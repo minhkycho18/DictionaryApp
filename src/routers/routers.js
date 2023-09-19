@@ -6,6 +6,10 @@ import Vocabulary from "../pages/vocabulary/Vocabulary";
 import Dashboard from "../layouts/Dashboard/Dashboard";
 import Profile from "../pages/profile/Profile";
 import MyWordLists from "../pages/my-word-lists/MyWordLists";
+import SignIn from "../pages/sign-in/SignIn";
+import Register from "../pages/sign-up/SignUp";
+import SignUp from "../pages/sign-up/SignUp";
+import Auth from "../layouts/Auth/Auth";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -40,6 +44,14 @@ const routers = createBrowserRouter([
       {
         path: "leitner",
       },
+    ],
+  },
+  {
+    path: "/auth",
+    element: <Auth />,
+    children: [
+      { path: "sign-in", element: <SignIn /> },
+      { path: "sign-up", element: <SignUp /> },
     ],
   },
 ]);
