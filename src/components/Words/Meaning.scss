@@ -1,0 +1,48 @@
+@import "../../assets/scss/font.scss";
+@import "../../assets/scss/variable.scss";
+.meaning {
+  font-family: $font;
+  font-size: 20px;
+  line-height: 28px;
+  color: #6b7280;
+  font-weight: 400;
+  &__content {
+    text-align: left;
+    float: left;
+    &--num {
+      font-weight: 600;
+    }
+  }
+}
+.choice {
+  cursor: pointer;
+
+  margin-top: 32px;
+  &__item {
+    border: 3px solid #ddd;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 10px;
+    border-radius: 200px;
+    position: relative;
+  }
+  &__icon {
+    font-size: 20px;
+    &--sub {
+      font-size: 16px;
+      position: absolute;
+      padding: 5% !important ;
+      top: -4px;
+      right: -4px;
+      color: #aaa;
+    }
+  }
+}
+.icon--active {
+  border: 3px solid #ff86868f;
+  & > .choice__icon--sub {
+    color: #ff5555 !important;
+  }
+}

@@ -1,0 +1,29 @@
+@import "../../assets/scss/font.scss";
+@import "../../assets/scss/variable.scss";
+.vocab {
+  margin: 32px;
+
+  &__title {
+    font-family: $font;
+    font-size: 45px;
+    line-height: 54px;
+    color: $text-secondary-color;
+    font-weight: 800;
+  }
+  &__intro {
+    color: #87919f;
+    font-family: "Inter", sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 28.8px;
+    text-align: center;
+  }
+}
+.mainwrap {
+  width: 100dvw;
+  padding: 0px 136px;
+  // background-color: #eee;
+}
+.word-wrap {
+  width: inherit;
+}

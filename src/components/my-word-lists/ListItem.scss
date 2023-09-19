@@ -1,0 +1,24 @@
+@import "../../assets/scss/font.scss";
+@import "../../assets/scss/variable.scss";
+.ListItem {
+  font-family: $font;
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  &__middle {
+    line-height: 16px;
+  }
+  &__bottom {
+    line-height: 24px;
+    font-size: 18px;
+    font-weight: 600;
+    color: $text-secondary-color;
+  }
+}
+.icon-hover {
+  &:hover {
+    color: #000 !important;
+  }
+}

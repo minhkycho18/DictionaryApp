@@ -1,0 +1,32 @@
+@import "../../assets/scss/font.scss";
+@import "../../assets/scss/variable.scss";
+@mixin size {
+  width: 257px;
+  height: 257px;
+  margin: 16px;
+  border-radius: 32px;
+}
+.MyWordLists {
+  padding: 16px;
+  &__add {
+    @include size();
+    justify-content: center;
+    align-items: center;
+    background-color: #eeeeee;
+    color: #fff;
+    font-size: 128px;
+    cursor: pointer;
+
+    &:hover {
+      border: 1px solid #ccc;
+    }
+  }
+  &__item {
+    @include size();
+    background-color: #fff;
+    border: 1px solid #eee;
+    justify-content: space-between;
+    // align-items: center;
+    padding: 16px;
+  }
+}

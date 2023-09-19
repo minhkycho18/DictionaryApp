@@ -1,0 +1,20 @@
+@import "../../assets/scss/font.scss";
+@import "../../assets/scss/variable.scss";
+
+.result {
+  height: 248px;
+  cursor: pointer;
+  border-color: #cccccc88;
+  &__title {
+    font-family: $font;
+    font-size: 30px;
+    line-height: 36px;
+    font-weight: 600;
+  }
+  &__content {
+    color: #6b7280;
+    font-family: $font;
+    font-size: 18px;
+    line-height: 32px;
+  }
+}

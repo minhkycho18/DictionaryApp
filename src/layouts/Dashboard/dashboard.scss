@@ -1,0 +1,21 @@
+@import "../../assets/scss/font.scss";
+@import "../../assets/scss/variable.scss";
+.headerPage {
+  margin-left: 32px;
+  &__name {
+    color: #0b043d;
+    font-family: $font;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 36px;
+    text-align: left;
+    padding-top: 32px;
+    margin-bottom: -16px;
+  }
+  &__breadcum {
+    padding: 0 !important;
+    margin-top: -16px !important;
+    font-size: 18px;
+    line-height: 28px;
+  }
+}

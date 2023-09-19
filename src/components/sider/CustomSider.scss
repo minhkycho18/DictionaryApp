@@ -1,0 +1,72 @@
+@import "../../assets/scss/font.scss";
+@import "../../assets/scss/variable.scss";
+.sidermenu {
+  font-family: $font;
+  background-color: #fff !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  border-right: 1px solid #eee;
+}
+.infor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 64px;
+  margin: 0px 16px;
+  &__name {
+    display: block;
+    margin-top: 16px;
+    font-weight: 600;
+    font-size: 18px;
+  }
+  &__ava {
+    margin-top: 64px;
+    border: 2px solid #164ea4;
+  }
+  &__logo {
+    display: flex;
+    align-items: center;
+    margin-top: 64px;
+    padding: 0px 16px 16px 16px;
+    font-family: $font;
+    font-weight: 600;
+    font-size: 16px;
+    color: #0b043d;
+  }
+}
+.menu2 {
+  display: flex;
+  justify-content: center;
+  //   align-items: flex-start;
+  margin: 32px 0px;
+  padding: 32px 0px;
+  &__item {
+    display: flex;
+    align-items: center;
+    color: #6c757d;
+    line-height: 24px;
+    text-align: start;
+    margin: 8px 8px;
+    padding: 16px 0px;
+    border-radius: 16px;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 600;
+    &:hover {
+      background-color: #eeeeee;
+      color: #0b043d;
+      cursor: pointer;
+    }
+    &--active {
+      background-color: #eeeeee;
+      color: #0b043d;
+      cursor: pointer;
+    }
+    &--icon {
+      font-size: 20px;
+      margin: 0px 4px 0px 16px;
+    }
+  }
+}

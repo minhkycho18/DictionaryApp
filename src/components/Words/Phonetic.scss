@@ -1,0 +1,60 @@
+@import "../../assets/scss/font.scss";
+@import "../../assets/scss/variable.scss";
+.phonetic {
+  display: flex;
+  //   justify-content: space-between !important;
+  align-items: center;
+
+  &__word {
+    font-size: 48px;
+    line-height: 48px;
+    font-family: $font;
+    font-weight: 800;
+  }
+  &__icon {
+    font-size: 20px;
+    line-height: 20px;
+    margin-left: 16px;
+    margin-right: 128px;
+    cursor: pointer;
+    &:hover {
+      color: #6b7280;
+    }
+  }
+  &__type {
+    font-size: 16px;
+    font-family: $font;
+    font-weight: 500;
+    align-self: center;
+    margin-left: 128px;
+  }
+}
+.wrappered {
+  display: flex !important;
+  text-align: center;
+  align-items: flex-start !important;
+  justify-content: space-between;
+  border-radius: 16px;
+  padding: 32px;
+}
+.phonetic__content {
+  font-size: 20px;
+  line-height: 28px;
+  font-family: $font;
+  color: #6b7280;
+}
+.language__flag {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.border {
+  border: 2px solid;
+  border-left: 8px solid;
+  &--blue {
+    border-color: #1e40af;
+  }
+  &--lightblue {
+    border-color: #2980b9;
+    margin-top: 16px;
+  }
+}

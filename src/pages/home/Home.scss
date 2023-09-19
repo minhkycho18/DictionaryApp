@@ -1,0 +1,105 @@
+@import "../../assets/scss/font.scss";
+@import "../../assets/scss/variable.scss";
+@mixin mid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.home {
+  background-color: $background-primary-color;
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.image {
+  position: relative;
+  z-index: 2;
+  padding: 0px 240px;
+  margin-bottom: -52px;
+}
+.introduce {
+  color: $text-secondary-color;
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 240px;
+  margin-top: 240px;
+  width: 424px;
+  &__title {
+    font-size: 45px;
+    font-weight: 800;
+    line-height: 54px;
+  }
+  &__paragraph {
+    font-size: 20px;
+    font-weight: 100;
+    color: #a7b1c0;
+    line-height: 32px;
+  }
+}
+.bg-second {
+  background-color: #6248b1;
+  // height: 800px;
+  width: 100%;
+}
+.content {
+  font-family: $font;
+  font-weight: 400;
+}
+.btn {
+  display: flex;
+  align-items: center;
+  border-radius: 50px;
+  padding: 24px 32px;
+  font-family: $font;
+  font-weight: 800;
+  font-size: 20px;
+  &__pri {
+    background-color: $text-primary-color;
+    &:hover {
+      background-color: $text-secondary-color !important;
+    }
+  }
+  &__sec {
+    border-color: $text-primary-color;
+    border-width: 2px;
+    color: $text-primary-color;
+    &:hover {
+      border-color: $text-secondary-color !important;
+      color: $text-secondary-color !important;
+    }
+  }
+}
+.feature {
+  @include mid();
+  padding-bottom: 64px;
+  margin-top: 180px;
+  color: #fff;
+  &__title {
+    margin: 0;
+  }
+  &__paragraph {
+    text-align: center;
+    color: #fff;
+    width: 520px;
+    font-weight: 500;
+  }
+}
+.banner {
+  @include mid();
+  padding-bottom: 128px;
+  &__item {
+    width: 380px;
+    padding: 8px;
+  }
+  &__title {
+    font-family: $font;
+    font-size: 21px;
+    line-height: 25px;
+    font-weight: 600;
+    color: $text-secondary-color;
+  }
+}
