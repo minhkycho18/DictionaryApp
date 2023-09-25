@@ -1,11 +1,11 @@
 import { Col, Row, Space } from "antd";
 import { Content } from "antd/es/layout/layout";
 import React, { useEffect, useState } from "react";
-import SearchBox from "../../components/Words/SearchBox";
-import Result from "../../components/card/result";
+import SearchBox from "../../../components/Words/SearchBox";
+import Result from "../../../components/card/result";
 import "./Dictionary.scss";
 import { useNavigate } from "react-router-dom";
-import Phonetic from "../../components/Words/Phonetic";
+import Phonetic from "../../../components/Words/Phonetic";
 import { useSelector } from "react-redux";
 const Dictionary = () => {
   const [isSelected, setIsSelected] = useState(true);

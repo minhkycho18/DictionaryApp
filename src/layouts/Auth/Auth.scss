@@ -1,0 +1,47 @@
+@import "../../assets/scss/font.scss";
+@import "../../assets/scss/variable.scss";
+.auth {
+  &_wrap {
+    overflow: hidden;
+    display: flex;
+    // justify-content: center;
+    // align-items: center;
+    flex-direction: row;
+    // width: 100%;
+    // height: 100vh;
+  }
+  &__background {
+    width: 50vw;
+    height: 100vh;
+    background-image: url("../../assets/images/main.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 100;
+  }
+  &__content {
+    width: 50vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  &__title {
+    align-items: center;
+    color: #0e336b;
+    display: flex;
+    font-family: $font;
+    font-size: 44.8px;
+    font-weight: 700;
+    justify-content: center;
+    line-height: 53.76px;
+    text-align: center;
+  }
+  &__description {
+    color: #6c757d;
+    font-family: "Inter regular", sans-serif;
+    font-size: 14px;
+    line-height: 21px;
+    text-align: center;
+    margin: 16px 0px 32px 0px;
+  }
+}

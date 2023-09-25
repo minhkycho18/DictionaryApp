@@ -1,12 +1,12 @@
-@import "../../assets/scss/font.scss";
-@import "../../assets/scss/variable.scss";
+@import "../../../assets/scss/font.scss";
+@import "../../../assets/scss/variable.scss";
 .profileCard {
   margin: 64px;
   background-color: aqua;
   width: 830px;
   border-radius: 48px;
   background-image: linear-gradient(0deg, #0d469ee6, #0d469ee6),
-    url("../../assets/images/background-ava.png");
+    url("../../../assets/images/background-ava.png");
   display: flex;
   flex-direction: column;
   //   justify-content: flex-start;
