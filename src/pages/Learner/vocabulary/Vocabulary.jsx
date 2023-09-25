@@ -1,6 +1,6 @@
 import { Space } from "antd";
 import React from "react";
-import WordLists from "../../components/word-lists/WordLists";
+import WordLists from "../../../components/word-lists/WordLists";
 import "./Vocabulary.scss";
 const Vocabulary = () => {
   return (
