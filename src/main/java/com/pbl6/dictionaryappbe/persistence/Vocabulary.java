@@ -3,6 +3,7 @@ package com.pbl6.dictionaryappbe.persistence;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -17,10 +18,10 @@ public class Vocabulary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long vocabId;
 
-    @Column(length = 100)
+    @Column(name = "word", length = 100)
     private String word;
 
-    @Column(length = 100)
+    @Column(name = "pos", length = 100)
     private String pos;
 
     @Column(name = "phonetics_us")
@@ -35,10 +36,23 @@ public class Vocabulary {
     @Column(name = "audio_uk")
     private String audioUk;
 
+    @Column(name = "modified_at")
+    private LocalDateTime modifiedAt;
+
+    @Column(name = "modified_by")
+    private String modifiedBy;
+
     @ManyToMany
     @JoinTable(
             name = "vocab_def",
-            joinColumns = @JoinColumn(name = "vocab_id", referencedColumnName = "vocabId"),
-            inverseJoinColumns = @JoinColumn(name = "def_id", referencedColumnName = "defId"))
+            joinColumns = @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id"),
+            inverseJoinColumns = @JoinColumn(name = "def_id", referencedColumnName = "def_id"))
     List<Definition> definitions;
+
+    @ManyToMany
+    @JoinTable(
+            name = "vocabulary_list_detail",
+            joinColumns = @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id"),
+            inverseJoinColumns = @JoinColumn(name = "subcategory_id", referencedColumnName = "subcategory_id"))
+    List<Subcategory> subcategories;
 }
