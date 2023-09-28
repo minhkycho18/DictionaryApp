@@ -22,7 +22,7 @@ public class Subcategory {
     private String title;
 
     @Column(nullable = false)
-    private int amountOfWord;
+    private Integer amountOfWord = 0;
 
     @Column
     private String createdBy;
