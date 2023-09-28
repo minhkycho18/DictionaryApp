@@ -18,23 +18,22 @@ public class Subcategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long subcategoryId;
 
-    @Column(name = "title", length = 200)
+    @Column(length = 200, nullable = false)
     private String title;
 
-    @Column(name = "amount_of_word")
+    @Column(nullable = false)
     private int amountOfWord;
 
-    @Column(name = "created_by")
+    @Column()
     private String createdBy;
 
-    @OneToMany(mappedBy = "subcategory")
+    @OneToMany(mappedBy = "subcategory", fetch = FetchType.LAZY)
     private List<VocabularyCustom> vocabularyCustoms;
 
-    @ManyToMany(mappedBy = "subcategories")
+    @ManyToMany(mappedBy = "subcategories", fetch = FetchType.LAZY)
     List<Vocabulary> vocabularies;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vocabulary_list_id", referencedColumnName = "vocabulary_list_id")
     private VocabularyList vocabularyList;
-
 }

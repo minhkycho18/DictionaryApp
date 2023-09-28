@@ -23,6 +23,6 @@ public class Definition {
     @Column(columnDefinition = "TEXT")
     private String examples;
 
-    @ManyToMany(mappedBy = "definitions")
+    @ManyToMany(mappedBy = "definitions", fetch = FetchType.LAZY)
     List<Vocabulary> vocabularies;
 }

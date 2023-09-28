@@ -18,29 +18,28 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(name = "name", length = 150)
+    @Column(length = 150)
     private String name;
 
-    @Column(name = "email")
+    @Column(nullable = false)
     private String email;
 
-    @Column(name = "gender", length = 10)
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
-    @Column(name = "password")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String password;
 
-    @Column(name = "image")
+    @Column(columnDefinition = "TEXT")
     private String image;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     private Role role;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<VocabularyList> vocabularyLists;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<VocabLeitner> vocabLeitners;
-
 }

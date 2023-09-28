@@ -18,20 +18,19 @@ public class VocabularyList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long vocabularyListId;
 
-    @Column(name = "title", length = 200)
+    @Column( length = 200, nullable = false)
     private String title;
 
-    @Column(name = "list_desc")
+    @Column()
     private String listDesc;
 
-    @Column(name = "created_by")
+    @Column()
     private String createdBy;
 
-    @OneToMany(mappedBy = "vocabularyList")
+    @OneToMany(mappedBy = "vocabularyList", fetch = FetchType.LAZY)
     private List<Subcategory> subcategories;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
-
 }

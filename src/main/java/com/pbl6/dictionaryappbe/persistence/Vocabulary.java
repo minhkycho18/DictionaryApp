@@ -18,10 +18,10 @@ public class Vocabulary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long vocabId;
 
-    @Column(name = "word", length = 100)
+    @Column(length = 100, nullable = false)
     private String word;
 
-    @Column(name = "pos", length = 100)
+    @Column( length = 100, nullable = false)
     private String pos;
 
     @Column(name = "phonetics_us")
@@ -30,16 +30,16 @@ public class Vocabulary {
     @Column(name = "phonetics_uk")
     private String phoneticsUk;
 
-    @Column(name = "audio_us")
+    @Column()
     private String audioUs;
 
-    @Column(name = "audio_uk")
+    @Column()
     private String audioUk;
 
-    @Column(name = "modified_at")
+    @Column()
     private LocalDateTime modifiedAt;
 
-    @Column(name = "modified_by")
+    @Column()
     private String modifiedBy;
 
     @ManyToMany
@@ -47,12 +47,12 @@ public class Vocabulary {
             name = "vocab_def",
             joinColumns = @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id"),
             inverseJoinColumns = @JoinColumn(name = "def_id", referencedColumnName = "def_id"))
-    List<Definition> definitions;
+    private List<Definition> definitions;
 
     @ManyToMany
     @JoinTable(
             name = "vocabulary_list_detail",
             joinColumns = @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id"),
             inverseJoinColumns = @JoinColumn(name = "subcategory_id", referencedColumnName = "subcategory_id"))
-    List<Subcategory> subcategories;
+    private List<Subcategory> subcategories;
 }

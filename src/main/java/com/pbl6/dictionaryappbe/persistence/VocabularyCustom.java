@@ -16,18 +16,15 @@ import java.util.List;
 public class VocabularyCustom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long vocabCustomId;
+    private Long vocabCustomId;
 
-    @Column(name = "word", length = 100)
+    @Column(length = 100, nullable = false)
     private String word;
 
-    @Column(name = "word_desc")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String wordDesc;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subcategory_id", referencedColumnName = "subcategory_id")
     private Subcategory subcategory;
-
-
-
 }
