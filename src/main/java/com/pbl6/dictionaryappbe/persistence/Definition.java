@@ -17,12 +17,12 @@ public class Definition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long defId;
 
-    @Column(name = "word_desc", nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String wordDesc;
 
     @Column(columnDefinition = "TEXT")
     private String examples;
 
-    @ManyToMany(mappedBy = "definitions")
+    @ManyToMany(mappedBy = "definitions", fetch = FetchType.LAZY)
     List<Vocabulary> vocabularies;
 }

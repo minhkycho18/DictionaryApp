@@ -1,8 +1,10 @@
 package com.pbl6.dictionaryappbe.persistence;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -17,10 +19,10 @@ public class Vocabulary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long vocabId;
 
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String word;
 
-    @Column(length = 100)
+    @Column( length = 100, nullable = false)
     private String pos;
 
     @Column(name = "phonetics_us")
@@ -29,16 +31,29 @@ public class Vocabulary {
     @Column(name = "phonetics_uk")
     private String phoneticsUk;
 
-    @Column(name = "audio_us")
+    @Column
     private String audioUs;
 
-    @Column(name = "audio_uk")
+    @Column
     private String audioUk;
+
+    @Column
+    private LocalDateTime modifiedAt;
+
+    @Column
+    private String modifiedBy;
 
     @ManyToMany
     @JoinTable(
             name = "vocab_def",
-            joinColumns = @JoinColumn(name = "vocab_id", referencedColumnName = "vocabId"),
-            inverseJoinColumns = @JoinColumn(name = "def_id", referencedColumnName = "defId"))
-    List<Definition> definitions;
+            joinColumns = @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id"),
+            inverseJoinColumns = @JoinColumn(name = "def_id", referencedColumnName = "def_id"))
+    private List<Definition> definitions;
+
+    @ManyToMany
+    @JoinTable(
+            name = "vocabulary_list_detail",
+            joinColumns = @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id"),
+            inverseJoinColumns = @JoinColumn(name = "subcategory_id", referencedColumnName = "subcategory_id"))
+    private List<Subcategory> subcategories;
 }
