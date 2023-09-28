@@ -16,7 +16,7 @@ import java.util.List;
 public class Subcategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long subcategoryId;
+    private Long subcategoryId;
 
     @Column(length = 200, nullable = false)
     private String title;
@@ -24,7 +24,7 @@ public class Subcategory {
     @Column(nullable = false)
     private int amountOfWord;
 
-    @Column()
+    @Column
     private String createdBy;
 
     @OneToMany(mappedBy = "subcategory", fetch = FetchType.LAZY)

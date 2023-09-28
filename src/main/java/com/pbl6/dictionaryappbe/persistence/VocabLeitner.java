@@ -1,6 +1,7 @@
 package com.pbl6.dictionaryappbe.persistence;
 
 
+import com.pbl6.dictionaryappbe.persistence.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,7 +29,7 @@ public class VocabLeitner {
     @Column(length = 30)
     private String level;
 
-    @Column()
+    @Column
     private LocalDateTime lastLearning;
 
     @ManyToOne(fetch = FetchType.LAZY)

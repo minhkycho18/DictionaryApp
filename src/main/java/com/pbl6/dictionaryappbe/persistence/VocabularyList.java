@@ -1,5 +1,6 @@
 package com.pbl6.dictionaryappbe.persistence;
 
+import com.pbl6.dictionaryappbe.persistence.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,10 +22,10 @@ public class VocabularyList {
     @Column( length = 200, nullable = false)
     private String title;
 
-    @Column()
+    @Column
     private String listDesc;
 
-    @Column()
+    @Column
     private String createdBy;
 
     @OneToMany(mappedBy = "vocabularyList", fetch = FetchType.LAZY)

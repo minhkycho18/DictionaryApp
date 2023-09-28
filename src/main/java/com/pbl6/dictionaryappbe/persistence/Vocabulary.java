@@ -1,5 +1,6 @@
 package com.pbl6.dictionaryappbe.persistence;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,16 +31,16 @@ public class Vocabulary {
     @Column(name = "phonetics_uk")
     private String phoneticsUk;
 
-    @Column()
+    @Column
     private String audioUs;
 
-    @Column()
+    @Column
     private String audioUk;
 
-    @Column()
+    @Column
     private LocalDateTime modifiedAt;
 
-    @Column()
+    @Column
     private String modifiedBy;
 
     @ManyToMany

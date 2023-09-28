@@ -1,5 +1,6 @@
-package com.pbl6.dictionaryappbe.persistence;
+package com.pbl6.dictionaryappbe.persistence.role;
 
+import com.pbl6.dictionaryappbe.persistence.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
