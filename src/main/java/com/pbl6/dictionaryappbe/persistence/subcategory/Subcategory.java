@@ -1,5 +1,6 @@
-package com.pbl6.dictionaryappbe.persistence;
+package com.pbl6.dictionaryappbe.persistence.subcategory;
 
+import com.pbl6.dictionaryappbe.persistence.VocabularyList;
 import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,6 +28,10 @@ public class Subcategory {
 
     @Column
     private String createdBy;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private SubcategoryType subcategoryType;
 
     @ManyToMany(mappedBy = "subcategories", fetch = FetchType.LAZY)
     private List<Vocabulary> vocabularies;

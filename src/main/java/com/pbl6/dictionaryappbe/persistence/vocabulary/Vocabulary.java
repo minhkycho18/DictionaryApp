@@ -1,7 +1,7 @@
 package com.pbl6.dictionaryappbe.persistence.vocabulary;
 
 import com.pbl6.dictionaryappbe.persistence.Definition;
-import com.pbl6.dictionaryappbe.persistence.Subcategory;
+import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
 import com.pbl6.dictionaryappbe.persistence.leitner.VocabLeitner;
 import jakarta.persistence.*;
 import lombok.*;
