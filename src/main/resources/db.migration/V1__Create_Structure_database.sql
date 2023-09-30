@@ -24,8 +24,8 @@ DROP TABLE IF EXISTS `definitions`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `definitions` (
   `def_id` bigint NOT NULL AUTO_INCREMENT,
-  `word_desc` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `examples` text COLLATE utf8mb3_unicode_ci,
+  `word_desc` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `examples` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   PRIMARY KEY (`def_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=103441 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -58,8 +58,25 @@ CREATE TABLE `subcategory` (
   `created_by` varchar(255) DEFAULT NULL,
   `vocabulary_list_id` bigint NOT NULL,
   PRIMARY KEY (`subcategory_id`),
-  KEY `fk_subcategory_vocablist` (`vocabulary_list_id`),
-  CONSTRAINT `fk_subcategory_vocablist` FOREIGN KEY (`vocabulary_list_id`) REFERENCES `vocabulary_list` (`vocabulary_list_id`)
+  KEY `vocabulary_list_id` (`vocabulary_list_id`),
+  CONSTRAINT `subcategory_ibfk_1` FOREIGN KEY (`vocabulary_list_id`) REFERENCES `vocabulary_list` (`vocabulary_list_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `subcategory_detail`
+--
+
+DROP TABLE IF EXISTS `subcategory_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `subcategory_detail` (
+  `vocab_id` bigint NOT NULL,
+  `subcategory_id` bigint NOT NULL,
+  PRIMARY KEY (`vocab_id`,`subcategory_id`),
+  KEY `subcategory_id` (`subcategory_id`),
+  CONSTRAINT `subcategory_detail_ibfk_1` FOREIGN KEY (`vocab_id`) REFERENCES `vocabularies` (`vocab_id`),
+  CONSTRAINT `subcategory_detail_ibfk_2` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategory` (`subcategory_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -79,8 +96,8 @@ CREATE TABLE `users` (
   `image` text,
   `role_id` int NOT NULL,
   PRIMARY KEY (`user_id`),
-  KEY `fk_user_role` (`role_id`),
-  CONSTRAINT `fk_user_role` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`)
+  KEY `role_id` (`role_id`),
+  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -109,15 +126,14 @@ DROP TABLE IF EXISTS `vocab_leitner`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `vocab_leitner` (
-  `vocab_leitner_id` bigint NOT NULL AUTO_INCREMENT,
-  `word` varchar(100) NOT NULL,
-  `word_desc` text NOT NULL,
+  `user_id` bigint NOT NULL,
+  `vocab_id` bigint NOT NULL,
   `level` varchar(30) NOT NULL,
   `last_learning` timestamp NULL DEFAULT NULL,
-  `user_id` bigint NOT NULL,
-  PRIMARY KEY (`vocab_leitner_id`),
-  KEY `fk_user_leitner` (`user_id`),
-  CONSTRAINT `fk_user_leitner` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  PRIMARY KEY (`vocab_id`,`user_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `vocab_leitner_ibfk_1` FOREIGN KEY (`vocab_id`) REFERENCES `vocabularies` (`vocab_id`),
+  CONSTRAINT `vocab_leitner_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -131,35 +147,17 @@ DROP TABLE IF EXISTS `vocabularies`;
 CREATE TABLE `vocabularies` (
   `vocab_id` bigint NOT NULL AUTO_INCREMENT,
   `word` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_as_cs NOT NULL,
-  `pos` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `pos` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `phonetics_us` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `phonetics_uk` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `audio_us` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `audio_uk` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `modified_at` timestamp NULL DEFAULT NULL,
-  `modified_by` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `word_type` varchar(10) COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`vocab_id`),
   UNIQUE KEY `head_pos` (`word`,`pos`),
-  UNIQUE KEY `UKqu6kj4lt710nsj568gn507tld` (`word`,`pos`)
+  UNIQUE KEY `UKqu6kj4lt710nsj568gn507tld` (`word`,`pos`),
+  KEY `index_word_type` (`word_type`)
 ) ENGINE=InnoDB AUTO_INCREMENT=147789 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `vocabulary_custom`
---
-
-DROP TABLE IF EXISTS `vocabulary_custom`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `vocabulary_custom` (
-  `vocab_custom_id` bigint NOT NULL AUTO_INCREMENT,
-  `word` varchar(100) NOT NULL,
-  `word_desc` text NOT NULL,
-  `subcategory_id` bigint NOT NULL,
-  PRIMARY KEY (`vocab_custom_id`),
-  KEY `fk_subcategory_vocabcustom` (`subcategory_id`),
-  CONSTRAINT `fk_subcategory_vocabcustom` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategory` (`subcategory_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -176,25 +174,8 @@ CREATE TABLE `vocabulary_list` (
   `created_by` varchar(255) DEFAULT NULL,
   `user_id` bigint NOT NULL,
   PRIMARY KEY (`vocabulary_list_id`),
-  KEY `fk_user_vocablist` (`user_id`),
-  CONSTRAINT `fk_user_vocablist` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `vocabulary_list_detail`
---
-
-DROP TABLE IF EXISTS `vocabulary_list_detail`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `vocabulary_list_detail` (
-  `vocab_id` bigint NOT NULL,
-  `subcategory_id` bigint NOT NULL,
-  PRIMARY KEY (`vocab_id`,`subcategory_id`),
-  KEY `subcategory_id` (`subcategory_id`),
-  CONSTRAINT `vocabulary_list_detail_ibfk_1` FOREIGN KEY (`vocab_id`) REFERENCES `vocabularies` (`vocab_id`),
-  CONSTRAINT `vocabulary_list_detail_ibfk_2` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategory` (`subcategory_id`)
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `vocabulary_list_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -207,4 +188,4 @@ CREATE TABLE `vocabulary_list_detail` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-27 23:58:05
+-- Dump completed on 2023-09-30 15:03:25
