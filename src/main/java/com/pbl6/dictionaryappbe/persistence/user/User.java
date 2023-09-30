@@ -1,9 +1,8 @@
 package com.pbl6.dictionaryappbe.persistence.user;
 
-import com.pbl6.dictionaryappbe.persistence.VocabLeitner;
+import com.pbl6.dictionaryappbe.persistence.leitner.VocabLeitner;
 import com.pbl6.dictionaryappbe.persistence.VocabularyList;
 import com.pbl6.dictionaryappbe.persistence.role.Role;
-import com.pbl6.dictionaryappbe.persistence.user.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,11 +13,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
     @Id
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
@@ -41,9 +40,9 @@ public class User {
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     private Role role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user")
     private List<VocabularyList> vocabularyLists;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user")
     private List<VocabLeitner> vocabLeitners;
 }

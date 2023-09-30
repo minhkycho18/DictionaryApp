@@ -1,7 +1,8 @@
-package com.pbl6.dictionaryappbe.persistence;
+package com.pbl6.dictionaryappbe.persistence.leitner;
 
 
 import com.pbl6.dictionaryappbe.persistence.user.User;
+import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,19 +13,17 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
-@Table(name = "vocab_leitner", uniqueConstraints = @UniqueConstraint(columnNames = {"word","word_desc","user_id"}))
+@Table(name = "vocab_leitner")
+@IdClass(LeitnerId.class)
 public class VocabLeitner {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long vocabLeitnerId;
+    @Column(name = "vocab_id")
+    private Long vocabId;
 
-    @Column(length = 100, nullable = false)
-    private String word;
-
-    @Column(nullable = false)
-    private String wordDesc;
+    @Id
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(length = 30)
     private String level;
@@ -35,4 +34,8 @@ public class VocabLeitner {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id")
+    private Vocabulary vocabulary;
 }

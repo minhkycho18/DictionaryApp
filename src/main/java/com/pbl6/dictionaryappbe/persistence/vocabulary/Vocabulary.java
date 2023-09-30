@@ -1,6 +1,8 @@
-package com.pbl6.dictionaryappbe.persistence;
+package com.pbl6.dictionaryappbe.persistence.vocabulary;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.pbl6.dictionaryappbe.persistence.Definition;
+import com.pbl6.dictionaryappbe.persistence.Subcategory;
+import com.pbl6.dictionaryappbe.persistence.leitner.VocabLeitner;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,27 +11,28 @@ import java.util.List;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "vocabularies", uniqueConstraints = @UniqueConstraint(columnNames = {"word","pos"}))
+@Table(name = "vocabularies", uniqueConstraints = @UniqueConstraint(columnNames = {"word", "pos"}))
 public class Vocabulary {
     @Id
+    @Column(name = "vocab_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long vocabId;
 
     @Column(length = 100, nullable = false)
     private String word;
 
-    @Column( length = 100, nullable = false)
+    @Column(length = 100)
     private String pos;
 
     @Column(name = "phonetics_us")
     private String phoneUs;
 
     @Column(name = "phonetics_uk")
-    private String phoneticsUk;
+    private String phoneUk;
 
     @Column
     private String audioUs;
@@ -43,6 +46,10 @@ public class Vocabulary {
     @Column
     private String modifiedBy;
 
+    @Enumerated(EnumType.STRING)
+    @Column
+    private WordType wordType;
+
     @ManyToMany
     @JoinTable(
             name = "vocab_def",
@@ -52,8 +59,11 @@ public class Vocabulary {
 
     @ManyToMany
     @JoinTable(
-            name = "vocabulary_list_detail",
+            name = "subcategory_detail",
             joinColumns = @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id"),
             inverseJoinColumns = @JoinColumn(name = "subcategory_id", referencedColumnName = "subcategory_id"))
     private List<Subcategory> subcategories;
+
+    @OneToMany(mappedBy = "vocabulary")
+    private List<VocabLeitner> vocabLeitners;
 }

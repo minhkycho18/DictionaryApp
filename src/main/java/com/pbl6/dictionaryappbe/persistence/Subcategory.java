@@ -1,5 +1,6 @@
 package com.pbl6.dictionaryappbe.persistence;
 
+import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,13 +9,13 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "subcategory")
 public class Subcategory {
     @Id
+    @Column(name = "subcategory_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long subcategoryId;
 
@@ -27,11 +28,8 @@ public class Subcategory {
     @Column
     private String createdBy;
 
-    @OneToMany(mappedBy = "subcategory", fetch = FetchType.LAZY)
-    private List<VocabularyCustom> vocabularyCustoms;
-
     @ManyToMany(mappedBy = "subcategories", fetch = FetchType.LAZY)
-    List<Vocabulary> vocabularies;
+    private List<Vocabulary> vocabularies;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vocabulary_list_id", referencedColumnName = "vocabulary_list_id")

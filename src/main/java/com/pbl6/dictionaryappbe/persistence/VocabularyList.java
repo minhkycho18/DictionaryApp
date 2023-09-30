@@ -11,15 +11,15 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
 @Table(name = "vocabulary_list")
 public class VocabularyList {
     @Id
+    @Column(name = "vocabulary_list_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long vocabularyListId;
 
-    @Column( length = 200, nullable = false)
+    @Column(length = 200, nullable = false)
     private String title;
 
     @Column
