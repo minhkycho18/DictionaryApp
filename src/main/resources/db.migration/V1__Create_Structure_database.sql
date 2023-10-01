@@ -55,6 +55,7 @@ CREATE TABLE `subcategory` (
   `subcategory_id` bigint NOT NULL AUTO_INCREMENT,
   `title` varchar(200) NOT NULL,
   `amount_of_word` int NOT NULL,
+  `subcategory_type` varchar(10) NOT NULL,
   `created_by` varchar(255) DEFAULT NULL,
   `vocabulary_list_id` bigint NOT NULL,
   PRIMARY KEY (`subcategory_id`),
@@ -72,11 +73,14 @@ DROP TABLE IF EXISTS `subcategory_detail`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subcategory_detail` (
   `vocab_id` bigint NOT NULL,
+  `def_id` bigint NOT NULL,
   `subcategory_id` bigint NOT NULL,
-  PRIMARY KEY (`vocab_id`,`subcategory_id`),
+  PRIMARY KEY (`vocab_id`,`def_id`,`subcategory_id`),
+  KEY `def_id` (`def_id`),
   KEY `subcategory_id` (`subcategory_id`),
-  CONSTRAINT `subcategory_detail_ibfk_1` FOREIGN KEY (`vocab_id`) REFERENCES `vocabularies` (`vocab_id`),
-  CONSTRAINT `subcategory_detail_ibfk_2` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategory` (`subcategory_id`)
+  CONSTRAINT `subcategory_detail_ibfk_1` FOREIGN KEY (`vocab_id`) REFERENCES `vocab_def` (`vocab_id`),
+  CONSTRAINT `subcategory_detail_ibfk_2` FOREIGN KEY (`def_id`) REFERENCES `vocab_def` (`def_id`),
+  CONSTRAINT `subcategory_detail_ibfk_3` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategory` (`subcategory_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -128,12 +132,15 @@ DROP TABLE IF EXISTS `vocab_leitner`;
 CREATE TABLE `vocab_leitner` (
   `user_id` bigint NOT NULL,
   `vocab_id` bigint NOT NULL,
+  `def_id` bigint NOT NULL,
   `level` varchar(30) NOT NULL,
   `last_learning` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`vocab_id`,`user_id`),
+  PRIMARY KEY (`vocab_id`,`user_id`,`def_id`),
+  KEY `def_id` (`def_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `vocab_leitner_ibfk_1` FOREIGN KEY (`vocab_id`) REFERENCES `vocabularies` (`vocab_id`),
-  CONSTRAINT `vocab_leitner_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `vocab_leitner_ibfk_1` FOREIGN KEY (`vocab_id`) REFERENCES `vocab_def` (`vocab_id`),
+  CONSTRAINT `vocab_leitner_ibfk_2` FOREIGN KEY (`def_id`) REFERENCES `vocab_def` (`def_id`),
+  CONSTRAINT `vocab_leitner_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -188,4 +195,4 @@ CREATE TABLE `vocabulary_list` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-30 15:03:25
+-- Dump completed on 2023-10-01 21:53:26

@@ -7,5 +7,6 @@ import java.io.Serializable;
 @Data
 public class LeitnerId implements Serializable {
     private Long vocabId;
+    private Long defId;
     private Long userId;
 }

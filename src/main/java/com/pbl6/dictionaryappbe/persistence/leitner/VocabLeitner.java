@@ -2,7 +2,7 @@ package com.pbl6.dictionaryappbe.persistence.leitner;
 
 
 import com.pbl6.dictionaryappbe.persistence.user.User;
-import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
+import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +22,10 @@ public class VocabLeitner {
     private Long vocabId;
 
     @Id
+    @Column(name = "def_id")
+    private Long defId;
+
+    @Id
     @Column(name = "user_id")
     private Long userId;
 
@@ -36,6 +40,9 @@ public class VocabLeitner {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id")
-    private Vocabulary vocabulary;
+    @JoinColumns({
+            @JoinColumn(name = "def_id", referencedColumnName = "def_id"),
+            @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id")
+    })
+    private VocabDef vocabDef;
 }
