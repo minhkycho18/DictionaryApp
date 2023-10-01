@@ -1,8 +1,6 @@
 package com.pbl6.dictionaryappbe.persistence.vocabulary;
 
-import com.pbl6.dictionaryappbe.persistence.Definition;
-import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
-import com.pbl6.dictionaryappbe.persistence.leitner.VocabLeitner;
+import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -50,20 +48,6 @@ public class Vocabulary {
     @Column
     private WordType wordType;
 
-    @ManyToMany
-    @JoinTable(
-            name = "vocab_def",
-            joinColumns = @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id"),
-            inverseJoinColumns = @JoinColumn(name = "def_id", referencedColumnName = "def_id"))
-    private List<Definition> definitions;
-
-    @ManyToMany
-    @JoinTable(
-            name = "subcategory_detail",
-            joinColumns = @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id"),
-            inverseJoinColumns = @JoinColumn(name = "subcategory_id", referencedColumnName = "subcategory_id"))
-    private List<Subcategory> subcategories;
-
     @OneToMany(mappedBy = "vocabulary")
-    private List<VocabLeitner> vocabLeitners;
+    private List<VocabDef> vocabDefs;
 }

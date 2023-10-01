@@ -13,10 +13,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "vocabulary_list")
-public class VocabularyList {
+@Table(name = "word_list", uniqueConstraints = @UniqueConstraint(columnNames = {"title", "user_id"}))
+public class WordList {
     @Id
-    @Column(name = "vocabulary_list_id")
+    @Column(name = "word_list_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long vocabularyListId;
 
@@ -29,7 +29,7 @@ public class VocabularyList {
     @Column
     private String createdBy;
 
-    @OneToMany(mappedBy = "vocabularyList", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "wordList", fetch = FetchType.LAZY)
     private List<Subcategory> subcategories;
 
     @ManyToOne(fetch = FetchType.LAZY)

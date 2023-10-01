@@ -1,1 +1,0 @@
-ALTER TABLE subcategory ADD COLUMN subcategory_type VARCHAR(10) NOT NULL;

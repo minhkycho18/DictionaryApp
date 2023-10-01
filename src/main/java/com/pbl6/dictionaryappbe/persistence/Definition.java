@@ -1,6 +1,6 @@
 package com.pbl6.dictionaryappbe.persistence;
 
-import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
+import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,6 +25,6 @@ public class Definition {
     @Column(columnDefinition = "TEXT")
     private String examples;
 
-    @ManyToMany(mappedBy = "definitions", fetch = FetchType.LAZY)
-    List<Vocabulary> vocabularies;
+    @OneToMany(mappedBy = "definition")
+    private List<VocabDef> vocabDefs;
 }

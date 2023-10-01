@@ -1,7 +1,7 @@
 package com.pbl6.dictionaryappbe.persistence.subcategory;
 
-import com.pbl6.dictionaryappbe.persistence.VocabularyList;
-import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
+import com.pbl6.dictionaryappbe.persistence.WordList;
+import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "subcategory")
+@Table(name = "subcategory", uniqueConstraints = @UniqueConstraint(columnNames = {"title", "word_list_id"}))
 public class Subcategory {
     @Id
     @Column(name = "subcategory_id")
@@ -34,9 +34,9 @@ public class Subcategory {
     private SubcategoryType subcategoryType;
 
     @ManyToMany(mappedBy = "subcategories", fetch = FetchType.LAZY)
-    private List<Vocabulary> vocabularies;
+    private List<VocabDef> vocabDefs;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vocabulary_list_id", referencedColumnName = "vocabulary_list_id")
-    private VocabularyList vocabularyList;
+    @JoinColumn(name = "word_list_id", referencedColumnName = "word_list_id")
+    private WordList wordList;
 }
