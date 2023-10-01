@@ -1,7 +1,7 @@
 package com.pbl6.dictionaryappbe.persistence.user;
 
 import com.pbl6.dictionaryappbe.persistence.leitner.VocabLeitner;
-import com.pbl6.dictionaryappbe.persistence.VocabularyList;
+import com.pbl6.dictionaryappbe.persistence.WordList;
 import com.pbl6.dictionaryappbe.persistence.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,7 +41,7 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "user")
-    private List<VocabularyList> vocabularyLists;
+    private List<WordList> wordLists;
 
     @OneToMany(mappedBy = "user")
     private List<VocabLeitner> vocabLeitners;

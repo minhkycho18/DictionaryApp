@@ -1,6 +1,6 @@
 package com.pbl6.dictionaryappbe.persistence.subcategory;
 
-import com.pbl6.dictionaryappbe.persistence.VocabularyList;
+import com.pbl6.dictionaryappbe.persistence.WordList;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,6 +37,6 @@ public class Subcategory {
     private List<VocabDef> vocabDefs;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vocabulary_list_id", referencedColumnName = "vocabulary_list_id")
-    private VocabularyList vocabularyList;
+    @JoinColumn(name = "word_list_id", referencedColumnName = "word_list_id")
+    private WordList wordList;
 }

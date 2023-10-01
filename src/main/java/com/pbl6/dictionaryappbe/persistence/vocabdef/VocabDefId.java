@@ -7,5 +7,5 @@ import java.io.Serializable;
 @Data
 public class VocabDefId implements Serializable {
     private Long vocabId;
-    private Long userId;
+    private Long defId;
 }

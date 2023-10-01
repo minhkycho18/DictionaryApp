@@ -57,10 +57,11 @@ CREATE TABLE `subcategory` (
   `amount_of_word` int NOT NULL,
   `subcategory_type` varchar(10) NOT NULL,
   `created_by` varchar(255) DEFAULT NULL,
-  `vocabulary_list_id` bigint NOT NULL,
+  `word_list_id` bigint NOT NULL,
   PRIMARY KEY (`subcategory_id`),
-  KEY `vocabulary_list_id` (`vocabulary_list_id`),
-  CONSTRAINT `subcategory_ibfk_1` FOREIGN KEY (`vocabulary_list_id`) REFERENCES `vocabulary_list` (`vocabulary_list_id`)
+  UNIQUE KEY `title_word_list_id` (`title`,`word_list_id`),
+  KEY `word_list_id` (`word_list_id`),
+  CONSTRAINT `subcategory_ibfk_1` FOREIGN KEY (`word_list_id`) REFERENCES `word_list` (`word_list_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -168,21 +169,22 @@ CREATE TABLE `vocabularies` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `vocabulary_list`
+-- Table structure for table `word_list`
 --
 
-DROP TABLE IF EXISTS `vocabulary_list`;
+DROP TABLE IF EXISTS `word_list`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `vocabulary_list` (
-  `vocabulary_list_id` bigint NOT NULL AUTO_INCREMENT,
+CREATE TABLE `word_list` (
+  `word_list_id` bigint NOT NULL AUTO_INCREMENT,
   `title` varchar(200) NOT NULL,
   `list_desc` varchar(255) DEFAULT NULL,
   `created_by` varchar(255) DEFAULT NULL,
   `user_id` bigint NOT NULL,
-  PRIMARY KEY (`vocabulary_list_id`),
+  PRIMARY KEY (`word_list_id`),
+  UNIQUE KEY `title_userid` (`title`,`user_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `vocabulary_list_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `word_list_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -195,4 +197,4 @@ CREATE TABLE `vocabulary_list` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-01 21:53:26
+-- Dump completed on 2023-10-01 23:23:48
