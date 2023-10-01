@@ -8,11 +8,10 @@ import java.util.List;
 @Builder
 @Data
 public class VocabularySearchDto {
+    private Long id;
     private String word;
     private String pos;
     private String phoneUs;
     private String phoneticsUk;
-    private String audioUs;
-    private String audioUk;
-    private List<DefinitionResponseDto> definitionResponseDto;
+    private List<String> definitions;
 }
