@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "subcategory")
+@Table(name = "subcategory", uniqueConstraints = @UniqueConstraint(columnNames = {"title", "word_list_id"}))
 public class Subcategory {
     @Id
     @Column(name = "subcategory_id")
