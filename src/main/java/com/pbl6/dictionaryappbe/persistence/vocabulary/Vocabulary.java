@@ -1,5 +1,6 @@
 package com.pbl6.dictionaryappbe.persistence.vocabulary;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import jakarta.persistence.*;
 import lombok.*;
@@ -49,5 +50,6 @@ public class Vocabulary {
     private WordType wordType;
 
     @OneToMany(mappedBy = "vocabulary")
+    @JsonIgnore
     private List<VocabDef> vocabDefs;
 }

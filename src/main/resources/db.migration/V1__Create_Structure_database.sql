@@ -161,6 +161,8 @@ CREATE TABLE `vocabularies` (
   `audio_us` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `audio_uk` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `word_type` varchar(10) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `modified_at` timestamp NULL DEFAULT NULL,
+  `modified_by` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`vocab_id`),
   UNIQUE KEY `head_pos` (`word`,`pos`),
   UNIQUE KEY `UKqu6kj4lt710nsj568gn507tld` (`word`,`pos`),
@@ -197,4 +199,4 @@ CREATE TABLE `word_list` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-01 23:23:48
+-- Dump completed on 2023-10-02 15:17:42

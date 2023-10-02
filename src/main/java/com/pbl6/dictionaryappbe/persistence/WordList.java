@@ -18,7 +18,7 @@ public class WordList {
     @Id
     @Column(name = "word_list_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long vocabularyListId;
+    private Long wordListId;
 
     @Column(length = 200, nullable = false)
     private String title;
