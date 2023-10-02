@@ -1,10 +1,9 @@
 package com.pbl6.dictionaryappbe.service;
 
 
-import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
-
-import java.util.List;
+import com.pbl6.dictionaryappbe.dto.VocabularySearchDto;
+import org.springframework.data.domain.Page;
 
 public interface VocabularyService {
-    List<Vocabulary> findByKeyword(String keyword, int offset, int limit);
+    Page<VocabularySearchDto> findByKeyword(String keyword, int offset, int limit);
 }

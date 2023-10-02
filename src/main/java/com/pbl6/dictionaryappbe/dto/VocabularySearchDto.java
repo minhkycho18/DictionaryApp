@@ -12,6 +12,6 @@ public class VocabularySearchDto {
     private String word;
     private String pos;
     private String phoneUs;
-    private String phoneticsUk;
+    private String phoneUk;
     private List<String> definitions;
 }
