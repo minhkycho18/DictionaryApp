@@ -20,19 +20,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> titleExistedException(Exception ex) {
         return ResponseEntity.status(400).body("Title is existed");
     }
-
     @ExceptionHandler(value = {DataIntegrityViolationException .class, PropertyValueException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ResponseEntity<String> notNullException(Exception ex) {
         return ResponseEntity.status(400).body(ex.getMessage());
     }
-
     @ExceptionHandler(value = {EntityNotFoundException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ResponseEntity<String> extityNotFoundException(Exception ex) {
         return ResponseEntity.status(400).body(ex.getMessage());
     }
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleUnwantedException(Exception e) {
         e.printStackTrace();
