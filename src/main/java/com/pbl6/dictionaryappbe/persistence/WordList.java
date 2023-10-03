@@ -1,5 +1,6 @@
 package com.pbl6.dictionaryappbe.persistence;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import jakarta.persistence.*;
@@ -12,13 +13,14 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Entity
 @Table(name = "word_list", uniqueConstraints = @UniqueConstraint(columnNames = {"title", "user_id"}))
 public class WordList {
     @Id
     @Column(name = "word_list_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long vocabularyListId;
+    private Long wordListId;
 
     @Column(length = 200, nullable = false)
     private String title;
@@ -34,5 +36,6 @@ public class WordList {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @JsonIgnore
     private User user;
 }
