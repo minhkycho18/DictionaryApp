@@ -4,7 +4,7 @@ function capitalizeFirstLetter(str) {
 const changeTitle = (path = "") => {
   const arrPath = path.split("/").filter(Boolean);
   document.title = arrPath
-    ? "Vocabulary app"
-    : capitalizeFirstLetter(arrPath[arrPath.length - 1]) + " - Vocabulary App";
+    ? "Dictionary app"
+    : capitalizeFirstLetter(arrPath[arrPath.length - 1]) + " - Dictionary App";
 };
 export default changeTitle;

@@ -14,14 +14,14 @@ const Home = () => {
         <Space className="introduce" direction="vertical">
           <Space className="introduce__title">Learn with MyTeam</Space>
           <Space className="introduce__paragraph">
-            FlashQuiz is a language learning platform that helps you learn
+            DictionaryApp is a language learning platform that helps you learn
             easier, faster and smarter.
           </Space>
           <Space className="introduce__btn" wrap>
             <Button type="primary" className="btn btn__pri">
               Vocabulary
             </Button>
-            <Button className="btn btn__sec">Grammar</Button>
+            <Button className="btn btn__sec">Word Lists</Button>
           </Space>
         </Space>
         <Image className="image" src={backGround} preview={false}></Image>
