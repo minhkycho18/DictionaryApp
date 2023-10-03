@@ -8,6 +8,9 @@
   justify-content: space-between;
   align-items: center;
   border-right: 1px solid #eee;
+  position: sticky !important;
+  top: 0;
+  left: 0;
 }
 .infor {
   display: flex;

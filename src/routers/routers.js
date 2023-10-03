@@ -9,6 +9,7 @@ import MyWordLists from "../pages/Learner/my-word-lists/MyWordLists";
 import SignIn from "../pages/sign-in/SignIn";
 import SignUp from "../pages/sign-up/SignUp";
 import Auth from "../layouts/Auth/Auth";
+import Leitner from "../pages/Learner/leitner/Leitner";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -42,6 +43,7 @@ const routers = createBrowserRouter([
       },
       {
         path: "leitner",
+        element: <Leitner />,
       },
     ],
   },

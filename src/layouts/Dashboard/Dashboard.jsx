@@ -22,7 +22,7 @@ const Dashboard = () => {
     },
   ];
   return (
-    <Layout>
+    <Layout style={{ position: "relative" }}>
       <CustomSider />
       <Layout>
         <Header
