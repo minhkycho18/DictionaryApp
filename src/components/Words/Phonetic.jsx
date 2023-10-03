@@ -5,6 +5,7 @@ import en from "../../assets/images/en-circle.png";
 import "./Phonetic.scss";
 import Meaning from "./Meaning";
 import { useSelector } from "react-redux";
+import Examples from "./Examples";
 const Phonetic = (props) => {
   const { word } = useSelector((state) => state.search);
 
@@ -38,29 +39,7 @@ const Phonetic = (props) => {
           <Meaning />
         </Col>
         <Col xs={{ span: 24 }} lg={{ span: 8 }}>
-          <Space className="wrappered">
-            <Space direction="vertical" wrap>
-              <Space className="phonetic">
-                <span className="phonetic__word">{props?.word} Hung</span>
-                <span>
-                  <SoundFilled className="phonetic__icon" />
-                </span>
-              </Space>
-              <Space
-                style={{
-                  paddingTop: "16px",
-                  alignItems: "start",
-                  display: "flex",
-                }}
-              >
-                <Avatar src={en} className="language__flag"></Avatar>
-                <span className="phonetic__content">
-                  {props?.phonetic} /lˈɒŋɡən/
-                </span>
-              </Space>
-            </Space>
-            <span className="phonetic__type">[{props?.type}noun]</span>
-          </Space>
+          <Examples />
         </Col>
       </Row>
     </div>
