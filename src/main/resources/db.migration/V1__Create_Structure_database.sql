@@ -7,7 +7,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -24,10 +24,10 @@ DROP TABLE IF EXISTS `definitions`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `definitions` (
   `def_id` bigint NOT NULL AUTO_INCREMENT,
-  `word_desc` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `examples` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `word_desc` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `examples` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`def_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=103441 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=103441 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -120,7 +120,7 @@ CREATE TABLE `vocab_def` (
   KEY `def_id` (`def_id`),
   CONSTRAINT `vocab_def_ibfk_1` FOREIGN KEY (`vocab_id`) REFERENCES `vocabularies` (`vocab_id`),
   CONSTRAINT `vocab_def_ibfk_2` FOREIGN KEY (`def_id`) REFERENCES `definitions` (`def_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -155,19 +155,19 @@ DROP TABLE IF EXISTS `vocabularies`;
 CREATE TABLE `vocabularies` (
   `vocab_id` bigint NOT NULL AUTO_INCREMENT,
   `word` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_as_cs NOT NULL,
-  `pos` varchar(100) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `phonetics_us` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `phonetics_uk` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `audio_us` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `audio_uk` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `word_type` varchar(10) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `pos` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phonetics_us` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phonetics_uk` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `audio_us` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `audio_uk` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `word_type` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `modified_at` timestamp NULL DEFAULT NULL,
-  `modified_by` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `modified_by` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`vocab_id`),
   UNIQUE KEY `head_pos` (`word`,`pos`),
   UNIQUE KEY `UKqu6kj4lt710nsj568gn507tld` (`word`,`pos`),
   KEY `index_word_type` (`word_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=147789 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=147789 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
