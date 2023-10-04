@@ -7,6 +7,7 @@ import {
 import { Col, Row, Space, Timeline } from "antd";
 import React from "react";
 import "./Leitner.scss";
+import LeitnerItem from "../../../components/leitner-item/LeitnerItem";
 
 const Leitner = () => {
   return (
@@ -61,114 +62,36 @@ const Leitner = () => {
         <Space className="leitner_title">Leitner Boxes</Space>
         <Space>
           <Timeline
+            className="timeline"
             items={[
               {
-                children: (
-                  <Space className="box-option" direction="vertical">
-                    <Space className="box-option_title">Waiting</Space>
-                    <Space className="box-option_count" direction="horizontal">
-                      <Space>
-                        <ContainerOutlined />
-                        <Space className="box-option_count--num">22</Space>Words
-                      </Space>
-                    </Space>
-                  </Space>
-                ),
+                children: <LeitnerItem title={"Waiting"} count={20} />,
               },
               {
-                children: (
-                  <Space className="box-option" direction="vertical">
-                    <Space className="box-option_title">Waiting</Space>
-                    <Space className="box-option_count" direction="horizontal">
-                      <Space>
-                        <ContainerOutlined />
-                        <Space className="box-option_count--num">22</Space>Words
-                      </Space>
-                    </Space>
-                  </Space>
-                ),
+                children: <LeitnerItem title={"Everyday"} count={20} />,
               },
               {
-                children: (
-                  <Space className="box-option" direction="vertical">
-                    <Space className="box-option_title">Waiting</Space>
-                    <Space className="box-option_count" direction="horizontal">
-                      <Space>
-                        <ContainerOutlined />
-                        <Space className="box-option_count--num">22</Space>Words
-                      </Space>
-                    </Space>
-                  </Space>
-                ),
+                children: <LeitnerItem title={"Every 2 day"} count={20} />,
               },
               {
-                children: (
-                  <Space className="box-option" direction="vertical">
-                    <Space className="box-option_title">Waiting</Space>
-                    <Space className="box-option_count" direction="horizontal">
-                      <Space>
-                        <ContainerOutlined />
-                        <Space className="box-option_count--num">22</Space>Words
-                      </Space>
-                    </Space>
-                  </Space>
-                ),
+                children: <LeitnerItem title={"Every 4 day"} count={20} />,
               },
             ]}
           />
           <Timeline
+            className="timeline"
             items={[
               {
-                children: (
-                  <Space className="box-option" direction="vertical">
-                    <Space className="box-option_title">Waiting</Space>
-                    <Space className="box-option_count" direction="horizontal">
-                      <Space>
-                        <ContainerOutlined />
-                        <Space className="box-option_count--num">22</Space>Words
-                      </Space>
-                    </Space>
-                  </Space>
-                ),
+                children: <LeitnerItem title={"Waiting"} count={20} />,
               },
               {
-                children: (
-                  <Space className="box-option" direction="vertical">
-                    <Space className="box-option_title">Waiting</Space>
-                    <Space className="box-option_count" direction="horizontal">
-                      <Space>
-                        <ContainerOutlined />
-                        <Space className="box-option_count--num">22</Space>Words
-                      </Space>
-                    </Space>
-                  </Space>
-                ),
+                children: <LeitnerItem title={"Waiting"} count={20} />,
               },
               {
-                children: (
-                  <Space className="box-option" direction="vertical">
-                    <Space className="box-option_title">Waiting</Space>
-                    <Space className="box-option_count" direction="horizontal">
-                      <Space>
-                        <ContainerOutlined />
-                        <Space className="box-option_count--num">22</Space>Words
-                      </Space>
-                    </Space>
-                  </Space>
-                ),
+                children: <LeitnerItem title={"Waiting"} count={20} />,
               },
               {
-                children: (
-                  <Space className="box-option" direction="vertical">
-                    <Space className="box-option_title">Waiting</Space>
-                    <Space className="box-option_count" direction="horizontal">
-                      <Space>
-                        <ContainerOutlined />
-                        <Space className="box-option_count--num">22</Space>Words
-                      </Space>
-                    </Space>
-                  </Space>
-                ),
+                children: <LeitnerItem title={"Waiting"} count={20} />,
               },
             ]}
           />

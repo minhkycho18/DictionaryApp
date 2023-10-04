@@ -16,7 +16,7 @@
   &-bottom {
     background-color: #eee;
     border-radius: 32px;
-    padding: 32px 200px;
+    padding: 64px;
   }
 }
 .leitner-start {
@@ -78,10 +78,11 @@
     font-size: 36px;
     line-height: 40px;
     text-align: left;
-    padding: 16px 0px;
+    padding: 16px 64px;
   }
 }
 .box-option {
+  cursor: pointer;
   align-items: center;
   background-color: #ffffff;
   color: #212529;
@@ -113,4 +114,7 @@
       font-weight: 800;
     }
   }
+}
+.timeline {
+  margin: 0px 64px;
 }

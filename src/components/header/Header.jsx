@@ -7,10 +7,11 @@ import "./Header.scss";
 import changeTitle from "../../helpers/changeTitle";
 const Header = () => {
   const { pathname } = useLocation();
-  changeTitle(pathname);
   const [isScroll, setIsScroll] = useState();
   const navigate = useNavigate();
+  changeTitle(pathname);
   useEffect(() => {
+    // document.title = "a";
     const handleScroll = () => {
       if (window.scrollY > 630) {
         setIsScroll(true);
@@ -22,7 +23,7 @@ const Header = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [pathname]);
 
   const links = [
     {

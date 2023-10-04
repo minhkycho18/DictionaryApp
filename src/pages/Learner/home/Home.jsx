@@ -6,8 +6,10 @@ import backGround from "../../../assets/images/background.png";
 import funImage from "../../../assets/images/fun-learning-tools-500.png";
 import dynamic from "../../../assets/images/learn-with-a-dynamic-platform-500.png";
 import "./Home.scss";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <Content className="main">
       <Space className="content">
@@ -18,10 +20,19 @@ const Home = () => {
             easier, faster and smarter.
           </Space>
           <Space className="introduce__btn" wrap>
-            <Button type="primary" className="btn btn__pri">
-              Vocabulary
+            <Button
+              type="primary"
+              className="btn btn__pri"
+              onClick={() => navigate("./dictionary")}
+            >
+              Dictionary
             </Button>
-            <Button className="btn btn__sec">Word Lists</Button>
+            <Button
+              className="btn btn__sec"
+              onClick={() => navigate("./vocabulary")}
+            >
+              Word Lists
+            </Button>
           </Space>
         </Space>
         <Image className="image" src={backGround} preview={false}></Image>

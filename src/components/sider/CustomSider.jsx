@@ -15,7 +15,7 @@ const CustomSider = (props) => {
       <Space direction="vertical" className="infor">
         <Link className="infor__logo" to={"/home"}>
           <Image src={logo} preview={false} width={48} />
-          Vocab
+          Dictionary
         </Link>
         <Avatar
           size={96}
