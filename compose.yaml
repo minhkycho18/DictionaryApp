@@ -1,0 +1,30 @@
+services:
+  dictionary:
+    image: minhkycho18/dictionary-app
+    container_name: dictionary-container
+    ports:
+      - "8080:8080"
+    networks:
+      - dev
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    container_name: dictionary-mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: Quang123
+      MYSQL_DATABASE: vocab_note
+    volumes:
+      - dictionary-mysql-data:/var/lib/mysql
+    networks:
+      - dev
+
+networks:
+  dev:
+    driver: bridge
+
+volumes:
+  dictionary-mysql-data:
