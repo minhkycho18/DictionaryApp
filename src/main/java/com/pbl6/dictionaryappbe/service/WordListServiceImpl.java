@@ -7,7 +7,6 @@ import com.pbl6.dictionaryappbe.repository.UserRepository;
 import com.pbl6.dictionaryappbe.repository.WordListRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.PropertyValueException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,9 +26,9 @@ public class WordListServiceImpl implements WordListService {
     }
 
     @Override
-    public void createWordList(WordListDto wordList) {
+    public WordList createWordList(WordListDto wordList) {
         User user = userRepository.findByEmail(wordList.getCreatedBy());
-        wordListRepository.save(WordList.builder()
+        return wordListRepository.save(WordList.builder()
                 .title(wordList.getTitle())
                 .listDesc(wordList.getListDesc())
                 .createdBy(wordList.getCreatedBy())
@@ -40,9 +39,6 @@ public class WordListServiceImpl implements WordListService {
 
     @Override
     public WordList updateTitle(Long wordListId, WordListDto wordList) {
-        if (wordList.getTitle().isEmpty()) {
-            throw new PropertyValueException("Title should not be null", "WordList", "Title");
-        }
         Optional<WordList> oldWordListOptional = wordListRepository.findById(wordListId);
         if (oldWordListOptional.isPresent()) {
             WordList oldWordList = oldWordListOptional.get();

@@ -11,7 +11,7 @@ public interface WordListService {
 
     List<WordList> getAll();
 
-    void createWordList(WordListDto wordList);
+    WordList createWordList(WordListDto wordList);
 
     WordList updateTitle(Long wordListId, WordListDto wordList);
 

@@ -6,6 +6,7 @@ import com.pbl6.dictionaryappbe.service.WordListService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,17 +24,19 @@ public class WordListController {
     }
 
     @PostMapping
-    public String createWordList(@RequestBody @Valid @NotNull WordListDto wordList) {
-        wordListService.createWordList(wordList);
-        return "Add successfully";
+    @Transactional
+    public WordList createWordList(@RequestBody @Valid @NotNull WordListDto wordList) {
+        return wordListService.createWordList(wordList);
     }
 
     @PutMapping("/{id}")
+    @Transactional
     public WordList updateWordList(@PathVariable Long id, @RequestBody @NotNull WordListDto wordList) {
         return wordListService.updateTitle(id, wordList);
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     public String deleteWordList(@PathVariable Long id) {
         wordListService.deleteWordList(id);
         return "Delete successfully";
