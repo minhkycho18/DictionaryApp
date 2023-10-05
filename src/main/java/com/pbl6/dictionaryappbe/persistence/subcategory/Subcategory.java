@@ -1,6 +1,6 @@
 package com.pbl6.dictionaryappbe.persistence.subcategory;
 
-import com.pbl6.dictionaryappbe.persistence.WordList;
+import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import jakarta.persistence.*;
 import lombok.*;

@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "vocabularies", uniqueConstraints = @UniqueConstraint(columnNames = {"word", "pos"}))
+@Table(name = "vocabularies")
 public class Vocabulary {
     @Id
     @Column(name = "vocab_id")

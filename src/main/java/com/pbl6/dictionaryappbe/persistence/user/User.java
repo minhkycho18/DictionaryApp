@@ -1,7 +1,7 @@
 package com.pbl6.dictionaryappbe.persistence.user;
 
 import com.pbl6.dictionaryappbe.persistence.leitner.VocabLeitner;
-import com.pbl6.dictionaryappbe.persistence.WordList;
+import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import com.pbl6.dictionaryappbe.persistence.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,7 +24,7 @@ public class User {
     @Column(length = 150)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)
@@ -35,6 +35,9 @@ public class User {
 
     @Column(columnDefinition = "TEXT")
     private String image;
+
+    @Column
+    private Boolean isLock = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
