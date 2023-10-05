@@ -8,6 +8,7 @@ import com.pbl6.dictionaryappbe.repository.WordListRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +22,13 @@ public class WordListServiceImpl implements WordListService {
 
     private final UserRepository userRepository;
 
+    @Override
     public List<WordList> getAll() {
         return wordListRepository.findAll();
     }
 
     @Override
+    @Transactional
     public WordList createWordList(WordListDto wordList) {
         User user = userRepository.findByEmail(wordList.getCreatedBy());
         return wordListRepository.save(WordList.builder()
@@ -38,6 +41,7 @@ public class WordListServiceImpl implements WordListService {
     }
 
     @Override
+    @Transactional
     public WordList updateTitle(Long wordListId, WordListDto wordList) {
         Optional<WordList> oldWordListOptional = wordListRepository.findById(wordListId);
         if (oldWordListOptional.isPresent()) {
@@ -50,6 +54,7 @@ public class WordListServiceImpl implements WordListService {
     }
 
     @Override
+    @Transactional
     public void deleteWordList(Long id) {
         Optional<WordList> wordListOptional = wordListRepository.findById(id);
         if (wordListOptional.isPresent()) {

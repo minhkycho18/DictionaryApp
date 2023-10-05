@@ -13,7 +13,6 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
 @Table(name = "word_list", uniqueConstraints = @UniqueConstraint(columnNames = {"title", "user_id"}))
 public class WordList {
@@ -32,6 +31,7 @@ public class WordList {
     private String createdBy;
 
     @OneToMany(mappedBy = "wordList", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Subcategory> subcategories;
 
     @ManyToOne(fetch = FetchType.LAZY)
