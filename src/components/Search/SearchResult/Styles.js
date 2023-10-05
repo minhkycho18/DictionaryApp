@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-
+import { colors } from "~/constants/theme";
 export const styles = StyleSheet.create({
    result: {
       height: 102,
@@ -34,7 +34,8 @@ export const styles = StyleSheet.create({
    },
    content_top_Vocal: {
       fontSize: 17,
-      color: '#414548'
+      color: colors.textColor,
+      letterSpacing :0.5
    },
    content_top_Type: {
       fontSize: 14,
@@ -43,14 +44,16 @@ export const styles = StyleSheet.create({
       borderRadius: 10,
       color: 'white',
       paddingLeft: 10,
-      paddingRight: 10
+      paddingRight: 10,
+      letterSpacing :0.5
    },
    content_bottom: {
       width: '100%',
       height: 45
    },
    content_bottom_Mean: {
-      color: '#414548',
+      color: colors.textColor,
+      letterSpacing :0.5,
       fontSize: 15,
       lineHeight: 22
    }

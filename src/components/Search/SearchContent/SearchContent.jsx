@@ -5,7 +5,7 @@ function SearchContent() {
   return (
     <View style={styles.searchResult}>
           <Image
-            source={require("../../../assets/searchDoc.png")}
+            source={require("~/assets/searchDoc.png")}
             style={styles.image}
           />
           <Text style={styles.Text}>Search something ...</Text>
