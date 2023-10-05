@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import { colors, spacing, sizes, shadow } from '../../constants/theme';
 export const styles = StyleSheet.create({
     searchResult:{
         position:'absolute',
@@ -9,11 +8,11 @@ export const styles = StyleSheet.create({
     image: {
         width: 180,
         height: 180,
-        tintColor: 'gray'
+        tintColor: '#6b7280'
 
     },
     Text: {
         fontSize: 20,
-        color: 'gray'
+        color: '#6b7280'
     },
 });

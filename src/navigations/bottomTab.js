@@ -1,8 +1,10 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer} from '@react-navigation/native'
 import Home from '../screens/Home';
-import Dictionary from "../screens/Dictionary/Dictionary";
+// import Dictionary from "../screens/Dictionary/Dictionary";
+import DictionaryStack from "./dictionaryStack";
 import Profile from "../screens/Profile";
+import VocalDetail from "../screens/VocalDetail/VocalDetail";
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from "../styles/Style";
 import { useRef , useState , useEffect } from 'react'
@@ -78,7 +80,7 @@ export default function BottomTab() {
 
         })}
       >
-        <Tab.Screen name="Home" component={Home} options={styles.tabScreenStyle}
+        <Tab.Screen name="Home" component={VocalDetail} options={styles.tabScreenStyle}
           listeners={({ navigation, route }) => ({
             tabPress: e => {
               Animated.spring(tabOffsetValue, {
@@ -87,7 +89,7 @@ export default function BottomTab() {
               }).start();
             }
           })} />
-        <Tab.Screen name="Dictionary" component={Dictionary} options={styles.tabScreenStyle}
+        <Tab.Screen name="Dictionary" component={DictionaryStack} options={styles.tabScreenStyle}
           listeners={({ navigation, route }) => ({
             tabPress: e => {
               Animated.spring(tabOffsetValue, {

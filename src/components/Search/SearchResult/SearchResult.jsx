@@ -1,11 +1,15 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { styles } from "./Styles";
+import { useNavigation } from "@react-navigation/native";
+
 function SearchResult() {
+  const { navigate } = useNavigation();
   return (
     <TouchableOpacity
       onPress={() => {
-        // props.navigation.push("movieDetails", {});
+        navigate("VocalDetail");
+        console.log('huy')
       }}
     >
       <View style={styles.result}>
@@ -21,7 +25,7 @@ function SearchResult() {
           <View style={styles.content_bottom}>
             <Text numberOfLines={2} style={styles.content_bottom_Mean}>
               a word we say when we see someone and want to great them a word we
-              say when we see someone and want to great them{" "}
+              say when we see someone and want to great them
             </Text>
           </View>
         </View>

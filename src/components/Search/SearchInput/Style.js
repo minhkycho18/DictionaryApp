@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { colors, spacing, sizes, shadow } from '../../constants/theme';
+import { colors, spacing, sizes, shadow } from '~/constants/theme';
 export const styles = StyleSheet.create({
   headerSearch: {
     display: 'flex',
@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
     paddingLeft: spacing.xl + spacing.s,
     paddingRight: spacing.m,
     borderRadius: sizes.radius,
-    width: "100%",
+    width: "90%",
     flex: 1,
     ...shadow.light,
   },
@@ -34,5 +34,11 @@ export const styles = StyleSheet.create({
     marginLeft: 10,
     borderRadius: 15,
 
-  }
+  },
+  iconClear: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 1,
+  },
 });
