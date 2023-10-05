@@ -1,5 +1,6 @@
 package com.pbl6.dictionaryappbe.persistence;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import jakarta.persistence.*;
@@ -30,9 +31,11 @@ public class WordList {
     private String createdBy;
 
     @OneToMany(mappedBy = "wordList", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Subcategory> subcategories;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @JsonIgnore
     private User user;
 }
