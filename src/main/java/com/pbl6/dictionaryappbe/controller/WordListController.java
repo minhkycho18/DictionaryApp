@@ -28,7 +28,7 @@ public class WordListController {
     }
 
     @PutMapping("/{id}")
-    public WordList updateWordList(@PathVariable Long id, @RequestBody @NotNull WordListDto wordList) {
+    public WordList updateWordList(@PathVariable Long id, @RequestBody @Valid @NotNull WordListDto wordList) {
         return wordListService.updateTitle(id, wordList);
     }
 
