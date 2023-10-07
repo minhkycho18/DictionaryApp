@@ -8,5 +8,14 @@ ALTER TABLE word_list
 ALTER TABLE word_list
     ADD COLUMN create_at TIMESTAMP;
 
+ALTER TABlE subcategory_detail
+    ADD COLUMN is_quiz BOOLEAN default false;
+ALTER TABlE subcategory_detail
+    ADD COLUMN is_review BOOLEAN default false;
+ALTER TABlE subcategory_detail
+    ADD COLUMN is_flashcard BOOLEAN default false;
+ALTER TABlE subcategory_detail
+    ADD COLUMN last_learning TIMESTAMP;
+
 DROP INDEX head_pos ON vocabularies;
 

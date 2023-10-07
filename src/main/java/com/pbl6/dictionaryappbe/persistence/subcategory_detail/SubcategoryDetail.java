@@ -1,8 +1,6 @@
-package com.pbl6.dictionaryappbe.persistence.leitner;
+package com.pbl6.dictionaryappbe.persistence.subcategory_detail;
 
-
-import com.pbl6.dictionaryappbe.persistence.level_leitner.LevelLeitner;
-import com.pbl6.dictionaryappbe.persistence.user.User;
+import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,12 +10,12 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "vocab_leitner")
-@IdClass(LeitnerId.class)
-public class VocabLeitner {
+@Table(name = "subcategory_detail")
+@IdClass(SubcategoryDetailId.class)
+public class SubcategoryDetail {
     @Id
     @Column(name = "vocab_id")
     private Long vocabId;
@@ -27,15 +25,24 @@ public class VocabLeitner {
     private Long defId;
 
     @Id
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "subcategory_id")
+    private Long subcategoryId;
+
+    @Column
+    private Boolean isQuiz;
+
+    @Column
+    private Boolean isFlashcard;
+
+    @Column
+    private Boolean isReview;
 
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime lastLearning;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private User user;
+    @JoinColumn(name = "subcategory_id", referencedColumnName = "subcategory_id")
+    private Subcategory subcategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
@@ -43,8 +50,4 @@ public class VocabLeitner {
             @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id")
     })
     private VocabDef vocabDef;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "level", referencedColumnName = "level")
-    private LevelLeitner levelLeitner;
 }
