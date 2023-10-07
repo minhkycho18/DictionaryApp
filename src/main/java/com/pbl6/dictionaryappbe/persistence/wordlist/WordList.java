@@ -1,4 +1,4 @@
-package com.pbl6.dictionaryappbe.persistence;
+package com.pbl6.dictionaryappbe.persistence.wordlist;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
@@ -6,6 +6,7 @@ import com.pbl6.dictionaryappbe.persistence.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -29,6 +30,13 @@ public class WordList {
 
     @Column
     private String createdBy;
+
+    @Column
+    private LocalDateTime createdAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private ListType listType;
 
     @OneToMany(mappedBy = "wordList", fetch = FetchType.LAZY)
     @JsonIgnore

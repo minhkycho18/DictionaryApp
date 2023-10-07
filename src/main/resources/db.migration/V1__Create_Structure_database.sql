@@ -165,7 +165,6 @@ CREATE TABLE `vocabularies` (
   `modified_by` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`vocab_id`),
   UNIQUE KEY `head_pos` (`word`,`pos`),
-  UNIQUE KEY `UKqu6kj4lt710nsj568gn507tld` (`word`,`pos`),
   KEY `index_word_type` (`word_type`)
 ) ENGINE=InnoDB AUTO_INCREMENT=147789 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

@@ -2,7 +2,7 @@ package com.pbl6.dictionaryappbe.persistence.vocabdef;
 
 import com.pbl6.dictionaryappbe.persistence.Definition;
 import com.pbl6.dictionaryappbe.persistence.leitner.VocabLeitner;
-import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
+import com.pbl6.dictionaryappbe.persistence.subcategory_detail.SubcategoryDetail;
 import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,13 +37,6 @@ public class VocabDef {
     @OneToMany(mappedBy = "vocabDef")
     private List<VocabLeitner> vocabLeitners;
 
-    @ManyToMany
-    @JoinTable(
-            name = "subcategory_detail",
-            joinColumns = {
-                    @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id"),
-                    @JoinColumn(name = "def_id", referencedColumnName = "def_id")
-            },
-            inverseJoinColumns = @JoinColumn(name = "subcategory_id", referencedColumnName = "subcategory_id"))
-    private List<Subcategory> subcategories;
+    @OneToMany(mappedBy = "vocabDef")
+    private List<SubcategoryDetail> subcategoryDetails;
 }
