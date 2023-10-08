@@ -1,32 +1,34 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { Avatar, Divider, Input, Space } from "antd";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import en from "../../assets/images/en-circle.png";
-import { searchByWord } from "../../stores/search-word/searchSlice";
+import { setKeyword } from "../../stores/search-word/searchSlice";
 import "./SearchBox.scss";
 
 const SearchBox = (props) => {
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState("");
-  // const { word } = useSelector((state) => state.search);
+  const { keyword, result } = useSelector((state) => state.search);
+
   const onChangeInput = (event) => {
     const newValue = event.target.value;
     setInputValue(newValue);
   };
-  const processInput = (value) => {
-    dispatch(searchByWord(value));
-  };
+
   useEffect(() => {
+    const processInput = (value) => {
+      dispatch(setKeyword(value));
+    };
+
     const debounceTimeout = setTimeout(() => {
       processInput(inputValue);
-    }, 300);
+    }, 500);
 
     return () => {
       clearTimeout(debounceTimeout);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputValue]);
+  }, [dispatch, inputValue]);
 
   return (
     <Space wrap className="search font align-center">

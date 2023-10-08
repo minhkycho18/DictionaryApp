@@ -2,7 +2,7 @@ import axios from "axios";
 class Http {
   constructor() {
     this.instance = axios.create({
-      baseURL: process.env.REACT_APP_API_KEY,
+      baseURL: "http://localhost:8080",
       name: "Dictionary App",
       timeout: 10000,
       headers: {

@@ -1,21 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getSearchResult } from "./searchThunk";
 
 const initialState = {
-  word: "",
-  result: {},
+  // keyword: "",
+  result: [],
 };
 
 const searchSlice = createSlice({
   name: "search",
   initialState: initialState,
   reducers: {
-    searchByWord: (state, action) => {
-      state.word = action.payload;
-    },
+    // setKeyword: (state, action) => {
+    //   state.word = action.payload;
+    // },
   },
-  // extraReducers: (builder) => {builder.addCase()},
+  extraReducers: (builder) => {
+    builder.addCase(getSearchResult.fulfilled, (state, action) => {
+      state.result = action.payload;
+    });
+  },
 });
 
-export const { searchByWord } = searchSlice.actions;
+export const { setKeyword } = searchSlice.actions;
 
 export default searchSlice.reducer;

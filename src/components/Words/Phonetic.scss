@@ -2,7 +2,6 @@
 @import "../../assets/scss/variable.scss";
 .phonetic {
   display: flex;
-  //   justify-content: space-between !important;
   align-items: center;
 
   &__word {
@@ -10,12 +9,13 @@
     line-height: 48px;
     font-family: $font;
     font-weight: 800;
+    width: max-content;
   }
   &__icon {
     font-size: 20px;
     line-height: 20px;
     margin-left: 16px;
-    margin-right: 128px;
+    margin-right: auto;
     cursor: pointer;
     &:hover {
       color: #6b7280;

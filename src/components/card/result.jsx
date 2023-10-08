@@ -4,14 +4,14 @@ import "./Result.scss";
 const Result = (props) => {
   const selectedWord = (e) => {
     e.preventDefault();
-    props.onSelect(props.word);
+    props.onSelect(props.result);
   };
   return (
     <Card className="result" onClick={selectedWord}>
       <h2 className="result__title">
-        {props.index}. {props.word}{" "}
+        {props.index}. {props.result?.word}{" "}
       </h2>
-      <p className="result__content">{props.definition}</p>
+      <p className="result__content">{props.result?.definitions[0]}</p>
     </Card>
   );
 };
