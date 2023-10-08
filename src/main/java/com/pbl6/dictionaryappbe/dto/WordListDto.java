@@ -11,4 +11,5 @@ public class WordListDto {
     private String title;
     private String listDesc;
     private String createdBy;
+    private String listType;
 }

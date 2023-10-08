@@ -19,9 +19,19 @@ public class WordListController {
 
     private final WordListService wordListService;
 
-    @GetMapping
-    public List<WordList> getWordlists() {
-        return wordListService.getAll();
+    @GetMapping("/{id}")
+    public List<WordList> getWordlists(@PathVariable Long id) {
+        return wordListService.getAllByUser(id);
+    }
+
+    @GetMapping("/default")
+    public List<WordList> getAllDefaultWordlists() {
+        return wordListService.getAllDefaultWordList();
+    }
+
+    @GetMapping("/public")
+    public List<WordList> getAllPublicWordLists() {
+        return wordListService.getAllPublicWordList();
     }
 
     @PostMapping
@@ -31,7 +41,7 @@ public class WordListController {
 
     @PutMapping("/{id}")
     public WordList updateWordList(@PathVariable Long id, @RequestBody @Valid @NotNull WordListDto wordList) {
-        return wordListService.updateTitle(id, wordList);
+        return wordListService.updateWordList(id, wordList);
     }
 
     @DeleteMapping("/{id}")

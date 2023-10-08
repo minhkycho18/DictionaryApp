@@ -9,11 +9,15 @@ import java.util.List;
 @Service
 public interface WordListService {
 
-    List<WordList> getAll();
+    List<WordList> getAllByUser(Long id);
+
+    List<WordList> getAllDefaultWordList();
+
+    List<WordList> getAllPublicWordList();
 
     WordList createWordList(WordListDto wordList);
 
-    WordList updateTitle(Long wordListId, WordListDto wordList);
+    WordList updateWordList(Long wordListId, WordListDto wordList);
 
     void deleteWordList(Long id);
 }
