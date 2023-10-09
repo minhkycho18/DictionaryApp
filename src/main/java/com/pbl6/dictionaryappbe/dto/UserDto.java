@@ -22,6 +22,7 @@ public class UserDto {
     @NotEmpty(message = "User name should not be empty")
     @Size(max = 30, message = "Name should not be over 30 characters")
     private String name;
+    private String image;
     private Gender gender;
     private Role role;
 }
