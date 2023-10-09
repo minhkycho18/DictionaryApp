@@ -3,7 +3,7 @@ package com.pbl6.dictionaryappbe.service;
 import com.pbl6.dictionaryappbe.dto.WordListDto;
 import com.pbl6.dictionaryappbe.exception.DuplicateDataException;
 import com.pbl6.dictionaryappbe.exception.FieldNotNullException;
-import com.pbl6.dictionaryappbe.persistence.role.Role;
+import com.pbl6.dictionaryappbe.exception.RecordNotFoundException;
 import com.pbl6.dictionaryappbe.persistence.role.RoleName;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.persistence.wordlist.ListType;
@@ -11,9 +11,9 @@ import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import com.pbl6.dictionaryappbe.repository.RoleRepository;
 import com.pbl6.dictionaryappbe.repository.UserRepository;
 import com.pbl6.dictionaryappbe.repository.WordListRepository;
+import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,15 +51,16 @@ public class WordListServiceImpl implements WordListService {
     @Transactional
     public WordList createWordList(WordListDto wordList) {
         String title = wordList.getTitle();
-        User user = userRepository.findByEmail(wordList.getCreatedBy())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email " + wordList.getCreatedBy()));
+        User user = AuthenticationUtils.getUserFromSecurityContext();
+        if (user == null) {
+            throw new RecordNotFoundException("User not found");
+        }
         if (wordListRepository.findByTitle(wordList.getTitle()) != null) {
             throw new DuplicateDataException("Title is existed");
         }
         WordList newWordList = WordList.builder()
                 .title(title)
                 .listDesc(wordList.getListDesc())
-                .createdBy(wordList.getCreatedBy())
                 .createdAt(LocalDateTime.now())
                 .subcategories(new ArrayList<>())
                 .user(user)

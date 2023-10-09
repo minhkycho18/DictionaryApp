@@ -20,8 +20,14 @@ import java.util.Map;
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {RuntimeException.class})
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleRuntimeException(Exception ex) {
+    @ResponseBody
+    public ResponseEntity<Object> handleRuntimeException(RuntimeException ex) {
+        return ResponseEntity.status(400).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(value = {DuplicateDataException.class})
+    @ResponseBody
+    public ResponseEntity<Object> handleDuplicateDataException(DuplicateDataException ex) {
         return ResponseEntity.status(400).body(ex.getMessage());
     }
 

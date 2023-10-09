@@ -30,9 +30,6 @@ public class WordList implements Serializable {
     private String listDesc;
 
     @Column
-    private String createdBy;
-
-    @Column
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)

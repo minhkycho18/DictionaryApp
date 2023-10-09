@@ -12,4 +12,5 @@ public class WordListDto {
     private String listDesc;
     private String createdBy;
     private String listType;
+    private String  createdAt;
 }
