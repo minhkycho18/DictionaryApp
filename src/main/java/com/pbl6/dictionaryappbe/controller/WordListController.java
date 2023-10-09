@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/wordlist")
+@RequestMapping(path = "/wordlists")
 public class WordListController {
 
     private final WordListService wordListService;

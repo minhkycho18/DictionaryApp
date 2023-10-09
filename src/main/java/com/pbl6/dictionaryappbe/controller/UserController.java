@@ -7,12 +7,11 @@ import com.pbl6.dictionaryappbe.dto.auth.RegisterRequestDto;
 import com.pbl6.dictionaryappbe.mapper.UserMapper;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.service.AuthenticationService;
+import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,12 +33,9 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<UserDto> getUserInfo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof User user) {
-                return ResponseEntity.ok(userMapper.entityToUserDTO(user));
-            }
+        User user = AuthenticationUtils.getUserFromSecurityContext();
+        if (user != null) {
+            return ResponseEntity.ok(userMapper.entityToUserDTO(user));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
