@@ -2,17 +2,21 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getSearchResult } from "./searchThunk";
 
 const initialState = {
-  // keyword: "",
+  keyword: "",
   result: [],
+  selectedMeaning: {},
 };
 
 const searchSlice = createSlice({
   name: "search",
   initialState: initialState,
   reducers: {
-    // setKeyword: (state, action) => {
-    //   state.word = action.payload;
-    // },
+    setMeaningWord: (state, action) => {
+      state.selectedMeaning = action.payload;
+    },
+    setKeyWord: (state, action) => {
+      state.keyword = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getSearchResult.fulfilled, (state, action) => {
@@ -21,6 +25,6 @@ const searchSlice = createSlice({
   },
 });
 
-export const { setKeyword } = searchSlice.actions;
+export const { setMeaningWord, setKeyWord } = searchSlice.actions;
 
 export default searchSlice.reducer;

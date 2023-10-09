@@ -8,7 +8,7 @@ import Meaning from "./Meaning";
 import Examples from "./Examples";
 const Phonetic = (props) => {
   // const { word } = useSelector((state) => state.search);
-
+  
   return (
     <div>
       <Row gutter={[32, 16]}>
