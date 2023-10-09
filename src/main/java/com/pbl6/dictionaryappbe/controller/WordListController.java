@@ -3,6 +3,7 @@ package com.pbl6.dictionaryappbe.controller;
 import com.pbl6.dictionaryappbe.dto.WordListDto;
 import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import com.pbl6.dictionaryappbe.service.WordListService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Wordlist")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/wordlists")
