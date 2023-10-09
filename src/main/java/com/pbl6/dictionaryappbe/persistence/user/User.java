@@ -48,10 +48,10 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     private Role role;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
     private List<WordList> wordLists;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
     private List<VocabLeitner> vocabLeitners;
 
     @Override

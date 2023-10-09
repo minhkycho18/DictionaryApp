@@ -58,7 +58,10 @@ public class WebSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://localhost:3000", "https://dictionary-pbl6.netlify.app"));
+        configuration.setAllowedOrigins(Arrays.asList(
+                "https://localhost:3000",
+                "https://dictionary-pbl6.netlify.app",
+                "https://localhost:8081"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PUT"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
@@ -74,12 +77,12 @@ public class WebSecurityConfig {
                 .cors(withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/vocabs/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/vocabs/**").hasAnyRole(forAdminAndManager())
-                        .requestMatchers(HttpMethod.PUT, "/vocabs/**").hasAnyRole(forAdminAndManager())
-                        .requestMatchers(HttpMethod.DELETE, "/vocabs/**").hasAnyRole(forAdminAndManager())
-                        .requestMatchers("/wordlists/**").hasAnyRole(forAllRole())
+                        .requestMatchers(HttpMethod.POST, "/vocabs/**").hasAnyAuthority(forAdminAndManager())
+                        .requestMatchers(HttpMethod.PUT, "/vocabs/**").hasAnyAuthority(forAdminAndManager())
+                        .requestMatchers(HttpMethod.DELETE, "/vocabs/**").hasAnyAuthority(forAdminAndManager())
+                        .requestMatchers("/wordlists/**").hasAnyAuthority(forAllRole())
                         .requestMatchers("/users/register", "/users/authenticate","users/me").permitAll()
-                        .requestMatchers("/users/**").hasAnyRole(forAllRole())
+                        .requestMatchers("/users/**").hasAnyAuthority(forAllRole())
                         .anyRequest()
                         .authenticated()
                 )
