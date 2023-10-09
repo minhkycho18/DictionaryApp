@@ -7,6 +7,7 @@ import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "vocab_leitner")
 @IdClass(LeitnerId.class)
-public class VocabLeitner {
+public class VocabLeitner implements Serializable {
     @Id
     @Column(name = "vocab_id")
     private Long vocabId;

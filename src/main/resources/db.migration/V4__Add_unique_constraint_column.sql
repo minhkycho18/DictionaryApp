@@ -6,7 +6,7 @@ ALTER TABLE users
 ALTER TABLE word_list
     ADD COLUMN list_type VARCHAR(10) NOT NULL;
 ALTER TABLE word_list
-    ADD COLUMN create_at TIMESTAMP;
+    ADD COLUMN created_at TIMESTAMP;
 
 ALTER TABlE subcategory_detail
     ADD COLUMN is_quiz BOOLEAN default false;
