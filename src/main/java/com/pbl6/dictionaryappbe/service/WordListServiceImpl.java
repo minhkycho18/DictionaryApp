@@ -13,6 +13,7 @@ import com.pbl6.dictionaryappbe.repository.UserRepository;
 import com.pbl6.dictionaryappbe.repository.WordListRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,7 +51,8 @@ public class WordListServiceImpl implements WordListService {
     @Transactional
     public WordList createWordList(WordListDto wordList) {
         String title = wordList.getTitle();
-        User user = userRepository.findByEmail(wordList.getCreatedBy());
+        User user = userRepository.findByEmail(wordList.getCreatedBy())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email " + wordList.getCreatedBy()));
         if (wordListRepository.findByTitle(wordList.getTitle()) != null) {
             throw new DuplicateDataException("Title is existed");
         }
