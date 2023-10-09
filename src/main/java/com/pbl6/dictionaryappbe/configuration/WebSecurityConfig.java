@@ -59,9 +59,9 @@ public class WebSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
-                "https://localhost:3000",
+                "http://localhost:3000",
                 "https://dictionary-pbl6.netlify.app",
-                "https://localhost:8081"));
+                "http://localhost:8081"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PUT"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
