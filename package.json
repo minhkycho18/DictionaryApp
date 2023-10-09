@@ -35,5 +35,5 @@
     "@babel/core": "^7.20.0",
     "react-native-dotenv": "^3.4.9"
   },
-  "private": true
+  "private": false
 }

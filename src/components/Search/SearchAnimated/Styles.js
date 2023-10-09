@@ -26,10 +26,13 @@ export const styles = StyleSheet.create({
         
     },
     title :{
-        marginTop :30,marginBottom:10,
+        
+      marginTop :10,
+      letterSpacing :0.6,
         color :'#fff',
-        fontSize :30,
-        fontWeight : 'bold'
+        fontSize :34,
+        fontWeight : 'bold',
+        alignItems :'center'
     },
     boxContent :{
         display :"flex" , 
@@ -49,10 +52,10 @@ export const styles = StyleSheet.create({
         
     },
     img :{
-        width :30,
-        height :30,
-        borderRadius :50,
-        marginRight :20
+        marginTop :20,
+        width :80,
+        height :80,
+        
     },
     text :{
         fontWeight : 'bold',
