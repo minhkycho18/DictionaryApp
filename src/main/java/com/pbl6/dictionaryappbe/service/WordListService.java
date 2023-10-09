@@ -1,7 +1,7 @@
 package com.pbl6.dictionaryappbe.service;
 
 import com.pbl6.dictionaryappbe.dto.WordListDto;
-import com.pbl6.dictionaryappbe.persistence.WordList;
+import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

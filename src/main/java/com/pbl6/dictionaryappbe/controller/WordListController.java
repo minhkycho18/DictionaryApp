@@ -1,7 +1,7 @@
 package com.pbl6.dictionaryappbe.controller;
 
 import com.pbl6.dictionaryappbe.dto.WordListDto;
-import com.pbl6.dictionaryappbe.persistence.WordList;
+import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import com.pbl6.dictionaryappbe.service.WordListService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

@@ -6,6 +6,7 @@ import com.pbl6.dictionaryappbe.persistence.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "word_list", uniqueConstraints = @UniqueConstraint(columnNames = {"title", "user_id"}))
-public class WordList {
+public class WordList implements Serializable {
     @Id
     @Column(name = "word_list_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

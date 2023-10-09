@@ -1,12 +1,13 @@
 package com.pbl6.dictionaryappbe.service;
 
 import com.pbl6.dictionaryappbe.dto.WordListDto;
-import com.pbl6.dictionaryappbe.persistence.WordList;
 import com.pbl6.dictionaryappbe.persistence.user.User;
+import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import com.pbl6.dictionaryappbe.repository.UserRepository;
 import com.pbl6.dictionaryappbe.repository.WordListRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +31,8 @@ public class WordListServiceImpl implements WordListService {
     @Override
     @Transactional
     public WordList createWordList(WordListDto wordList) {
-        User user = userRepository.findByEmail(wordList.getCreatedBy());
+        User user = userRepository.findByEmail(wordList.getCreatedBy())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email " + wordList.getCreatedBy()));
         return wordListRepository.save(WordList.builder()
                 .title(wordList.getTitle())
                 .listDesc(wordList.getListDesc())
