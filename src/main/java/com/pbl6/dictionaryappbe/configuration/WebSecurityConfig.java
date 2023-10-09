@@ -58,12 +58,8 @@ public class WebSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:3000",
-                "https://dictionary-pbl6.netlify.app",
-                "http://localhost:8081"));
+        configuration.addAllowedOrigin("*");
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PUT"));
-        configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -81,7 +77,13 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/vocabs/**").hasAnyAuthority(forAdminAndManager())
                         .requestMatchers(HttpMethod.DELETE, "/vocabs/**").hasAnyAuthority(forAdminAndManager())
                         .requestMatchers("/wordlists/**").hasAnyAuthority(forAllRole())
-                        .requestMatchers("/users/register", "/users/authenticate","users/me").permitAll()
+                        .requestMatchers(
+                                "/roles/**",
+                                "/users/register",
+                                "/users/authenticate",
+                                "users/me",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**").permitAll()
                         .requestMatchers("/users/**").hasAnyAuthority(forAllRole())
                         .anyRequest()
                         .authenticated()
