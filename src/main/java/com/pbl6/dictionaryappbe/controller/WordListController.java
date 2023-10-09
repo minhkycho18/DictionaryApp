@@ -1,6 +1,7 @@
 package com.pbl6.dictionaryappbe.controller;
 
 import com.pbl6.dictionaryappbe.dto.WordListDto;
+import com.pbl6.dictionaryappbe.persistence.role.RoleName;
 import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import com.pbl6.dictionaryappbe.service.WordListService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,8 +26,8 @@ public class WordListController {
     }
 
     @GetMapping("/default")
-    public List<WordList> getAllDefaultWordlists() {
-        return wordListService.getAllDefaultWordList();
+    public List<WordList> getAllSystemWordlists() {
+        return wordListService.getAllSystemWordList(RoleName.CONTENT_MANAGER);
     }
 
     @GetMapping("/public")
