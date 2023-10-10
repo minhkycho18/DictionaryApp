@@ -17,6 +17,7 @@ const Dictionary = () => {
   const [inputWord, setInputWord] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const onChangeInput = (event) => {
     const newValue = event.target.value;
     setInputWord(newValue);

@@ -1,0 +1,17 @@
+@import "../../assets/scss/font.scss";
+@import "../../assets/scss/variable.scss";
+.header-signIn-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 32px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-family: $font;
+  font-weight: 800;
+  border: none;
+  &:hover {
+    background-color: #bed4ff !important;
+    color: #508aff !important;
+  }
+}

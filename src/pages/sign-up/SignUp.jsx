@@ -1,7 +1,10 @@
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, Select } from "antd";
+import { Button, Checkbox, Form, Input, Select, message } from "antd";
 import React from "react";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { signUpUser } from "../../stores/authenticate/authThunk";
+
 const { Option } = Select;
 const formItemLayout = {
   labelCol: {
@@ -35,22 +38,41 @@ const tailFormItemLayout = {
 };
 const SignUp = () => {
   const [form] = Form.useForm();
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
-  };
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select
-        style={{
-          width: 70,
-        }}
-      >
-        <Option value="86">+84</Option>
-      </Select>
-    </Form.Item>
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [messageApi, contextHolder] = message.useMessage();
+  const { userInformation, loading, error } = useSelector(
+    (state) => state.auth
   );
+  const errorToast = () => {
+    messageApi.open({
+      type: "error",
+      content: "Can not register!",
+    });
+  };
+
+  const onFinish = (values) => {
+    const { confirm, agreement, ...formValue } = {
+      confirm: values.confirm,
+      agreement: values.agreement,
+      ...values,
+    };
+    if (confirm && agreement) {
+      dispatch(signUpUser({ ...formValue, roleId: 1 }));
+      if (!loading && error === null) {
+        localStorage.setItem("token", userInformation.access_token);
+        navigate("/");
+      }
+      if (error) {
+        errorToast();
+      }
+    }
+  };
+
   return (
     <>
+      {contextHolder}
+
       <Link
         to={"/auth/sign-in"}
         style={{
@@ -137,22 +159,8 @@ const SignUp = () => {
         >
           <Input.Password />
         </Form.Item>
-
         <Form.Item
-          name="username"
-          label="Username"
-          rules={[
-            {
-              required: true,
-              message: "Please input your username!",
-              whitespace: false,
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name="nickname"
+          name="name"
           label="Nickname"
           tooltip="What do you want others to call you?"
           rules={[
@@ -167,24 +175,6 @@ const SignUp = () => {
         </Form.Item>
 
         <Form.Item
-          name="phone"
-          label="Phone Number"
-          rules={[
-            {
-              required: true,
-              message: "Please input your phone number!",
-            },
-          ]}
-        >
-          <Input
-            addonBefore={prefixSelector}
-            style={{
-              width: "100%",
-            }}
-          />
-        </Form.Item>
-
-        <Form.Item
           name="gender"
           label="Gender"
           rules={[
@@ -195,9 +185,9 @@ const SignUp = () => {
           ]}
         >
           <Select placeholder="select your gender">
-            <Option value="male">Male</Option>
-            <Option value="female">Female</Option>
-            <Option value="other">Other</Option>
+            <Option value="MALE">Male</Option>
+            <Option value="FEMALE">Female</Option>
+            {/* <Option value="other">Other</Option> */}
           </Select>
         </Form.Item>
 

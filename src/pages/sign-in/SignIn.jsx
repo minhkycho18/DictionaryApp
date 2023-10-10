@@ -1,11 +1,33 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { signInUser } from "../../stores/authenticate/authThunk";
 import "./SignIn.scss";
-import { Link } from "react-router-dom";
+
 const SignIn = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [messageApi, contextHolder] = message.useMessage();
+  const { userInformation, loading, error } = useSelector(
+    (state) => state.auth
+  );
   const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+    dispatch(signInUser(values));
+    if (!loading && error === null) {
+      localStorage.setItem("token", userInformation.access_token);
+      navigate("/");
+    }
+    if (error) {
+      errorToast();
+    }
+  };
+  const errorToast = () => {
+    messageApi.open({
+      type: "error",
+      content: "Can not sign-in! Please, try again!",
+    });
   };
   return (
     <Form
@@ -16,14 +38,18 @@ const SignIn = () => {
       }}
       onFinish={onFinish}
     >
+      {contextHolder}
       <Form.Item
-        name="username"
+        name="email"
         rules={[
           {
-            required: true,
-            message: "Please input your Username!",
+            type: "email",
+            message: "The input is not valid E-mail!",
           },
-          { minLength: 4 },
+          {
+            required: true,
+            message: "Please input your E-mail!",
+          },
         ]}
       >
         <Input
@@ -50,11 +76,10 @@ const SignIn = () => {
         />
       </Form.Item>
       <Form.Item>
-        <Form.Item name="remember" valuePropName="checked" noStyle>
+        {/* <Form.Item name="remember" valuePropName="checked" noStyle>
           <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-
-        <Link className="login-form-forgot">Forgot password</Link>
+        </Form.Item> */}
+        Click! If you <Link className="login-form-forgot">Forgot password</Link>
       </Form.Item>
 
       <Form.Item>

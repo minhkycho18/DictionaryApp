@@ -1,4 +1,4 @@
-import { Button, Card, Col, Image, Row, Space } from "antd";
+import { Button, Card, Col, Image, Row, Space, message } from "antd";
 import { Content } from "antd/es/layout/layout";
 import React from "react";
 import AiImage from "../../../assets/images/ai-based-real-world-examples-500.png";
@@ -9,9 +9,11 @@ import "./Home.scss";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
   return (
     <Content className="main">
+      {contextHolder}
       <Space className="content">
         <Space className="introduce" direction="vertical">
           <Space className="introduce__title">Learn with MyTeam</Space>
