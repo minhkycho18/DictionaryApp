@@ -118,21 +118,21 @@ const SignUp = () => {
             },
           ]}
         >
-          <Input />
+          <Input style={{ marginLeft: 32 }} />
         </Form.Item>
 
         <Form.Item
           name="password"
           label="Password"
+          hasFeedback
           rules={[
             {
               required: true,
               message: "Please input your password!",
             },
           ]}
-          hasFeedback
         >
-          <Input.Password />
+          <Input.Password style={{ marginLeft: 32 }} />
         </Form.Item>
 
         <Form.Item
@@ -150,14 +150,12 @@ const SignUp = () => {
                 if (!value || getFieldValue("password") === value) {
                   return Promise.resolve();
                 }
-                return Promise.reject(
-                  new Error("The new password that you entered do not match!")
-                );
+                return Promise.reject(new Error("Do not match!"));
               },
             }),
           ]}
         >
-          <Input.Password />
+          <Input.Password style={{ marginLeft: 32 }} />
         </Form.Item>
         <Form.Item
           name="name"
@@ -171,7 +169,7 @@ const SignUp = () => {
             },
           ]}
         >
-          <Input />
+          <Input style={{ marginLeft: 32 }} />
         </Form.Item>
 
         <Form.Item
@@ -184,7 +182,7 @@ const SignUp = () => {
             },
           ]}
         >
-          <Select placeholder="select your gender">
+          <Select style={{ marginLeft: 32 }} placeholder="select your gender">
             <Option value="MALE">Male</Option>
             <Option value="FEMALE">Female</Option>
             {/* <Option value="other">Other</Option> */}
@@ -204,7 +202,7 @@ const SignUp = () => {
           ]}
           {...tailFormItemLayout}
         >
-          <Checkbox>
+          <Checkbox style={{ marginLeft: 32 }}>
             I have read the <Link href="">agreement</Link>
           </Checkbox>
         </Form.Item>
