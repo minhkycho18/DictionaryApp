@@ -1,5 +1,6 @@
 package com.pbl6.dictionaryappbe.controller;
 
+import com.pbl6.dictionaryappbe.dto.vocabulary.VocabDetailDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySearchDto;
 import com.pbl6.dictionaryappbe.service.VocabularyService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Vocabulary")
 @RestController
@@ -49,8 +52,7 @@ public class VocabularyController {
             @ApiResponse(responseCode = "400", description = "Invalid data")
     })
     @GetMapping("/{word}")
-    public String getDetailVocab(@PathVariable String word) {
-
-        return null;
+    public List<VocabDetailDto> getDetailVocab(@PathVariable String word) {
+        return vocabularyService.getVocabInfo(word);
     }
 }
