@@ -1,6 +1,6 @@
 package com.pbl6.dictionaryappbe.mapper;
 
-import com.pbl6.dictionaryappbe.dto.VocabularySearchDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySearchDto;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
 import org.mapstruct.Mapper;

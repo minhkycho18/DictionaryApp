@@ -1,6 +1,6 @@
 package com.pbl6.dictionaryappbe.service;
 
-import com.pbl6.dictionaryappbe.dto.VocabularySearchDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySearchDto;
 import com.pbl6.dictionaryappbe.mapper.VocabularyMapper;
 import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
 import com.pbl6.dictionaryappbe.repository.VocabularyRepository;
@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,5 +25,11 @@ public class VocabularyServiceImpl implements VocabularyService {
         Pageable pageable = PageRequest.of(pageNo, limit, Sort.by("word").ascending());
         Page<Vocabulary> vocabularies = vocabularyRepository.findByWordStartsWith(keyword, pageable);
         return vocabularies.map(vocabularyMapper::toVocabSearchDto);
+    }
+
+    @Override
+    public List<VocabularySearchDto> getVocabInfo(String word) {
+
+        return null;
     }
 }

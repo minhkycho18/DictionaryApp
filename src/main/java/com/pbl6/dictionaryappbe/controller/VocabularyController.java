@@ -1,6 +1,6 @@
 package com.pbl6.dictionaryappbe.controller;
 
-import com.pbl6.dictionaryappbe.dto.VocabularySearchDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySearchDto;
 import com.pbl6.dictionaryappbe.service.VocabularyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,10 +12,7 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Vocabulary")
 @RestController
@@ -30,8 +27,6 @@ public class VocabularyController {
     @Operation(summary = "Get vocabs with paging (if needed)", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found vocabularies", content = {@Content(mediaType = "application/json")}),
-            @ApiResponse(responseCode = "403", description = "Authentication fail"),
-            @ApiResponse(responseCode = "401", description = "Authorization fail"),
             @ApiResponse(responseCode = "400", description = "Invalid data")
     })
     @GetMapping
@@ -46,5 +41,16 @@ public class VocabularyController {
             limit = defaultPageSize;
         }
         return vocabularyService.findByKeyword(keyword, offset, limit);
+    }
+
+    @Operation(summary = "Get info vocab", security = {@SecurityRequirement(name = "bearer-key")})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get vocab info success", content = {@Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "400", description = "Invalid data")
+    })
+    @GetMapping("/{word}")
+    public String getDetailVocab(@PathVariable String word) {
+
+        return null;
     }
 }
