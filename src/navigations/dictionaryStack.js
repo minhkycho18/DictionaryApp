@@ -10,14 +10,13 @@ export default function DictionaryStack() {
 
   return (
     <Stack.Navigator
-      initialRouteName="dictionary"
+      initialRouteName="dictionaryStack"
     >
       <Stack.Screen
         name="Dictionary"
         component={Dictionary}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen name="Search" component={Search} options={headerStyle} /> */}
       <Stack.Screen
         name="VocalDetail"
         component={VocalDetail}

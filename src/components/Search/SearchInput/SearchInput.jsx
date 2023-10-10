@@ -7,7 +7,6 @@ const SearchInput = ({ onChange, onBackPress }) => {
   const [search, setSearch] = useState("");
   const [clear , setClear] = useState(false)
   const handleClear = () =>{
-    console.log("TEST")
      setSearch("")
      setClear(false)
   }
@@ -39,7 +38,7 @@ const SearchInput = ({ onChange, onBackPress }) => {
         />
         {clear && (
           <View style={styles.iconClear} >
-              <EvilIcons name="close" size={30} color="##6b7280" onPress={handleClear}/>
+              <EvilIcons name="close" size={30} color="#6b7280" onPress={handleClear}/>
           </View>
         )}
       </View>

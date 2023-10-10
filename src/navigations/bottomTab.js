@@ -64,7 +64,7 @@ export default function BottomTab() {
             if (route.name === "Home") {
               iconName = "home-outline"
             }
-            else if (route.name === "Dictionary") {
+            else if (route.name === "DictionaryStack") {
               iconName = "book-outline"
             }
             else if (route.name === "Profile") {
@@ -89,7 +89,10 @@ export default function BottomTab() {
               }).start();
             }
           })} />
-        <Tab.Screen name="Dictionary" component={DictionaryStack} options={styles.tabScreenStyle}
+        <Tab.Screen name="DictionaryStack" component={DictionaryStack} options={{
+          tabBarLabel :'Dictionary',
+          ...styles.tabScreenStyle
+        }}
           listeners={({ navigation, route }) => ({
             tabPress: e => {
               Animated.spring(tabOffsetValue, {
