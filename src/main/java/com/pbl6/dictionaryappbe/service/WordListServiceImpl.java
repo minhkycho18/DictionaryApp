@@ -9,7 +9,6 @@ import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.persistence.wordlist.ListType;
 import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import com.pbl6.dictionaryappbe.repository.RoleRepository;
-import com.pbl6.dictionaryappbe.repository.UserRepository;
 import com.pbl6.dictionaryappbe.repository.WordListRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -28,13 +28,12 @@ public class WordListServiceImpl implements WordListService {
 
     private final WordListRepository wordListRepository;
 
-    private final UserRepository userRepository;
-
     private final RoleRepository roleRepository;
 
     @Override
-    public List<WordList> getAllByUser(Long id) {
-        return wordListRepository.findWordListsByUserId(id);
+    public List<WordList> getAllByUser() {
+        User user = AuthenticationUtils.getUserFromSecurityContext();
+        return wordListRepository.findByUser(user);
     }
 
     @Override
@@ -44,7 +43,9 @@ public class WordListServiceImpl implements WordListService {
 
     @Override
     public List<WordList> getAllPublicWordList() {
-        return wordListRepository.findByListType(ListType.PUBLIC);
+        Long userId = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext()).getUserId();
+        Long roleId = roleRepository.findByName(RoleName.LEARNER).getRoleId();
+        return wordListRepository.findByListTypeAndUserUserIdNotAndUserRoleRoleId(ListType.PUBLIC, userId, roleId);
     }
 
     @Override

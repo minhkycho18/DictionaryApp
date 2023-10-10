@@ -1,7 +1,6 @@
 package com.pbl6.dictionaryappbe.service;
 
 import com.pbl6.dictionaryappbe.dto.WordListDto;
-import com.pbl6.dictionaryappbe.persistence.role.Role;
 import com.pbl6.dictionaryappbe.persistence.role.RoleName;
 import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,7 @@ import java.util.List;
 @Service
 public interface WordListService {
 
-    List<WordList> getAllByUser(Long id);
+    List<WordList> getAllByUser();
 
     List<WordList> getAllSystemWordList(RoleName role);
 

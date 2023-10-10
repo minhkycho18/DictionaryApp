@@ -24,9 +24,9 @@ public class WordListController {
 
     private final WordListMapper wordListMapper;
 
-    @GetMapping("/{id}")
-    public List<WordListDto> getWordlists(@PathVariable Long id) {
-        return WordListUtils.toResponseWordList(wordListService.getAllByUser(id), wordListMapper);
+    @GetMapping
+    public List<WordListDto> getWordlists() {
+        return WordListUtils.toResponseWordList(wordListService.getAllByUser(), wordListMapper);
     }
 
     @GetMapping("/default")
