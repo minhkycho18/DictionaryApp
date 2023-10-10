@@ -3,7 +3,6 @@ package com.pbl6.dictionaryappbe.service;
 import com.pbl6.dictionaryappbe.dto.WordListDto;
 import com.pbl6.dictionaryappbe.exception.DuplicateDataException;
 import com.pbl6.dictionaryappbe.exception.FieldNotNullException;
-import com.pbl6.dictionaryappbe.exception.RecordNotFoundException;
 import com.pbl6.dictionaryappbe.persistence.role.RoleName;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.persistence.wordlist.ListType;
@@ -45,17 +44,14 @@ public class WordListServiceImpl implements WordListService {
     public List<WordList> getAllPublicWordList() {
         Long userId = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext()).getUserId();
         Long roleId = roleRepository.findByName(RoleName.LEARNER).getRoleId();
-        return wordListRepository.findByListTypeAndUserUserIdNotAndUserRoleRoleId(ListType.PUBLIC, userId, roleId);
+        return wordListRepository.findDefaultWordList(String.valueOf(ListType.PUBLIC), userId, roleId);
     }
 
     @Override
     @Transactional
     public WordList createWordList(WordListDto wordList) {
         String title = wordList.getTitle();
-        User user = AuthenticationUtils.getUserFromSecurityContext();
-        if (user == null) {
-            throw new RecordNotFoundException("User not found");
-        }
+        User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
         if (wordListRepository.findByTitle(wordList.getTitle()) != null) {
             throw new DuplicateDataException("Title is existed");
         }
