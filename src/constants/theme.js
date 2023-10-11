@@ -20,6 +20,21 @@ export const colorPos = [
   { phrase: "#06FBFF" },
   { adverb: "#AED574" }]
 
+export const colorSynonym = [
+  {
+    Synonym: {
+      bg: "#CFE5DE",
+      text: "#467A4D"
+    }
+  },
+  {
+    Antonym :{
+      bg :"#FDEFEF",
+      text :"#D15C67"
+    }
+  }
+
+]
 export const shadow = {
   light: {
     shadowColor: colors.black,

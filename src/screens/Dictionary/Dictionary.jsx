@@ -7,6 +7,7 @@ import SearchContent from "~/components/Search/SearchContent/SearchContent";
 import SearchAnimated from "~/components/Search/SearchAnimated/SearchAnimated";
 import SearchResult from "~/components/Search/SearchResult/SearchResult";
 import { getVocalByKeyWord } from "~/api/Dictionary";
+import { getSearchHistory , removeHistory} from "~/helper/asyncStorage";
 
 const Dictionary = () => {
   const scrollY = new Animated.Value(0);
@@ -14,7 +15,13 @@ const Dictionary = () => {
   const [isFound, setIsFound] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [vocals, setVocals] = useState();
+  
   const opacity = new Animated.Value(1);
+  const getData = async () => {
+    const his = await getSearchHistory();
+    setHistory(his);
+   
+  }
   const handleSearchPress = () => {
     Animated.parallel([
       Animated.timing(scrollY, {
@@ -33,7 +40,18 @@ const Dictionary = () => {
     setIsHeaderVisible(true);
     setVocals([]),
     setIsFound(true)
+    getData();
   };
+  const handleRemove =async (index) => {
+    console.log("huy")
+    await removeHistory(index)
+    getData();
+  }
+  const [history, setHistory] = useState([]);
+  useEffect(() => {
+    
+    getData();
+  },[])
 
   useEffect(() => {
     const getVocals = async (query) => {
@@ -65,7 +83,7 @@ const Dictionary = () => {
           opacity={opacity}
         />
       )}
-      {isHeaderVisible && <SearchContent />}
+      {isHeaderVisible && <SearchContent history={history} onRemove={handleRemove}/>}
       {!isHeaderVisible && (
         <SearchInput
           onChange={handleTextChange}

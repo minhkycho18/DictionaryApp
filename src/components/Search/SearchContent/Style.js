@@ -1,9 +1,14 @@
 import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
+    main : {
+        position:'absolute',
+        bottom :20,
+        left: '10%',
+    },
     searchResult:{
         position:'absolute',
-        top: 350,
-        left: '30%',
+        bottom :100,
+        left: 75,
         
     },
     image: {
@@ -17,12 +22,8 @@ export const styles = StyleSheet.create({
         color: '#6b7280'
     },
     historySearch :{
-        // backgroundColor :'red',
          width :320,
          height :330,
-         position :'absolute',
-         bottom :20,
-         left :37,
          display :'flex',
          flexDirection :'column',
          justifyContent :'space-between'
@@ -38,7 +39,7 @@ export const styles = StyleSheet.create({
             display :'flex',
             flexDirection :'row',
             backgroundColor :"#E1E1E1",
-            height :29,
+            height :32,
             marginRight :15,
             alignItems :'center',
             borderRadius :10,
