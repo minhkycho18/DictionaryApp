@@ -1,4 +1,4 @@
-package com.pbl6.dictionaryappbe.dto;
+package com.pbl6.dictionaryappbe.dto.vocabulary;
 
 import lombok.Builder;
 import lombok.Data;
