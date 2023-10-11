@@ -31,11 +31,12 @@
     "react-native-screens": "~3.22.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-web": "~0.19.6",
-    "twrnc": "^3.6.4"
+    "twrnc": "^3.6.4",
+    "@react-native-async-storage/async-storage": "1.18.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "react-native-dotenv": "^3.4.9"
   },
-  "private": true
+  "private": false
 }

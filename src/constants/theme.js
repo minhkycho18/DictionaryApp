@@ -1,6 +1,6 @@
-import {Dimensions} from 'react-native';
+import { Dimensions } from 'react-native';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export const colors = {
   primary: '#7E68EF',
@@ -9,9 +9,32 @@ export const colors = {
   light: '#fbfbfb',
   white: '#fff',
   black: '#000',
-  textColor :'#6b7280'
-};
+  textColor: '#6b7280',
 
+};
+export const colorPos = [
+  { verb: '#79DE74' },
+  { noun: '#46C5F2' },
+  { adjective: '#E47E23' },
+  { interjection: "#B4B6E6" },
+  { phrase: "#06FBFF" },
+  { adverb: "#AED574" }]
+
+export const colorSynonym = [
+  {
+    Synonym: {
+      bg: "#CFE5DE",
+      text: "#467A4D"
+    }
+  },
+  {
+    Antonym :{
+      bg :"#FDEFEF",
+      text :"#D15C67"
+    }
+  }
+
+]
 export const shadow = {
   light: {
     shadowColor: colors.black,
