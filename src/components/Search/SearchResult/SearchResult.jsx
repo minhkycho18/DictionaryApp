@@ -3,13 +3,19 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import { styles } from "./Styles";
 import { useNavigation } from "@react-navigation/native";
 import { GetColor } from "~/helper";
+import { addSearchToHistory } from "~/helper/asyncStorage";
 function SearchResult({vocal}) {
 
   const { navigate } = useNavigation();
-  const colorPos = GetColor(vocal.item.pos)
+  const colorPos = GetColor(vocal.item.pos) ;
+  const handlePressItem = () => {
+    addSearchToHistory(vocal.item.word);
+    navigate("VocalDetail")
+  }
   return (
+    
     <TouchableOpacity
-      onPress={() => { navigate("VocalDetail") }}
+      onPress={handlePressItem}
     >
       <View style={styles.result}>
       <View style={styles.content}>
