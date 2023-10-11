@@ -1,6 +1,6 @@
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input, Select, message } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { signUpUser } from "../../stores/authenticate/authThunk";
@@ -41,15 +41,22 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
-  const { userInformation, loading, error } = useSelector(
-    (state) => state.auth
-  );
-  const errorToast = () => {
-    messageApi.open({
-      type: "error",
-      content: "Can not register!",
-    });
-  };
+  const { userInformation, error } = useSelector((state) => state.auth);
+  useEffect(() => {
+    if (userInformation) {
+      localStorage.setItem("token", userInformation.access_token);
+      navigate("/");
+    }
+
+    if (error) {
+      messageApi.open({
+        type: "error",
+        content: error,
+        duration: 2,
+      });
+    }
+    return () => {};
+  }, [error, messageApi, navigate, userInformation]);
 
   const onFinish = (values) => {
     const { confirm, agreement, ...formValue } = {
@@ -59,13 +66,6 @@ const SignUp = () => {
     };
     if (confirm && agreement) {
       dispatch(signUpUser({ ...formValue, roleId: 1 }));
-      if (!loading && error === null) {
-        localStorage.setItem("token", userInformation.access_token);
-        navigate("/");
-      }
-      if (error) {
-        errorToast();
-      }
     }
   };
 
@@ -95,10 +95,6 @@ const SignUp = () => {
         form={form}
         name="register"
         onFinish={onFinish}
-        initialValues={{
-          residence: ["zhejiang", "hangzhou", "xihu"],
-          prefix: "86",
-        }}
         style={{
           maxWidth: 600,
         }}
@@ -128,7 +124,15 @@ const SignUp = () => {
           rules={[
             {
               required: true,
-              message: "Please input your password!",
+              message: "Please input your Password!",
+            },
+            {
+              min: 8,
+              message: "At least 8 characters long.",
+            },
+            {
+              pattern: /^\S*$/,
+              message: "Password cannot contain spaces.",
             },
           ]}
         >
@@ -182,7 +186,7 @@ const SignUp = () => {
             },
           ]}
         >
-          <Select style={{ marginLeft: 32 }} placeholder="select your gender">
+          <Select style={{ marginLeft: 32 }} placeholder="Select your gender">
             <Option value="MALE">Male</Option>
             <Option value="FEMALE">Female</Option>
             {/* <Option value="other">Other</Option> */}

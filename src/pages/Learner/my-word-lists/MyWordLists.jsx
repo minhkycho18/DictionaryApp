@@ -12,7 +12,6 @@ const MyWordLists = () => {
       >
         <PlusOutlined />
       </Space>
-
       <ListItem />
     </Space>
   );

@@ -1,6 +1,6 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input, message } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { signInUser } from "../../stores/authenticate/authThunk";
@@ -10,25 +10,27 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
-  const { userInformation, loading, error } = useSelector(
-    (state) => state.auth
-  );
-  const onFinish = (values) => {
-    dispatch(signInUser(values));
-    if (!loading && error === null) {
+  const { userInformation, error } = useSelector((state) => state.auth);
+  useEffect(() => {
+    if (userInformation) {
       localStorage.setItem("token", userInformation.access_token);
       navigate("/");
     }
+
     if (error) {
-      errorToast();
+      messageApi.open({
+        type: "error",
+        content: error,
+        duration: 2,
+      });
     }
+    return () => {};
+  }, [error, messageApi, navigate, userInformation]);
+
+  const onFinish = (values) => {
+    dispatch(signInUser(values));
   };
-  const errorToast = () => {
-    messageApi.open({
-      type: "error",
-      content: "Can not sign-in! Please, try again!",
-    });
-  };
+
   return (
     <Form
       name="normal_login"
@@ -65,10 +67,9 @@ const SignIn = () => {
             required: true,
             message: "Please input your Password!",
           },
-          { minLength: 8 },
         ]}
       >
-        <Input
+        <Input.Password
           prefix={<LockOutlined className="site-form-item-icon" />}
           className="input__password input"
           type="password"
@@ -76,9 +77,6 @@ const SignIn = () => {
         />
       </Form.Item>
       <Form.Item>
-        {/* <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item> */}
         Click! If you <Link className="login-form-forgot">Forgot password</Link>
       </Form.Item>
 

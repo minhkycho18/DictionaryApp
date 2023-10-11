@@ -3,12 +3,12 @@ import { logInUser, registerUser } from "../../api/Auth/signIn.api";
 
 export const signUpUser = createAsyncThunk(
   "auth/signUpUser",
-  async (userData) => {
+  async (userData, thunkApi) => {
     try {
       const response = await registerUser(userData);
       return response;
     } catch (error) {
-      throw error.response;
+      throw thunkApi.rejectWithValue(error);
     }
   }
 );
@@ -16,12 +16,12 @@ export const signUpUser = createAsyncThunk(
 // Async action to log in a user
 export const signInUser = createAsyncThunk(
   "auth/signInUser",
-  async (userData) => {
+  async (userData, thunkApi) => {
     try {
       const response = await logInUser(userData);
       return response;
     } catch (error) {
-      throw error.response;
+      throw thunkApi.rejectWithValue(error);
     }
   }
 );

@@ -27,7 +27,9 @@ const Header = () => {
   }, [pathname]);
   useEffect(() => {
     const token = localStorage.getItem("token");
-    token && setIsLogin(true);
+    if (token) {
+      setIsLogin(true);
+    }
   }, []);
 
   const links = [
