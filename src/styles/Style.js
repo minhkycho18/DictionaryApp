@@ -2,9 +2,9 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     tabBarStyle: {
-        height: 58,
+        height: 75,
         paddingTop: 1,
-        paddingBottom: 3,
+        paddingBottom: 18,
     },
     tabScreenStyle: {
         headerShown: false,
@@ -15,13 +15,13 @@ export const styles = StyleSheet.create({
     },
     animatedViewStyle:
     {
-        
+
         height: 3.5,
         backgroundColor: '#007EFF',
         position: 'absolute',
-        bottom: 55,
+        bottom: 71,
         left: 14,
         borderRadius: 20,
-        
+
     }
 })

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { styles } from "./Styles";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, StyleSheet } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import HeaderVocalDetail from "~/components/VocalDetail/HeaderVocalDetail/HeaderVocalDetail";
 import ItemVocalDetail from "~/components/VocalDetail/ItemVocalDetail/ItemVocalDetail";
@@ -53,5 +52,10 @@ function VocalDetail() {
     </View>
   );
 }
-
+styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 20,
+  },
+});
 export default VocalDetail;

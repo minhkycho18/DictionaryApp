@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, SafeAreaView } from "react-native";
+import { FlatList, SafeAreaView, View, StyleSheet } from "react-native";
 import { Animated, Text } from "react-native";
-import { styles } from "./Styles";
 import SearchInput from "~/components/Search/SearchInput/SearchInput";
 import SearchContent from "~/components/Search/SearchContent/SearchContent";
 import SearchAnimated from "~/components/Search/SearchAnimated/SearchAnimated";
 import SearchResult from "~/components/Search/SearchResult/SearchResult";
 import { getVocalByKeyWord } from "~/api/Dictionary";
-import { getSearchHistory , removeHistory} from "~/helper/asyncStorage";
+import { getSearchHistory, removeHistory } from "~/helper/asyncStorage";
 
 const Dictionary = () => {
   const scrollY = new Animated.Value(0);
@@ -20,8 +19,7 @@ const Dictionary = () => {
   const getData = async () => {
     const his = await getSearchHistory();
     setHistory(his);
-   
-  }
+  };
   const handleSearchPress = () => {
     Animated.parallel([
       Animated.timing(scrollY, {
@@ -38,19 +36,17 @@ const Dictionary = () => {
   };
   const handleBackPress = () => {
     setIsHeaderVisible(true);
-    setVocals([]),
-    setIsFound(true)
+    setVocals([]), setIsFound(true);
     getData();
   };
-  const handleRemove =async (index) => {
-    await removeHistory(index)
+  const handleRemove = async (index) => {
+    await removeHistory(index);
     getData();
-  }
-  
+  };
+
   useEffect(() => {
-    
     getData();
-  },[])
+  }, []);
 
   useEffect(() => {
     const getVocals = async (query) => {
@@ -76,31 +72,53 @@ const Dictionary = () => {
   return (
     <SafeAreaView style={styles.container}>
       {isHeaderVisible && (
-        <SearchAnimated
-          scrollY={scrollY}
-          handleSearchPress={handleSearchPress}
-          opacity={opacity}
-        />
+        <View style={{ height: "40%", width: "100%" }}>
+          <SearchAnimated
+            scrollY={scrollY}
+            handleSearchPress={handleSearchPress}
+            opacity={opacity}
+          />
+        </View>
       )}
-      {isHeaderVisible && <SearchContent history={history} onRemove={handleRemove}/>}
+      {isHeaderVisible && (
+        <View style={{ height: "60%", width: "100%", position: "relative" }}>
+          <SearchContent history={history} onRemove={handleRemove} />
+        </View>
+      )}
+
       {!isHeaderVisible && (
         <SearchInput
           onChange={handleTextChange}
           onBackPress={handleBackPress}
         />
       )}
-      {!isHeaderVisible && ( isFound ? (
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.id}
-          data={vocals}
-          renderItem={(item) => <SearchResult vocal={item} />}
-        />
-      ) : (
-        <Text style={{position :"absolute" ,right :100 ,bottom :250 ,fontSize :20}}>No results were found</Text>
-      ))}
+      {!isHeaderVisible &&
+        (isFound ? (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item) => item.id}
+            data={vocals}
+            renderItem={(item) => <SearchResult vocal={item} />}
+          />
+        ) : (
+          <Text
+            style={{
+              position: "absolute",
+              right: 100,
+              bottom: 250,
+              fontSize: 20,
+            }}
+          >
+            No results were found
+          </Text>
+        ))}
     </SafeAreaView>
   );
 };
-
+styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 20,
+  },
+});
 export default Dictionary;

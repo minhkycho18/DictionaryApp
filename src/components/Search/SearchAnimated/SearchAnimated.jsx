@@ -3,7 +3,6 @@ import { styles } from "./Styles";
 import { EvilIcons } from "@expo/vector-icons";
 import { Animated, View, Text, TouchableOpacity, Image } from "react-native";
 function SearchAnimated({ scrollY, handleSearchPress, opacity }) {
-
   return (
     <Animated.View
       style={[
@@ -23,17 +22,20 @@ function SearchAnimated({ scrollY, handleSearchPress, opacity }) {
       ]}
     >
       <View style={styles.borderStyle}>
-        <View style={{backgroundColor: 'transparents'}}>
-        <Image style={styles.img} source={require("~/assets/logo.png")}></Image>
+        <View style={{ backgroundColor: "transparents" }}>
+          <Image
+            style={styles.img}
+            source={require("~/assets/logo.png")}
+          ></Image>
         </View>
         <Text style={styles.title}>Dictionary</Text>
+        <TouchableOpacity style={styles.searchView} onPress={handleSearchPress}>
+          <EvilIcons name="search" size={30} color="#6b7280" />
+          <Text style={{ marginLeft: 15, color: "#6b7280" }}>
+            Search for a word
+          </Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.searchView} onPress={handleSearchPress}>
-        <EvilIcons name="search" size={30} color="#6b7280" />
-        <Text style={{ marginLeft: 15, color: "#6b7280" }}>
-          Search for a word
-        </Text>
-      </TouchableOpacity>
     </Animated.View>
   );
 }
