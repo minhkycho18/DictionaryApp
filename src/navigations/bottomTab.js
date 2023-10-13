@@ -1,15 +1,13 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer} from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
 import Home from '../screens/Home';
-// import Dictionary from "../screens/Dictionary/Dictionary";
 import DictionaryStack from "./dictionaryStack";
 import Profile from "../screens/Profile";
-import VocalDetail from "../screens/VocalDetail/VocalDetail";
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from "../styles/Style";
-import { useRef , useState , useEffect } from 'react'
-import { Dimensions, Animated , Keyboard } from "react-native";
-import ItemVocalMain from "~/components/VocalDetail/ItemVocalMain/ItemVocalMain";
+import { useRef, useState, useEffect } from 'react'
+import { Dimensions, Animated, Keyboard } from "react-native";
+
 export default function BottomTab() {
   const tabOffsetValue = useRef(new Animated.Value(0)).current;
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -18,7 +16,7 @@ export default function BottomTab() {
     let width = Dimensions.get("window").width
     width = width - 80
     return width / 3
-    
+
   }
   useEffect(() => {
     // Add event listeners for keyboard show/hide
@@ -39,7 +37,7 @@ export default function BottomTab() {
         setKeyboardVisible(false);
         // Optionally, you can animate the Animated.View back to its original position
         Animated.spring(tabOffsetValue, {
-          toValue: getWidth()* 1.23,
+          toValue: getWidth() * 1.23,
           useNativeDriver: true,
         }).start();
       }
@@ -51,7 +49,7 @@ export default function BottomTab() {
       keyboardDidHideListener.remove();
     };
   }, []);
- 
+
 
 
 
@@ -76,11 +74,11 @@ export default function BottomTab() {
           tabBarActiveTintColor: "#007EFF",
           tabBarInactiveTintColor: 'gray',
           tabBarStyle: styles.tabBarStyle,
-          tabBarHideOnKeyboard : "true"
+          tabBarHideOnKeyboard: "true"
 
         })}
       >
-        <Tab.Screen name="Home" component={Profile} options={styles.tabScreenStyle}
+        <Tab.Screen name="Home" component={Home} options={styles.tabScreenStyle}
           listeners={({ navigation, route }) => ({
             tabPress: e => {
               Animated.spring(tabOffsetValue, {
@@ -90,7 +88,7 @@ export default function BottomTab() {
             }
           })} />
         <Tab.Screen name="DictionaryStack" component={DictionaryStack} options={{
-          tabBarLabel :'Dictionary',
+          tabBarLabel: 'Dictionary',
           ...styles.tabScreenStyle
         }}
           listeners={({ navigation, route }) => ({
@@ -113,13 +111,13 @@ export default function BottomTab() {
 
       </Tab.Navigator>
       {!keyboardVisible && (
-      <Animated.View style={{
-        width: getWidth() - 3,
-        transform: [
-          { translateX: tabOffsetValue }
-        ],
-        ...styles.animatedViewStyle
-      }}></Animated.View>
+        <Animated.View style={{
+          width: getWidth() - 3,
+          transform: [
+            { translateX: tabOffsetValue }
+          ],
+          ...styles.animatedViewStyle
+        }}></Animated.View>
       )}
     </NavigationContainer>
 

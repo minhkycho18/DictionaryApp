@@ -26,7 +26,8 @@ export const styles = StyleSheet.create({
         height: 330,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+
     },
     historySearch_content: {
         width: '100%',
