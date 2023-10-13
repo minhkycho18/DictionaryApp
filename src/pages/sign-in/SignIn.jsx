@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { signInUser } from "../../stores/authenticate/authThunk";
 import "./SignIn.scss";
-
 const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -13,7 +12,7 @@ const SignIn = () => {
   const { userInformation, error } = useSelector((state) => state.auth);
   useEffect(() => {
     if (userInformation) {
-      localStorage.setItem("token", userInformation.access_token);
+      // localStorage.setItem("token", userInformation.access_token);
       navigate("/");
     }
 

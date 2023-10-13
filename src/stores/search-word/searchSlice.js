@@ -1,10 +1,33 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getSearchResult } from "./searchThunk";
+import { getSearchResult, getVocabDetail } from "./searchThunk";
 
 const initialState = {
   keyword: "",
   result: [],
   selectedMeaning: {},
+  loading: false,
+  error: null,
+  vocabDetails: [
+    {
+      id: 48279,
+      word: "hello",
+      pos: "noun",
+      phoneUs: "/həˈləʊ/",
+      phoneUk: "/həˈləʊ/",
+      audioUs:
+        "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/h/hel/hello/hello__us_1_rr.mp3",
+      audioUk:
+        "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/h/hel/hello/hello__gb_1.mp3",
+      definitions: [
+        {
+          defId: 46377,
+          wordDesc: "an expression of greeting",
+          examples: "Every morning they exchanged polite hellos.",
+          synonyms: ["hullo"],
+        },
+      ],
+    },
+  ],
 };
 
 const searchSlice = createSlice({
@@ -19,9 +42,32 @@ const searchSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getSearchResult.fulfilled, (state, action) => {
-      state.result = action.payload;
-    });
+    builder
+      .addCase(getSearchResult.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getSearchResult.fulfilled, (state, action) => {
+        state.loading = false;
+        state.result = action.payload;
+      })
+      .addCase(getSearchResult.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.detail;
+      })
+      //========================================================
+      .addCase(getVocabDetail.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getVocabDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.vocabDetails = action.payload;
+      })
+      .addCase(getVocabDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.detail;
+      });
   },
 });
 

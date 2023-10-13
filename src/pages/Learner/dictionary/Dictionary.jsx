@@ -1,6 +1,6 @@
-import { Avatar, Col, Divider, Input, Row, Space } from "antd";
+import { Avatar, Col, Divider, Input, Row, Space, Spin } from "antd";
 import { Content } from "antd/es/layout/layout";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import en from "../../../assets/images/en-circle.png";
@@ -9,10 +9,15 @@ import Result from "../../../components/card/result";
 import "./Dictionary.scss";
 
 import { SearchOutlined } from "@ant-design/icons";
-import { setMeaningWord } from "../../../stores/search-word/searchSlice";
-import { getSearchResult } from "../../../stores/search-word/searchThunk";
+import { debounce } from "lodash";
+import {
+  getSearchResult,
+  getVocabDetail,
+} from "../../../stores/search-word/searchThunk";
 const Dictionary = () => {
-  const { result, selectedMeaning } = useSelector((state) => state.search);
+  const { result, selectedMeaning, loading } = useSelector(
+    (state) => state.search
+  );
   const [isSelected, setIsSelected] = useState(true);
   const [inputWord, setInputWord] = useState("");
   const dispatch = useDispatch();
@@ -21,29 +26,27 @@ const Dictionary = () => {
   const onChangeInput = (event) => {
     const newValue = event.target.value;
     setInputWord(newValue);
+    debounceInputKey(newValue);
   };
 
+  const debounceInputKey = useRef(
+    debounce((nextValue) => {
+      setIsSelected(false);
+      dispatch(getSearchResult(nextValue));
+    }, 500)
+  ).current;
+
   useEffect(() => {
-    const processInput = (value) => {
-      if (value) {
-        setIsSelected(false);
-        dispatch(getSearchResult(value));
-      }
-    };
+    if (!selectedMeaning && result) {
+      setIsSelected(false);
+    }
+  }, [result, selectedMeaning]);
 
-    const debounceTimeout = setTimeout(() => {
-      processInput(inputWord);
-    }, 500);
-
-    return () => {
-      clearTimeout(debounceTimeout);
-    };
-  }, [dispatch, inputWord]);
   const handleSelectWord = (result) => {
     navigate(`/dictionary?entry=${result?.word}`);
     setInputWord("");
     setIsSelected(true);
-    dispatch(setMeaningWord(result));
+    dispatch(getVocabDetail(result));
   };
 
   const items = result.map((item, index) => (
@@ -82,11 +85,13 @@ const Dictionary = () => {
       </Space>
       {isSelected ? (
         <Space>
-          <Phonetic content={selectedMeaning} />
+          <Phonetic />
         </Space>
       ) : (
         <Space>
-          <Row gutter={[32, 16]}>{result.length > 0 ? items : "NotFound"}</Row>
+          <Row gutter={[32, 16]}>
+            {result.length > 0 ? items : <Spin spinning={loading} />}
+          </Row>
         </Space>
       )}
     </Content>

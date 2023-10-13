@@ -2,17 +2,21 @@ import { Image, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logoMain.png";
+import Avt from "../../components/header/Avt";
 import changeTitle from "../../helpers/changeTitle";
 import "./Header.scss";
 import SignInBtn from "./SignInBtn";
-import Avt from "../../components/header/Avt";
+import { getUserProfile } from "../../stores/user/userThunk";
+import { useDispatch } from "react-redux";
+
 const Header = () => {
   const { pathname } = useLocation();
   const [isScroll, setIsScroll] = useState();
   const [isLogin, setIsLogin] = useState(false);
+  const dispatch = useDispatch();
+
   changeTitle(pathname);
   useEffect(() => {
-    // document.title = "a";
     const handleScroll = () => {
       if (window.scrollY > 630) {
         setIsScroll(true);
@@ -28,9 +32,10 @@ const Header = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
+      dispatch(getUserProfile());
       setIsLogin(true);
     }
-  }, []);
+  }, [dispatch]);
 
   const links = [
     {

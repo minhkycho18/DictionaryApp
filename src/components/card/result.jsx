@@ -4,7 +4,7 @@ import "./Result.scss";
 const Result = (props) => {
   const selectedWord = (e) => {
     e.preventDefault();
-    props.onSelect(props.result);
+    props.onSelect(props.result?.word);
   };
   return (
     <Card className="result" onClick={selectedWord}>

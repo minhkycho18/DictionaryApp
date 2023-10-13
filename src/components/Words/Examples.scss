@@ -1,10 +1,20 @@
+@import "../../assets/scss/font.scss";
+@import "../../assets/scss/variable.scss";
 .examples {
-  height: 50%;
   background-color: #f3f4f6;
   width: 100%;
   border-radius: 16px;
-  // justify-content: flex-start;
-  align-items: flex-start;
+  padding: 16px;
+  &__body {
+    padding-left: 16px;
+    font-family: $font;
+    font-size: 16px;
+  }
+  &__content {
+    float: left;
+    justify-content: center;
+    align-items: center;
+  }
 }
 .title {
   color: #6b7280;

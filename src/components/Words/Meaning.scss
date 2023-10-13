@@ -1,14 +1,13 @@
 @import "../../assets/scss/font.scss";
 @import "../../assets/scss/variable.scss";
 .meaning {
-  font-family: $font;
-  font-size: 20px;
-  line-height: 28px;
-  color: #6b7280;
-  font-weight: 400;
   &__content {
-    text-align: left;
-    float: left;
+    width: 100% !important;
+    font-family: $font;
+    font-size: 20px;
+    line-height: 28px;
+    color: #6b7280;
+    font-weight: 400;
     &--num {
       font-weight: 600;
     }
@@ -47,9 +46,17 @@
   }
 }
 .group-meaning {
-  width: 100% !important;
+  width: 100%;
+  border-top: 1px solid #ccc;
+  display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
-  border-top: 1px solid #ccc;
   padding: 16px 0px;
+}
+
+.wrap-meaning {
+  width: 100%;
+  border-radius: 16px;
+  padding: 32px;
+  font-family: $font;
 }

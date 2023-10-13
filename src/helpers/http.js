@@ -1,4 +1,5 @@
 import axios from "axios";
+import getTokenFromStorage from "./getTokenFromStorage";
 class Http {
   constructor() {
     this.instance = axios.create({
@@ -22,6 +23,10 @@ class Http {
     );
     this.instance.interceptors.request.use(
       (config) => {
+        const token = getTokenFromStorage();
+        if (token) {
+          config.headers["Authorization"] = `Bearer ${token}`;
+        }
         return config;
       },
       (error) => {

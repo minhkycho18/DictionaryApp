@@ -1,14 +1,47 @@
 import { SoundFilled } from "@ant-design/icons";
 import { Avatar, Col, Row, Space } from "antd";
-import React from "react";
+import React, { useRef } from "react";
+import { useSelector } from "react-redux";
 import uk from "../../assets/images/en-circle.png";
 import us from "../../assets/images/us-square.png";
-import "./Phonetic.scss";
-import Meaning from "./Meaning";
 import Examples from "./Examples";
+import Meaning from "./Meaning";
+import "./Phonetic.scss";
 const Phonetic = (props) => {
-  // const { word } = useSelector((state) => state.search);
-  
+  const { vocabDetails } = useSelector((state) => state.search);
+  const audioUk = useRef();
+  const audioUs = useRef();
+  const renderExamples = () => {
+    const examples = [];
+    vocabDetails.forEach((vocabDetail) => {
+      vocabDetail.definitions.forEach((definition) => {
+        if (definition.examples) {
+          examples.push(definition.examples);
+        }
+      });
+    });
+    return examples;
+  };
+  const renderDefinitions = vocabDetails.map((item) => (
+    <Meaning key={item.id} detail={item} />
+  ));
+
+  const pos = vocabDetails.map((item) => (
+    <span key={item.id} className="phonetic__type">
+      [{item?.pos}]
+    </span>
+  ));
+  const defaultWord = vocabDetails[0];
+  const handlePlayAudio = (type) => {
+    if (type === "uk" && defaultWord?.audioUk) {
+      audioUk.current.volume = 0.4;
+      audioUk.current.play();
+    }
+    if (type === "us" && defaultWord?.audioUs) {
+      audioUs.current.volume = 0.4;
+      audioUs.current.play();
+    }
+  };
   return (
     <div>
       <Row gutter={[32, 16]}>
@@ -16,10 +49,7 @@ const Phonetic = (props) => {
           <Space className="wrappered border border--blue">
             <Space direction="vertical" wrap>
               <Space className="phonetic">
-                <Space className="phonetic__word">{props.content?.word}</Space>
-                <span>
-                  <SoundFilled className="phonetic__icon" />
-                </span>
+                <Space className="phonetic__word">{defaultWord?.word}</Space>
               </Space>
               <Space
                 style={{
@@ -30,7 +60,18 @@ const Phonetic = (props) => {
               >
                 <Avatar src={uk} className="language__flag"></Avatar>
                 <span className="phonetic__content">
-                  {props.content?.phoneUk}
+                  {defaultWord?.phoneUk}
+                  <SoundFilled
+                    className="phonetic__icon "
+                    onClick={() => handlePlayAudio("uk")}
+                  />
+                  {defaultWord?.audioUk && (
+                    <audio
+                      id="ukAudio"
+                      ref={audioUk}
+                      src={defaultWord?.audioUk}
+                    ></audio>
+                  )}
                 </span>
               </Space>
               <Space
@@ -42,16 +83,27 @@ const Phonetic = (props) => {
               >
                 <Avatar src={us} className="language__flag"></Avatar>
                 <span className="phonetic__content">
-                  {props.content?.phoneUs}
+                  {defaultWord?.phoneUs}
+                  <SoundFilled
+                    className="phonetic__icon"
+                    onClick={() => handlePlayAudio("us")}
+                  />
+                  {defaultWord?.audioUs && (
+                    <audio
+                      id="usAudio"
+                      ref={audioUs}
+                      src={defaultWord?.audioUs}
+                    ></audio>
+                  )}
                 </span>
               </Space>
             </Space>
-            <span className="phonetic__type">[{props.content?.pos}]</span>
+            <Space>{pos}</Space>
           </Space>
-          <Meaning definitions={props.content?.definitions} />
+          {renderDefinitions}
         </Col>
         <Col xs={{ span: 24 }} lg={{ span: 8 }}>
-          <Examples />
+          <Examples examples={renderExamples()} />
         </Col>
       </Row>
     </div>
@@ -59,12 +111,3 @@ const Phonetic = (props) => {
 };
 
 export default Phonetic;
-// definitions:Array(1)
-// 0:"a jury that is unable to agree on a verdict; the result is a mistrial"
-// length: 1
-// [[Prototype]]:Array(0)
-// id: 48626
-// phoneUk: null
-// phoneUs: null
-// pos: "noun"
-// word:"hung jury"

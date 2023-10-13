@@ -6,43 +6,55 @@ import {
 import { Space } from "antd";
 import React, { useState } from "react";
 import "./Meaning.scss";
-const Meaning = (props) => {
+const Meaning = ({ detail }) => {
   const [isChoice, setIsChoice] = useState(false);
   const onChoice = (e) => {
     setIsChoice(!isChoice);
   };
-  const renderDefinitions =
-    props.definitions &&
-    props.definitions.map((definition, index) => (
-      <Space key={index} className="group-meaning">
-        <Space className="meaning">
-          <span className="meaning__content">
-            <span className="meaning__content--num">{index + 1}.</span>{" "}
-            {definition}
-          </span>
-        </Space>
-        <Space className="synonyms"></Space>
-        <Space className="choice">
-          <div
-            className={`choice__item ${isChoice ? "icon--active" : ""}`}
-            onClick={onChoice}
-          >
-            <InboxOutlined className="choice__icon " />
-            <PlusCircleFilled className="choice__icon--sub" />
-          </div>
-          <div className="choice__item">
-            <BookOutlined className="choice__icon" />
-            <PlusCircleFilled className="choice__icon--sub" />
-          </div>
-        </Space>
+  const renderDefinitions = detail.definitions.map((definition, index) => (
+    <div key={definition.defId} className="group-meaning">
+      <div className="meaning__content">
+        <span className="meaning__content--num">{index + 1}.</span>{" "}
+        <span>{definition.wordDesc}</span>
+      </div>
+      <Space className="synonyms"></Space>
+      <Space className="choice">
+        <div
+          className={`choice__item ${isChoice ? "icon--active" : ""}`}
+          onClick={onChoice}
+        >
+          <InboxOutlined className="choice__icon " />
+          <PlusCircleFilled className="choice__icon--sub" />
+        </div>
+        <div className="choice__item">
+          <BookOutlined className="choice__icon" />
+          <PlusCircleFilled className="choice__icon--sub" />
+        </div>
       </Space>
-    ));
+    </div>
+  ));
+  const posClass = () => {
+    switch (detail.pos) {
+      case "adverb":
+        return "border--lightblue";
+      case "verb":
+        return "border--orange";
+      case "adjective":
+        return "border--pink";
+
+      default:
+        return "border--lightblue";
+    }
+  };
   return (
-    <Space className="wrappered border border--lightblue" direction="vertical">
-      <Space style={{ width: "100vh" }}>
-        <h1>Meaning</h1>
+    <Space className={`wrap-meaning border ${posClass()}`} direction="vertical">
+      <Space style={{ width: "100%" }}>
+        <h1>{detail.word}</h1>
+        <h5>[{detail.pos}]</h5>
       </Space>
-      {renderDefinitions}
+      <Space className="meaning__content" direction="vertical">
+        {renderDefinitions}
+      </Space>
     </Space>
   );
 };
