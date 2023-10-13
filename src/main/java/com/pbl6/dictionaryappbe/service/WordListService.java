@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface WordListService {
 
-    List<WordList> getAllByUser();
+    List<WordListDto> getAllByUser();
 
-    List<WordList> getAllSystemWordList(RoleName role);
+    List<WordListDto> getAllSystemWordList(RoleName role);
 
-    List<WordList> getAllPublicWordList();
+    List<WordListDto> getAllPublicWordList();
 
-    WordList createWordList(WordListDto wordList);
+    WordListDto createWordList(WordListDto wordList);
 
-    WordList updateWordList(Long wordListId, WordListDto wordList);
+    WordListDto updateWordList(Long wordListId, WordListDto wordList);
 
     void deleteWordList(Long id);
 

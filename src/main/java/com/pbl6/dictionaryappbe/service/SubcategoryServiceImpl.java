@@ -1,7 +1,9 @@
 package com.pbl6.dictionaryappbe.service;
 
-import com.pbl6.dictionaryappbe.dto.SubcategoryDto;
+import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryRequestDto;
+import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.exception.DuplicateDataException;
+import com.pbl6.dictionaryappbe.mapper.SubcategoryMapper;
 import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
 import com.pbl6.dictionaryappbe.persistence.subcategory.SubcategoryType;
 import com.pbl6.dictionaryappbe.persistence.user.User;
@@ -9,6 +11,7 @@ import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import com.pbl6.dictionaryappbe.repository.SubcategoryRepository;
 import com.pbl6.dictionaryappbe.repository.WordListRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
+import com.pbl6.dictionaryappbe.utils.MapperUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -24,18 +27,19 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
     private final SubcategoryRepository subcategoryRepository;
     private final WordListRepository wordListRepository;
+    private final SubcategoryMapper subcategoryMapper;
 
     @Override
-    public List<Subcategory> getAllSubcategories(Long id) {
+    public List<SubcategoryResponseDto> getAllSubcategories(Long wordListId) {
         User user = AuthenticationUtils.getUserFromSecurityContext();
-        WordList wordList = wordListRepository.findByUserAndWordListId(user, id)
+        WordList wordList = wordListRepository.findByUserAndWordListId(user, wordListId)
                 .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"));
-        return subcategoryRepository.findAllByWordList(wordList);
+        return MapperUtils.toResponseSubcategory(subcategoryRepository.findAllByWordList(wordList), subcategoryMapper);
     }
 
     @Override
     @Transactional
-    public Subcategory createSubcategory(SubcategoryDto subcategory) {
+    public SubcategoryResponseDto createSubcategory(SubcategoryRequestDto subcategory) {
         Long wordListId = subcategory.getWordListId();
         String title = subcategory.getTitle();
         WordList wordList = wordListRepository.findByUserAndWordListId(AuthenticationUtils.getUserFromSecurityContext(), wordListId)
@@ -50,33 +54,33 @@ public class SubcategoryServiceImpl implements SubcategoryService {
                 .wordList(wordList)
                 .subcategoryDetails(new ArrayList<>())
                 .build();
-        return subcategoryRepository.save(newSubcategory);
+        return subcategoryMapper.toSubcategoryResponseDto(subcategoryRepository.save(newSubcategory));
     }
 
     @Override
     @Transactional
-    public Subcategory updateSubcategory(Long id, SubcategoryDto subcategory) {
+    public SubcategoryResponseDto updateSubcategory(Long subcategoryId, SubcategoryRequestDto subcategory) {
         String title = subcategory.getTitle();
-        Subcategory oldSubcategory = getOwnedSubcategory(id);
+        Subcategory oldSubcategory = getOwnedSubcategory(subcategoryId);
         if (subcategoryRepository.findByTitleAndWordList(title, oldSubcategory.getWordList()) != null && !title.equals(oldSubcategory.getTitle())) {
             throw new DuplicateDataException("Duplicate title's subcategory");
         }
         oldSubcategory.setTitle(title);
         oldSubcategory.setSubcategoryType(SubcategoryType.valueOf(subcategory.getSubcategoryType().toUpperCase()));
-        return subcategoryRepository.save(oldSubcategory);
+        return subcategoryMapper.toSubcategoryResponseDto(subcategoryRepository.save(oldSubcategory));
     }
 
     @Override
     @Transactional
-    public void deleteSubcategory(Long id) {
-        subcategoryRepository.delete(getOwnedSubcategory(id));
+    public void deleteSubcategory(Long subcategoryId) {
+        subcategoryRepository.delete(getOwnedSubcategory(subcategoryId));
     }
 
     @Override
-    public Subcategory getOwnedSubcategory(Long id) {
+    public Subcategory getOwnedSubcategory(Long subcategoryId) {
         User user = AuthenticationUtils.getUserFromSecurityContext();
-        Subcategory subcategory = subcategoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Subcategory not found with ID:" + id));
+        Subcategory subcategory = subcategoryRepository.findById(subcategoryId)
+                .orElseThrow(() -> new EntityNotFoundException("Subcategory not found with ID:" + subcategoryId));
         if (wordListRepository.findByUserAndWordListId(user, subcategory.getWordList().getWordListId()).isEmpty()) {
             throw new AccessDeniedException("You do not have permission to access this WordList");
         }

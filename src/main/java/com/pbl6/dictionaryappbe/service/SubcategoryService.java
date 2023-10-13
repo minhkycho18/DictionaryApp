@@ -1,19 +1,20 @@
 package com.pbl6.dictionaryappbe.service;
 
-import com.pbl6.dictionaryappbe.dto.SubcategoryDto;
+import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryRequestDto;
+import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
 
 import java.util.List;
 
 public interface SubcategoryService {
 
-    List<Subcategory> getAllSubcategories(Long id);
+    List<SubcategoryResponseDto> getAllSubcategories(Long wordListId);
 
-    Subcategory createSubcategory(SubcategoryDto subcategory);
+    SubcategoryResponseDto createSubcategory(SubcategoryRequestDto subcategory);
 
-    Subcategory updateSubcategory(Long id, SubcategoryDto subcategory);
+    SubcategoryResponseDto updateSubcategory(Long subcategoryId, SubcategoryRequestDto subcategory);
 
-    void deleteSubcategory(Long id);
+    void deleteSubcategory(Long subcategoryId);
 
-    Subcategory getOwnedSubcategory(Long id);
+    Subcategory getOwnedSubcategory(Long subcategoryId);
 }

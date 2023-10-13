@@ -3,6 +3,7 @@ package com.pbl6.dictionaryappbe.service;
 import com.pbl6.dictionaryappbe.dto.WordListDto;
 import com.pbl6.dictionaryappbe.exception.DuplicateDataException;
 import com.pbl6.dictionaryappbe.exception.FieldNotNullException;
+import com.pbl6.dictionaryappbe.mapper.WordListMapper;
 import com.pbl6.dictionaryappbe.persistence.role.RoleName;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.persistence.wordlist.ListType;
@@ -10,6 +11,7 @@ import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import com.pbl6.dictionaryappbe.repository.RoleRepository;
 import com.pbl6.dictionaryappbe.repository.WordListRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
+import com.pbl6.dictionaryappbe.utils.MapperUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -25,30 +27,30 @@ import java.util.Objects;
 public class WordListServiceImpl implements WordListService {
 
     private final WordListRepository wordListRepository;
-
     private final RoleRepository roleRepository;
+    private final WordListMapper wordListMapper;
 
     @Override
-    public List<WordList> getAllByUser() {
+    public List<WordListDto> getAllByUser() {
         User user = AuthenticationUtils.getUserFromSecurityContext();
-        return wordListRepository.findByUser(user);
+        return MapperUtils.toResponseWordList(wordListRepository.findByUser(user), wordListMapper);
     }
 
     @Override
-    public List<WordList> getAllSystemWordList(RoleName role) {
-        return wordListRepository.findAllByUserRole(roleRepository.findByName(RoleName.CONTENT_MANAGER));
+    public List<WordListDto> getAllSystemWordList(RoleName role) {
+        return MapperUtils.toResponseWordList(wordListRepository.findAllByUserRole(roleRepository.findByName(RoleName.CONTENT_MANAGER)), wordListMapper);
     }
 
     @Override
-    public List<WordList> getAllPublicWordList() {
+    public List<WordListDto> getAllPublicWordList() {
         Long userId = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext()).getUserId();
         Long roleId = roleRepository.findByName(RoleName.LEARNER).getRoleId();
-        return wordListRepository.findDefaultWordList(String.valueOf(ListType.PUBLIC), userId, roleId);
+        return MapperUtils.toResponseWordList(wordListRepository.findDefaultWordList(String.valueOf(ListType.PUBLIC), userId, roleId), wordListMapper);
     }
 
     @Override
     @Transactional
-    public WordList createWordList(WordListDto wordList) {
+    public WordListDto createWordList(WordListDto wordList) {
         String title = wordList.getTitle();
         User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
         if (wordListRepository.findByTitleAndUser(wordList.getTitle(), user) != null) {
@@ -70,12 +72,12 @@ public class WordListServiceImpl implements WordListService {
             }
             newWordList.setListType(ListType.valueOf(listType.toUpperCase()));
         }
-        return wordListRepository.save(newWordList);
+        return wordListMapper.toWordListDto(wordListRepository.save(newWordList));
     }
 
     @Override
     @Transactional
-    public WordList updateWordList(Long wordListId, WordListDto wordList) {
+    public WordListDto updateWordList(Long wordListId, WordListDto wordList) {
         String newTitle = wordList.getTitle();
         WordList ownedWordList = getOwnedWordList(wordListId);
         if (wordListRepository.findByTitleAndUser(newTitle, ownedWordList.getUser()) != null && !Objects.equals(newTitle, ownedWordList.getTitle())) {
@@ -84,7 +86,7 @@ public class WordListServiceImpl implements WordListService {
         ownedWordList.setTitle(wordList.getTitle());
         ownedWordList.setListDesc(wordList.getListDesc());
         ownedWordList.setListType(ListType.valueOf(wordList.getListType().toUpperCase()));
-        return wordListRepository.save(ownedWordList);
+        return wordListMapper.toWordListDto(wordListRepository.save(ownedWordList));
     }
 
     @Override

@@ -9,7 +9,6 @@ import org.mapstruct.Mapping;
 public interface WordListMapper {
     @Mapping(source = "wordListId", target = "id")
     @Mapping(source = "user.name", target = "createdBy")
-    @Mapping(source = "createdAt", target = "createdAt")
     WordListDto toWordListDto(WordList wordList);
 
 }
