@@ -26,7 +26,7 @@ public class LeitnerController {
 
     @Operation(summary = "Add vocabulary to Leitner")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Add vocabulary to leitner successfully",
+            @ApiResponse(responseCode = "201", description = "Add vocabulary to leitner successfully",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid data")})
     @PostMapping
