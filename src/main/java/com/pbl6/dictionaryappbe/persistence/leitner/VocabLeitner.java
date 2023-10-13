@@ -7,7 +7,6 @@ import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,30 +17,27 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "vocab_leitner")
 @IdClass(LeitnerId.class)
-public class VocabLeitner implements Serializable {
+public class VocabLeitner {
     @Id
-    @Column(name = "vocab_id")
     private Long vocabId;
 
     @Id
-    @Column(name = "def_id")
     private Long defId;
 
     @Id
-    @Column(name = "user_id")
     private Long userId;
 
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime lastLearning;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable=false, updatable=false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
-            @JoinColumn(name = "def_id", referencedColumnName = "def_id"),
-            @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id")
+            @JoinColumn(name = "def_id", referencedColumnName = "def_id", insertable=false, updatable=false),
+            @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id", insertable=false, updatable=false)
     })
     private VocabDef vocabDef;
 
