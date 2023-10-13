@@ -10,7 +10,7 @@ function SearchResult({vocal}) {
   const colorPos = GetColor(vocal.item.pos) ;
   const handlePressItem = () => {
     addSearchToHistory(vocal.item.word);
-    navigate("VocalDetail")
+    navigate("VocalDetail",{ word : vocal.item.word })
   }
   return (
     

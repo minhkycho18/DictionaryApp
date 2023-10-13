@@ -18,7 +18,11 @@ export const colorPos = [
   { adjective: '#E47E23' },
   { interjection: "#B4B6E6" },
   { phrase: "#06FBFF" },
-  { adverb: "#AED574" }]
+  { adverb: "#AED574" },
+  {preposition:"#2F9D8C"},
+  {determiner:"#C4A986"},
+  {pronoun:"#EAC56D"}
+]
 
 export const colorSynonym = [
   {

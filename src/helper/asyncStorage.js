@@ -3,7 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const getSearchHistory = async () => {
     try {
       const historyJSON = await AsyncStorage.getItem('searchHistory');
-      console.log("get his")
       return historyJSON ? JSON.parse(historyJSON) : [];
     } catch (error) {
       console.error('Lỗi khi lấy lịch sử tìm kiếm: ', error);
@@ -13,9 +12,14 @@ const getSearchHistory = async () => {
 
 const addSearchToHistory = async (search) => {
     try {
-      const history = await getSearchHistory();
+      let history = await getSearchHistory();
+      if(history.includes(search)){
+        const index = history.indexOf(search);
+        history = history.filter((item,i) => {return i !== index});
+      }
       history.unshift(search);
       await AsyncStorage.setItem('searchHistory', JSON.stringify(history));
+      
     } catch (error) {
       console.error('Lỗi khi lưu lịch sử tìm kiếm: ', error);
     }
@@ -25,7 +29,6 @@ const addSearchToHistory = async (search) => {
       const historyJSON = await AsyncStorage.getItem('searchHistory');
       const  arrHistory = JSON.parse(historyJSON).filter((item,i) => {return i !== index});
       await AsyncStorage.setItem('searchHistory', JSON.stringify(arrHistory));
-      return arrHistory
     } catch (error) {
       console.error('Lỗi khi lấy lịch sử tìm kiếm: ', error);
       return [];
