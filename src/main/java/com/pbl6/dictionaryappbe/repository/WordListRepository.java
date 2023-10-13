@@ -9,13 +9,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface WordListRepository extends JpaRepository<WordList, Long> {
 
-    WordList findByTitle(String title);
+    WordList findByTitleAndUser(String title, User user);
 
-    @Query(value = "SELECT wl.* FROM vocab_note.word_list wl " +
+    @Query(value = "SELECT wl.* FROM word_list wl " +
             "JOIN users u ON wl.user_id = u.user_id " +
             "WHERE wl.list_type = :listType AND u.user_id != :userId AND u.role_id = :roleId", nativeQuery = true)
     List<WordList> findDefaultWordList(@Param("listType") String listType,
@@ -25,4 +26,6 @@ public interface WordListRepository extends JpaRepository<WordList, Long> {
     List<WordList> findAllByUserRole(Role role);
 
     List<WordList> findByUser(User user);
+
+    Optional<WordList> findByUserAndWordListId(User user, Long wordListId);
 }

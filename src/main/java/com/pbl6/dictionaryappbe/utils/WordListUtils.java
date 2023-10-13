@@ -18,5 +18,4 @@ public class WordListUtils {
                 .map(wordListMapper::toWordListDto)
                 .toList();
     }
-
 }

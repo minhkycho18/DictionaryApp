@@ -7,8 +7,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface SubcategoryMapper {
-
+    @Mapping(source = "wordList.wordListId", target = "wordListId")
     SubcategoryDto toSubcategoryDto(Subcategory subcategory);
-
-
 }

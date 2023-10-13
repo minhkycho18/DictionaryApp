@@ -10,8 +10,8 @@ import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import com.pbl6.dictionaryappbe.repository.RoleRepository;
 import com.pbl6.dictionaryappbe.repository.WordListRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +51,7 @@ public class WordListServiceImpl implements WordListService {
     public WordList createWordList(WordListDto wordList) {
         String title = wordList.getTitle();
         User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
-        if (wordListRepository.findByTitle(wordList.getTitle()) != null) {
+        if (wordListRepository.findByTitleAndUser(wordList.getTitle(), user) != null) {
             throw new DuplicateDataException("Title is existed");
         }
         WordList newWordList = WordList.builder()
@@ -77,26 +76,27 @@ public class WordListServiceImpl implements WordListService {
     @Override
     @Transactional
     public WordList updateWordList(Long wordListId, WordListDto wordList) {
-        if (wordListRepository.findByTitle(wordList.getTitle()) != null) {
+        String newTitle = wordList.getTitle();
+        WordList ownedWordList = getOwnedWordList(wordListId);
+        if (wordListRepository.findByTitleAndUser(newTitle, ownedWordList.getUser()) != null && !Objects.equals(newTitle, ownedWordList.getTitle())) {
             throw new DuplicateDataException("Title is existed");
         }
-        Optional<WordList> oldWordListOptional = wordListRepository.findById(wordListId);
-        if (oldWordListOptional.isPresent()) {
-            WordList oldWordList = oldWordListOptional.get();
-            oldWordList.setTitle(wordList.getTitle());
-            oldWordList.setListDesc(wordList.getListDesc());
-            oldWordList.setListType(ListType.valueOf(wordList.getListType().toUpperCase()));
-            return wordListRepository.save(oldWordList);
-        } else {
-            throw new EntityNotFoundException("WordList not found with ID: " + wordListId);
-        }
+        ownedWordList.setTitle(wordList.getTitle());
+        ownedWordList.setListDesc(wordList.getListDesc());
+        ownedWordList.setListType(ListType.valueOf(wordList.getListType().toUpperCase()));
+        return wordListRepository.save(ownedWordList);
     }
 
     @Override
     @Transactional
     public void deleteWordList(Long id) {
-        WordList wordList = wordListRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("WordList not found with ID: " + id));
-        wordListRepository.delete(wordList);
+        wordListRepository.delete(getOwnedWordList(id));
+    }
+
+    @Override
+    public WordList getOwnedWordList(Long id) {
+        User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
+        return wordListRepository.findByUserAndWordListId(user, id)
+                .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"));
     }
 }
