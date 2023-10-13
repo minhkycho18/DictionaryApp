@@ -1,20 +1,31 @@
-import React, { useState ,useEffect } from 'react'
-import { View, Image, Text, TouchableOpacity } from 'react-native'
-import { styles } from './Style'
-import { AntDesign } from '@expo/vector-icons';
-import { removeHistory } from '~/helper/asyncStorage';
-function SearchContent({history, onRemove}) {
-  
+import React, { useState, useEffect } from "react";
+import { View, Image, Text, TouchableOpacity } from "react-native";
+import { styles } from "./Style";
+import { AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+function SearchContent({ history, onRemove }) {
+  const { navigate } = useNavigation();
+
   return (
     <View style={styles.main}>
-      {history.length > 0 ?  (
+      {history.length > 0 ? (
         <View style={styles.historySearch}>
           <Text style={styles.Text}>Search History</Text>
           <View style={styles.historySearch_content}>
             {history.map((item, index) => (
               <View style={styles.history_item} key={index}>
-                <TouchableOpacity><Text>{item}</Text></TouchableOpacity>
-                <AntDesign name="closecircle" size={18} color="#9F9F9F" style={styles.iconClose} onPress={() => onRemove(index)} />
+                <TouchableOpacity
+                  onPress={() => navigate("VocalDetail", { word: item })}
+                >
+                  <Text>{item}</Text>
+                </TouchableOpacity>
+                <AntDesign
+                  name="closecircle"
+                  size={18}
+                  color="#9F9F9F"
+                  style={styles.iconClose}
+                  onPress={() => onRemove(index)}
+                />
               </View>
             ))}
           </View>
@@ -29,16 +40,7 @@ function SearchContent({history, onRemove}) {
         </View>
       )}
     </View>
-    
-    
-    
-    
-    
-    
-    
-
-
-  )
+  );
 }
 
-export default SearchContent
+export default SearchContent;

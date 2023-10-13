@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { styles } from "../styles/Style";
 import { useRef , useState , useEffect } from 'react'
 import { Dimensions, Animated , Keyboard } from "react-native";
-
+import ItemVocalMain from "~/components/VocalDetail/ItemVocalMain/ItemVocalMain";
 export default function BottomTab() {
   const tabOffsetValue = useRef(new Animated.Value(0)).current;
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -80,7 +80,7 @@ export default function BottomTab() {
 
         })}
       >
-        <Tab.Screen name="Home" component={VocalDetail} options={styles.tabScreenStyle}
+        <Tab.Screen name="Home" component={Profile} options={styles.tabScreenStyle}
           listeners={({ navigation, route }) => ({
             tabPress: e => {
               Animated.spring(tabOffsetValue, {

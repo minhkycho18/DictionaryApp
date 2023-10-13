@@ -15,7 +15,7 @@ const Dictionary = () => {
   const [isFound, setIsFound] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [vocals, setVocals] = useState();
-  
+  const [history, setHistory] = useState([]);
   const opacity = new Animated.Value(1);
   const getData = async () => {
     const his = await getSearchHistory();
@@ -43,11 +43,10 @@ const Dictionary = () => {
     getData();
   };
   const handleRemove =async (index) => {
-    console.log("huy")
     await removeHistory(index)
     getData();
   }
-  const [history, setHistory] = useState([]);
+  
   useEffect(() => {
     
     getData();

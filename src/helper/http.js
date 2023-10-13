@@ -1,15 +1,15 @@
 import axios from "axios";
-import { API_URL} from "@env";
+import { API_URL } from "@env";
 class Http {
   constructor() {
     this.instance = axios.create({
-      baseURL:"http://192.168.1.10:8080",
+      baseURL: "http://192.168.1.9:8080",
       name: "Dictionary App",
       timeout: 10000,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-    },
+      },
     });
     this.instance.interceptors.response.use(
       (response) => {

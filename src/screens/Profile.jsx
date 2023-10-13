@@ -1,11 +1,9 @@
 import React from 'react'
-import { SafeAreaView, Text } from 'react-native'
+import { View ,Text} from 'react-native'
 
-const Profile = () => {
+function Profile() {
   return (
-    <SafeAreaView>
-        <Text>Profile</Text>
-    </SafeAreaView>
+    <View><Text>Huy</Text></View>
   )
 }
 
