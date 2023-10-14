@@ -19,7 +19,7 @@ import java.util.List;
 @Tag(name = "Subcategory")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/wordlist/subcategories")
+@RequestMapping(path = "/wordlist/{wordListId}/subcategories")
 public class SubcategoryController {
 
     private final SubcategoryService subcategoryService;
@@ -29,7 +29,7 @@ public class SubcategoryController {
             @ApiResponse(responseCode = "200", description = "Get data successfully",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))}),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
-    @GetMapping("/{wordListId}")
+    @GetMapping
     public List<SubcategoryResponseDto> getAllSubcategories(@PathVariable Long wordListId) {
         return subcategoryService.getAllSubcategories(wordListId);
     }
@@ -41,8 +41,9 @@ public class SubcategoryController {
             @ApiResponse(responseCode = "400", description = "Invalid data"),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @PostMapping
-    public SubcategoryResponseDto createSubcategory(@Valid @RequestBody SubcategoryRequestDto subcategory) {
-        return subcategoryService.createSubcategory(subcategory);
+    public SubcategoryResponseDto createSubcategory(@PathVariable Long wordListId,
+                                                    @Valid @RequestBody SubcategoryRequestDto subcategory) {
+        return subcategoryService.createSubcategory(wordListId, subcategory);
     }
 
     @Operation(summary = "Edit a subcategory")
@@ -52,7 +53,8 @@ public class SubcategoryController {
             @ApiResponse(responseCode = "400", description = "Invalid data"),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @PutMapping("/{subcategoryId}")
-    public SubcategoryResponseDto updateSubcategory(@PathVariable Long subcategoryId, @RequestBody @Valid @NotNull SubcategoryRequestDto subcategory) {
+    public SubcategoryResponseDto updateSubcategory(@PathVariable Long subcategoryId,
+                                                    @RequestBody @Valid @NotNull SubcategoryRequestDto subcategory) {
         return subcategoryService.updateSubcategory(subcategoryId, subcategory);
     }
 

@@ -39,8 +39,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
     @Override
     @Transactional
-    public SubcategoryResponseDto createSubcategory(SubcategoryRequestDto subcategory) {
-        Long wordListId = subcategory.getWordListId();
+    public SubcategoryResponseDto createSubcategory(Long wordListId, SubcategoryRequestDto subcategory) {
         String title = subcategory.getTitle();
         WordList wordList = wordListRepository.findByUserAndWordListId(AuthenticationUtils.getUserFromSecurityContext(), wordListId)
                 .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"));

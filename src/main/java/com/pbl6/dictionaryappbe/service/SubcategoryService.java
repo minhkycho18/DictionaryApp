@@ -10,7 +10,7 @@ public interface SubcategoryService {
 
     List<SubcategoryResponseDto> getAllSubcategories(Long wordListId);
 
-    SubcategoryResponseDto createSubcategory(SubcategoryRequestDto subcategory);
+    SubcategoryResponseDto createSubcategory(Long wordListId, SubcategoryRequestDto subcategory);
 
     SubcategoryResponseDto updateSubcategory(Long subcategoryId, SubcategoryRequestDto subcategory);
 
