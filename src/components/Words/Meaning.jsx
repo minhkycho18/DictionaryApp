@@ -48,9 +48,9 @@ const Meaning = ({ detail }) => {
   };
   return (
     <Space className={`wrap-meaning border ${posClass()}`} direction="vertical">
-      <Space style={{ width: "100%" }}>
+      <Space style={{ width: "100%", justifyContent: "space-between" }}>
         <h1>{detail.word}</h1>
-        <h5>[{detail.pos}]</h5>
+        <p style={{ fontSize: 20, fontWeight: 500 }}>[{detail.pos}]</p>
       </Space>
       <Space className="meaning__content" direction="vertical">
         {renderDefinitions}

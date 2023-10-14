@@ -43,7 +43,7 @@ const Dictionary = () => {
   }, [result, selectedMeaning]);
 
   const handleSelectWord = (result) => {
-    navigate(`/dictionary?entry=${result?.word}`);
+    navigate(`/dictionary?entry=${result}`);
     setInputWord("");
     setIsSelected(true);
     dispatch(getVocabDetail(result));

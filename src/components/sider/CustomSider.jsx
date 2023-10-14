@@ -1,22 +1,29 @@
 import { Avatar, Image, Space } from "antd";
 import Sider from "antd/es/layout/Sider";
 import React from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logoMain.png";
 import dashboardLink from "../../routers/dashboard";
+import { logOut } from "../../stores/authenticate/authSlice";
 import "./CustomSider.scss";
 const CustomSider = (props) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  // const a = useLocation();
-  // console.log(a);
+  const dispatch = useDispatch();
+  const { profile } = useSelector((state) => state.profile);
+  const handleSignOut = () => {
+    dispatch(logOut());
+    localStorage.removeItem("token");
+    navigate("/");
+  };
   return (
     <Sider collapsed={false} width={286} className="sidermenu">
       <Space direction="vertical" className="infor">
-        <Link className="infor__logo" to={"/home"}>
+        <Space className="infor__logo" onClick={() => navigate("/")}>
           <Image src={logo} preview={false} width={48} />
           Dictionary
-        </Link>
+        </Space>
         <Avatar
           size={96}
           style={{
@@ -25,10 +32,10 @@ const CustomSider = (props) => {
           }}
           className="infor__ava "
         >
-          H
+          {profile?.name[0]}
         </Avatar>
 
-        <span className="infor__name">Nguyen Hung</span>
+        <span className="infor__name">{profile?.name}</span>
       </Space>
       <Space className="menu2" direction="vertical">
         {dashboardLink.map((link, index) => (
@@ -39,7 +46,11 @@ const CustomSider = (props) => {
                 ? "menu2__item--active"
                 : ""
             }`}
-            onClick={() => navigate(`/dashboard${link?.path}`)}
+            onClick={() => {
+              if (link.label === "Sign Out") {
+                handleSignOut();
+              } else navigate(`/dashboard${link?.path}`);
+            }}
           >
             <Space className="menu2__item--icon">{link?.icon}</Space>
             {link?.label}
