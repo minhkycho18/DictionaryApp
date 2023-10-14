@@ -4,6 +4,7 @@
   width: inherit;
   margin: 32px;
   &__card {
+    width: 390px;
     z-index: 14;
     background-color: #ffffff;
     color: #212529;
@@ -12,7 +13,6 @@
     line-height: 24px;
     text-align: left;
     margin-right: -20px;
-    border-color: #ef6c00;
     border-radius: 16px;
     &--btn {
       float: right;
@@ -36,6 +36,7 @@
       }
     }
     &--title {
+      width: max-content;
       color: #0e336b;
       font-family: $font;
       font-size: 28px;
@@ -76,4 +77,15 @@
       color: #aeaeae;
     }
   }
+}
+.borderCard {
+  &--orange {
+    border-color: #ef6c00;
+  }
+  &--blue {
+    border-color: #00599c;
+  }
+}
+.btn-blue {
+  background-color: #00599c;
 }

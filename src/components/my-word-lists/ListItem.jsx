@@ -1,41 +1,100 @@
-import React from "react";
+import React, { useState } from "react";
 import "./ListItem.scss";
-import { Image, Popover, Space } from "antd";
+import { Image, Input, Modal, Popover, Space } from "antd";
 import category from "../../assets/images/category-back.png";
 import {
   ClockCircleOutlined,
   DeleteOutlined,
   EditOutlined,
+  ExclamationCircleFilled,
   MoreOutlined,
   RightOutlined,
 } from "@ant-design/icons";
+import calculateDateTime from "../../helpers/calculateDateTime";
 
-const ListItem = (props) => {
+const ListItem = ({ wordlist }) => {
+  const { confirm } = Modal;
+  const [isOpenModel, setIsOpenModel] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [newTitle, setNewTitle] = useState("");
+  const showDeleteConfirm = () => {
+    setIsOpenModel(true);
+    confirm({
+      title: "Are you sure delete this Word List?",
+      icon: <ExclamationCircleFilled />,
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        setIsOpenModel(false);
+        console.log("OK");
+      },
+      onCancel() {
+        setIsOpenModel(false);
+        console.log("Cancel");
+      },
+    });
+  };
+  const showModal = () => {
+    setOpen(true);
+  };
+  const handleOk = () => {
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 2000);
+  };
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setOpen(false);
+  };
   const content = (
     <Space wrap direction="vertical">
-      <div style={{ cursor: "pointer" }}>
+      <Space style={{ cursor: "pointer" }} onClick={showModal}>
         <EditOutlined style={{ marginRight: 8 }} />
         Edit
-      </div>
-      <div style={{ cursor: "pointer" }}>
+      </Space>
+      <Space style={{ cursor: "pointer" }} onClick={showDeleteConfirm}>
         <DeleteOutlined style={{ marginRight: 8 }} />
         Delete
-      </div>
+      </Space>
     </Space>
   );
+
   return (
     <Space className="MyWordLists__item ListItem" direction="vertical">
+      <Modal
+        title="Edit"
+        open={open}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+        className="ModalEdit_wrap"
+      >
+        <Space className="ModalEdit" direction="vertical">
+          <Input
+            name="inputTitle"
+            className="ModalEdit_input"
+            type="text"
+            placeholder="Input new title.."
+            onChange={(e) => setNewTitle(e.target.value)}
+            value={wordlist?.title}
+          ></Input>
+        </Space>
+      </Modal>
       <Space className="ListItem__top">
         <Image className="" width={100} src={category} preview={false}></Image>
-
         <Popover
           title=" "
-          trigger="click"
+          trigger="hover"
           showArrow="hide"
           placement="bottomRight"
-          className="pop"
+          // className="pop"
           content={content}
-          style={{ width: "20px!important" }}
+          style={{ zIndex: 1 }}
+          popupVisible={!isOpenModel}
         >
           <MoreOutlined
             style={{
@@ -52,7 +111,7 @@ const ListItem = (props) => {
         <span>1-sublist</span>
         <span>
           <ClockCircleOutlined style={{ marginRight: 8 }} />
-          Created at 9 days ago
+          Created at {calculateDateTime(wordlist.createdAt)} days ago
         </span>
       </Space>
       <Space
@@ -63,7 +122,7 @@ const ListItem = (props) => {
           cursor: "pointer",
         }}
       >
-        <span>Word List Name</span>
+        <span>{wordlist?.title.toUpperCase()}</span>
         <RightOutlined />
       </Space>
     </Space>
