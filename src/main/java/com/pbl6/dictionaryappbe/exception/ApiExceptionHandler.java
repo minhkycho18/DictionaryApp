@@ -1,6 +1,8 @@
 package com.pbl6.dictionaryappbe.exception;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -47,6 +49,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseBody
     public ResponseEntity<Object> handleRecordNotFoundException(RecordNotFoundException ex) {
         return ResponseEntity.status(400).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ResponseEntity<Object> handleConstraintViolationException(HttpServletRequest request, Exception ex) {
+        Map<String, String> errors = new HashMap<>();
+        String message = ex.getMessage();
+        errors.put("message", message.substring(message.indexOf(":") + 1).trim());
+        return ResponseEntity.status(400).body(errors);
     }
 
     @ExceptionHandler(Exception.class)
