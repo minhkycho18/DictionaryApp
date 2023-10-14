@@ -16,15 +16,15 @@ VALUES
     (7, 'wordlist7', 'wordlist7', 4, 'PUBLIC', '2023-10-10 16:05:00'),
     (8, 'wordlist8', 'wordlist8', 4, 'PUBLIC', '2023-10-10 16:05:25');
 
-INSERT INTO vocab_note.subcategory (subcategory_id, title, amount_of_word, subcategory_type, created_by, word_list_id)
+INSERT INTO vocab_note.subcategory (subcategory_id, title, amount_of_word, subcategory_type, word_list_id)
 VALUES
-    (1, 'subcategory1', 20, 'DEFAULT', 'learner1@gmail.com', 1),
-    (2, 'subcategory2', 30, 'DEFAULT', 'learner1@gmail.com', 1),
-    (3, 'subcategory3', 10, 'DEFAULT', 'learner2@gmail.com', 3),
-    (4, 'subcategory4', 5, 'CUSTOM', 'learner2@gmail.com', 2),
-    (5, 'subcategory5', 8, 'DEFAULT', 'manager1@gmail.com', 2),
-    (6, 'subcategory6', 7, 'DEFAULT', 'manager1@gmail.com', 3),
-    (7, 'subcategory7', 6, 'DEFAULT', 'admin@gmail.com', 3);
+    (1, 'subcategory1', 20, 'DEFAULT', 1),
+    (2, 'subcategory2', 30, 'DEFAULT', 1),
+    (3, 'subcategory3', 10, 'DEFAULT', 3),
+    (4, 'subcategory4', 5, 'CUSTOM', 2),
+    (5, 'subcategory5', 8, 'DEFAULT', 2),
+    (6, 'subcategory6', 7, 'DEFAULT', 3),
+    (7, 'subcategory7', 6, 'DEFAULT', 3);
 
 INSERT INTO vocab_note.subcategory_detail (vocab_id, def_id, subcategory_id, is_quiz, is_review, is_flashcard, last_learning)
 VALUES

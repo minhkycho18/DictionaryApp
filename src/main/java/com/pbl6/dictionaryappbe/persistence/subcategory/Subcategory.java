@@ -26,9 +26,6 @@ public class Subcategory {
     @Column(nullable = false)
     private Integer amountOfWord = 0;
 
-    @Column
-    private String createdBy;
-
     @Enumerated(EnumType.STRING)
     @Column
     private SubcategoryType subcategoryType;

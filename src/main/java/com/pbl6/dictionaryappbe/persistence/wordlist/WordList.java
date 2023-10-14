@@ -36,7 +36,7 @@ public class WordList implements Serializable {
     @Column
     private ListType listType;
 
-    @OneToMany(mappedBy = "wordList", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "wordList", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Subcategory> subcategories;
 

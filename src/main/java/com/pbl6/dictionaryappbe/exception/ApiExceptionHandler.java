@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseBody
     public ResponseEntity<Object> handleRuntimeException(RuntimeException ex) {
         return ResponseEntity.status(400).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(value = {AccessDeniedException.class})
+    @ResponseBody
+    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex) {
+        return ResponseEntity.status(403).body(ex.getMessage());
     }
 
     @ExceptionHandler(value = {DuplicateDataException.class})
@@ -41,6 +48,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ResponseEntity<String> handleExtityNotFoundException(Exception ex) {
         return ResponseEntity.status(400).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(value = {IllegalArgumentException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleIllegalArgumentException(Exception ex) {
+        return ResponseEntity.status(400).body("Illegal argument");
     }
 
     @ExceptionHandler(value = {RecordNotFoundException.class})

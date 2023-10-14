@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Builder
 @Data
 public class WordListDto {
+    private Long id;
     @NotEmpty(message = "Title can not be empty")
     private String title;
     private String listDesc;
