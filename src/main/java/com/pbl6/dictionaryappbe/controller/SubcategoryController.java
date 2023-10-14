@@ -19,7 +19,7 @@ import java.util.List;
 @Tag(name = "Subcategory")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/wordlist/{wordListId}/subcategories")
+@RequestMapping(path = "/wordlists/{wordListId}/subcategories")
 public class SubcategoryController {
 
     private final SubcategoryService subcategoryService;

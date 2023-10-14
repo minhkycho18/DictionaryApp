@@ -11,5 +11,4 @@ public class SubcategoryRequestDto {
     private String title;
     @NotEmpty(message = "Type can not be empty")
     private String subcategoryType;
-    private Long wordListId;
 }
