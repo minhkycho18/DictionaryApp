@@ -7,7 +7,7 @@
     font-size: 20px;
     line-height: 28px;
     color: #6b7280;
-    font-weight: 400;
+    font-weight: 500;
     &--num {
       font-weight: 600;
     }
@@ -59,4 +59,19 @@
   border-radius: 16px;
   padding: 32px;
   font-family: $font;
+}
+.synonyms {
+  margin-top: 16px;
+  padding: 16px;
+  font-family: $font;
+  font-size: 20px;
+  line-height: 28px;
+  color: #6b7280;
+  font-weight: 500;
+  &__word {
+    display: block;
+    color: $text-primary-color;
+    padding-right: 16px;
+    text-decoration: underline dashed;
+  }
 }

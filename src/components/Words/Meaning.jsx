@@ -11,13 +11,23 @@ const Meaning = ({ detail }) => {
   const onChoice = (e) => {
     setIsChoice(!isChoice);
   };
+
   const renderDefinitions = detail.definitions.map((definition, index) => (
     <div key={definition.defId} className="group-meaning">
       <div className="meaning__content">
         <span className="meaning__content--num">{index + 1}.</span>{" "}
         <span>{definition.wordDesc}</span>
       </div>
-      <Space className="synonyms"></Space>
+      {definition.synonyms.length > 0 && (
+        <Space className="synonyms">
+          <span>Synonyms:</span>
+          {definition?.synonyms.map((synonym, index) => (
+            <span key={index} className="synonyms__word">
+              {synonym}
+            </span>
+          ))}
+        </Space>
+      )}
       <Space className="choice">
         <div
           className={`choice__item ${isChoice ? "icon--active" : ""}`}

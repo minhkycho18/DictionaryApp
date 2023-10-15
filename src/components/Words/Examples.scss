@@ -11,9 +11,11 @@
     font-size: 16px;
   }
   &__content {
+    font-family: $font;
     float: left;
     justify-content: center;
     align-items: center;
+    font-weight: 500;
   }
 }
 .title {
