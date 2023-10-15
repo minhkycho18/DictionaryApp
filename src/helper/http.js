@@ -3,7 +3,8 @@ import { API_URL } from "@env";
 class Http {
   constructor() {
     this.instance = axios.create({
-      baseURL: "http://192.168.1.9:8080",
+      // baseURL: "http://192.168.1.9:8080",
+      baseURL: "http://192.168.1.140:8080", //URL Quoc Thanh
       name: "Dictionary App",
       timeout: 10000,
       headers: {
@@ -24,6 +25,10 @@ class Http {
     );
     this.instance.interceptors.request.use(
       (config) => {
+        // const token = sessionStorage.getItem("tokenUser");
+        // if (token) {
+        //   config.headers["Authorization"] = `Token ${token}`;
+        // }
         return config;
       },
       (error) => {
