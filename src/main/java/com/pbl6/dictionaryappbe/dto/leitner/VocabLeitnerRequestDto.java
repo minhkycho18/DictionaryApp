@@ -1,4 +1,4 @@
-package com.pbl6.dictionaryappbe.dto;
+package com.pbl6.dictionaryappbe.dto.leitner;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class CreationVocabLeitnerRequestDto {
+public class VocabLeitnerRequestDto {
     @NotNull(message = "vocabId should not be null")
     private Long vocabId;
 

@@ -1,12 +1,16 @@
 package com.pbl6.dictionaryappbe.service;
 
-import com.pbl6.dictionaryappbe.dto.CreationVocabLeitnerRequestDto;
+import com.pbl6.dictionaryappbe.dto.leitner.LevelLeitnerModificationRequestDto;
+import com.pbl6.dictionaryappbe.dto.leitner.StatusLevelDto;
+import com.pbl6.dictionaryappbe.dto.leitner.VocabLeitnerRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularyLeitnerDetailDto;
 
 import java.util.List;
 
 public interface LeitnerService {
-    void addVocabToLeitner(CreationVocabLeitnerRequestDto creationVocabLeitnerRequestDto);
+    void addVocabToLeitner(VocabLeitnerRequestDto vocabLeitnerRequestDto);
 
     List<VocabularyLeitnerDetailDto> showVocabsByLevel(Integer level);
+
+    void modifyStatusLevelVocabLetiner(LevelLeitnerModificationRequestDto modificationRequestDto, StatusLevelDto statusLevel);
 }

@@ -1,12 +1,15 @@
 package com.pbl6.dictionaryappbe.service;
 
-import com.pbl6.dictionaryappbe.dto.CreationVocabLeitnerRequestDto;
+import com.pbl6.dictionaryappbe.dto.leitner.LevelLeitnerModificationRequestDto;
+import com.pbl6.dictionaryappbe.dto.leitner.StatusLevelDto;
+import com.pbl6.dictionaryappbe.dto.leitner.VocabLeitnerRequestDto;
 import com.pbl6.dictionaryappbe.dto.definition.DefinitionLeitnerDetailDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularyLeitnerDetailDto;
 import com.pbl6.dictionaryappbe.exception.DuplicateDataException;
 import com.pbl6.dictionaryappbe.exception.FieldNotNullException;
 import com.pbl6.dictionaryappbe.exception.RecordNotFoundException;
 import com.pbl6.dictionaryappbe.mapper.LeitnerMapper;
+import com.pbl6.dictionaryappbe.persistence.leitner.LeitnerId;
 import com.pbl6.dictionaryappbe.persistence.leitner.VocabLeitner;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
@@ -18,9 +21,12 @@ import com.pbl6.dictionaryappbe.repository.VocabDefRepository;
 import com.pbl6.dictionaryappbe.repository.VocabularyRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -40,7 +46,7 @@ public class LeitnerServiceImpl implements LeitnerService {
 
     @Override
     @Transactional
-    public void addVocabToLeitner(CreationVocabLeitnerRequestDto leitnerRequestDto) {
+    public void addVocabToLeitner(VocabLeitnerRequestDto leitnerRequestDto) {
         VocabDef vocabDef =
                 vocabDefRepository.findById(new VocabDefId(leitnerRequestDto.getVocabId(), leitnerRequestDto.getDefId()))
                         .orElseThrow(() -> new RecordNotFoundException("Vocabulary not found"));
@@ -94,11 +100,49 @@ public class LeitnerServiceImpl implements LeitnerService {
         leitnerDetailDtoList.forEach(vocabularyLeitnerDetailDto ->
                 vocabularyLeitnerDetailDto.setShortDetailDtos(
                         vocabularyLeitnerDetailDto.getShortDetailDtos().stream()
-                        .sorted(comparing(DefinitionLeitnerDetailDto::getStudyTime))
-                        .toList()
+                                .sorted(comparing(DefinitionLeitnerDetailDto::getStudyTime))
+                                .toList()
                 )
         );
 
         return leitnerDetailDtoList;
+    }
+
+    @Override
+    @Transactional
+    public void modifyStatusLevelVocabLetiner(
+            LevelLeitnerModificationRequestDto leitnerModificationRequestDto,
+            StatusLevelDto statusLevel
+    ) {
+        final int currentLevel = leitnerModificationRequestDto.getLevel();
+        final User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
+        leitnerModificationRequestDto.getVocabLeitnerRequestDtoList().forEach(vocabLeitnerRequestDto -> {
+            LeitnerId leitnerId = LeitnerId.builder()
+                    .vocabId(vocabLeitnerRequestDto.getVocabId())
+                    .defId(vocabLeitnerRequestDto.getDefId())
+                    .userId(user.getUserId())
+                    .build();
+            VocabLeitner vocabLeitner = leitnerRepository.findById(leitnerId)
+                    .orElseThrow(() -> new RecordNotFoundException("Vocab leitner not found"));
+            switch (statusLevel) {
+                case UP -> {
+                    if (currentLevel < 7) {
+                        vocabLeitner.setLevelLeitner(levelLeitnerRepository.findById(currentLevel + 1)
+                                .orElseThrow(() -> new RecordNotFoundException("Level leitner not found")));
+                    }
+                    // case: up level from 0 to 1 --> continue
+                    if (currentLevel > 1) vocabLeitner.setLastLearning(LocalDateTime.now());
+                }
+                case DOWN -> {
+                    if (currentLevel > 1) {
+                        vocabLeitner.setLevelLeitner(levelLeitnerRepository.findById(currentLevel - 1)
+                                .orElseThrow(() -> new RecordNotFoundException("Level leitner not found")));
+                    }
+                    vocabLeitner.setLastLearning(LocalDateTime.now());
+                }
+                default -> throw new ResponseStatusException(HttpStatusCode.valueOf(400), "Invalid Level Data");
+            }
+            leitnerRepository.save(vocabLeitner);
+        });
     }
 }
