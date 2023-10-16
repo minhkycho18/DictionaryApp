@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_URL } from "@env";
+import { getTokenFromAsyncStorage } from "./Auth";
 class Http {
   constructor() {
     this.instance = axios.create({
@@ -24,6 +25,10 @@ class Http {
     );
     this.instance.interceptors.request.use(
       (config) => {
+        const token = getTokenFromAsyncStorage();
+        if (token) {
+          config.headers["Authorization"] = `Bearer ${token}`;
+        }
         return config;
       },
       (error) => {

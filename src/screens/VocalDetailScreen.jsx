@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
+import { View, ScrollView, StyleSheet, SafeAreaView } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import HeaderVocalDetail from "~/components/VocalDetail/HeaderVocalDetail/HeaderVocalDetail";
 import ItemVocalDetail from "~/components/VocalDetail/ItemVocalDetail/ItemVocalDetail";
@@ -44,12 +44,12 @@ function VocalDetail() {
   });
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <HeaderVocalDetail vocal={word} />
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         {items}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 styles = StyleSheet.create({

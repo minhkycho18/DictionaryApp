@@ -1,8 +1,8 @@
 
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import Dictionary from "../screens/Dictionary";
-import VocalDetail from "../screens/VocalDetail";
+import Dictionary from "../screens/DictionaryScreen";
+import VocalDetail from "../screens/VocalDetailScreen";
 
 
 export default function DictionaryStack() {

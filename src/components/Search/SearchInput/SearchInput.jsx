@@ -1,19 +1,21 @@
-import React, { useState } from "react";
-import { TextInput, View} from "react-native";
+import React, { useState, useRef } from "react";
+import { TextInput, View } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./Style";
 const SearchInput = ({ onChange, onBackPress }) => {
   const [search, setSearch] = useState("");
-  const [clear , setClear] = useState(false)
-  const handleClear = () =>{
-     setSearch("")
-     setClear(false)
-  }
+  const [clear, setClear] = useState(false);
+  const clickClear = useRef();
+  const handleClear = () => {
+    setSearch("");
+    setClear(false);
+    clickClear.current.focus();
+  };
   const handleTextChange = (text) => {
     setSearch(text);
     onChange(text);
-    setClear(true)
+    setClear(true);
   };
   return (
     <View style={styles.headerSearch}>
@@ -35,10 +37,16 @@ const SearchInput = ({ onChange, onBackPress }) => {
           value={search}
           onChangeText={handleTextChange}
           autoFocus={true}
+          ref={clickClear}
         />
         {clear && (
-          <View style={styles.iconClear} >
-              <EvilIcons name="close" size={30} color="#6b7280" onPress={handleClear}/>
+          <View style={styles.iconClear}>
+            <EvilIcons
+              name="close"
+              size={30}
+              color="#6b7280"
+              onPress={handleClear}
+            />
           </View>
         )}
       </View>

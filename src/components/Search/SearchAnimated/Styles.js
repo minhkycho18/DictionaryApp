@@ -1,10 +1,11 @@
 
 import { StyleSheet } from "react-native";
+import { colors } from "~/constants/theme";
 export const styles = StyleSheet.create({
 
     borderStyle: {
 
-        backgroundColor: "#7E68EF",
+        backgroundColor: colors.primary,
         height: '100%',
         borderBottomLeftRadius: 45,
         borderBottomRightRadius: 45,
