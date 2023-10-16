@@ -17,11 +17,11 @@ function ItemVocalDetail({ definition, color, item, count }) {
           >
             <View>
               <Text style={styles.word}>
-                {count}. {item.word.toLowerCase()}
+                {count}.{item.word.toLowerCase()}
               </Text>
-              <Text style={{ ...styles.pos, color: color, marginLeft: 18 }}>
+              {/* <Text style={{ ...styles.pos, color: color, marginLeft: 18 }}>
                 ({item.pos})
-              </Text>
+              </Text> */}
             </View>
 
             <View style={{ display: "flex", flexDirection: "row" }}>

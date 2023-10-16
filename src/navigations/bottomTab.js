@@ -1,17 +1,18 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from '@react-navigation/native'
-import Home from '../screens/Home';
+import Home from '../screens/HomeScreen';
 import DictionaryStack from "./dictionaryStack";
-import Profile from "../screens/Profile";
+import Profile from "../screens/ProfileScreen";
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from "../styles/Style";
 import { useRef, useState, useEffect } from 'react'
-import { Dimensions, Animated, Keyboard } from "react-native";
+import { Dimensions, Animated, Keyboard, Platform } from "react-native";
 
 export default function BottomTab() {
   const tabOffsetValue = useRef(new Animated.Value(0)).current;
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const Tab = createBottomTabNavigator();
+
   function getWidth() {
     let width = Dimensions.get("window").width
     width = width - 80
@@ -73,7 +74,11 @@ export default function BottomTab() {
           },
           tabBarActiveTintColor: "#007EFF",
           tabBarInactiveTintColor: 'gray',
-          tabBarStyle: styles.tabBarStyle,
+          tabBarStyle: {
+            height: Platform.OS === 'ios' ? 75 : 60,
+            paddingTop: 1,
+            paddingBottom: Platform.OS === 'ios' ? 18 : 2,
+          },
           tabBarHideOnKeyboard: "true"
 
         })}
@@ -116,7 +121,8 @@ export default function BottomTab() {
           transform: [
             { translateX: tabOffsetValue }
           ],
-          ...styles.animatedViewStyle
+          ...styles.animatedViewStyle,
+          bottom: Platform.OS === 'ios' ? 71 : 57
         }}></Animated.View>
       )}
     </NavigationContainer>
