@@ -23,6 +23,7 @@ import com.pbl6.dictionaryappbe.repository.LevelLeitnerRepository;
 import com.pbl6.dictionaryappbe.repository.VocabDefRepository;
 import com.pbl6.dictionaryappbe.repository.VocabularyRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
+import com.pbl6.dictionaryappbe.utils.MapperUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -173,8 +174,6 @@ public class LeitnerServiceImpl implements LeitnerService {
                     .toList()
             );
         });
-        return levelLeitners.stream()
-                .map(leitnerMapper::levelLeitnerToLeitnerBoxDto)
-                .toList();
+        return MapperUtils.toTargetList(leitnerMapper::levelLeitnerToLeitnerBoxDto, levelLeitners);
     }
 }
