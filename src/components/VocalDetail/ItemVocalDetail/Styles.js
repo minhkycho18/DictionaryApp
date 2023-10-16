@@ -54,7 +54,7 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         letterSpacing: 0.5,
         lineHeight: 27,
-        color: colors.textColor
+        color: colors.textColor,
     },
     wrapper: {
         borderWidth: 1,
@@ -66,39 +66,45 @@ export const styles = StyleSheet.create({
 
 
     },
-    synonym :{
-        display :'flex',
-        flexDirection :'row',
+    synonym: {
+        display: 'flex',
+        flexDirection: 'row',
         marginTop: 10,
-        alignItems :'center',
-        flexWrap :'wrap'
+        alignItems: 'center',
+        flexWrap: 'wrap'
     },
-    synonym_main :{
+    synonym_main: {
         fontSize: 16,
         letterSpacing: 0.6,
         color: '#5E7172',
-        
+
     },
-    synonym_Item : {
-        backgroundColor :"#CFE5DE",
-        width :'auto',
-        height :'auto',
-        padding :3,
-        borderRadius :10,
-        marginLeft :10,
-        marginBottom :5
+    synonym_Item: {
+        backgroundColor: "#CFE5DE",
+        width: 'auto',
+        height: 'auto',
+        paddingBottom: 3,
+        paddingTop: 3,
+        paddingLeft: 15,
+        paddingRight: 15,
+        borderRadius: 15,
+        marginLeft: 10,
+        marginBottom: 5,
+
+
     },
-    synonym_Item__Text :{
-        color :"#467A4D"
+    synonym_Item__Text: {
+        color: "#467A4D",
+        textAlign: 'center'
     },
-    example : {
-        fontSize :16,
+    example: {
+        fontSize: 16,
         letterSpacing: 0.5,
         lineHeight: 27,
         color: colors.textColor,
-        marginLeft :5
+        marginLeft: 5
     },
-    example_main : {
+    example_main: {
         fontSize: 16,
         letterSpacing: 0.6,
         color: '#5E7172',

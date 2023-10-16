@@ -3,7 +3,7 @@ import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
 export const colors = {
-  primary: '#7E68EF',
+  primary: 'rgba(97, 47, 222, 0.8)',
   gray: '#8b8989',
   lightGray: '#b2b2b2',
   light: '#fbfbfb',
@@ -19,9 +19,9 @@ export const colorPos = [
   { interjection: "#B4B6E6" },
   { phrase: "#06FBFF" },
   { adverb: "#AED574" },
-  {preposition:"#2F9D8C"},
-  {determiner:"#C4A986"},
-  {pronoun:"#EAC56D"}
+  { preposition: "#2F9D8C" },
+  { determiner: "#C4A986" },
+  { pronoun: "#EAC56D" }
 ]
 
 export const colorSynonym = [
@@ -32,9 +32,9 @@ export const colorSynonym = [
     }
   },
   {
-    Antonym :{
-      bg :"#FDEFEF",
-      text :"#D15C67"
+    Antonym: {
+      bg: "#FDEFEF",
+      text: "#D15C67"
     }
   }
 

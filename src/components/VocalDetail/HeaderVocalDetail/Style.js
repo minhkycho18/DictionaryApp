@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     height: 70,
     width: '100%',
-    backgroundColor: '#7E68EF',
+    backgroundColor: colors.primary,
     justifyContent: 'center',
     flexDirection: 'row',
     alignItems: 'center',
@@ -18,13 +18,6 @@ export const styles = StyleSheet.create({
 
 
 
-  },
-  textHeader: {
-    fontSize: 30,
-    color: "#fff",
-    fontStyle: 'italic',
-    fontWeight: 'bold',
-    letterSpacing: 0.6
   },
   pronunText: {
     fontSize: 18,
