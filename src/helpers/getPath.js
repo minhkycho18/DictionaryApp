@@ -1,12 +1,14 @@
 const getFullPath = (pathname = "") => {
-  const arrPath = pathname.split("/");
-  const result = {
-    parent: capitalizeFirstLetter(arrPath[1]),
-    child: capitalizeFirstLetter(arrPath[2]),
-  };
-  return result;
+  const arrPath = pathname.split("/").filter(Boolean);
+  const pathLevels = arrPath.map((path, index) => ({
+    title: capitalizeFirstLetter(path),
+    link: `/${arrPath.slice(0, index + 1).join("/")}`,
+  }));
+  return pathLevels;
 };
+
 function capitalizeFirstLetter(str) {
   return str.replace(/(^\w|\s\w)/g, (match) => match.toUpperCase());
 }
+
 export default getFullPath;

@@ -30,13 +30,19 @@ const Meaning = ({ detail }) => {
       )}
       <Space className="choice">
         <div
-          className={`choice__item ${isChoice ? "icon--active" : ""}`}
+          className={`choice__item ${
+            definition?.isWordOfUserLeitner ? "icon--active" : ""
+          }`}
           onClick={onChoice}
         >
           <InboxOutlined className="choice__icon " />
           <PlusCircleFilled className="choice__icon--sub" />
         </div>
-        <div className="choice__item">
+        <div
+          className={`choice__item ${
+            definition?.isWordOfUserWordList ? "icon--active" : ""
+          }`}
+        >
           <BookOutlined className="choice__icon" />
           <PlusCircleFilled className="choice__icon--sub" />
         </div>

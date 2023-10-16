@@ -10,18 +10,22 @@ const Dashboard = () => {
   const { pathname } = useLocation();
   changeTitle(pathname);
   const path = getFullPath(pathname);
-
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  const itemBreadcum = [
-    {
-      title: path.parent,
-    },
-    {
-      title: <Link href="">{path.child}</Link>,
-    },
-  ];
+  const breadcrumbs = path.map((item, index) => {
+    const isFirst = index === 0;
+    if (isFirst) {
+      return {
+        title: <Link to={`/`}>{item?.title}</Link>,
+      };
+    } else {
+      return {
+        title: <Link to={`${item.link}`}>{item?.title}</Link>,
+      };
+    }
+  });
+
   return (
     <Layout style={{ position: "relative" }}>
       <CustomSider />
@@ -35,8 +39,8 @@ const Dashboard = () => {
           }}
         >
           <Space direction="vertical" className="headerPage">
-            <Space className="headerPage__name">{path.child}</Space>
-            <Breadcrumb items={itemBreadcum} className="headerPage__breadcum" />
+            <Space className="headerPage__name">{path[1].title}</Space>
+            <Breadcrumb items={breadcrumbs} className="headerPage__breadcum" />
           </Space>
         </Header>
         <Content

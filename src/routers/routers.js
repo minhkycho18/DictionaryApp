@@ -10,6 +10,7 @@ import SignIn from "../pages/sign-in/SignIn";
 import SignUp from "../pages/sign-up/SignUp";
 import Auth from "../layouts/Auth/Auth";
 import Leitner from "../pages/Learner/leitner/Leitner";
+import WordListsPage from "../pages/Learner/wordlists/WordListsPage";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -39,7 +40,16 @@ const routers = createBrowserRouter([
       },
       {
         path: "wordLists",
-        element: <MyWordLists />,
+        children: [
+          {
+            path: "",
+            element: <MyWordLists />,
+          },
+          {
+            path: ":name/:id",
+            element: <WordListsPage />,
+          },
+        ],
       },
       {
         path: "leitner",

@@ -28,7 +28,11 @@ const WordLists = ({ type, wordLists }) => {
       title={wordlist.title}
     ></Category>
   ));
-
+  const handleExplore = (e) => {
+    if (type === "self") {
+      navigate("/dashboard/wordLists");
+    }
+  };
   return (
     <Space className="wordLists" direction="horizontal">
       <Card
@@ -45,7 +49,10 @@ const WordLists = ({ type, wordLists }) => {
             : "Here you will find different Word lists categorized"}
         </p>
 
-        <Button className={`wordLists__card--btn ${isSelf ? "" : "btn-blue"}`}>
+        <Button
+          className={`wordLists__card--btn ${isSelf ? "" : "btn-blue"}`}
+          onClick={handleExplore}
+        >
           Explore
         </Button>
       </Card>

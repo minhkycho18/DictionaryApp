@@ -1,7 +1,3 @@
-import React, { useState } from "react";
-import "./ListItem.scss";
-import { Image, Input, Modal, Popover, Space } from "antd";
-import category from "../../assets/images/category-back.png";
 import {
   ClockCircleOutlined,
   DeleteOutlined,
@@ -10,14 +6,18 @@ import {
   MoreOutlined,
   RightOutlined,
 } from "@ant-design/icons";
+import { Image, Input, Modal, Popover, Space } from "antd";
+import React, { useState } from "react";
+import category from "../../assets/images/category-back.png";
 import calculateDateTime from "../../helpers/calculateDateTime";
+import "./ListItem.scss";
 
-const ListItem = ({ wordlist }) => {
+const ListItem = ({ wordlist, onSelect }) => {
   const { confirm } = Modal;
   const [isOpenModel, setIsOpenModel] = useState(false);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [newTitle, setNewTitle] = useState("");
+  const [, setNewTitle] = useState("");
   const showDeleteConfirm = () => {
     setIsOpenModel(true);
     confirm({
@@ -62,7 +62,10 @@ const ListItem = ({ wordlist }) => {
       </Space>
     </Space>
   );
-
+  const handleSelectWordList = (e) => {
+    // navigate(`/dashboard/wordLists/${wordlist?.title}`);
+    onSelect(e);
+  };
   return (
     <Space className="MyWordLists__item ListItem" direction="vertical">
       <Modal
@@ -121,6 +124,7 @@ const ListItem = ({ wordlist }) => {
           display: "flex",
           cursor: "pointer",
         }}
+        onClick={() => handleSelectWordList(wordlist)}
       >
         <span>{wordlist?.title.toUpperCase()}</span>
         <RightOutlined />
