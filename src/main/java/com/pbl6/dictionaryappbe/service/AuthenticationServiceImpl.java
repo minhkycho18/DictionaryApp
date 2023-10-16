@@ -8,6 +8,7 @@ import com.pbl6.dictionaryappbe.dto.auth.RegisterRequestDto;
 import com.pbl6.dictionaryappbe.exception.RecordNotFoundException;
 import com.pbl6.dictionaryappbe.mapper.UserMapper;
 import com.pbl6.dictionaryappbe.persistence.role.Role;
+import com.pbl6.dictionaryappbe.persistence.role.RoleName;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.repository.RoleRepository;
 import com.pbl6.dictionaryappbe.repository.UserRepository;
@@ -38,9 +39,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (existedUser.isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
         }
-
-        Role role = roleRepository.findById(request.getRoleId())
-                .orElseThrow(() -> new RecordNotFoundException("No Role record exists for the given id: " + request.getRoleId()));
+        Role role = roleRepository.findByName(RoleName.LEARNER);
         String passwordEncode = passwordEncoder.encode(request.getPassword());
         User user = User.builder()
                 .email(request.getEmail())
