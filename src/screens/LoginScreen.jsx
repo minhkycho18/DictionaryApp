@@ -9,7 +9,6 @@ import { getTokenLogin } from '~/api/Auth'
 import { LogBox } from 'react-native';
 import { AuthContext } from '~/context/AuthContext';
 import AppLoader from '~/components/AppLoader';
-// import ToastNotification from '~/components/toast';
 import Toast, { ErrorToast } from 'react-native-toast-message';
 
 LogBox.ignoreLogs(['Asyncstorage: ...']); // Ignore log notification by message
@@ -35,29 +34,54 @@ export default function LoginScreen() {
 
     const [warningMail, setWarningMail] = useState(false);
     const [warningPw, setWarningPw] = useState(false);
+    const [isFocusMail, setIsFocusMail] = useState(false);
+    const [isFocusPw, setIsFocusPw] = useState(false);
 
     const handlePressItem = async () => {
         console.log("Test : ", "Click Sign in");
         const data = {
             email: email,
             password: password,
+            
             // email: 'user01@gmail.com',
             // password: '1234'
         };
+        console.log("Test : ", data);
+        
         if (email == '' || password == '') {
             if (email == '') {
-                emailRef.current.focus()
+                if(!isFocusMail)
+                {
+                    emailRef.current.focus()
+                }
+                else
+                {
+                    console.log("Test : ", "geeeeeeeeee");
+                    setWarningMail(true);
+                }
             }
-            else passwordRef.current.focus()
+            else {
+                if(!isFocusPw)
+                {
+                    passwordRef.current.focus()
+                }
+                else
+                {
+                    console.log("Test : ", "geeeeeeeeee pw");
+                    setWarningPw(true);
+                }
+                
+            }
         }
         else {
             handlePressOutside();
+            //validate Email
             if (email.includes('@gmail.com')) {
                 {
                     try {
                         const i = await login(data);
                         if (i == 0) {
-                            showToast();
+                            showToast("Login Fail","Invalid Email or Password, please try again!");
                         }
                         else {
                             console.log("test : ", 'PASSSSSS');
@@ -70,7 +94,8 @@ export default function LoginScreen() {
             }
             else
             {
-                showToastEmail();
+                showToast("Error","Invalid Email Format, please check again!");
+                setWarningMail(true);
             }
 
         }
@@ -78,26 +103,14 @@ export default function LoginScreen() {
     }
 
     //Toast
-    const showToast = () => {
-        console.log("check", " click here")
+    const showToast = (text1,text2) => {
         Toast.show({
             position: 'top',
             type: "error",
-            text1: "Login Fail",
-            text2: "Invalid Email or Password, please try again!",
-            visibilityTime: 2000,
-            autoHide: true,
-            topOffset: 55,
-        })
-    }
-
-    const showToastEmail = () => {
-        setWarningMail(true);
-        Toast.show({
-            position: 'top',
-            type: "error",
-            text1: "Error",
-            text2: "Invalid Email Format, please check again!",
+            text1: text1,
+            text2: text2,
+            // text1: "Login Fail",
+            // text2: "Invalid Email or Password, please try again!",
             visibilityTime: 2000,
             autoHide: true,
             topOffset: 55,
@@ -122,24 +135,38 @@ export default function LoginScreen() {
     const handleBlurEmail = () => {
         if (email === '') {
             setWarningMail(true);
-        } else {
-            setWarningMail(false);
         }
+        setIsFocusMail(false);
     };
     const handleBlurPw = () => {
         if (password === '') {
             setWarningPw(true);
-        } else {
-            setWarningPw(false);
         }
+        setIsFocusPw(false);
     };
 
     const handleFocusEmail = () => {
         setWarningMail(false);
+        setIsFocusMail(true);
     };
     const handleFocusPw = () => {
         setWarningPw(false);
+        setIsFocusPw(true);
     };
+    const onChangeMail = (text) => {
+        if(warningMail)
+        {
+            setWarningMail(false);
+        }
+        setEmail(text);
+    }
+    const onChangePw = (text) => {
+        if(warningPw)
+        {
+            setWarningPw(false);
+        }
+        setPassword(text);
+    }
 
     return (
         <>
@@ -194,11 +221,11 @@ export default function LoginScreen() {
                             <View
                                 style={[tw`flex items-center mx-5`]}
                             >
-                                {/* <Text>{val}</Text> */}
                                 <Animated.View
                                     entering={FadeInDown.duration(1000).springify()}
                                     style={[tw`bg-black/10 p-5 rounded-2xl w-full mb-4`,
-                                    warningMail && { borderColor: "#FF0000", borderWidth: 1, }
+                                    warningMail && { borderColor: "#FF0000", borderWidth: 1, },
+                                    
                                     ]}
                                 // onPress={emailRef.current.focus()}
                                 >
@@ -215,7 +242,7 @@ export default function LoginScreen() {
                                             placeholderTextColor={'gray'}
                                             onSubmitEditing={handleEmailSubmit}
                                             value={email}
-                                            onChangeText={text => setEmail(text)}
+                                            onChangeText={text => onChangeMail(text)}
                                             onBlur={handleBlurEmail}
                                             onFocus={handleFocusEmail}
                                         />
@@ -252,7 +279,7 @@ export default function LoginScreen() {
                                             placeholderTextColor={'gray'}
                                             secureTextEntry
                                             value={password}
-                                            onChangeText={text => setPassword(text)}
+                                            onChangeText={text => onChangePw(text)}
                                             onBlur={handleBlurPw}
                                             onFocus={handleFocusPw}
                                         />
