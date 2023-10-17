@@ -1,0 +1,71 @@
+@import "../../../assets/scss/font.scss";
+@import "../../../assets/scss/variable.scss";
+.wldetail-wrap {
+  justify-content: center;
+  align-items: center;
+  font-family: $font;
+  padding: 0px 64px;
+  width: 100%;
+}
+.wldetail__content {
+  //   &-avatar {
+  //   }
+  &-title {
+    color: #0e336b;
+    font-size: 44.8px;
+    font-weight: 700;
+    line-height: 67.2px;
+    text-transform: capitalize;
+  }
+  &-infor {
+    color: #6a778d;
+    font-size: 15.2px;
+    font-weight: 500;
+    letter-spacing: 0.15px;
+    line-height: 24px;
+    // text-align: left;
+  }
+  &-btn {
+    border: #0e336b 2px solid;
+    padding: 4px 8px;
+    border-radius: 16px;
+    color: #0e336b;
+    font-weight: 600;
+  }
+}
+.wldetail__card {
+  width: inherit;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  padding: 32px;
+  border-radius: 16px;
+  &-addLeitner {
+    color: #212529;
+    font-family: $font;
+    font-size: 8.8px;
+    font-weight: 500;
+    line-height: 16px;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  &-iconAdd {
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    padding: 16px;
+    background-color: #ddd;
+    border-radius: 50%;
+    margin: 0 !important;
+  }
+  &-title {
+    color: #212529;
+    display: flex;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 33.6px;
+    text-align: left;
+  }
+}

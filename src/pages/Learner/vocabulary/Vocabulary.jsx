@@ -30,7 +30,6 @@ const Vocabulary = () => {
       </Space>
       <WordLists type="self" wordLists={wordLists} />
       <WordLists type="default" wordLists={wordListsDefault} />
-      {/* <WordLists type="public" wordLists={wordListsPublic} /> */}
     </Space>
   );
 };

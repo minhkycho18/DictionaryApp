@@ -11,6 +11,7 @@ import SignUp from "../pages/sign-up/SignUp";
 import Auth from "../layouts/Auth/Auth";
 import Leitner from "../pages/Learner/leitner/Leitner";
 import WordListsPage from "../pages/Learner/wordlists/WordListsPage";
+import WordListDetail from "../pages/Learner/wordlists/WordListDetail";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -26,7 +27,17 @@ const routers = createBrowserRouter([
       },
       {
         path: "vocabulary",
-        element: <Vocabulary />,
+        children: [
+          {
+            path: "",
+            element: <Vocabulary />,
+          },
+
+          {
+            path: "detail",
+            element: <WordListDetail />,
+          },
+        ],
       },
     ],
   },

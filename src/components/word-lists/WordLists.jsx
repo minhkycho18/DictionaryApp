@@ -5,27 +5,35 @@ import { useNavigate } from "react-router-dom";
 import getTokenFromStorage from "../../helpers/getTokenFromStorage";
 import "./WordLists.scss";
 import Category from "./category/Category";
+import { useDispatch } from "react-redux";
+import { selectWl } from "../../stores/subcategory/subcategorySlice";
 
 const WordLists = ({ type, wordLists }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isSelf, setIsSelf] = useState(true);
+  useEffect(() => {
+    if (type === "self") {
+      setIsSelf(true);
+    } else setIsSelf(false);
+  }, [type]);
   const handleAddNewWL = (e) => {
     const token = getTokenFromStorage();
     if (token) {
       navigate("/dashboard/wordLists");
     } else navigate("/auth/sign-in");
   };
-  useEffect(() => {
-    if (type === "self") {
-      setIsSelf(true);
-    } else setIsSelf(false);
-  }, [type]);
 
+  const handleSelectCategory = (wl) => {
+    dispatch(selectWl(wl));
+    navigate(`/vocabulary/detail?id=${wl?.id}`);
+  };
   const renderCategory = wordLists.map((wordlist, index) => (
     <Category
       isSelf={isSelf}
       key={wordlist.id}
-      title={wordlist.title}
+      wl={wordlist}
+      onSelect={handleSelectCategory}
     ></Category>
   ));
   const handleExplore = (e) => {

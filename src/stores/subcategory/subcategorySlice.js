@@ -10,6 +10,7 @@ const initialState = {
   loading: false,
   error: null,
   subcategories: [],
+  selectedWL: {},
 };
 
 const subcategorySlice = createSlice({
@@ -18,6 +19,9 @@ const subcategorySlice = createSlice({
   reducers: {
     deleteASub: (state, action) => {
       state.subcategories.filter((sub) => sub !== action.payload);
+    },
+    selectWl: (state, action) => {
+      state.selectedWL = action.payload;
     },
   },
   extraReducers: (builder) =>
@@ -76,6 +80,6 @@ const subcategorySlice = createSlice({
   //=====================================================
 });
 
-// export const {} = subcategorySlice.actions;
+export const { selectWl, deleteASub } = subcategorySlice.actions;
 
 export default subcategorySlice.reducer;

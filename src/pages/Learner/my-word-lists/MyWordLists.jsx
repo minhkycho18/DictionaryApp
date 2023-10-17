@@ -9,12 +9,7 @@ import "./MyWordLists.scss";
 const MyWordLists = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {
-    loading,
-    // error,
-    // message,
-    wordLists,
-  } = useSelector((state) => state.wordLists);
+  const { loading, wordLists } = useSelector((state) => state.wordLists);
   useEffect(() => {
     dispatch(getAllWordListsById());
     return () => {};
@@ -44,8 +39,6 @@ const MyWordLists = () => {
       ) : (
         <Spin spinning={loading} />
       )}
-
-      {/* {!loading ? renderWordList : <Spin spinning={loading} />} */}
     </Space>
   );
 };
