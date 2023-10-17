@@ -7,3 +7,7 @@ export const getTokenLogin = (data) => {
 export const Logout = (data) => {
   return http.post("/users/authenticate", data);
 };
+
+export const Register = (data) => {
+  return http.post("/users/register", data);
+};
