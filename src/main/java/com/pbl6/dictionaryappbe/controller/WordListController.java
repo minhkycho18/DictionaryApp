@@ -2,6 +2,7 @@ package com.pbl6.dictionaryappbe.controller;
 
 import com.pbl6.dictionaryappbe.dto.WordListDto;
 import com.pbl6.dictionaryappbe.persistence.role.RoleName;
+import com.pbl6.dictionaryappbe.persistence.wordlist.ListType;
 import com.pbl6.dictionaryappbe.service.WordListService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -62,6 +63,12 @@ public class WordListController {
         return wordListService.getAllPublicWordList();
     }
 
+
+    @GetMapping("/types")
+    public ListType[] getAllWordListType() {
+        return ListType.values();
+    }
+    
     @Operation(summary = "Create a new WordLists")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Create successfully",

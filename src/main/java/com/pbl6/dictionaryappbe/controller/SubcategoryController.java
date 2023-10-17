@@ -2,6 +2,9 @@ package com.pbl6.dictionaryappbe.controller;
 
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryResponseDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryResponseDto;
+import com.pbl6.dictionaryappbe.persistence.subcategory.SubcategoryType;
 import com.pbl6.dictionaryappbe.service.SubcategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,7 +22,7 @@ import java.util.List;
 @Tag(name = "Subcategory")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/wordlists/{wordListId}/subcategories")
+@RequestMapping(path = "")
 public class SubcategoryController {
 
     private final SubcategoryService subcategoryService;
@@ -29,9 +32,26 @@ public class SubcategoryController {
             @ApiResponse(responseCode = "200", description = "Get data successfully",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))}),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
-    @GetMapping
+    @GetMapping("/wordlists/{wordListId}/subcategories")
     public List<SubcategoryResponseDto> getAllSubcategories(@PathVariable Long wordListId) {
         return subcategoryService.getAllSubcategories(wordListId);
+    }
+
+    @GetMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}")
+    public List<VocabularySubcategoryResponseDto> getAllVocabulary(@PathVariable Long subcategoryId) {
+        return subcategoryService.getAllVocabularies(subcategoryId);
+    }
+
+    @GetMapping("subcategories/types")
+    public SubcategoryType[] getAllSubcategoryType() {
+        return SubcategoryType.values();
+    }
+
+    @PostMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}")
+    public String addVocabularyTOSubcategory(@PathVariable Long subcategoryId,
+                                             @RequestBody VocabularySubcategoryRequestDto vocabSub) {
+        subcategoryService.addVocabToSubcategory(subcategoryId, vocabSub);
+        return "Add successfully";
     }
 
     @Operation(summary = "Create a new subcategory")
@@ -52,7 +72,7 @@ public class SubcategoryController {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid data"),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
-    @PutMapping("/{subcategoryId}")
+    @PutMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}")
     public SubcategoryResponseDto updateSubcategory(@PathVariable Long subcategoryId,
                                                     @RequestBody @Valid @NotNull SubcategoryRequestDto subcategory) {
         return subcategoryService.updateSubcategory(subcategoryId, subcategory);
@@ -63,7 +83,7 @@ public class SubcategoryController {
             @ApiResponse(responseCode = "200", description = "Delete successfully",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
-    @DeleteMapping("/{subcategoryId}")
+    @DeleteMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}")
     public String deleteSubcategory(@PathVariable Long subcategoryId) {
         subcategoryService.deleteSubcategory(subcategoryId);
         return "Delete successfully";

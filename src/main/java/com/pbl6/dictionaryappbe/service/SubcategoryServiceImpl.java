@@ -2,13 +2,23 @@ package com.pbl6.dictionaryappbe.service;
 
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryResponseDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.exception.DuplicateDataException;
+import com.pbl6.dictionaryappbe.exception.RecordNotFoundException;
+import com.pbl6.dictionaryappbe.mapper.SubcategoryDetailMapper;
 import com.pbl6.dictionaryappbe.mapper.SubcategoryMapper;
 import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
 import com.pbl6.dictionaryappbe.persistence.subcategory.SubcategoryType;
+import com.pbl6.dictionaryappbe.persistence.subcategory_detail.SubcategoryDetail;
 import com.pbl6.dictionaryappbe.persistence.user.User;
+import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
+import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDefId;
+import com.pbl6.dictionaryappbe.persistence.vocabulary.WordType;
 import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
+import com.pbl6.dictionaryappbe.repository.SubcategoryDetailRepository;
 import com.pbl6.dictionaryappbe.repository.SubcategoryRepository;
+import com.pbl6.dictionaryappbe.repository.VocabDefRepository;
 import com.pbl6.dictionaryappbe.repository.WordListRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
 import com.pbl6.dictionaryappbe.utils.MapperUtils;
@@ -28,6 +38,9 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     private final SubcategoryRepository subcategoryRepository;
     private final WordListRepository wordListRepository;
     private final SubcategoryMapper subcategoryMapper;
+    private final VocabDefRepository vocabDefRepository;
+    private final SubcategoryDetailRepository subcategoryDetailRepository;
+    private final SubcategoryDetailMapper subcategoryDetailMapper;
 
     @Override
     public List<SubcategoryResponseDto> getAllSubcategories(Long wordListId) {
@@ -36,6 +49,35 @@ public class SubcategoryServiceImpl implements SubcategoryService {
                 .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"));
         List<Subcategory> subcategories = subcategoryRepository.findAllByWordList(wordList);
         return MapperUtils.toTargetList(subcategoryMapper::toSubcategoryResponseDto, subcategories);
+    }
+
+    @Override
+    public List<VocabularySubcategoryResponseDto> getAllVocabularies(Long subcategoryId) {
+        List<SubcategoryDetail> vocabularies = subcategoryDetailRepository.findAllBySubcategoryId(subcategoryId);
+        return MapperUtils.toVocabSubResponse(vocabularies, subcategoryDetailMapper);
+    }
+
+    @Override
+    public void addVocabToSubcategory(Long subcategoryId,
+                                      VocabularySubcategoryRequestDto vocabularySubcategoryRequestDto
+    ) {
+        Subcategory subcategory = getOwnedSubcategory(subcategoryId);
+        VocabDef vocabDef = vocabDefRepository.findById(new VocabDefId(vocabularySubcategoryRequestDto.getVocabId(),
+                        vocabularySubcategoryRequestDto.getDefId()))
+                .orElseThrow(() -> new RecordNotFoundException("Invalid vocabulary"));
+        if (vocabDef.getVocabulary().getWordType() == WordType.CUSTOM
+                && subcategory.getSubcategoryType() == SubcategoryType.DEFAULT) {
+            throw new IllegalArgumentException("CUSTOM vocabulary can not add to DEFAULT subcategory");
+        }
+        subcategoryDetailRepository.save(SubcategoryDetail.builder()
+                .vocabId(vocabDef.getVocabId())
+                .defId(vocabDef.getDefId())
+                .subcategoryId(subcategory.getSubcategoryId())
+                .isReview(false)
+                .isFlashcard(false)
+                .isQuiz(false)
+                .lastLearning(null)
+                .build());
     }
 
     @Override
@@ -62,7 +104,8 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     public SubcategoryResponseDto updateSubcategory(Long subcategoryId, SubcategoryRequestDto subcategory) {
         String title = subcategory.getTitle();
         Subcategory oldSubcategory = getOwnedSubcategory(subcategoryId);
-        if (subcategoryRepository.findByTitleAndWordList(title, oldSubcategory.getWordList()) != null && !title.equals(oldSubcategory.getTitle())) {
+        if (subcategoryRepository.findByTitleAndWordList(title, oldSubcategory.getWordList()) != null
+                && !title.equals(oldSubcategory.getTitle())) {
             throw new DuplicateDataException("Duplicate title's subcategory");
         }
         oldSubcategory.setTitle(title);
@@ -86,4 +129,5 @@ public class SubcategoryServiceImpl implements SubcategoryService {
         }
         return subcategory;
     }
+
 }

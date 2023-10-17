@@ -49,7 +49,8 @@ public class WordListServiceImpl implements WordListService {
 
     @Override
     public List<WordListDto> getAllPublicWordList() {
-        Long userId = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext()).getUserId();
+        User user = AuthenticationUtils.getUserFromSecurityContext();
+        Long userId = user == null ? null : user.getUserId();
         Long roleId = roleRepository.findByName(RoleName.LEARNER).getRoleId();
         List<WordList> wordLists = wordListRepository.findDefaultWordList(String.valueOf(ListType.PUBLIC), userId, roleId);
         return MapperUtils.toTargetList(wordListMapper::toWordListDto, wordLists);
