@@ -18,16 +18,17 @@ pipeline {
 
         stage('Packaging/Pushing image') {
 
-            steps {
-                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
-                    sh 'docker build -t minhkycho18/dictionary-app .'
-                    sh 'docker push minhkycho18/dictionary-app'
+             steps {
+                 withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
+                        sh 'docker build -t minhkycho18/dictionary-app .'
+                        sh 'docker push minhkycho18/dictionary-app'
                 }
-            }
+             }
         }
 
         stage('Deploy Dictionary App to Server') {
             steps {
+                sh 'ls'
                 sh 'docker-compose down --rmi all -v'
                 sh 'docker-compose up'
                 sh 'docker compose up -d'
