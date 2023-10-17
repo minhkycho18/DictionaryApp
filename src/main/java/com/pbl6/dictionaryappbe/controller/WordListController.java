@@ -24,6 +24,16 @@ public class WordListController {
 
     private final WordListService wordListService;
 
+    @Operation(summary = "Get WordList by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get data successfully",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = WordListDto.class))}),
+            @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
+    @GetMapping("/{wordListId}")
+    public WordListDto getWordlistById(@PathVariable long wordListId) {
+        return wordListService.getWordListById(wordListId);
+    }
+
     @Operation(summary = "Get all WordLists by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Get data successfully",
