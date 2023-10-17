@@ -2,6 +2,7 @@ package com.pbl6.dictionaryappbe.service;
 
 import com.pbl6.dictionaryappbe.dto.leitner.LevelLeitnerModificationRequestDto;
 import com.pbl6.dictionaryappbe.dto.leitner.StatusLevelDto;
+import com.pbl6.dictionaryappbe.dto.leitner.VocabLeitnerDetailDto;
 import com.pbl6.dictionaryappbe.dto.leitner.VocabLeitnerRequestDto;
 import com.pbl6.dictionaryappbe.dto.definition.DefinitionLeitnerDetailDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularyLeitnerDetailDto;
@@ -43,6 +44,19 @@ public class LeitnerServiceImpl implements LeitnerService {
     private final LevelLeitnerRepository levelLeitnerRepository;
     private final VocabularyRepository vocabularyRepository;
     private final LeitnerMapper leitnerMapper;
+
+    @Override
+    public VocabLeitnerDetailDto getInfoVocabLeitner(VocabLeitnerRequestDto leitnerRequestDto) {
+        User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
+        LeitnerId leitnerId = LeitnerId.builder()
+                .userId(user.getUserId())
+                .defId(leitnerRequestDto.getDefId())
+                .vocabId(leitnerRequestDto.getVocabId())
+                .build();
+        VocabLeitner vocabLeitner = leitnerRepository.findById(leitnerId)
+                .orElseThrow(() -> new RecordNotFoundException("Vocabulary not found"));
+        return leitnerMapper.vocabLeitnerToVocabLeitnerDetailDto(vocabLeitner);
+    }
 
     @Override
     @Transactional

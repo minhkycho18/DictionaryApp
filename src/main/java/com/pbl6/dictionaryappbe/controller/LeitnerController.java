@@ -2,6 +2,7 @@ package com.pbl6.dictionaryappbe.controller;
 
 import com.pbl6.dictionaryappbe.dto.leitner.LevelLeitnerModificationRequestDto;
 import com.pbl6.dictionaryappbe.dto.leitner.StatusLevelDto;
+import com.pbl6.dictionaryappbe.dto.leitner.VocabLeitnerDetailDto;
 import com.pbl6.dictionaryappbe.dto.leitner.VocabLeitnerRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularyLeitnerDetailDto;
 import com.pbl6.dictionaryappbe.service.LeitnerService;
@@ -30,6 +31,16 @@ import java.util.List;
 @Validated
 public class LeitnerController {
     private final LeitnerService leitnerService;
+
+    @Operation(summary = "Get info vocabulary in leitner", security = {@SecurityRequirement(name = "bearer-key")})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Get info vocabulary successfully",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VocabLeitnerDetailDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid data")})
+    @GetMapping("/vocab")
+    public VocabLeitnerDetailDto getVocabLeitnerInfo(@Valid @RequestBody VocabLeitnerRequestDto leitnerRequestDto) {
+        return leitnerService.getInfoVocabLeitner(leitnerRequestDto);
+    }
 
     @Operation(summary = "Add vocabulary to Leitner", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
