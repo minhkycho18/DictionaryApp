@@ -5,9 +5,7 @@ pipeline {
     tools {
         maven 'my-maven'
     }
-    environment {
-        MYSQL_ROOT_LOGIN = credentials('mysql-root-login')
-    }
+
     stages {
 
         stage('Build with Maven') {
@@ -21,8 +19,10 @@ pipeline {
         stage('Packaging/Pushing image') {
 
             steps {
+                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
                     sh 'docker build -t minhkycho18/dictionary-app .'
                     sh 'docker push minhkycho18/dictionary-app'
+                }
             }
         }
 
