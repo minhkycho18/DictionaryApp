@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface WordListService {
 
+    WordListDto getWordListById(Long wordListId);
+
     List<WordListDto> getAllByUser();
 
     List<WordListDto> getAllSystemWordList(RoleName role);

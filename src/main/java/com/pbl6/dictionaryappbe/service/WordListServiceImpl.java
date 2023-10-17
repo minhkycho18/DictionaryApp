@@ -31,6 +31,11 @@ public class WordListServiceImpl implements WordListService {
     private final WordListMapper wordListMapper;
 
     @Override
+    public WordListDto getWordListById(Long wordListId) {
+        return wordListMapper.toWordListDto(getOwnedWordList(wordListId));
+    }
+
+    @Override
     public List<WordListDto> getAllByUser() {
         User user = AuthenticationUtils.getUserFromSecurityContext();
         return MapperUtils.toTargetList(wordListMapper::toWordListDto, wordListRepository.findByUser(user));
