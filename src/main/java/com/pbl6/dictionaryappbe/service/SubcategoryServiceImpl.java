@@ -34,7 +34,8 @@ public class SubcategoryServiceImpl implements SubcategoryService {
         User user = AuthenticationUtils.getUserFromSecurityContext();
         WordList wordList = wordListRepository.findByUserAndWordListId(user, wordListId)
                 .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"));
-        return MapperUtils.toResponseSubcategory(subcategoryRepository.findAllByWordList(wordList), subcategoryMapper);
+        List<Subcategory> subcategories = subcategoryRepository.findAllByWordList(wordList);
+        return MapperUtils.toTargetList(subcategoryMapper::toSubcategoryResponseDto, subcategories);
     }
 
     @Override

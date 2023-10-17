@@ -1,5 +1,6 @@
 package com.pbl6.dictionaryappbe.service;
 
+import com.pbl6.dictionaryappbe.dto.leitner.LeitnerBoxDto;
 import com.pbl6.dictionaryappbe.dto.leitner.LevelLeitnerModificationRequestDto;
 import com.pbl6.dictionaryappbe.dto.leitner.StatusLevelDto;
 import com.pbl6.dictionaryappbe.dto.leitner.VocabLeitnerDetailDto;
@@ -12,6 +13,7 @@ import com.pbl6.dictionaryappbe.exception.RecordNotFoundException;
 import com.pbl6.dictionaryappbe.mapper.LeitnerMapper;
 import com.pbl6.dictionaryappbe.persistence.leitner.LeitnerId;
 import com.pbl6.dictionaryappbe.persistence.leitner.VocabLeitner;
+import com.pbl6.dictionaryappbe.persistence.level_leitner.LevelLeitner;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDefId;
@@ -21,6 +23,7 @@ import com.pbl6.dictionaryappbe.repository.LevelLeitnerRepository;
 import com.pbl6.dictionaryappbe.repository.VocabDefRepository;
 import com.pbl6.dictionaryappbe.repository.VocabularyRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
+import com.pbl6.dictionaryappbe.utils.MapperUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -158,5 +161,19 @@ public class LeitnerServiceImpl implements LeitnerService {
             }
             leitnerRepository.save(vocabLeitner);
         });
+    }
+
+    @Override
+    public List<LeitnerBoxDto> getAllUserLeitnerBoxes() {
+        final User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
+        List<LevelLeitner> levelLeitners = levelLeitnerRepository.findAll();
+        levelLeitners.forEach(levelLeitner -> {
+            List<VocabLeitner> vocabLeitners = levelLeitner.getVocabLeitners();
+            levelLeitner.setVocabLeitners(vocabLeitners.stream()
+                    .filter(vocabLeitner -> Objects.equals(vocabLeitner.getUser().getUserId(), user.getUserId()))
+                    .toList()
+            );
+        });
+        return MapperUtils.toTargetList(leitnerMapper::levelLeitnerToLeitnerBoxDto, levelLeitners);
     }
 }

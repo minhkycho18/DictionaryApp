@@ -1,5 +1,6 @@
 package com.pbl6.dictionaryappbe.controller;
 
+import com.pbl6.dictionaryappbe.dto.leitner.LeitnerBoxDto;
 import com.pbl6.dictionaryappbe.dto.leitner.LevelLeitnerModificationRequestDto;
 import com.pbl6.dictionaryappbe.dto.leitner.StatusLevelDto;
 import com.pbl6.dictionaryappbe.dto.leitner.VocabLeitnerDetailDto;
@@ -51,6 +52,16 @@ public class LeitnerController {
     public ResponseEntity<String> addVocabLeitner(@Valid @RequestBody VocabLeitnerRequestDto leitnerRequestDto) {
         leitnerService.addVocabToLeitner(leitnerRequestDto);
         return new ResponseEntity<>("Add vocabulary to leitner successfully", HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Show user's leitner boxes", security = {@SecurityRequirement(name = "bearer-key")})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get all leitner boxes success",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = LeitnerBoxDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid data")})
+    @GetMapping("/levels")
+    public List<LeitnerBoxDto> showVocabsLeitnerBox() {
+        return leitnerService.getAllUserLeitnerBoxes();
     }
 
     @Operation(summary = "Show vocabularies in leitner box", security = {@SecurityRequirement(name = "bearer-key")})

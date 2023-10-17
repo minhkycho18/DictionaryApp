@@ -1,5 +1,6 @@
 package com.pbl6.dictionaryappbe.service;
 
+import com.pbl6.dictionaryappbe.dto.leitner.LeitnerBoxDto;
 import com.pbl6.dictionaryappbe.dto.leitner.LevelLeitnerModificationRequestDto;
 import com.pbl6.dictionaryappbe.dto.leitner.StatusLevelDto;
 import com.pbl6.dictionaryappbe.dto.leitner.VocabLeitnerDetailDto;
@@ -16,4 +17,6 @@ public interface LeitnerService {
     List<VocabularyLeitnerDetailDto> showVocabsByLevel(Integer level);
 
     void modifyStatusLevelVocabLetiner(LevelLeitnerModificationRequestDto modificationRequestDto, StatusLevelDto statusLevel);
+
+    List<LeitnerBoxDto> getAllUserLeitnerBoxes();
 }
