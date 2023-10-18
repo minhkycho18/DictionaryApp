@@ -2,17 +2,29 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   createNewWordLists,
   deleteWordLists,
+  getAllWordLists,
   getDefault,
   getPublic,
   getWordListById,
   updateWordLists,
 } from "../../api/WordLists/word-lists.api";
 
-export const getAllWordListsById = createAsyncThunk(
-  "profile/getAllWordListsById",
+export const getAllWL = createAsyncThunk(
+  "wordLists/getAllWL",
   async (userData, thunkApi) => {
     try {
-      const response = await getWordListById();
+      const response = await getAllWordLists();
+      return response;
+    } catch (error) {
+      throw thunkApi.rejectWithValue(error);
+    }
+  }
+);
+export const getWLById = createAsyncThunk(
+  "wordLists/getWLById",
+  async (id, thunkApi) => {
+    try {
+      const response = await getWordListById(id);
       return response;
     } catch (error) {
       throw thunkApi.rejectWithValue(error);
@@ -20,7 +32,7 @@ export const getAllWordListsById = createAsyncThunk(
   }
 );
 export const getWordListsDefault = createAsyncThunk(
-  "profile/getWordListsDefault",
+  "wordLists/getWordListsDefault",
   async (userData, thunkApi) => {
     try {
       const response = await getDefault();
@@ -31,7 +43,7 @@ export const getWordListsDefault = createAsyncThunk(
   }
 );
 export const getWordListsPublic = createAsyncThunk(
-  "profile/getWordListsPublic",
+  "wordLists/getWordListsPublic",
   async (userData, thunkApi) => {
     try {
       const response = await getPublic();
@@ -42,7 +54,7 @@ export const getWordListsPublic = createAsyncThunk(
   }
 );
 export const createNewWL = createAsyncThunk(
-  "profile/createNewWL",
+  "wordLists/createNewWL",
   async (wordListsData, thunkApi) => {
     try {
       const response = await createNewWordLists(wordListsData);
@@ -53,10 +65,10 @@ export const createNewWL = createAsyncThunk(
   }
 );
 export const updateWl = createAsyncThunk(
-  "profile/updateWl",
-  async (id, thunkApi) => {
+  "wordLists/updateWl",
+  async (params, thunkApi) => {
     try {
-      const response = await updateWordLists(id);
+      const response = await updateWordLists(params);
       return response;
     } catch (error) {
       throw thunkApi.rejectWithValue(error);
@@ -64,7 +76,7 @@ export const updateWl = createAsyncThunk(
   }
 );
 export const deleteExistWordList = createAsyncThunk(
-  "profile/deleteExistWordList",
+  "wordLists/deleteExistWordList",
   async (id, thunkApi) => {
     try {
       const response = await deleteWordLists(id);

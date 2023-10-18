@@ -27,15 +27,10 @@
   border-radius: 32px;
   background-color: #fff;
   border: 1px solid #eee;
-  justify-content: space-between !important;
-  align-items: center !important;
-  text-align: center !important;
-  padding: 100px 32px;
+  padding: 64px 32px;
   &_wrap {
     display: flex !important;
     justify-content: space-between !important;
-    // align-items: center !important;
-    text-align: center !important;
   }
   &_input {
     width: 100% !important;

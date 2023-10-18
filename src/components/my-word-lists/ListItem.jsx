@@ -8,8 +8,10 @@ import {
 } from "@ant-design/icons";
 import { Image, Input, Modal, Popover, Space } from "antd";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import category from "../../assets/images/category-back.png";
 import calculateDateTime from "../../helpers/calculateDateTime";
+import { updateWl } from "../../stores/word-lists/wordLists-thunk";
 import "./ListItem.scss";
 
 const ListItem = ({ wordlist, onSelect }) => {
@@ -17,7 +19,9 @@ const ListItem = ({ wordlist, onSelect }) => {
   const [isOpenModel, setIsOpenModel] = useState(false);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [, setNewTitle] = useState("");
+  const [newTitle, setNewTitle] = useState(wordlist?.title);
+  const [newDesc, setNewDesc] = useState(wordlist?.listDesc);
+  const dispatch = useDispatch();
   const showDeleteConfirm = () => {
     setIsOpenModel(true);
     confirm({
@@ -39,15 +43,22 @@ const ListItem = ({ wordlist, onSelect }) => {
   const showModal = () => {
     setOpen(true);
   };
+  const newData = {
+    id: 1,
+    title: newTitle,
+    listDesc: newDesc,
+    listType: "PUBLIC",
+  };
+
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {
+      dispatch(updateWl(newData));
       setOpen(false);
       setConfirmLoading(false);
     }, 2000);
   };
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setOpen(false);
   };
   const content = (
@@ -63,7 +74,6 @@ const ListItem = ({ wordlist, onSelect }) => {
     </Space>
   );
   const handleSelectWordList = (e) => {
-    // navigate(`/dashboard/wordLists/${wordlist?.title}`);
     onSelect(e);
   };
   return (
@@ -77,13 +87,23 @@ const ListItem = ({ wordlist, onSelect }) => {
         className="ModalEdit_wrap"
       >
         <Space className="ModalEdit" direction="vertical">
+          <label htmlFor="inputTitle">Title:</label>
           <Input
             name="inputTitle"
             className="ModalEdit_input"
             type="text"
             placeholder="Input new title.."
             onChange={(e) => setNewTitle(e.target.value)}
-            value={wordlist?.title}
+            value={newTitle}
+          ></Input>
+          <label htmlFor="inputDesc">Description:</label>
+          <Input
+            name="inputDesc"
+            className="ModalEdit_input"
+            type="text"
+            placeholder="Input new desc.."
+            onChange={(e) => setNewDesc(e.target.value)}
+            value={newDesc}
           ></Input>
         </Space>
       </Modal>
@@ -126,7 +146,16 @@ const ListItem = ({ wordlist, onSelect }) => {
         }}
         onClick={() => handleSelectWordList(wordlist)}
       >
-        <span>{wordlist?.title.toUpperCase()}</span>
+        <span
+          style={{
+            letterSpacing: 1.2,
+            textTransform: "uppercase",
+            textAlign: "center",
+            marginLeft: 8,
+          }}
+        >
+          {wordlist?.title}
+        </span>
         <RightOutlined />
       </Space>
     </Space>

@@ -7,7 +7,7 @@ import {
 } from "../../api/Subcategory/subcategory.api";
 
 export const getSubcategory = createAsyncThunk(
-  "search/getSubcategory",
+  "subcategory/getSubcategory",
   async (wordlistId, thunkAPi) => {
     try {
       const response = await getSubByWlsId(wordlistId);
@@ -19,7 +19,7 @@ export const getSubcategory = createAsyncThunk(
 );
 
 export const createSubcategory = createAsyncThunk(
-  "search/createSubcategory",
+  "subcategory/createSubcategory",
   async (wordlistId, thunkAPi) => {
     try {
       const response = await createSub(wordlistId);
@@ -30,7 +30,7 @@ export const createSubcategory = createAsyncThunk(
   }
 );
 export const updateSubcategory = createAsyncThunk(
-  "search/updateSubcategory",
+  "subcategory/updateSubcategory",
   async (params, thunkAPi) => {
     try {
       const response = await updateSub(params);
@@ -41,7 +41,7 @@ export const updateSubcategory = createAsyncThunk(
   }
 );
 export const deleteSubcategory = createAsyncThunk(
-  "search/deleteSubcategory",
+  "subcategory/deleteSubcategory",
   async (params, thunkAPi) => {
     try {
       const response = await deleteSub(params);

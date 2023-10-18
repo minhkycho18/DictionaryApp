@@ -1,12 +1,12 @@
 import { Space } from "antd";
 import React, { useEffect } from "react";
-import WordLists from "../../../components/word-lists/WordLists";
-import "./Vocabulary.scss";
 import { useDispatch, useSelector } from "react-redux";
+import WordLists from "../../../components/word-lists/WordLists";
 import {
-  getAllWordListsById,
+  getAllWL,
   getWordListsDefault,
 } from "../../../stores/word-lists/wordLists-thunk";
+import "./Vocabulary.scss";
 const Vocabulary = () => {
   const dispatch = useDispatch();
   const {
@@ -18,7 +18,7 @@ const Vocabulary = () => {
     wordListsDefault,
   } = useSelector((state) => state.wordLists);
   useEffect(() => {
-    dispatch(getAllWordListsById());
+    dispatch(getAllWL());
     dispatch(getWordListsDefault());
     return () => {};
   }, [dispatch]);

@@ -31,6 +31,11 @@
     border-radius: 16px;
     color: #0e336b;
     font-weight: 600;
+    cursor: pointer;
+    &:hover {
+      background-color: #0b043d;
+      color: #fff;
+    }
   }
 }
 .wldetail__card {

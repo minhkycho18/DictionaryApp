@@ -1,26 +1,27 @@
-import React, { useEffect, useState } from "react";
-import "./WordListDetail.scss";
+import { EditOutlined, InboxOutlined } from "@ant-design/icons";
 import { Avatar, Col, Row, Space } from "antd";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getSubcategory } from "../../../stores/subcategory/subcategoryThunk";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import logo from "../../../assets/images/category-back.png";
 import calculateDateTime from "../../../helpers/calculateDateTime";
-import { EditOutlined, InboxOutlined } from "@ant-design/icons";
+import { getSubcategory } from "../../../stores/subcategory/subcategoryThunk";
+import { getWLById } from "../../../stores/word-lists/wordLists-thunk";
+import "./WordListDetail.scss";
 const WordListDetail = (props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("id"));
-  const { subcategories, selectedWL } = useSelector(
-    (state) => state.subcategory
-  );
+  const { subcategories } = useSelector((state) => state.subcategory);
+  const { selectedWordList } = useSelector((state) => state.wordLists);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
+    dispatch(getWLById(query));
     dispatch(getSubcategory(query));
     return () => {};
   }, [dispatch, query]);
-  const renderSubcategory = subcategories.map((subcategory) => (
-    <Col span={12}>
+  const renderSubcategory = subcategories.map((subcategory, index) => (
+    <Col span={12} key={index}>
       <Space
         style={{ width: "100%!important" }}
         className="wldetail__card"
@@ -42,6 +43,11 @@ const WordListDetail = (props) => {
       </Space>
     </Col>
   ));
+  const onHandleEdit = (selectedWordList) => {
+    navigate(
+      `/dashboard/wordLists/${selectedWordList?.title}/${selectedWordList?.id}`
+    );
+  };
   return (
     <Space className="wldetail-wrap" direction="vertical">
       <Space className="wldetail__content wldetail-wrap" direction="vertical">
@@ -50,11 +56,16 @@ const WordListDetail = (props) => {
           size={156}
           src={logo}
         ></Avatar>
-        <Space className="wldetail__content-title">{selectedWL?.title}</Space>
-        <Space className="wldetail__content-infor">
-          Created{calculateDateTime(selectedWL?.createdAt) || 0}days ago
+        <Space className="wldetail__content-title">
+          {selectedWordList?.title}
         </Space>
-        <Space className="wldetail__content-btn">
+        <Space className="wldetail__content-infor">
+          Created{calculateDateTime(selectedWordList?.createdAt) || 0}days ago
+        </Space>
+        <Space
+          className="wldetail__content-btn"
+          onClick={() => onHandleEdit(selectedWordList)}
+        >
           Edit
           <EditOutlined />
         </Space>

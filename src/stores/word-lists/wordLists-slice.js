@@ -2,9 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   createNewWL,
   deleteExistWordList,
-  getAllWordListsById,
+  getAllWL,
+  getWLById,
   getWordListsDefault,
   getWordListsPublic,
+  updateWl,
 } from "./wordLists-thunk";
 
 const wordListsSlice = createSlice({
@@ -14,6 +16,7 @@ const wordListsSlice = createSlice({
     error: null,
     message: null,
     wordLists: [],
+    selectedWordList: {},
     wordListsPublic: [],
     wordListsDefault: [],
   },
@@ -30,15 +33,28 @@ const wordListsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       //==========================================================GetAllWl
-      .addCase(getAllWordListsById.pending, (state) => {
+      .addCase(getAllWL.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getAllWordListsById.fulfilled, (state, action) => {
+      .addCase(getAllWL.fulfilled, (state, action) => {
         state.loading = false;
         state.wordLists = action.payload;
       })
-      .addCase(getAllWordListsById.rejected, (state, action) => {
+      .addCase(getAllWL.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.detail;
+      })
+      //==========================================================GetWlById
+      .addCase(getWLById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getWLById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.selectedWordList = action.payload;
+      })
+      .addCase(getWLById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.detail;
       })
@@ -91,6 +107,25 @@ const wordListsSlice = createSlice({
         state.message = action.payload;
       })
       .addCase(deleteExistWordList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.detail;
+      })
+      //==========================================================update
+      .addCase(updateWl.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateWl.fulfilled, (state, action) => {
+        state.loading = false;
+        const newWL = action.payload;
+        let index = state.wordLists.findIndex((wl) => wl._id === newWL._id);
+        if (index !== -1) {
+          state.wordLists.splice(index, 1, newWL);
+        } else {
+          console.log("Error: Wordlist not found");
+        }
+      })
+      .addCase(updateWl.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.detail;
       });
