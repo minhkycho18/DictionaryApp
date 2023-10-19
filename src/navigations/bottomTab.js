@@ -1,13 +1,15 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from '@react-navigation/native'
-import Home from '../screens/HomeScreen';
+import HomeStack from "./HomeStack";
+import HomeScreen from "~/screens/HomeScreen";
 import DictionaryStack from "./dictionaryStack";
 import Profile from "../screens/ProfileScreen";
+import AddWordList from "~/components/YourWordList/AddWordList/AddWordList";
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from "../styles/Style";
 import { useRef, useState, useEffect } from 'react'
 import { Dimensions, Animated, Keyboard, Platform } from "react-native";
-
+import YourWordList from "~/screens/YourWordList";
 export default function BottomTab() {
   const tabOffsetValue = useRef(new Animated.Value(0)).current;
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -55,7 +57,7 @@ export default function BottomTab() {
 
 
   return (
-    <NavigationContainer>
+    <>
       <Tab.Navigator
         screenOptions={({ route, navigation }) => ({
           tabBarIcon: ({ color, focused, size }) => {
@@ -83,7 +85,7 @@ export default function BottomTab() {
 
         })}
       >
-        <Tab.Screen name="Home" component={Home} options={styles.tabScreenStyle}
+        <Tab.Screen name="Home" component={HomeStack} options={styles.tabScreenStyle}
           listeners={({ navigation, route }) => ({
             tabPress: e => {
               Animated.spring(tabOffsetValue, {
@@ -104,7 +106,7 @@ export default function BottomTab() {
               }).start();
             }
           })} />
-        <Tab.Screen name="Profile" component={Profile} options={styles.tabScreenStyle}
+        <Tab.Screen name="Profile" component={Profile} options={{ ...styles.tabScreenStyle }}
           listeners={({ navigation, route }) => ({
             tabPress: e => {
               Animated.spring(tabOffsetValue, {
@@ -125,7 +127,7 @@ export default function BottomTab() {
           bottom: Platform.OS === 'ios' ? 71 : 57
         }}></Animated.View>
       )}
-    </NavigationContainer>
+    </>
 
   )
 

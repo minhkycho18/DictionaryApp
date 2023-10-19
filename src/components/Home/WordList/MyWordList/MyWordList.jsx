@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { View, Text } from "react-native";
 import tw from "twrnc";
 import ItemWordList from "../ItemWordList/ItemWordList";
@@ -9,30 +9,71 @@ import { ScrollView } from "react-native";
 import ItemCreateWordList from "../ItemCreateWordList/ItemCreateWordList";
 import { checkLogin } from "~/helper/Auth";
 import { getWordListById } from "~/api/WordList";
+import Toast, { ErrorToast } from "react-native-toast-message";
+import { useNavigation } from "@react-navigation/native";
+import { delay } from "~/helper";
+import { LinearGradient } from "expo-linear-gradient";
 export default function MyWordList() {
   const [wordLists, setWordLists] = useState([]);
   const [isLogin, setIsLogin] = useState(false);
-
+  const navigation = useNavigation();
+  const getMyWordList = async () => {
+    const data = await getWordListById();
+    setWordLists(data);
+  };
   useEffect(() => {
-    const check = async () => {
-      setIsLogin(await checkLogin());
+    const checkToken = async () => {
+      const check = await checkLogin();
+      setIsLogin(check);
     };
-    const getMyWordList = async () => {
-      const data = await getWordListById();
-      setWordLists(data);
-    };
-    check();
+
+    checkToken();
+  }, []);
+  useEffect(() => {
     if (isLogin) {
       getMyWordList();
     }
-  }, []);
+  }, [isLogin]);
+
   const handlePressSeeAll = async () => {
     if (!isLogin) {
-      console.log("Need To Login");
+      showToast();
+      await delay(1000);
+      navigation.push("Authenticate");
+    } else {
+      navigation.push("YourWordlist");
     }
   };
+  const toastConfig = {
+    error: (props) => (
+      <ErrorToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
+  };
+  const showToast = () => {
+    Toast.show({
+      position: "top",
+      type: "error",
+      text1: "See all Fail",
+      text2: "Please login to see your wordlist",
+      visibilityTime: 2000,
+      autoHide: true,
+      topOffset: -10,
+    });
+  };
+
   return (
-    <View style={tw`pt-1.5 pr-2 pl-2 pb-2  mt-5 bg-stone-50`}>
+    <LinearGradient
+      colors={["#fff", "rgb(241 245 249)", "rgb(248 250 252)"]}
+      style={tw`pt-1.5 pr-2 pl-2 pb-2  mt-5 bg-stone-50`}
+    >
       <View style={{ ...Styles.header, justifyContent: "space-between" }}>
         <Text style={tw`text-slate-600 tracking-wider text-lg italic`}>
           Your Wordlist
@@ -50,17 +91,24 @@ export default function MyWordList() {
       <ScrollView
         showsHorizontalScrollIndicator={false}
         horizontal
-        style={{ marginTop: 20 }}
+        style={{ marginTop: 15 }}
       >
-        <ItemCreateWordList />
+        <ItemCreateWordList onPress={handlePressSeeAll} />
         {isLogin &&
           wordLists.map((item) => (
             <ItemWordList
               key={item.id}
               src={require("~/assets/wordlist.png")}
+              wordlist={item}
             />
           ))}
       </ScrollView>
-    </View>
+      <Toast
+        config={toastConfig}
+        refs={(ref) => {
+          Toast.setRef(ref);
+        }}
+      />
+    </LinearGradient>
   );
 }
