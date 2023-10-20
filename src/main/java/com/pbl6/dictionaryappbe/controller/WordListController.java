@@ -1,6 +1,7 @@
 package com.pbl6.dictionaryappbe.controller;
 
-import com.pbl6.dictionaryappbe.dto.WordListDto;
+import com.pbl6.dictionaryappbe.dto.wordlist.WordListRequestDto;
+import com.pbl6.dictionaryappbe.dto.wordlist.WordListResponseDto;
 import com.pbl6.dictionaryappbe.persistence.role.RoleName;
 import com.pbl6.dictionaryappbe.persistence.wordlist.ListType;
 import com.pbl6.dictionaryappbe.service.WordListService;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -28,38 +30,38 @@ public class WordListController {
     @Operation(summary = "Get WordList by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Get data successfully",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = WordListDto.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = WordListResponseDto.class))}),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @GetMapping("/{wordListId}")
-    public WordListDto getWordlistById(@PathVariable long wordListId) {
+    public WordListResponseDto getWordlistById(@PathVariable long wordListId) {
         return wordListService.getWordListById(wordListId);
     }
 
-    @Operation(summary = "Get all WordLists by id")
+    @Operation(summary = "Get all WordLists by user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Get data successfully",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = WordListDto.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = WordListResponseDto.class))}),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @GetMapping
-    public List<WordListDto> getWordlists() {
+    public List<WordListResponseDto> getWordlists() {
         return wordListService.getAllByUser();
     }
 
     @Operation(summary = "Get all system's WordLists which is created by Content Manager")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Get data successfully",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = WordListDto.class))})})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = WordListResponseDto.class))})})
     @GetMapping("/default")
-    public List<WordListDto> getAllSystemWordlists() {
+    public List<WordListResponseDto> getAllSystemWordlists() {
         return wordListService.getAllSystemWordList(RoleName.CONTENT_MANAGER);
     }
 
     @Operation(summary = "Get all public WordLists except system's WordLists and current user's WordLists")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Get data successfully",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = WordListDto.class))})})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = WordListResponseDto.class))})})
     @GetMapping("/public")
-    public List<WordListDto> getAllPublicWordLists() {
+    public List<WordListResponseDto> getAllPublicWordLists() {
         return wordListService.getAllPublicWordList();
     }
 
@@ -68,29 +70,29 @@ public class WordListController {
     public ListType[] getAllWordListType() {
         return ListType.values();
     }
-    
-    @Operation(summary = "Create a new WordLists")
+
+    @Operation(summary = "Create a new WordLists", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Create successfully",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = WordListDto.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = WordListResponseDto.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid data")})
     @PostMapping
-    public WordListDto createWordList(@RequestBody @Valid @NotNull WordListDto wordList) {
+    public WordListResponseDto createWordList(@RequestBody @Valid @NotNull WordListRequestDto wordList) {
         return wordListService.createWordList(wordList);
     }
 
-    @Operation(summary = "Edit WordLists")
+    @Operation(summary = "Edit WordLists", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Edit successfully",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = WordListDto.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = WordListResponseDto.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid data"),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource"),})
     @PutMapping("/{id}")
-    public WordListDto updateWordList(@PathVariable Long id, @RequestBody @Valid @NotNull WordListDto wordList) {
+    public WordListResponseDto updateWordList(@PathVariable Long id, @RequestBody @Valid @NotNull WordListRequestDto wordList) {
         return wordListService.updateWordList(id, wordList);
     }
 
-    @Operation(summary = "Delete WordLists")
+    @Operation(summary = "Delete WordLists", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Delete successfully",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),

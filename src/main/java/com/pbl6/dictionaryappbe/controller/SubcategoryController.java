@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -37,36 +38,51 @@ public class SubcategoryController {
         return subcategoryService.getAllSubcategories(wordListId);
     }
 
+    @Operation(summary = "Get all vocabulary of subcategory")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get data successfully",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))}),
+            @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @GetMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}")
     public List<VocabularySubcategoryResponseDto> getAllVocabulary(@PathVariable Long subcategoryId) {
         return subcategoryService.getAllVocabularies(subcategoryId);
     }
 
+    @Operation(summary = "Get all type of subcategories")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get data successfully",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))})})
     @GetMapping("subcategories/types")
     public SubcategoryType[] getAllSubcategoryType() {
         return SubcategoryType.values();
     }
 
+    @Operation(summary = "Add vocabulary to subcategory", security = {@SecurityRequirement(name = "bearer-key")})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Add data successfully",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid data"),
+            @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @PostMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}")
-    public String addVocabularyTOSubcategory(@PathVariable Long subcategoryId,
-                                             @RequestBody VocabularySubcategoryRequestDto vocabSub) {
+    public String addVocabularyToSubcategory(@PathVariable Long subcategoryId,
+                                             @Valid @RequestBody VocabularySubcategoryRequestDto vocabSub) {
         subcategoryService.addVocabToSubcategory(subcategoryId, vocabSub);
         return "Add successfully";
     }
 
-    @Operation(summary = "Create a new subcategory")
+    @Operation(summary = "Create a new subcategory", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Create successfully",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid data"),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
-    @PostMapping
+    @PostMapping("/wordlists/{wordListId}/subcategories")
     public SubcategoryResponseDto createSubcategory(@PathVariable Long wordListId,
                                                     @Valid @RequestBody SubcategoryRequestDto subcategory) {
         return subcategoryService.createSubcategory(wordListId, subcategory);
     }
 
-    @Operation(summary = "Edit a subcategory")
+    @Operation(summary = "Edit a subcategory", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Edit successfully",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))}),
@@ -78,7 +94,7 @@ public class SubcategoryController {
         return subcategoryService.updateSubcategory(subcategoryId, subcategory);
     }
 
-    @Operation(summary = "Delete a subcategory")
+    @Operation(summary = "Delete a subcategory", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Delete successfully",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),
