@@ -4,14 +4,16 @@ import HeaderHome from "~/components/Home/HeaderHome/HeaderHome";
 import MyWordList from "~/components/Home/WordList/MyWordList/MyWordList";
 import tw from "twrnc";
 import WordListDefault from "~/components/Home/WordList/WordListDefault/WordListDefault";
-export default function Home() {
+import WordListPublic from "~/components/Home/WordList/WordListPublic/WordListPublic";
+
+export default function HomeScreen() {
   return (
     <SafeAreaView
       style={{
         flex: 1,
         marginTop: 20,
         flexDirection: "column",
-        backgroundColor: "#ffff",
+        backgroundColor: "rgb(248 250 252)",
       }}
     >
       <HeaderHome />
@@ -23,7 +25,7 @@ export default function Home() {
           Explore
         </Text>
         <WordListDefault />
-        <WordListDefault />
+        <WordListPublic />
       </ScrollView>
     </SafeAreaView>
   );

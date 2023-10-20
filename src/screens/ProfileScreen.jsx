@@ -1,10 +1,22 @@
-import React from 'react'
-import { View ,Text} from 'react-native'
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React from "react";
+import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 
-function Profile() {
+export default function Profile() {
   return (
-    <View><Text>Huy</Text></View>
-  )
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignContent: "center",
+      }}
+    >
+      <Button
+        onPress={async () => {
+          await AsyncStorage.clear();
+        }}
+        title="Logout"
+      />
+    </View>
+  );
 }
-
-export default Profile

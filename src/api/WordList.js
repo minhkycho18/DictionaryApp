@@ -15,6 +15,6 @@ export const createNewWordLists = (data) => {
 export const deleteWordLists = (id) => {
     return http.delete(`/wordlists/${id}`);
 };
-export const updateWordLists = (id) => {
-    return http.put(`/wordlists/${id}`);
+export const updateWordLists = (id, data) => {
+    return http.put(`/wordlists/${id}`, data);
 };

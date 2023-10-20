@@ -22,6 +22,7 @@ export default function DictionaryStack() {
         component={VocalDetail}
         options={{ headerShown: false }}
       />
+
     </Stack.Navigator>
   );
 }

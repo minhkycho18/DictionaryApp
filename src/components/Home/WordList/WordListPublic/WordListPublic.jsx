@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { LinearGradient } from "expo-linear-gradient";
 import {
   FlatList,
   View,
@@ -11,20 +10,21 @@ import tw from "twrnc";
 import { Styles } from "./Styles";
 import { AntDesign } from "@expo/vector-icons";
 import ItemWordList from "../ItemWordList/ItemWordList";
-import { getDefault } from "~/api/WordList";
-export default function WordListDefault() {
+import { getPublic } from "~/api/WordList";
+import { LinearGradient } from "expo-linear-gradient";
+export default function WordListPublic() {
   const [defaultList, setDefaultList] = useState([]);
   useEffect(() => {
-    const getDefaultWordList = async () => {
-      const data = await getDefault();
+    const getPublicWordList = async () => {
+      const data = await getPublic();
       setDefaultList(data);
     };
-    getDefaultWordList();
+    getPublicWordList();
   }, []);
   return (
     <LinearGradient
       colors={["#fff", "rgb(241 245 249)", "rgb(248 250 252)"]}
-      style={tw`pt-1.5 pr-2 pl-2 pb-2 mb-5  mt-2 bg-stone-50`}
+      style={tw`pt-2 pr-2 pl-2 pb-2 mb-5  mt-4 bg-stone-50`}
     >
       <View
         style={{
@@ -34,7 +34,7 @@ export default function WordListDefault() {
         }}
       >
         <Text style={[tw`text-slate-600 tracking-wider text-lg italic`]}>
-          Default Wordlist
+          Public Wordlist
         </Text>
         <TouchableOpacity style={Styles.header}>
           <Text style={tw`text-base text-blue-600`}>See all</Text>
@@ -50,7 +50,7 @@ export default function WordListDefault() {
         {defaultList.map((item) => (
           <ItemWordList
             key={item.id}
-            src={require("~/assets/default.png")}
+            src={require("~/assets/communication.png")}
             wordlist={item}
           />
         ))}

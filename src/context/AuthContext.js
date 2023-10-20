@@ -9,59 +9,33 @@ export const AuthProvider = ({ children }) => {
     const [userToken, setUserToken] = useState("");
     const [splashLoading, setSplashLoading] = useState(false);
 
+    const [isLogin, setIsLogin] = useState(false)
     const login = async ({ email, password }) => {
         setIsLoading(true);
         try {
-            console.log("Test email input : ", email);
-            console.log("Test pass  input  : ", password);
-
             const res = await getTokenLogin({ email, password });
-            console.log('test 2 get token: \n', res);
             if (res.access_token) {
-                console.log("Test token : \n", res.access_token);
-                console.log("Test user  : \n", res.user);
-
-                console.log('test 3 get token: \n', "done and success");
                 setUserToken(res.access_token);
-                console.log('userToken luu vao storage22 : \n', userToken);
-                AsyncStorage.setItem('userToken', userToken)
-                // console.log('userToken luu vao storage : \n', userToken);
+                await AsyncStorage.setItem('userToken', JSON.stringify(res.access_token))
+                setIsLogin(true)
             }
-
             setIsLoading(false);
-
-            // if(res.access_token)
-            // {
-
-            // }
         } catch (error) {
             console.log(`Login error : ${error}`)
             setIsLoading(false);
             return 0;
         }
-        // getTokenLogin({ email, password }).then(res => {
-        //     let userInfo = res.data;
-        //     console.log(userInfo);
-        //     setUserInfo(userInfo);
-        //     // AsyncStorage.setItem('userInfo', JSON.stringify(userInfo))
-        //     setIsLoading(false)
-        // }).catch(e => {
-        //     console.log(`login error ${e}`);
-        //     setIsLoading(false);
-        // })
 
-
-        // return res;
 
     }
 
-    const logout = () => {
+    const logout = async () => {
         setIsLoading(true);
         try {
-            AsyncStorage.removeItem('userToken');
+            await AsyncStorage.removeItem('userToken');
             setUserToken("")
             setIsLoading(false);
-
+            setIsLogin(false)
             console.log("Test logout : ", "success");
 
         } catch (error) {
@@ -74,27 +48,15 @@ export const AuthProvider = ({ children }) => {
     const register = async ({ email, password, name, gender }) => {
         setIsLoading(true);
         try {
-            console.log("Test email input    : ", email);
-            console.log("Test pass  input    : ", password);
-            console.log("Test name input : ", name);
-            console.log("Test gender  input  : ", gender);
-
             const res = await Register({ email, password, name, gender });
-            console.log('test 2: \n', res);
             if (res.access_token) {
-                console.log("Test token : \n", res.access_token);
-                console.log("Test user  : \n", res.user);
-
-                console.log('test 3 get token: \n', "done and success");
                 setUserToken(res.access_token);
-                AsyncStorage.setItem('userToken', userToken)
-                console.log('userToken luu vao storage : \n', userToken);
+                await AsyncStorage.setItem('userToken', JSON.stringify(res.access_token))
             }
 
             setIsLoading(false);
             return '200';
         } catch (error) {
-            
             console.log(`Login error : ${error.status}`)
             setIsLoading(false);
             return '400';
@@ -106,19 +68,18 @@ export const AuthProvider = ({ children }) => {
             setSplashLoading(true);
 
             let userToken = await AsyncStorage.getItem('userToken');
-            if(userToken)
-            {
+            if (userToken) {
                 setUserToken(setUserToken);
             }
 
             setSplashLoading(false);
-            
+
         } catch (error) {
             console.log(`is logged in error ${error}`)
         }
     }
 
-    useEffect (() => {
+    useEffect(() => {
         isLoggedIn();
     }, []);
     return (
@@ -130,7 +91,8 @@ export const AuthProvider = ({ children }) => {
                 login,
                 logout,
                 register,
-                isLoggedIn
+                isLoggedIn,
+                isLogin
             }}>
             {children}
         </AuthContext.Provider>

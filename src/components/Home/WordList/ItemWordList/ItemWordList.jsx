@@ -4,7 +4,7 @@ import tw from "twrnc";
 import { Styles } from "./Styles";
 import { colors } from "~/constants/theme";
 
-export default function ItemWordList({ src }) {
+export default function ItemWordList({ src, wordlist }) {
   return (
     <TouchableOpacity onPress={() => {}} style={Styles.container}>
       <Image source={src} style={Styles.image} />
@@ -14,12 +14,11 @@ export default function ItemWordList({ src }) {
           tw`text-white ml-3  mt-2 tracking-wider text-sm italic`,
           {
             color: colors.textColor,
-            width: "94%",
-            alignItems: "center",
+            textAlign: "center",
           },
         ]}
       >
-        Free Word List
+        {wordlist?.title}
       </Text>
     </TouchableOpacity>
   );

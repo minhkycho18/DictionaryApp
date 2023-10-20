@@ -1,11 +1,12 @@
 import axios from "axios";
+import { useContext } from "react";
 import { API_URL } from "@env";
 import { getTokenFromAsyncStorage } from "./Auth";
 class Http {
   constructor() {
     this.instance = axios.create({
-      // baseURL: "http://192.168.1.9:8080",
-      baseURL: "http://192.168.0.6:8080", //URL Quoc Thanh
+      baseURL: "http://192.168.1.12:8080",
+      // baseURL: "http://192.168.1.140:8080", //URL Quoc Thanh
       name: "Dictionary App",
       timeout: 10000,
       headers: {
@@ -25,8 +26,8 @@ class Http {
       }
     );
     this.instance.interceptors.request.use(
-      (config) => {
-        const token = getTokenFromAsyncStorage();
+      async (config) => {
+        const token = await getTokenFromAsyncStorage();
         if (token) {
           config.headers["Authorization"] = `Bearer ${token}`;
         }
