@@ -14,22 +14,13 @@ const wordListsSlice = createSlice({
   initialState: {
     loading: false,
     error: null,
-    message: null,
+    messageDel: null,
     wordLists: [],
     selectedWordList: {},
     wordListsPublic: [],
     wordListsDefault: [],
   },
-  reducers: {
-    deleteWordList: (state, action) => {
-      state.loading = true;
-      const selectedWordList = action.payload;
-      if (selectedWordList) {
-        state.wordLists.filter((wordlist) => wordlist !== selectedWordList);
-        state.loading = false;
-      }
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       //==========================================================GetAllWl
@@ -40,6 +31,7 @@ const wordListsSlice = createSlice({
       .addCase(getAllWL.fulfilled, (state, action) => {
         state.loading = false;
         state.wordLists = action.payload;
+        state.messageDel = null;
       })
       .addCase(getAllWL.rejected, (state, action) => {
         state.loading = false;
@@ -72,7 +64,7 @@ const wordListsSlice = createSlice({
         state.error = action.payload.detail;
       })
       //==========================================================Public
-      .addCase(getWordListsPublic.pending, (state) => {
+      .addCase(getWordListsPublic.pending, (state, action) => {
         state.loading = true;
         state.error = null;
       })
@@ -104,7 +96,7 @@ const wordListsSlice = createSlice({
       })
       .addCase(deleteExistWordList.fulfilled, (state, action) => {
         state.loading = false;
-        state.message = action.payload;
+        state.messageDel = action.payload;
       })
       .addCase(deleteExistWordList.rejected, (state, action) => {
         state.loading = false;
@@ -116,14 +108,15 @@ const wordListsSlice = createSlice({
         state.error = null;
       })
       .addCase(updateWl.fulfilled, (state, action) => {
-        state.loading = false;
-        const newWL = action.payload;
-        let index = state.wordLists.findIndex((wl) => wl._id === newWL._id);
+        const index = state.wordLists.findIndex(
+          (wl) => wl.id === action.payload.id
+        );
         if (index !== -1) {
-          state.wordLists.splice(index, 1, newWL);
+          state.wordLists[index] = action.payload;
         } else {
-          console.log("Error: Wordlist not found");
+          console.log("no wordlist found");
         }
+        state.loading = false;
       })
       .addCase(updateWl.rejected, (state, action) => {
         state.loading = false;
@@ -131,5 +124,5 @@ const wordListsSlice = createSlice({
       });
   },
 });
-
+export const { deleteWordList } = wordListsSlice.actions;
 export default wordListsSlice.reducer;

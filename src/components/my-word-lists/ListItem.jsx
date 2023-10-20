@@ -14,13 +14,13 @@ import calculateDateTime from "../../helpers/calculateDateTime";
 import { updateWl } from "../../stores/word-lists/wordLists-thunk";
 import "./ListItem.scss";
 
-const ListItem = ({ wordlist, onSelect }) => {
+const ListItem = (props) => {
   const { confirm } = Modal;
   const [isOpenModel, setIsOpenModel] = useState(false);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [newTitle, setNewTitle] = useState(wordlist?.title);
-  const [newDesc, setNewDesc] = useState(wordlist?.listDesc);
+  const [newTitle, setNewTitle] = useState(props.wordlist?.title);
+  const [newDesc, setNewDesc] = useState(props.wordlist?.listDesc);
   const dispatch = useDispatch();
   const showDeleteConfirm = () => {
     setIsOpenModel(true);
@@ -31,12 +31,11 @@ const ListItem = ({ wordlist, onSelect }) => {
       okType: "danger",
       cancelText: "No",
       onOk() {
+        props.onDel(props.wordlist.id);
         setIsOpenModel(false);
-        console.log("OK");
       },
       onCancel() {
         setIsOpenModel(false);
-        console.log("Cancel");
       },
     });
   };
@@ -44,10 +43,10 @@ const ListItem = ({ wordlist, onSelect }) => {
     setOpen(true);
   };
   const newData = {
-    id: 1,
+    id: props.wordlist.id,
     title: newTitle,
     listDesc: newDesc,
-    listType: "PUBLIC",
+    listType: props.wordlist.listType,
   };
 
   const handleOk = () => {
@@ -74,7 +73,7 @@ const ListItem = ({ wordlist, onSelect }) => {
     </Space>
   );
   const handleSelectWordList = (e) => {
-    onSelect(e);
+    props.onSelect(e);
   };
   return (
     <Space className="MyWordLists__item ListItem" direction="vertical">
@@ -134,7 +133,7 @@ const ListItem = ({ wordlist, onSelect }) => {
         <span>1-sublist</span>
         <span>
           <ClockCircleOutlined style={{ marginRight: 8 }} />
-          Created at {calculateDateTime(wordlist.createdAt)} days ago
+          Created at {calculateDateTime(props.wordlist.createdAt)} days ago
         </span>
       </Space>
       <Space
@@ -144,7 +143,7 @@ const ListItem = ({ wordlist, onSelect }) => {
           display: "flex",
           cursor: "pointer",
         }}
-        onClick={() => handleSelectWordList(wordlist)}
+        onClick={() => handleSelectWordList(props.wordlist)}
       >
         <span
           style={{
@@ -154,7 +153,7 @@ const ListItem = ({ wordlist, onSelect }) => {
             marginLeft: 8,
           }}
         >
-          {wordlist?.title}
+          {props.wordlist?.title}
         </span>
         <RightOutlined />
       </Space>
