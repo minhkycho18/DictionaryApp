@@ -31,8 +31,8 @@ pipeline {
                 sh 'ls'
                 sh 'docker-compose down --rmi all -v'
                 sh 'docker-compose up -d'
-                sleep 120
-                sh 'docker compose run dictionary-container'
+                sleep 60
+                sh 'docker compose up -d'
             }
         }
 
