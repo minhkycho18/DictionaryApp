@@ -31,8 +31,6 @@ pipeline {
                 sh 'ls'
                 sh 'docker-compose down --rmi all -v'
                 sh 'docker-compose up -d'
-                sleep 60
-                sh 'docker compose up -d'
             }
         }
 
