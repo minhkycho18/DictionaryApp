@@ -95,6 +95,13 @@ const wordListsSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteExistWordList.fulfilled, (state, action) => {
+        const index = state.wordLists.findIndex(
+          (item) => item.id === action.payload
+        );
+        if (index === -1) {
+          state.wordLists.splice(index, 1);
+        } else console.log("full");
+
         state.loading = false;
         state.messageDel = action.payload;
       })

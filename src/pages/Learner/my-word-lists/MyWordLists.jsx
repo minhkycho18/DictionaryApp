@@ -16,7 +16,6 @@ const MyWordLists = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const { loading, wordLists } = useSelector((state) => state.wordLists);
-
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -121,7 +120,7 @@ const MyWordLists = () => {
       </Modal>
       {!loading && (
         <Row>
-          <Col span={6}>
+          <Col span={wordLists.length < 3 ? 8 : 6}>
             <Space
               className="
       MyWordLists__add"
@@ -133,9 +132,8 @@ const MyWordLists = () => {
 
           {wordLists &&
             wordLists.map((wordlist) => (
-              <Col span={6}>
+              <Col span={wordLists.length < 3 ? 8 : 6} key={wordlist.id}>
                 <ListItem
-                  key={wordlist.id}
                   wordlist={wordlist}
                   onSelect={handleSelectWordList}
                   onDel={onDeleteAnItem}
