@@ -98,12 +98,13 @@ const wordListsSlice = createSlice({
         const index = state.wordLists.findIndex(
           (item) => item.id === action.payload
         );
+
         if (index === -1) {
           state.wordLists.splice(index, 1);
-        } else console.log("full");
+          state.messageDel = action.payload;
+        } else state.messageDel = null;
 
         state.loading = false;
-        state.messageDel = action.payload;
       })
       .addCase(deleteExistWordList.rejected, (state, action) => {
         state.loading = false;
