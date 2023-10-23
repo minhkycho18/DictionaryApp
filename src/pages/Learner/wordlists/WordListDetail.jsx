@@ -23,7 +23,7 @@ const WordListDetail = (props) => {
   const renderSubcategory = subcategories.map((subcategory, index) => (
     <Col span={12} key={index}>
       <Space
-        style={{ width: "100%!important" }}
+        style={{ width: "100%" }}
         className="wldetail__card"
         direction="vertical"
       >
@@ -71,7 +71,7 @@ const WordListDetail = (props) => {
         </Space>
       </Space>
       <Space style={{ width: "100%!important", marginTop: 64 }}>
-        <Row gutter={8}>{renderSubcategory}</Row>
+        <Row gutter={[32, 32]}>{renderSubcategory}</Row>
       </Space>
     </Space>
   );
