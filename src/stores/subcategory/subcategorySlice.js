@@ -11,6 +11,7 @@ const initialState = {
   error: null,
   subcategories: [],
   selectedWL: {},
+  messageDel:'',
 };
 
 const subcategorySlice = createSlice({
@@ -46,7 +47,7 @@ const subcategorySlice = createSlice({
       })
       .addCase(createSubcategory.fulfilled, (state, action) => {
         state.loading = false;
-        state.subcategories = action.payload;
+        state.subcategories.push(action.payload);
       })
       .addCase(createSubcategory.rejected, (state, action) => {
         state.loading = false;
@@ -72,6 +73,14 @@ const subcategorySlice = createSlice({
       })
       .addCase(deleteSubcategory.fulfilled, (state, action) => {
         state.loading = false;
+        const index = state.wordLists.findIndex(
+          (item) => item.id === action.payload
+        );
+
+        if (index === -1) {
+          state.wordLists.splice(index, 1);
+          state.messageDel = action.payload;
+        } else state.messageDel = null;
       })
       .addCase(deleteSubcategory.rejected, (state, action) => {
         state.loading = false;

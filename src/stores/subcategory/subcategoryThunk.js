@@ -20,9 +20,9 @@ export const getSubcategory = createAsyncThunk(
 
 export const createSubcategory = createAsyncThunk(
   "subcategory/createSubcategory",
-  async (wordlistId, thunkAPi) => {
+  async (params, thunkAPi) => {
     try {
-      const response = await createSub(wordlistId);
+      const response = await createSub(params);
       return response;
     } catch (error) {
       throw thunkAPi.rejectWithValue(error);

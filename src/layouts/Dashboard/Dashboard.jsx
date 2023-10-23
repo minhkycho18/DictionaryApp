@@ -1,4 +1,4 @@
-import { Breadcrumb, Layout, Space, theme } from "antd";
+import { Breadcrumb, FloatButton, Layout, Space, theme } from "antd";
 import React from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import CustomSider from "../../components/sider/CustomSider";
@@ -47,9 +47,11 @@ const Dashboard = () => {
           style={{
             minHeight: 280,
             background: colorBgContainer,
+            width: "100%",
           }}
         >
           <Outlet />
+          <FloatButton.BackTop visibilityHeight={0} />
         </Content>
       </Layout>
     </Layout>

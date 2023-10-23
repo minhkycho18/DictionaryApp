@@ -18,7 +18,6 @@ const MyWordLists = () => {
   const { loading, wordLists } = useSelector((state) => state.wordLists);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-
   useEffect(() => {
     dispatch(getAllWL());
   }, [dispatch]);
@@ -45,7 +44,10 @@ const MyWordLists = () => {
   //   />
   // ));
   return (
-    <Space className={`MyWordLists ${loading ? "loading-css" : ""}`}>
+    <Space
+      className={`MyWordLists ${loading ? "loading-css" : ""}`}
+      style={{ width: "100%!important" }}
+    >
       <Modal
         open={open}
         title="Create a new WordList"
@@ -120,26 +122,28 @@ const MyWordLists = () => {
       </Modal>
       {!loading && (
         <Row>
-          <Col span={wordLists.length < 3 ? 8 : 6}>
-            <Space
-              className="
+          <Space style={{ width: "100%" }}>
+            <Col span={wordLists.length < 3 ? 8 : 6}>
+              <Space
+                className="
       MyWordLists__add"
-              onClick={handleAddingWordList}
-            >
-              <PlusOutlined />
-            </Space>
-          </Col>
+                onClick={handleAddingWordList}
+              >
+                <PlusOutlined />
+              </Space>
+            </Col>
 
-          {wordLists &&
-            wordLists.map((wordlist) => (
-              <Col span={wordLists.length < 3 ? 8 : 6} key={wordlist.id}>
-                <ListItem
-                  wordlist={wordlist}
-                  onSelect={handleSelectWordList}
-                  onDel={onDeleteAnItem}
-                />
-              </Col>
-            ))}
+            {wordLists &&
+              wordLists.map((wordlist) => (
+                <Col span={wordLists.length < 3 ? 8 : 6} key={wordlist.id}>
+                  <ListItem
+                    wordlist={wordlist}
+                    onSelect={handleSelectWordList}
+                    onDel={onDeleteAnItem}
+                  />
+                </Col>
+              ))}
+          </Space>
         </Row>
       )}
       {loading && <Spin spinning={loading} />}
