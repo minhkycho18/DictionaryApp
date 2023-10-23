@@ -39,7 +39,6 @@ export const Styles = StyleSheet.create({
         borderColor: "#e0e0e0"
     },
     formLabel: {
-        display: "block",
         fontWeight: "500",
         fontSize: 16,
         color: "#07074d",
@@ -55,7 +54,6 @@ export const Styles = StyleSheet.create({
         fontWeight: "500",
         fontSize: 16,
         color: "#6b7280",
-        resize: "none",
         marginBottom: 20,
     },
     radioGroup: {
