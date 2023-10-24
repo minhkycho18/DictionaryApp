@@ -7,7 +7,7 @@ import { Swipeable } from "react-native-gesture-handler";
 import { Fontisto } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 import { useNavigation } from "@react-navigation/native";
-export default function ItemWordList({ wordlist, onDelete }) {
+export default function ItemVocabOfSub({ wordlist, onDelete }) {
   const [title, setTitle] = useState(wordlist.item.title);
   const [isModalVisible, setModalVisible] = useState(false);
   const wrapRef = useRef();
@@ -101,10 +101,10 @@ export default function ItemWordList({ wordlist, onDelete }) {
         onSwipeableWillClose={onSwipeableClose}
       >
         <View style={[tw`bg-stone-100`, Styles.wrappered]} ref={wrapRef}>
-          <Image
+          {/* <Image
             source={require("~/assets/wordlist.png")}
             style={Styles.Image}
-          ></Image>
+          ></Image> */}
           <View style={Styles.Text_content}>
             <Text
               numberOfLines={1}
@@ -122,11 +122,11 @@ export default function ItemWordList({ wordlist, onDelete }) {
               1 sub-list
             </Text>
           </View>
-          <View style={Styles.Icon}>
+          {/* <View style={Styles.Icon}>
             <TouchableOpacity onPress={handleDetailWordList} ref={iconRef}>
               <Entypo name="chevron-right" size={26} color="#182B40" />
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </Swipeable>
     </TouchableOpacity>

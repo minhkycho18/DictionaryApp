@@ -33,7 +33,7 @@ export default function YourWordList() {
     } catch (error) {
       console.log(error);
     }
-  };
+  };  
   const handleAddWordlist = () => {
     navigation.push("AddWordlist");
   };
@@ -97,13 +97,19 @@ export default function YourWordList() {
         />
       </TouchableOpacity>
       <FlatList
+      // style={{
+      //   backgroundColor: 'red'
+      // }}
         showsVerticalScrollIndicator={false}
         vertical
         keyExtractor={(item) => item.id}
         data={wordLists}
         renderItem={(item) => (
           <GestureHandlerRootView>
-            <ItemWordList wordlist={item} onDelete={handleDelete} />
+            <ItemWordList 
+            wordlist={item} 
+            onDelete={handleDelete}
+            />
           </GestureHandlerRootView>
         )}
       />
