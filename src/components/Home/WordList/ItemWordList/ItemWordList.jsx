@@ -7,7 +7,9 @@ import { colors } from "~/constants/theme";
 export default function ItemWordList({ src, wordlist }) {
   return (
     <TouchableOpacity onPress={() => {}} style={Styles.container}>
-      <Image source={src} style={Styles.image} />
+      <View style={Styles.viewImage}>
+        <Image source={src} style={Styles.image} />
+      </View>
       <Text
         numberOfLines={2}
         style={[
