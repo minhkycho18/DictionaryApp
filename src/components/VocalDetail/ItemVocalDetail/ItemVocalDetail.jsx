@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./Styles";
 import { AntDesign } from "@expo/vector-icons";
+import { colors } from "~/constants/theme";
 
 function ItemVocalDetail({ definition, color, item, count }) {
   return (
@@ -25,14 +26,38 @@ function ItemVocalDetail({ definition, color, item, count }) {
             </View>
 
             <View style={{ display: "flex", flexDirection: "row" }}>
-              <TouchableOpacity style={styles.viewIcon}>
+              <TouchableOpacity
+                style={
+                  definition.isWordOfUserLeitner
+                    ? { ...styles.viewIcon, borderColor: "#00BFA5" }
+                    : styles.viewIcon
+                }
+              >
                 <Image
                   source={require("~/assets/leitner.png")}
-                  style={{ width: 24, height: 24, tintColor: "#5E7172" }}
+                  style={{
+                    width: 24,
+                    height: 24,
+                    tintColor: definition.isWordOfUserWordlist
+                      ? "#00BFA5"
+                      : "#5E7172",
+                  }}
                 />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.viewIcon}>
-                <AntDesign name="addfolder" size={24} color="#5E7172" />
+              <TouchableOpacity
+                style={
+                  definition.isWordOfUserWordlist
+                    ? { ...styles.viewIcon, borderColor: "#00BFA5" }
+                    : styles.viewIcon
+                }
+              >
+                <AntDesign
+                  name="addfolder"
+                  size={24}
+                  color={
+                    definition.isWordOfUserWordlist ? "#00BFA5" : "#5E7172"
+                  }
+                />
               </TouchableOpacity>
             </View>
           </View>
