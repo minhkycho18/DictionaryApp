@@ -4,8 +4,45 @@
   width: 100%;
   // height: 20%;
   font-family: $font;
-  background-color: #e0e7f2;
+  // background-color: #e0e7f2;
   border-radius: 8px;
   padding: 12px;
-  overflow-y: scroll;
+  &__study {
+    font-family: $font;
+    background-color: #0b043d;
+    color: #fff;
+    font-weight: 600;
+    margin-left: 16px;
+    padding: 24px 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 32px;
+    // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border: none;
+    &:hover {
+      color: #fff !important;
+    }
+  }
+  &__options {
+    &__btn {
+      &--search {
+        background-color: #1e40af;
+        color: #fff;
+        border: 1px solid #1e40af !important;
+        &:hover {
+          border: 1px solid #1e40af !important;
+          color: #fff !important;
+        }
+      }
+      &--delete {
+        background-color: #dc3545;
+        color: #fff;
+        &:hover {
+          border: 1px solid #dc3545 !important;
+          color: #fff !important;
+        }
+      }
+    }
+  }
 }

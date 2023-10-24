@@ -21,7 +21,7 @@ const Dashboard = () => {
       };
     } else {
       return {
-        title: <Link to={`${item.link}`}>{item?.title}</Link>,
+        title: <Link to={path[1].link}>{item?.title}</Link>,
       };
     }
   });

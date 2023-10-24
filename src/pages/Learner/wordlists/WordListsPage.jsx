@@ -1,5 +1,6 @@
 import {
   Button,
+  Empty,
   Form,
   Input,
   Modal,
@@ -34,7 +35,6 @@ function WordListsPage() {
   useEffect(() => {
     dispatch(getSubcategory(id));
   }, [dispatch, id]);
-
   const renderSub = subcategories.map((subcategory, index) => {
     return {
       key: index,
@@ -43,6 +43,7 @@ function WordListsPage() {
         <Subcategory
           key={subcategory.subcategoryId}
           subcategory={subcategory}
+          wlID={id}
         />
       ),
     };
@@ -79,7 +80,6 @@ function WordListsPage() {
               setConfirmLoading(true);
               setTimeout(() => {
                 dispatch(createSubcategory({ wordListId: +id, ...values }));
-                console.log({ wordListId: id, ...values });
                 messageApi.success("Success!");
                 form.resetFields();
                 setIsOpen(false);
@@ -132,10 +132,8 @@ function WordListsPage() {
       </Modal>
       {contextHolder}
       {error !== null && errorOpen()}
-      {!loading && subcategories.length > 1 && (
+      {!loading && subcategories.length > 0 && (
         <Tabs
-          // type="card"
-          // type="editable-card"
           tabBarExtraContent={{
             left: (
               <Button onClick={showAddMenu}>
@@ -154,8 +152,29 @@ function WordListsPage() {
           defaultActiveKey="0"
           items={renderSub}
           tabPosition="right"
-          // onChange={onChange}
         />
+      )}
+      {!loading && subcategories.length === 0 && (
+        <Empty
+          image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+          imageStyle={{
+            height: "120px",
+          }}
+          className="empty__sub"
+          description={
+            <span className="empty__sub--content">
+              You don't have any categories yet. Click the button above to add
+              one.
+            </span>
+          }
+        >
+          <Button
+            className="empty__sub--add"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            Create Now
+          </Button>
+        </Empty>
       )}
       {loading && <Spin spinning={loading} />}
     </Space>

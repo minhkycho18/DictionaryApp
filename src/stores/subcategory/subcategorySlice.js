@@ -11,7 +11,7 @@ const initialState = {
   error: null,
   subcategories: [],
   selectedWL: {},
-  messageDel:'',
+  messageDel: "",
 };
 
 const subcategorySlice = createSlice({
@@ -73,12 +73,12 @@ const subcategorySlice = createSlice({
       })
       .addCase(deleteSubcategory.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.wordLists.findIndex(
-          (item) => item.id === action.payload
+        const index = state.subcategories.findIndex(
+          (item) => item.subcategoryId === action.payload
         );
 
         if (index === -1) {
-          state.wordLists.splice(index, 1);
+          state.subcategories.splice(index, 1);
           state.messageDel = action.payload;
         } else state.messageDel = null;
       })

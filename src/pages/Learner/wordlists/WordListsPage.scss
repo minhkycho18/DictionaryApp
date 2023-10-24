@@ -1,4 +1,28 @@
+@import "../../../assets/scss/font.scss";
+@import "../../../assets/scss/variable.scss";
 .wordlist__page {
   width: 100%;
   padding: 16px;
+}
+.empty__sub {
+  margin-top: 128px;
+  font-size: 18px;
+  font-family: $font;
+  &--add {
+    background-color: #1e40af;
+    text-align: center;
+    padding: 0px 32px;
+    font-family: $font;
+    color: #fff;
+    border-radius: 16px;
+    font-weight: 600;
+    &:hover {
+      border: none !important;
+      color: #fff !important;
+      background-color: #7b56bd;
+    }
+  }
+  &--content {
+    color: #ccc;
+  }
 }

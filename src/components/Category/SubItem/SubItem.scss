@@ -4,12 +4,14 @@
   width: 156px;
   font-family: $font;
   height: 156px;
-  margin: 24px 12px;
+  // margin: 24px 12px;
   background-color: #fff;
   border-radius: 16px;
   justify-content: space-between;
   align-items: center;
   padding: 10px 0px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border: 1px solid #ddd;
   &__pos {
     font-family: $font;
     border: 1px solid #ccc;
@@ -66,7 +68,5 @@
   }
   &__select {
     font-size: 11px;
-  }
-  &__cancel {
   }
 }

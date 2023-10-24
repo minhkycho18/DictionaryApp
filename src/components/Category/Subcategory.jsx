@@ -2,40 +2,69 @@ import {
   DeleteOutlined,
   PlusOutlined,
   SearchOutlined,
+  TranslationOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Input, Popconfirm, Row, Space } from "antd";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Button, Col, Input, Popconfirm, Row, Space, message } from "antd";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { deleteSubcategory } from "../../stores/subcategory/subcategoryThunk";
 import SubItem from "./SubItem/SubItem";
 import "./Subcategory.scss";
-const Subcategory = () => {
+const Subcategory = (props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  let { id } = useParams();
+  const [isSearching, setIsSearching] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
+
   const handleSearchAWord = () => {
     console.log("search");
+    setIsSearching(!isSearching);
   };
-  const onConfirm = () => {};
+  const onConfirmDelete = () => {
+    dispatch(
+      deleteSubcategory({
+        wordListId: id,
+        SubId: props.subcategory.subcategoryId,
+      })
+    );
+    messageApi.success("success!");
+  };
   const onCancel = () => {};
   return (
     <Space className="subcategory" direction="vertical">
-      <Space style={{ float: "right" }}>
-        <Space.Compact wrap>
-          <Input style={{ border: "1px solid #0b043d" }}></Input>
+      {contextHolder}
+      <Space style={{ justifyContent: "space-between", width: "100%" }}>
+        <Button className="subcategory__study">
+          <span>Study</span>
+          <TranslationOutlined />{" "}
+        </Button>
+        <Space.Compact
+          wrap
+          style={{ float: "right" }}
+          className="subcategory__options"
+        >
+          {isSearching && <Input className="subcategory__options__input" />}
           <Button
-            style={{ border: "1px solid #0b043d" }}
             onClick={handleSearchAWord}
+            className="subcategory__options__btn--search"
           >
             <SearchOutlined />
           </Button>
-        </Space.Compact>
-        <Space.Compact wrap>
           <Popconfirm
             title="Delete the task"
             description="Are you sure to delete this task?"
-            onConfirm={onConfirm}
+            onConfirm={onConfirmDelete}
             onCancel={onCancel}
             okText="Yes"
             cancelText="No"
             placement="bottomRight"
+            okButtonProps={{
+              style: {
+                backgroundColor: "#dc3545",
+              },
+            }}
           >
             <Button danger>
               <DeleteOutlined />
@@ -43,113 +72,124 @@ const Subcategory = () => {
           </Popconfirm>
         </Space.Compact>
       </Space>
-      <Row justify="start" style={{ width: "100%" }}>
-        <Col span={4} className="gutter-row">
-          <Space
-            className="subitem subitem__add"
-            direction="vertical"
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("/dictionary")}
-          >
-            <Space className="subitem__content " direction="vertical" wrap>
-              <PlusOutlined />
+      {/* // background-color: #e0e7f2; */}
+      <Space
+        style={{
+          width: "100%",
+          backgroundColor: "#e0e7f2",
+          padding: 16,
+          borderRadius: 16,
+          marginTop: 16,
+        }}
+      >
+        <Row justify="start" gutter={[16, 16]}>
+          <Col span={4} className="gutter-row">
+            <Space
+              className="subitem subitem__add"
+              direction="vertical"
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate("/dictionary")}
+            >
+              <Space className="subitem__content " direction="vertical" wrap>
+                <PlusOutlined />
+              </Space>
             </Space>
-          </Space>
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-        <Col span={4} className="gutter-row">
-          <SubItem />
-        </Col>
-      </Row>
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+          <Col span={4} className="gutter-row">
+            <SubItem />
+          </Col>
+        </Row>
+      </Space>
     </Space>
   );
 };
