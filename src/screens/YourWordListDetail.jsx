@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -16,27 +16,26 @@ import tw from "twrnc";
 import ItemSubCategory from "~/components/Home/WordList/ItemSubCategory/ItemSubCategory";
 
 export default function YourWordlistDetail() {
-
   const navigation = useNavigation();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    { label: 'Apple', value: 'apple' },
-    { label: 'Banana', value: 'banana' }
+    { label: "Apple", value: "apple" },
+    { label: "Banana", value: "banana" },
   ]);
   const remoteItems = [
-    { id: 1, title: 'Item 1', val: 'item-1' },
-    { id: 2, title: 'Item 2', val: 'item-2' },
+    { id: 1, title: "Item 1", val: "item-1" },
+    { id: 2, title: "Item 2", val: "item-2" },
   ];
   const arr = [
     { id: 1 },
-    // { id: 2 },
-    // { id: 3 },
-    // { id: 4 },
-    // { id: 5 },
-    // { id: 6 },
-    // { id: 7 },
-    // { id: 8 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+    { id: 5 },
+    { id: 6 },
+    { id: 7 },
+    { id: 8 },
   ];
   return (
     <SafeAreaView style={styles.container}>
@@ -64,24 +63,25 @@ export default function YourWordlistDetail() {
         </View>
       </View>
 
-      <View
-        style={styles.body}
-      >
-        <View
-          style={styles.dropdown}
-        >
-          <ScrollView
+      <View style={styles.body}>
+        <View style={styles.dropdown}>
+          {/* <ScrollView
             showsVerticalScrollIndicator={false}
             style={{
               flex: 1,
               marginTop: 35,
             }}
           >
-          {arr.map((item) => (
-            <ItemSubCategory />
-          ))}
-          </ScrollView>
-
+            {arr.map((item) => (
+              <ItemSubCategory key={item.id} />
+            ))}
+          </ScrollView> */}
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={arr}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => <ItemSubCategory />}
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -112,11 +112,10 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 40,
   },
   dropdown: {
-    flex: 1,
     width: "88%",
+    marginTop: 10,
     // marginTop: 60,
     // justifyContent: "center",
     // alignItems: "center",
-  }
-
+  },
 });
