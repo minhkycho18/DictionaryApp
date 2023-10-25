@@ -34,12 +34,10 @@ public class WordListServiceImpl implements WordListService {
 
     @Override
     public WordListResponseDto getWordListById(Long wordListId) {
-        User user = AuthenticationUtils.getUserFromSecurityContext();
         WordList wordList = wordListRepository.findById(wordListId)
                 .orElseThrow(() -> new RecordNotFoundException("WordList not found with ID: " + wordListId));
-        if (wordList.getListType() == ListType.PRIVATE
-                && !wordList.getUser().equals(user)) {
-            throw new AccessDeniedException("You do not have permission to access this WordList");
+        if (wordList.getListType() == ListType.PRIVATE) {
+            return wordListMapper.toWordListDto(getOwnedWordList(wordListId));
         }
         return wordListMapper.toWordListDto(wordList);
     }

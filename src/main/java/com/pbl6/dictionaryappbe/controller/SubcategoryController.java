@@ -2,9 +2,11 @@ package com.pbl6.dictionaryappbe.controller;
 
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryResponseDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.persistence.subcategory.SubcategoryType;
+import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import com.pbl6.dictionaryappbe.service.SubcategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -52,7 +54,7 @@ public class SubcategoryController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Get data successfully",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))})})
-    @GetMapping("subcategories/types")
+    @GetMapping("/subcategories/types")
     public SubcategoryType[] getAllSubcategoryType() {
         return SubcategoryType.values();
     }
@@ -80,6 +82,14 @@ public class SubcategoryController {
     public SubcategoryResponseDto createSubcategory(@PathVariable Long wordListId,
                                                     @Valid @RequestBody SubcategoryRequestDto subcategory) {
         return subcategoryService.createSubcategory(wordListId, subcategory);
+    }
+
+    @PostMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}/custom")
+    public VocabDef createCustomVocabulary(@PathVariable Long wordListId,
+                                           @PathVariable String subcategoryId,
+                                           @Valid @RequestBody CustomVocabularyRequestDto customVocab) {
+        customVocab.setSubcategoryId(Long.valueOf(subcategoryId));
+        return subcategoryService.createCustomVocabulary(customVocab);
     }
 
     @Operation(summary = "Edit a subcategory", security = {@SecurityRequirement(name = "bearer-key")})

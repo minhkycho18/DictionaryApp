@@ -27,11 +27,11 @@ public class VocabDef {
     private Long defId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "def_id", referencedColumnName = "def_id")
+    @JoinColumn(name = "def_id", referencedColumnName = "def_id", insertable = false, updatable = false)
     private Definition definition;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id")
+    @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id", insertable = false, updatable = false)
     private Vocabulary vocabulary;
 
     @OneToMany(mappedBy = "vocabDef")

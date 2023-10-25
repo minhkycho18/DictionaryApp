@@ -1,8 +1,8 @@
 package com.pbl6.dictionaryappbe.persistence.user;
 
 import com.pbl6.dictionaryappbe.persistence.leitner.VocabLeitner;
-import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import com.pbl6.dictionaryappbe.persistence.role.Role;
+import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@EqualsAndHashCode
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
