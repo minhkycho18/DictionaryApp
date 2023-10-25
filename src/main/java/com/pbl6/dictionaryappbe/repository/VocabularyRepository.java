@@ -14,9 +14,7 @@ import java.util.List;
 
 @Repository
 public interface VocabularyRepository extends JpaRepository<Vocabulary, Long> {
-    Page<Vocabulary> findByWordStartsWith(String keyword, Pageable pageable);
-
-    List<Vocabulary> findAllByWordAndWordType(String word, WordType wordType);
+    Page<Vocabulary> findByWordStartsWithAndWordType(String word, WordType wordType, Pageable pageable);
 
     @Query(value = """
                             SELECT scd.def_id as defId

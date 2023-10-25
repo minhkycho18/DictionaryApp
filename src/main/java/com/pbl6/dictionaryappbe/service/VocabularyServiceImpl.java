@@ -2,7 +2,6 @@ package com.pbl6.dictionaryappbe.service;
 
 import com.pbl6.dictionaryappbe.dto.definition.DefinitionDetailUserDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabDetailDto;
-import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySearchDto;
 import com.pbl6.dictionaryappbe.mapper.VocabularyMapper;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
@@ -25,19 +24,13 @@ public class VocabularyServiceImpl implements VocabularyService {
     private final VocabularyMapper vocabularyMapper;
 
     @Override
-    public Page<VocabularySearchDto> findByKeyword(String keyword, int offset, int limit) {
+    public Page<VocabDetailDto> findByKeyword(String keyword, int offset, int limit) {
         int pageNo = offset / limit;
         Pageable pageable = PageRequest.of(pageNo, limit, Sort.by("word").ascending());
-        Page<Vocabulary> vocabularies = vocabularyRepository.findByWordStartsWith(keyword, pageable);
-        return vocabularies.map(vocabularyMapper::toVocabSearchDto);
-    }
+        Page<Vocabulary> vocabularies =
+                vocabularyRepository.findByWordStartsWithAndWordType(keyword, WordType.DEFAULT, pageable);
+        Page<VocabDetailDto> detailDtoList = vocabularies.map(vocabularyMapper::toVocabDetailDto);
 
-    @Override
-    public List<VocabDetailDto> getVocabInfo(String word) {
-        List<Vocabulary> vocabularies = vocabularyRepository.findAllByWordAndWordType(word, WordType.DEFAULT);
-        List<VocabDetailDto> detailDtoList = vocabularies.stream()
-                .map(vocabularyMapper::toVocabDetailDto)
-                .toList();
         User user = AuthenticationUtils.getUserFromSecurityContext();
         if (user != null) {
             // Get all defId in detailDtoList
@@ -61,7 +54,8 @@ public class VocabularyServiceImpl implements VocabularyService {
                                             userWordlistDefIds.contains(definitionDetailDto.getDefId()),
                                             userLeitnerDefIds.contains(definitionDetailDto.getDefId())
                                     )
-                            ).toList())
+                            )
+                            .toList())
             );
         }
         return detailDtoList;
