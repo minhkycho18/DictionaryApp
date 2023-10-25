@@ -28,6 +28,7 @@ const WordLists = ({ type, wordLists }) => {
     dispatch(selectWl(wl));
     navigate(`/vocabulary/detail?id=${wl?.id}`);
   };
+
   const renderCategory = wordLists.map((wordlist, index) => (
     <Category
       isSelf={isSelf}
@@ -36,11 +37,13 @@ const WordLists = ({ type, wordLists }) => {
       onSelect={handleSelectCategory}
     ></Category>
   ));
+
   const handleExplore = (e) => {
     if (type === "self") {
       navigate("/dashboard/wordLists");
     }
   };
+
   return (
     <Space className="wordLists" direction="horizontal">
       <Card

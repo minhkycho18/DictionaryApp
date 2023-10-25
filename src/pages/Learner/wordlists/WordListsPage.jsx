@@ -124,7 +124,7 @@ function WordListsPage() {
             ]}
           >
             <Radio.Group>
-              <Radio value="DEFAULT">Default</Radio>
+              <Radio value="CUSTOM">Custom</Radio>
               <Radio value="PUBLIC">Public</Radio>
             </Radio.Group>
           </Form.Item>
@@ -135,8 +135,8 @@ function WordListsPage() {
       {!loading && subcategories.length > 0 && (
         <Tabs
           tabBarExtraContent={{
-            left: (
-              <Button onClick={showAddMenu}>
+            right: (
+              <Button className="addSub" onClick={showAddMenu}>
                 <PlusOutlined />
                 <span>Add new</span>
               </Button>
@@ -151,7 +151,7 @@ function WordListsPage() {
           }}
           defaultActiveKey="0"
           items={renderSub}
-          tabPosition="right"
+          tabPosition="top"
         />
       )}
       {!loading && subcategories.length === 0 && (

@@ -21,9 +21,9 @@ const WordListDetail = (props) => {
     return () => {};
   }, [dispatch, query]);
   const renderSubcategory = subcategories.map((subcategory, index) => (
-    <Col span={12} key={index}>
+    <Col span={subcategories.length > 1 ? 12 : 24} key={index}>
       <Space
-        style={{ width: "320px" }}
+        style={{ width: `${subcategories.length > 1 ? "100%" : "320px"} ` }}
         className="wldetail__card"
         direction="vertical"
       >

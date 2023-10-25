@@ -1,4 +1,5 @@
 import {
+  CarryOutOutlined,
   ClockCircleOutlined,
   DeleteOutlined,
   EditOutlined,
@@ -22,6 +23,7 @@ const ListItem = (props) => {
   const [newTitle, setNewTitle] = useState(props.wordlist?.title);
   const [newDesc, setNewDesc] = useState(props.wordlist?.listDesc);
   const dispatch = useDispatch();
+
   const showDeleteConfirm = () => {
     setIsOpenModel(true);
     confirm({
@@ -39,9 +41,11 @@ const ListItem = (props) => {
       },
     });
   };
+
   const showModal = () => {
     setOpen(true);
   };
+
   const newData = {
     id: props.wordlist.id,
     title: newTitle,
@@ -57,9 +61,16 @@ const ListItem = (props) => {
       setConfirmLoading(false);
     }, 2000);
   };
+
   const handleCancel = () => {
     setOpen(false);
   };
+
+  const type = () => {
+    const [first, ...rest] = props.wordlist.listType;
+    return first + rest.join("").toLowerCase() + "";
+  };
+
   const content = (
     <Space wrap direction="vertical">
       <Space style={{ cursor: "pointer" }} onClick={showModal}>
@@ -130,7 +141,10 @@ const ListItem = (props) => {
         </Popover>
       </Space>
       <Space direction="vertical" className="ListItem__middle">
-        <span>1-subcategory</span>
+        <span>
+          <CarryOutOutlined style={{ marginRight: 8 }} />
+          {type()}
+        </span>
         <span>
           <ClockCircleOutlined style={{ marginRight: 8 }} />
           Created at {calculateDateTime(props.wordlist.createdAt)} days ago

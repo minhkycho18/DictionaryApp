@@ -2,15 +2,16 @@ import {
   DeleteOutlined,
   PlusOutlined,
   SearchOutlined,
-  TranslationOutlined,
 } from "@ant-design/icons";
 import { Button, Col, Input, Popconfirm, Row, Space, message } from "antd";
 import React, { useState } from "react";
+import { FaGraduationCap } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteSubcategory } from "../../stores/subcategory/subcategoryThunk";
 import SubItem from "./SubItem/SubItem";
 import "./Subcategory.scss";
+
 const Subcategory = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,8 +38,8 @@ const Subcategory = (props) => {
       {contextHolder}
       <Space style={{ justifyContent: "space-between", width: "100%" }}>
         <Button className="subcategory__study">
-          <span>Study</span>
-          <TranslationOutlined />{" "}
+          <span style={{ marginRight: 8 }}>Study</span>
+          <FaGraduationCap size={22} />
         </Button>
         <Space.Compact
           wrap
