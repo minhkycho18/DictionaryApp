@@ -22,6 +22,7 @@ const ListItem = (props) => {
   const [newTitle, setNewTitle] = useState(props.wordlist?.title);
   const [newDesc, setNewDesc] = useState(props.wordlist?.listDesc);
   const dispatch = useDispatch();
+
   const showDeleteConfirm = () => {
     setIsOpenModel(true);
     confirm({
@@ -130,7 +131,7 @@ const ListItem = (props) => {
         </Popover>
       </Space>
       <Space direction="vertical" className="ListItem__middle">
-        <span>1-sublist</span>
+        <span>1-subcategory</span>
         <span>
           <ClockCircleOutlined style={{ marginRight: 8 }} />
           Created at {calculateDateTime(props.wordlist.createdAt)} days ago

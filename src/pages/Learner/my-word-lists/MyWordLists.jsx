@@ -122,28 +122,26 @@ const MyWordLists = () => {
       </Modal>
       {!loading && (
         <Row>
-          <Space style={{ width: "100%" }}>
-            <Col span={wordLists.length < 3 ? 8 : 6}>
-              <Space
-                className="
+          <Col span={wordLists.length < 3 ? 8 : 6}>
+            <Space
+              className="
       MyWordLists__add"
-                onClick={handleAddingWordList}
-              >
-                <PlusOutlined />
-              </Space>
-            </Col>
+              onClick={handleAddingWordList}
+            >
+              <PlusOutlined />
+            </Space>
+          </Col>
 
-            {wordLists &&
-              wordLists.map((wordlist) => (
-                <Col span={wordLists.length < 3 ? 8 : 6} key={wordlist.id}>
-                  <ListItem
-                    wordlist={wordlist}
-                    onSelect={handleSelectWordList}
-                    onDel={onDeleteAnItem}
-                  />
-                </Col>
-              ))}
-          </Space>
+          {wordLists &&
+            wordLists.map((wordlist) => (
+              <Col span={wordLists.length < 3 ? 8 : 6} key={wordlist.id}>
+                <ListItem
+                  wordlist={wordlist}
+                  onSelect={handleSelectWordList}
+                  onDel={onDeleteAnItem}
+                />
+              </Col>
+            ))}
         </Row>
       )}
       {loading && <Spin spinning={loading} />}

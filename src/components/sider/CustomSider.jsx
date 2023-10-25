@@ -1,22 +1,33 @@
 import { Avatar, Image, Space } from "antd";
 import Sider from "antd/es/layout/Sider";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logoMain.png";
 import dashboardLink from "../../routers/dashboard";
 import { logOut } from "../../stores/authenticate/authSlice";
 import "./CustomSider.scss";
+import getFullPath from "../../helpers/getPath";
+import { getUserProfile } from "../../stores/user/userThunk";
+
 const CustomSider = (props) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const path = getFullPath(pathname);
   const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.profile);
+
+  useEffect(() => {
+    dispatch(getUserProfile());
+    return () => {};
+  }, [dispatch]);
+
   const handleSignOut = () => {
     dispatch(logOut());
     localStorage.removeItem("token");
     navigate("/");
   };
+
   return (
     <Sider collapsed={false} width={286} className="sidermenu">
       <Space direction="vertical" className="infor">
@@ -42,7 +53,7 @@ const CustomSider = (props) => {
           <Space
             key={index}
             className={`menu2__item ${
-              pathname === "/dashboard" + link?.path
+              path[1].link === "/dashboard" + link?.path
                 ? "menu2__item--active"
                 : ""
             }`}
