@@ -22,7 +22,6 @@ const ListItem = (props) => {
   const [newTitle, setNewTitle] = useState(props.wordlist?.title);
   const [newDesc, setNewDesc] = useState(props.wordlist?.listDesc);
   const dispatch = useDispatch();
-
   const showDeleteConfirm = () => {
     setIsOpenModel(true);
     confirm({
@@ -143,6 +142,7 @@ const ListItem = (props) => {
           justifyContent: "space-between",
           display: "flex",
           cursor: "pointer",
+          overflow: "hidden",
         }}
         onClick={() => handleSelectWordList(props.wordlist)}
       >
@@ -150,8 +150,13 @@ const ListItem = (props) => {
           style={{
             letterSpacing: 1.2,
             textTransform: "uppercase",
-            textAlign: "center",
-            marginLeft: 8,
+            textAlign: "left",
+            display: "inline-block",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            float: "left",
+            width: 200,
           }}
         >
           {props.wordlist?.title}
