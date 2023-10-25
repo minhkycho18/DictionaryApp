@@ -69,10 +69,11 @@ const WordLists = ({ type, wordLists }) => {
       </Card>
       <Space
         style={{
-          backgroundColor: "#f0f7f4",
+          backgroundColor: "#dfe6f1",
           height: "100px",
           width: "calc(100vw - 800px)",
-          boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+          boxShadow:
+            " rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;",
           borderRadius: 16,
           overflowX: "scroll",
           overflowY: "hidden",

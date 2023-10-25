@@ -54,8 +54,8 @@ const Subcategory = (props) => {
             <SearchOutlined />
           </Button>
           <Popconfirm
-            title="Delete the task"
-            description="Are you sure to delete this task?"
+            title="Delete the subcategory"
+            description="Are you sure to delete this subcategory?"
             onConfirm={onConfirmDelete}
             onCancel={onCancel}
             okText="Yes"

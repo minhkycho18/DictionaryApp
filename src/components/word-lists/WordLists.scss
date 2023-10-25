@@ -64,17 +64,43 @@
       justify-content: center;
       align-items: center;
       width: 135px;
-      border: 2px dashed #ccc;
+      border: 2px dashed #aaa;
       height: 135px;
       border-radius: 16px;
       font-size: 48px;
       color: #ccc;
     }
     &-caption {
-      border: 2px dashed #ccc;
+      border: 2px dashed #aaa;
       padding: 4px;
       border-radius: 4px;
       color: #aeaeae;
+    }
+    /* CSS cho thanh cuộn */
+    &::-webkit-scrollbar {
+      // width: 80px;
+      height: 8px;
+      /* Độ rộng của thanh cuộn */
+    }
+
+    /* Track (phần nền của thanh cuộn) */
+    &::-webkit-scrollbar-track {
+      background: #fff !important;
+
+      /* Màu nền của thanh cuộn */
+    }
+
+    /* Thumb (thanh cuộn chính) */
+    &::-webkit-scrollbar-thumb {
+      background: #eee;
+      border-radius: 100px;
+      /* Màu của thanh cuộn */
+    }
+
+    /* Thumb khi hover */
+    &::-webkit-scrollbar-thumb:hover {
+      background: #ccc;
+      /* Màu của thanh cuộn khi hover */
     }
   }
 }

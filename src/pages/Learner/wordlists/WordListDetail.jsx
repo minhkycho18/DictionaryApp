@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import logo from "../../../assets/images/category-back.png";
-import calculateDateTime from "../../../helpers/calculateDateTime";
 import { getSubcategory } from "../../../stores/subcategory/subcategoryThunk";
 import { getWLById } from "../../../stores/word-lists/wordLists-thunk";
 import "./WordListDetail.scss";
@@ -60,8 +59,10 @@ const WordListDetail = (props) => {
           {selectedWordList?.title}
         </Space>
         <Space className="wldetail__content-infor">
-          Created{calculateDateTime(selectedWordList?.createdAt) || 0}days ago
+          Created at{selectedWordList.createdAt}
+          {/* Created{calculateDateTime(selectedWordList.createdAt)}days ago */}
         </Space>
+        <Space>{selectedWordList.listDesc}</Space>
         <Space
           className="wldetail__content-btn"
           onClick={() => onHandleEdit(selectedWordList)}
