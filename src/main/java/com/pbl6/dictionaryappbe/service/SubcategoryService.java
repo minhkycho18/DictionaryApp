@@ -6,7 +6,7 @@ import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
-import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
+import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDefId;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public interface SubcategoryService {
 
     List<VocabularySubcategoryResponseDto> getAllVocabularies(Long subcategoryId);
 
-    VocabDef createCustomVocabulary(CustomVocabularyRequestDto customVocabularyRequestDto);
+    VocabDefId createCustomVocabulary(CustomVocabularyRequestDto customVocabularyRequestDto);
 
     SubcategoryResponseDto createSubcategory(Long wordListId, SubcategoryRequestDto subcategory);
 
@@ -27,6 +27,4 @@ public interface SubcategoryService {
     Subcategory getOwnedSubcategory(Long subcategoryId);
 
     void addVocabToSubcategory(Long subcategoryId, VocabularySubcategoryRequestDto vocabularySubcategoryRequestDto);
-
-    VocabularySubcategoryResponseDto getVocabSubDetail(VocabDef vocabDef, Long subcategoryId);
 }

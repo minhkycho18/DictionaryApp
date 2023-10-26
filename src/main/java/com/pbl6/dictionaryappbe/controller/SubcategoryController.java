@@ -6,7 +6,7 @@ import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.persistence.subcategory.SubcategoryType;
-import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
+import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDefId;
 import com.pbl6.dictionaryappbe.service.SubcategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -84,10 +84,16 @@ public class SubcategoryController {
         return subcategoryService.createSubcategory(wordListId, subcategory);
     }
 
+    @Operation(summary = "Create custom vocabulary in subcategory", security = {@SecurityRequirement(name = "bearer-key")})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Add data successfully",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid data"),
+            @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @PostMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}/custom")
-    public VocabDef createCustomVocabulary(@PathVariable Long wordListId,
-                                           @PathVariable String subcategoryId,
-                                           @Valid @RequestBody CustomVocabularyRequestDto customVocab) {
+    public VocabDefId createCustomVocabulary(@PathVariable Long wordListId,
+                                             @PathVariable String subcategoryId,
+                                             @Valid @RequestBody CustomVocabularyRequestDto customVocab) {
         customVocab.setSubcategoryId(Long.valueOf(subcategoryId));
         return subcategoryService.createCustomVocabulary(customVocab);
     }

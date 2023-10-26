@@ -66,8 +66,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
     @Override
     @Transactional
-    public VocabDef createCustomVocabulary(CustomVocabularyRequestDto newCustomVocab) {
-        Subcategory subcategory = getOwnedSubcategory(newCustomVocab.getSubcategoryId());
+    public VocabDefId createCustomVocabulary(CustomVocabularyRequestDto newCustomVocab) {
         Vocabulary newVocab = vocabularyRepository.save(Vocabulary.builder()
                 .word(newCustomVocab.getWord())
                 .pos(newCustomVocab.getPos())
@@ -87,7 +86,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
                 .vocabId(newVocab.getVocabId())
                 .defId(newDef.getDefId())
                 .build());
-        SubcategoryDetail newSubDetail = subcategoryDetailRepository.save(SubcategoryDetail.builder()
+        subcategoryDetailRepository.save(SubcategoryDetail.builder()
                 .vocabId(newVocab.getVocabId())
                 .defId(newDef.getDefId())
                 .subcategoryId(newCustomVocab.getSubcategoryId())
@@ -96,7 +95,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
                 .isFlashcard(false)
                 .lastLearning(null)
                 .build());
-        return newVocabDef;
+        return new VocabDefId(newVocabDef.getVocabId(), newVocabDef.getDefId());
     }
 
     @Override
@@ -120,11 +119,6 @@ public class SubcategoryServiceImpl implements SubcategoryService {
                 .isQuiz(false)
                 .lastLearning(null)
                 .build());
-    }
-
-    @Override
-    public VocabularySubcategoryResponseDto getVocabSubDetail(VocabDef vocabDef, Long subcategoryId) {
-        return subcategoryDetailMapper.toSubcategoryDetailResponseDto(subcategoryDetailRepository.findByVocabDefAndSubcategoryId(vocabDef, subcategoryId));
     }
 
     @Override
