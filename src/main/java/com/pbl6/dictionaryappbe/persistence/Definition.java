@@ -1,5 +1,6 @@
 package com.pbl6.dictionaryappbe.persistence;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,5 +27,6 @@ public class Definition {
     private String examples;
 
     @OneToMany(mappedBy = "definition")
+    @JsonIgnore
     private List<VocabDef> vocabDefs;
 }

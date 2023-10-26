@@ -1,4 +1,4 @@
-package com.pbl6.dictionaryappbe.dto;
+package com.pbl6.dictionaryappbe.dto.wordlist;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotEmpty;
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Builder
 @Data
-public class WordListDto {
+public class WordListResponseDto {
     private Long id;
     @NotEmpty(message = "Title can not be empty")
     private String title;

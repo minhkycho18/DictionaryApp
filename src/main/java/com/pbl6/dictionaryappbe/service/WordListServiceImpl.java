@@ -1,8 +1,10 @@
 package com.pbl6.dictionaryappbe.service;
 
-import com.pbl6.dictionaryappbe.dto.WordListDto;
+import com.pbl6.dictionaryappbe.dto.wordlist.WordListRequestDto;
+import com.pbl6.dictionaryappbe.dto.wordlist.WordListResponseDto;
 import com.pbl6.dictionaryappbe.exception.DuplicateDataException;
 import com.pbl6.dictionaryappbe.exception.FieldNotNullException;
+import com.pbl6.dictionaryappbe.exception.RecordNotFoundException;
 import com.pbl6.dictionaryappbe.mapper.WordListMapper;
 import com.pbl6.dictionaryappbe.persistence.role.RoleName;
 import com.pbl6.dictionaryappbe.persistence.user.User;
@@ -31,25 +33,31 @@ public class WordListServiceImpl implements WordListService {
     private final WordListMapper wordListMapper;
 
     @Override
-    public WordListDto getWordListById(Long wordListId) {
-        return wordListMapper.toWordListDto(getOwnedWordList(wordListId));
+    public WordListResponseDto getWordListById(Long wordListId) {
+        WordList wordList = wordListRepository.findById(wordListId)
+                .orElseThrow(() -> new RecordNotFoundException("WordList not found with ID: " + wordListId));
+        if (wordList.getListType() == ListType.PRIVATE) {
+            return wordListMapper.toWordListDto(getOwnedWordList(wordListId));
+        }
+        return wordListMapper.toWordListDto(wordList);
     }
 
     @Override
-    public List<WordListDto> getAllByUser() {
+    public List<WordListResponseDto> getAllByUser() {
         User user = AuthenticationUtils.getUserFromSecurityContext();
         return MapperUtils.toTargetList(wordListMapper::toWordListDto, wordListRepository.findByUser(user));
     }
 
     @Override
-    public List<WordListDto> getAllSystemWordList(RoleName role) {
+    public List<WordListResponseDto> getAllSystemWordList(RoleName role) {
         List<WordList> wordLists = wordListRepository.findAllByUserRole(roleRepository.findByName(RoleName.CONTENT_MANAGER));
         return MapperUtils.toTargetList(wordListMapper::toWordListDto, wordLists);
     }
 
     @Override
-    public List<WordListDto> getAllPublicWordList() {
-        Long userId = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext()).getUserId();
+    public List<WordListResponseDto> getAllPublicWordList() {
+        User user = AuthenticationUtils.getUserFromSecurityContext();
+        Long userId = user == null ? null : user.getUserId();
         Long roleId = roleRepository.findByName(RoleName.LEARNER).getRoleId();
         List<WordList> wordLists = wordListRepository.findDefaultWordList(String.valueOf(ListType.PUBLIC), userId, roleId);
         return MapperUtils.toTargetList(wordListMapper::toWordListDto, wordLists);
@@ -57,7 +65,7 @@ public class WordListServiceImpl implements WordListService {
 
     @Override
     @Transactional
-    public WordListDto createWordList(WordListDto wordList) {
+    public WordListResponseDto createWordList(WordListRequestDto wordList) {
         String title = wordList.getTitle();
         User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
         if (wordListRepository.findByTitleAndUser(wordList.getTitle(), user) != null) {
@@ -84,7 +92,7 @@ public class WordListServiceImpl implements WordListService {
 
     @Override
     @Transactional
-    public WordListDto updateWordList(Long wordListId, WordListDto wordList) {
+    public WordListResponseDto updateWordList(Long wordListId, WordListRequestDto wordList) {
         String newTitle = wordList.getTitle();
         WordList ownedWordList = getOwnedWordList(wordListId);
         if (wordListRepository.findByTitleAndUser(newTitle, ownedWordList.getUser()) != null && !Objects.equals(newTitle, ownedWordList.getTitle())) {

@@ -41,13 +41,13 @@ public class SubcategoryDetail {
     private LocalDateTime lastLearning;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subcategory_id", referencedColumnName = "subcategory_id")
+    @JoinColumn(name = "subcategory_id", referencedColumnName = "subcategory_id", insertable = false, updatable = false)
     private Subcategory subcategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
-            @JoinColumn(name = "def_id", referencedColumnName = "def_id"),
-            @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id")
+            @JoinColumn(name = "def_id", referencedColumnName = "def_id", insertable = false, updatable = false),
+            @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id", insertable = false, updatable = false)
     })
     private VocabDef vocabDef;
 }

@@ -76,7 +76,9 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/vocabs/**").hasAnyAuthority(forAdminAndManager())
                         .requestMatchers(HttpMethod.PUT, "/vocabs/**").hasAnyAuthority(forAdminAndManager())
                         .requestMatchers(HttpMethod.DELETE, "/vocabs/**").hasAnyAuthority(forAdminAndManager())
+                        .requestMatchers(HttpMethod.GET, "/wordlists/**").permitAll()
                         .requestMatchers("/wordlists/**").hasAnyAuthority(forAllRole())
+                        .requestMatchers("/subcategories/types").permitAll()
                         .requestMatchers(
                                 "/roles/**",
                                 "/users/register",
