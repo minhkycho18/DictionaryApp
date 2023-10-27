@@ -1,13 +1,12 @@
-import React, { useState } from "react";
-import { View, Image } from "react-native";
-import { Styles } from "../ItemVocabOfSub/Styles";
-import { SvgXml } from "react-native-svg";
-import { svgStudy } from "~/constants/theme";
-import ItemVocabOfSub from "../ItemVocabOfSub/ItemVocabOfSub";
-import { FlatList } from "react-native";
+import React, { useRef } from "react";
+import { View } from "react-native";
+import { Styles } from "./Styles";
+import {SvgXml } from "react-native-svg";
 import { Text } from "react-native";
+import tw from "twrnc";
+import { svgreview } from "~/constants/theme";
 export default function ItemListVocabOfSub() {
-  const [wordLists, setWordLists] = useState([]);
+  const wrapRef = useRef();
   const data = [
     {
       id: 1,
@@ -25,38 +24,73 @@ export default function ItemListVocabOfSub() {
       listType: "PRIVATE",
       createdAt: "10-10-2023",
     },
+    {
+      id: 3,
+      title: "wordlist1",
+      listDesc: "wordlist1",
+      createdBy: "learner1",
+      listType: "PUBLIC",
+      createdAt: "10-10-2023",
+    },
+    {
+      id: 4,
+      title: "wordlist2",
+      listDesc: "wordlist2",
+      createdBy: "learner1",
+      listType: "PRIVATE",
+      createdAt: "10-10-2023",
+    },
   ];
   // setWordLists(data);
   return (
-    // <FlatList
-    //     style={{
-    //         backgroundColor: 'red'
-    //     }}
-    //     showsVerticalScrollIndicator={false}
-    //     vertical
-    //     keyExtractor={(item) => item.id}
-    //     data={wordLists}
-    //     renderItem={(item) => (
-    //         <GestureHandlerRootView>
-    //             <ItemVocabOfSub
-    //                 wordlist={item}
-    //                 onDelete={handleDelete}
-    //             />
-    //         </GestureHandlerRootView>
-    //     )}
-    // />
     <>
       {data.map((item) => (
-        <View
-          key={item.id}
-          style={{
-            backgroundColor: "red",
-            height: 100,
-            width: "100%",
-            borderBottomWidth: 2,
-          }}
-        >
-          <Text>flatlist</Text>
+        <View style={[tw`bg-stone-100`, Styles.wrappered]} ref={wrapRef}>
+          <View style={Styles.Text_content}>
+            <View style={Styles.Title_Status}>
+              <View>
+                <Text
+                  numberOfLines={1}
+                  style={[tw`tracking-wide text-xl italic`, { color: "#182B40" }]}
+                >
+                  Word {item.id}
+                </Text>
+              </View>
+
+              {/* Status */}
+              <View style={Styles.viewItem}>
+                <View Styles={Styles.item}>
+                  <View style={Styles.circle}>
+                    <SvgXml width="20" height="20" xml={svgreview} />
+                  </View>
+                </View>
+
+                <View Styles={Styles.item}>
+                  <View style={Styles.circle}>
+                    <SvgXml width="20" height="20" xml={svgreview} />
+                  </View>
+                </View>
+
+                <View Styles={Styles.item}>
+                  <View style={Styles.circle}>
+                    <SvgXml width="20" height="20" xml={svgreview} />
+                  </View>
+                </View>
+
+              </View>
+            </View>
+
+            <View>
+              <Text
+                style={[
+                  tw`tracking-normal text-base non-italic`,
+                  { color: "#182B40" },
+                ]}
+              >
+                the word mean that you say hello word mean that you say hello
+              </Text>
+            </View>
+          </View>
         </View>
       ))}
     </>

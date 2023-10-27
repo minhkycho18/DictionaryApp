@@ -14,6 +14,9 @@ import { Entypo } from "@expo/vector-icons";
 import tw from "twrnc";
 
 import ItemSubCategory from "~/components/Home/WordList/ItemSubCategory/ItemSubCategory";
+import { Image } from "react-native";
+import { SvgXml } from "react-native-svg";
+import { svgstudy } from "~/constants/theme";
 
 export default function YourWordlistDetail() {
   const navigation = useNavigation();
@@ -36,6 +39,9 @@ export default function YourWordlistDetail() {
     { id: 6 },
     { id: 7 },
     { id: 8 },
+    { id: 9 },
+    { id: 10 },
+
   ];
   return (
     <SafeAreaView style={styles.container}>
@@ -51,38 +57,90 @@ export default function YourWordlistDetail() {
           />
         </TouchableOpacity>
 
-        <View style={{ marginLeft: 40 }}>
-          <Text
-            style={[
-              tw`pl-2 mt-1 font-bold  tracking-wider text-3xl italic`,
-              { color: "#182B40" },
-            ]}
-          >
-            Free Wordlist
-          </Text>
+        <View style={{
+          marginLeft: 40,
+          display: 'flex',
+          flexDirection: 'row',
+          // alignItems: 'center',
+          // position: 'relative',
+        }}>
+          <Image
+            source={require("~/assets/wordlist.png")}
+            style={{
+              width: 70,
+              height: 70,
+              borderRadius: 40,
+              // top: -10
+            }}
+          />
+          <View>
+            {/* Title */}
+            <Text
+              style={[
+                tw`pl-2 mt-1 font-bold  tracking-wider text-3xl`,
+                { color: "#182B40" },
+              ]}
+            >
+              Free Wordlist
+            </Text>
+            {/* Description */}
+            <Text
+              style={[
+                tw`pl-2 mt-1 font-normal  tracking-wider text-lg`,
+                { color: "#182B40" },
+              ]}
+            >
+              Free Wordlist
+            </Text>
+          </View>
         </View>
       </View>
 
       <View style={styles.body}>
-        <View style={styles.dropdown}>
-          {/* <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{
-              flex: 1,
-              marginTop: 35,
-            }}
+        {/* Button Study */}
+        <TouchableOpacity style={styles.ButtonStudy}>
+          <SvgXml width="30" height="30" xml={svgstudy} />
+          <Text
+            style={[
+              tw`pl-2 mt-1 font-normal  tracking-wider text-base `,
+              { color: "#FFF7FF" },
+            ]}
           >
-            {arr.map((item) => (
-              <ItemSubCategory key={item.id} />
-            ))}
-          </ScrollView> */}
+            Study
+          </Text>
+        </TouchableOpacity>
+
+        {/* List Subcategory */}
+        <View style={styles.dropdown}>
           <FlatList
+            style={{
+              marginTop: 10,
+              padding: 3,
+            }}
             showsVerticalScrollIndicator={false}
             data={arr}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => <ItemSubCategory />}
           />
         </View>
+
+        {/* Add new Subcategory */}
+        <TouchableOpacity style={styles.ButtonAdd}>
+          <Ionicons
+            name="add"
+            size={27}
+            color="#3C2D4E"
+          // backgroundColor="#BBBBBB"
+          />
+          <Text
+            style={[
+              tw`pl-2 mt-1 font-normal  tracking-wider text-base `,
+              { color: "#3C2D4E" },
+            ]}
+          >
+            Add
+          </Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -97,15 +155,14 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: "#CFC5EA",
     width: "80%",
-    height: 130,
+    height: "22%",
     // borderBottomRightRadius: 60,
   },
   body: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: "#FAFAFA",
-    backgroundColor: "#AAAAAA",
+    backgroundColor: "#FAFAFA",
+    // backgroundColor: "#AAAAAA",
     width: "100%",
     height: "100%",
     borderTopRightRadius: 40,
@@ -113,9 +170,51 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     width: "88%",
-    marginTop: 10,
-    // marginTop: 60,
-    // justifyContent: "center",
-    // alignItems: "center",
+    marginTop: 12,
+    elevation: 4,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.17,
+    shadowRadius: 4,
   },
+  ButtonStudy: {
+    backgroundColor: "#3D3A4D",
+    borderRadius: 18,
+    position: "absolute",
+    right: 25,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 100,
+    flexDirection: 'row',
+    top: '-4.5%',
+    paddingTop: 7,
+    paddingBottom: 7,
+    paddingLeft: 35,
+    paddingRight: 35,
+    // marginRight: 1
+  },
+  ButtonAdd: {
+    // display: "flex",
+    backgroundColor: "#D0C6EB",
+    borderRadius: 25,
+    position: "absolute",
+    // right: 25,
+    // top: 170,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 100,
+    flexDirection: 'row',
+    top: '4.5%',
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    top: "88%",
+    // bottom: 20,
+    right: "6.5%",
+  }
 });
