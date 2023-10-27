@@ -95,12 +95,13 @@ export default function ItemWordList({ wordlist, onDelete }) {
           </View>
         </Modal>
       </View>
+
       <Swipeable
         renderLeftActions={leftSwipe}
         onSwipeableOpen={onSwipeableOpen}
         onSwipeableWillClose={onSwipeableClose}
       >
-        <View style={[tw`bg-stone-100`, Styles.wrappered]} ref={wrapRef}>
+        <View style={[tw`bg-gray-100`, Styles.wrappered]} ref={wrapRef}>
           <Image
             source={require("~/assets/wordlist.png")}
             style={Styles.Image}

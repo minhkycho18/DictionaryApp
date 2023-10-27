@@ -13,7 +13,7 @@ export default function HomeScreen() {
         flex: 1,
         marginTop: 20,
         flexDirection: "column",
-        backgroundColor: "rgb(248 250 252)",
+        backgroundColor: "rgb(241 245 249)",
       }}
     >
       <HeaderHome />

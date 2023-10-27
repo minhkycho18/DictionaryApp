@@ -23,7 +23,7 @@ export default function WordListPublic() {
   }, []);
   return (
     <LinearGradient
-      colors={["#fff", "rgb(241 245 249)", "rgb(248 250 252)"]}
+      colors={["#fff", "rgb(241 245 249)"]}
       style={tw`pt-2 pr-2 pl-2 pb-2 mb-5  mt-4 bg-stone-50`}
     >
       <View

@@ -8,6 +8,7 @@ export const Styles = StyleSheet.create({
         zIndex: -1,
         marginBottom: 10,
         borderBottomLeftRadius: 20,
+
     },
     wrappered: {
         padding: 20,
@@ -29,7 +30,7 @@ export const Styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-between',
         width: "62%",
-        height: "75%",
+        height: "80%",
         justifyContent: 'flex-start',
     },
     Icon: {

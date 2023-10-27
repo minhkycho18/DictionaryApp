@@ -1,15 +1,14 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from '@react-navigation/native'
 import HomeStack from "./HomeStack";
-import HomeScreen from "~/screens/HomeScreen";
 import DictionaryStack from "./dictionaryStack";
 import Profile from "../screens/ProfileScreen";
-import AddWordList from "~/components/YourWordList/AddWordList/AddWordList";
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from "../styles/Style";
+import SplashScreen from "~/components/SplashScreen";
 import { useRef, useState, useEffect } from 'react'
 import { Dimensions, Animated, Keyboard, Platform } from "react-native";
-import YourWordList from "~/screens/YourWordList";
+
+import index from "~/components/Study";
 export default function BottomTab() {
   const tabOffsetValue = useRef(new Animated.Value(0)).current;
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -27,26 +26,16 @@ export default function BottomTab() {
       "keyboardDidShow",
       () => {
         setKeyboardVisible(true);
-        // Optionally, you can animate the Animated.View out of the screen
-        Animated.spring(tabOffsetValue, {
-          toValue: getWidth(),
-          useNativeDriver: true,
-        }).start();
       }
+
     );
     const keyboardDidHideListener = Keyboard.addListener(
       "keyboardDidHide",
       () => {
         setKeyboardVisible(false);
-        // Optionally, you can animate the Animated.View back to its original position
-        Animated.spring(tabOffsetValue, {
-          toValue: getWidth() * 1.23,
-          useNativeDriver: true,
-        }).start();
       }
     );
 
-    // Cleanup event listeners when the component unmounts
     return () => {
       keyboardDidShowListener.remove();
       keyboardDidHideListener.remove();
@@ -106,7 +95,7 @@ export default function BottomTab() {
               }).start();
             }
           })} />
-        <Tab.Screen name="Profile" component={Profile} options={{ ...styles.tabScreenStyle }}
+        <Tab.Screen name="Profile" component={index} options={{ ...styles.tabScreenStyle }}
           listeners={({ navigation, route }) => ({
             tabPress: e => {
               Animated.spring(tabOffsetValue, {
