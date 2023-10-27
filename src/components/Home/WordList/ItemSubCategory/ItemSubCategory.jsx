@@ -5,6 +5,7 @@ import { View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { SlideInUp } from "react-native-reanimated";
 import ItemListVocabOfSub from "../ItemListVocabOfSub/ItemListVocabOfSub";
+import ItemAddNewWord from "../ItemAddNewWord/ItemAddNewWord";
 export default function ItemSubCategory({ wordlist, onDelete }) {
 
   const [open, setOpen] = useState(false);
@@ -53,6 +54,7 @@ export default function ItemSubCategory({ wordlist, onDelete }) {
           }}
         />
         <Animated.View>
+          {open && <ItemAddNewWord />}
           {open && <ItemListVocabOfSub />}
         </Animated.View>
       </View>
