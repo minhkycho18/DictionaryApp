@@ -1,16 +1,26 @@
 import { SoundFilled } from "@ant-design/icons";
 import { Avatar, Col, Row, Space } from "antd";
-import React, { useRef } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import uk from "../../assets/images/en-circle.png";
 import us from "../../assets/images/us-square.png";
 import Examples from "./Examples";
 import Meaning from "./Meaning";
 import "./Phonetic.scss";
-const Phonetic = (props) => {
+import { getAllWL } from "../../stores/word-lists/wordLists-thunk";
+const Phonetic = () => {
   const { vocabDetails } = useSelector((state) => state.search);
   const audioUk = useRef();
   const audioUs = useRef();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllWL());
+  }, [dispatch]);
+
+const onReloadState=(e)=>{
+  
+}
+
   const renderExamples = () => {
     const examples = [];
     vocabDetails.forEach((vocabDetail) => {

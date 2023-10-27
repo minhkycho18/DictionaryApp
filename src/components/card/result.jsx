@@ -1,4 +1,4 @@
-import { Card } from "antd";
+import { Card, Space } from "antd";
 import React from "react";
 import "./Result.scss";
 const Result = (props) => {
@@ -8,10 +8,20 @@ const Result = (props) => {
   };
   return (
     <Card className="result" onClick={selectedWord}>
-      <h2 className="result__title">
-        {props.index}. {props.result?.word}{" "}
-      </h2>
-      <p className="result__content">{props.result?.definitions[0]}</p>
+      <Space
+        style={{
+          width: "100%",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <h2 className="result__title">
+          {props.index}. {props.result?.word}{" "}
+        </h2>
+        <span className="result__pos">[{props.result?.pos}]</span>
+      </Space>
+
+      <p className="result__content">{props.result?.definitions[0].wordDesc}</p>
     </Card>
   );
 };

@@ -5,16 +5,25 @@
   height: 248px;
   cursor: pointer;
   border-color: #cccccc88;
+  font-family: $font;
+  &:hover {
+    background: #f5f7fa;
+  }
+
   &__title {
-    font-family: $font;
     font-size: 30px;
     line-height: 36px;
     font-weight: 600;
+    color: $text-secondary-color;
   }
   &__content {
     color: #6b7280;
-    font-family: $font;
     font-size: 18px;
     line-height: 32px;
+  }
+  &__pos {
+    font-size: 18px;
+    font-weight: 500;
+    color: $text-third-color;
   }
 }

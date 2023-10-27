@@ -41,6 +41,8 @@
 }
 .icon--active {
   border: 3px solid #ff86868f;
+  color: #ff5555 !important;
+
   & > .choice__icon--sub {
     color: #ff5555 !important;
   }
@@ -74,4 +76,22 @@
     padding-right: 16px;
     text-decoration: underline dashed;
   }
+}
+.item__category {
+  font-family: $font;
+  cursor: pointer;
+  // border-bottom: 1px solid #eee;
+  border-top: 1px solid #eeeeeeaf;
+  width: 100%;
+  padding: 16px 0px;
+  margin-left: 8px;
+  font-weight: 500;
+  &:hover {
+    color: #6248b1 !important;
+    background-color: #f9f7f7;
+    border-radius: 16px;
+  }
+}
+.collapse__item {
+  font-family: $font;
 }

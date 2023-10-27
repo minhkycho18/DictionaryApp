@@ -10,10 +10,8 @@ import "./Dictionary.scss";
 
 import { SearchOutlined } from "@ant-design/icons";
 import { debounce } from "lodash";
-import {
-  getSearchResult,
-  getVocabDetail,
-} from "../../../stores/search-word/searchThunk";
+import { setVocabDetails } from "../../../stores/search-word/searchSlice";
+import { getSearchResult } from "../../../stores/search-word/searchThunk";
 const Dictionary = () => {
   const { result, selectedMeaning, loading } = useSelector(
     (state) => state.search
@@ -46,7 +44,7 @@ const Dictionary = () => {
     navigate(`/dictionary?entry=${result}`);
     setInputWord("");
     setIsSelected(true);
-    dispatch(getVocabDetail(result));
+    dispatch(setVocabDetails(result));
   };
 
   const items = result.map((item, index) => (

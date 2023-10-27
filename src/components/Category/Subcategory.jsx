@@ -3,24 +3,54 @@ import {
   PlusOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Button, Col, Input, Popconfirm, Row, Space, message } from "antd";
-import React, { useState } from "react";
+import {
+  Button,
+  Col,
+  Input,
+  Modal,
+  Popconfirm,
+  Row,
+  Space,
+  Spin,
+  message,
+} from "antd";
+import React, { useEffect, useState } from "react";
 import { FaGraduationCap } from "react-icons/fa6";
-import { useDispatch } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { deleteSubcategory } from "../../stores/subcategory/subcategoryThunk";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import {
+  deleteSubcategory,
+  getAllVocabInSubcategory,
+} from "../../stores/subcategory/subcategoryThunk";
+import CustomWord from "./CustomWord/CustomWord";
+import DefaultWord from "./DefaultWord/DefaultWord";
 import SubItem from "./SubItem/SubItem";
 import "./Subcategory.scss";
 
 const Subcategory = (props) => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   let { id } = useParams();
   const [isSearching, setIsSearching] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isCustom, setIsCustom] = useState(false);
+  const { vocabInSub, VocabLoading, error } = useSelector(
+    (state) => state.subcategory
+  );
+
+  useEffect(() => {
+    const params = {
+      wordListId: id,
+      SubId: props.subcategory.subcategoryId,
+    };
+    dispatch(getAllVocabInSubcategory(params));
+  }, [dispatch, id, props.subcategory.subcategoryId]);
+
+  const handleSetCustom = () => {
+    setIsCustom(!isCustom);
+  };
 
   const handleSearchAWord = () => {
-    console.log("search");
     setIsSearching(!isSearching);
   };
   const onConfirmDelete = () => {
@@ -32,6 +62,7 @@ const Subcategory = (props) => {
     );
     messageApi.success("success!");
   };
+
   const onCancel = () => {};
   return (
     <Space className="subcategory" direction="vertical">
@@ -42,7 +73,6 @@ const Subcategory = (props) => {
           <FaGraduationCap size={22} />
         </Button>
         <Space.Compact
-          wrap
           style={{ float: "right" }}
           className="subcategory__options"
         >
@@ -73,7 +103,6 @@ const Subcategory = (props) => {
           </Popconfirm>
         </Space.Compact>
       </Space>
-      {/* // background-color: #e0e7f2; */}
       <Space
         style={{
           width: "100%",
@@ -83,113 +112,67 @@ const Subcategory = (props) => {
           marginTop: 16,
         }}
       >
-        <Row justify="start" gutter={[16, 16]}>
-          <Col span={4} className="gutter-row">
+        <Modal
+          // title="Vertically centered modal dialog"
+          centered
+          open={isOpen}
+          onCancel={() => setIsOpen(false)}
+          footer={null}
+        >
+          <Space style={{ width: "100%" }} direction="vertical">
             <Space
-              className="subitem subitem__add"
-              direction="vertical"
-              style={{ cursor: "pointer" }}
-              onClick={() => navigate("/dictionary")}
+              style={{
+                width: "100%",
+                textAlign: "center",
+              }}
+              className="tab"
             >
-              <Space className="subitem__content " direction="vertical" wrap>
-                <PlusOutlined />
-              </Space>
+              <div
+                className={`tab__options ${isCustom ? "" : "active"}`}
+                onClick={handleSetCustom}
+              >
+                Default word
+              </div>
+              <div
+                className={`tab__options ${!isCustom ? "" : "active"}`}
+                onClick={handleSetCustom}
+              >
+                Custom word
+              </div>
             </Space>
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-          <Col span={4} className="gutter-row">
-            <SubItem />
-          </Col>
-        </Row>
+
+            {!isCustom && <DefaultWord />}
+            {isCustom && <CustomWord />}
+          </Space>
+        </Modal>
+
+        {!VocabLoading && (
+          <Row
+            justify="start"
+            gutter={[16, 16]}
+            className={`${VocabLoading ? "vocabLoading-css" : ""}`}
+          >
+            <Col span={4} className="gutter-row">
+              <Space
+                className="subitem subitem__add"
+                direction="vertical"
+                style={{ cursor: "pointer" }}
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                <Space className="subitem__content " direction="vertical" wrap>
+                  <PlusOutlined />
+                </Space>
+              </Space>
+            </Col>
+            {vocabInSub.map((vocab, index) => (
+              <Col span={4} className="gutter-row" key={index}>
+                <SubItem vocab={vocab} />
+              </Col>
+            ))}
+          </Row>
+        )}
+
+        {VocabLoading && <Spin spinning={VocabLoading} />}
       </Space>
     </Space>
   );

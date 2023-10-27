@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
+  addWordToSub,
+  createCustomWordInWL,
   createSub,
   deleteSub,
+  getAllVocabInSub,
   getSubByWlsId,
+  getSubType,
   updateSub,
 } from "../../api/Subcategory/subcategory.api";
 
@@ -48,6 +52,50 @@ export const deleteSubcategory = createAsyncThunk(
       return response;
     } catch (error) {
       throw thunkAPi.rejectWithValue(error);
+    }
+  }
+);
+export const addWordToSubcategory = createAsyncThunk(
+  "subcategory/addWordToSubcategory",
+  async (params, thunkApi) => {
+    try {
+      const response = await addWordToSub(params);
+      return response;
+    } catch (error) {
+      throw thunkApi.rejectWithValue(error);
+    }
+  }
+);
+export const createCustomWord = createAsyncThunk(
+  "subcategory/createCustomWord",
+  async (params, thunkApi) => {
+    try {
+      const response = await createCustomWordInWL(params);
+      return response;
+    } catch (error) {
+      throw thunkApi.rejectWithValue(error);
+    }
+  }
+);
+export const getTypeOfSub = createAsyncThunk(
+  "subcategory/getTypeOfSub",
+  async (params, thunkApi) => {
+    try {
+      const response = await getSubType();
+      return response;
+    } catch (error) {
+      throw thunkApi.rejectWithValue(error);
+    }
+  }
+);
+export const getAllVocabInSubcategory = createAsyncThunk(
+  "subcategory/getAllVocabInSubcategory",
+  async (params, thunkApi) => {
+    try {
+      const response = await getAllVocabInSub(params);
+      return response;
+    } catch (error) {
+      throw thunkApi.rejectWithValue(error);
     }
   }
 );

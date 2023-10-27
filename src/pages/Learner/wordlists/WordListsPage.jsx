@@ -17,6 +17,7 @@ import Subcategory from "../../../components/Category/Subcategory";
 import { capitalizeFirstLetter } from "../../../helpers/changeTitle";
 import {
   createSubcategory,
+  getAllVocabInSubcategory,
   getSubcategory,
 } from "../../../stores/subcategory/subcategoryThunk";
 import "./WordListsPage.scss";
@@ -37,7 +38,7 @@ function WordListsPage() {
   }, [dispatch, id]);
   const renderSub = subcategories.map((subcategory, index) => {
     return {
-      key: index,
+      key: subcategory.subcategoryId,
       label: capitalizeFirstLetter(subcategory?.title),
       children: (
         <Subcategory
@@ -48,7 +49,13 @@ function WordListsPage() {
       ),
     };
   });
-
+  const onChange = (key) => {
+    const params = {
+      wordListId: id,
+      SubId: key,
+    };
+    dispatch(getAllVocabInSubcategory(params));
+  };
   const errorOpen = () => {
     messageApi.open({
       type: "error",
@@ -67,6 +74,7 @@ function WordListsPage() {
       className={`wordlist__page ${loading ? "loading-css" : ""}`}
       direction="vertical"
     >
+      {contextHolder}
       <Modal
         open={isOpen}
         title="Add new subcategories"
@@ -130,7 +138,6 @@ function WordListsPage() {
           </Form.Item>
         </Form>
       </Modal>
-      {contextHolder}
       {error !== null && errorOpen()}
       {!loading && subcategories.length > 0 && (
         <Tabs
@@ -149,9 +156,10 @@ function WordListsPage() {
             fontWeight: 500,
             color: "#07285a",
           }}
-          defaultActiveKey="0"
+          defaultActiveKey={subcategories[0].subcategoryId}
           items={renderSub}
           tabPosition="top"
+          onChange={onChange}
         />
       )}
       {!loading && subcategories.length === 0 && (

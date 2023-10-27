@@ -46,3 +46,19 @@
     }
   }
 }
+.tab {
+  font-family: $font;
+
+  &__options {
+    cursor: pointer;
+    width: 220px;
+    padding: 16px 0px;
+    font-weight: 600;
+  }
+}
+.vocabLoading-css {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

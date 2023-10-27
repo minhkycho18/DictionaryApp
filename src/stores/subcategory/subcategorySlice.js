@@ -1,17 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  addWordToSubcategory,
   createSubcategory,
   deleteSubcategory,
+  getAllVocabInSubcategory,
   getSubcategory,
   updateSubcategory,
 } from "./subcategoryThunk";
 
 const initialState = {
   loading: false,
+  VocabLoading: false,
   error: null,
   subcategories: [],
   selectedWL: {},
   messageDel: "",
+  vocabInSub: [],
 };
 
 const subcategorySlice = createSlice({
@@ -85,8 +89,33 @@ const subcategorySlice = createSlice({
       .addCase(deleteSubcategory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.detail;
+      })
+      //=====================================================
+      .addCase(addWordToSubcategory.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addWordToSubcategory.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(addWordToSubcategory.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.detail;
+      })
+      //=====================================================
+
+      .addCase(getAllVocabInSubcategory.pending, (state, action) => {
+        state.VocabLoading = true;
+        state.error = null;
+      })
+      .addCase(getAllVocabInSubcategory.fulfilled, (state, action) => {
+        state.VocabLoading = false;
+        state.vocabInSub = action.payload;
+      })
+      .addCase(getAllVocabInSubcategory.rejected, (state, action) => {
+        state.VocabLoading = false;
+        state.error = action.payload.detail;
       }),
-  //=====================================================
 });
 
 export const { selectWl, deleteASub } = subcategorySlice.actions;

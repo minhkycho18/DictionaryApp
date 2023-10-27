@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getSearchResult, getVocabDetail } from "./searchThunk";
+import { getSearchResult } from "./searchThunk";
 
 const initialState = {
   keyword: "",
@@ -40,6 +40,11 @@ const searchSlice = createSlice({
     setKeyWord: (state, action) => {
       state.keyword = action.payload;
     },
+    setVocabDetails: (state, action) => {
+      state.vocabDetails = state.result.filter(
+        (item, index) => item.word === action.payload
+      );
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -54,23 +59,24 @@ const searchSlice = createSlice({
       .addCase(getSearchResult.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.detail;
-      })
-      //========================================================
-      .addCase(getVocabDetail.pending, (state, action) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getVocabDetail.fulfilled, (state, action) => {
-        state.loading = false;
-        state.vocabDetails = action.payload;
-      })
-      .addCase(getVocabDetail.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.detail;
       });
+    //========================================================
+    // .addCase(getVocabDetail.pending, (state, action) => {
+    //   state.loading = true;
+    //   state.error = null;
+    // })
+    // .addCase(getVocabDetail.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.vocabDetails = action.payload;
+    // })
+    // .addCase(getVocabDetail.rejected, (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.payload.detail;
+    // });
   },
 });
 
-export const { setMeaningWord, setKeyWord } = searchSlice.actions;
+export const { setMeaningWord, setKeyWord, setVocabDetails } =
+  searchSlice.actions;
 
 export default searchSlice.reducer;

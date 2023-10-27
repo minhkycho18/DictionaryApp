@@ -25,6 +25,7 @@
     &__word {
       font-weight: 800;
       color: $text-secondary-color;
+      text-align: center;
     }
     &__phonetic {
       color: #6c757d;
@@ -43,7 +44,7 @@
 }
 .pos__color {
   &--verb {
-    color: #2980b9;
+    color: #036d2a;
   }
   &--adj {
     color: #ffa2e8;

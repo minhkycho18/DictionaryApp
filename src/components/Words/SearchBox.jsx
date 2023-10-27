@@ -9,7 +9,7 @@ import "./SearchBox.scss";
 const SearchBox = (props) => {
   const dispatch = useDispatch();
   const [inputValue, setInputValue] = useState("");
-  const { keyword, result } = useSelector((state) => state.search);
+  // const { keyword, result } = useSelector((state) => state.search);
 
   const onChangeInput = (event) => {
     const newValue = event.target.value;

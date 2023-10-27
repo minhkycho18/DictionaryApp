@@ -1,15 +1,44 @@
 import {
   BookOutlined,
+  CaretRightOutlined,
   InboxOutlined,
   PlusCircleFilled,
 } from "@ant-design/icons";
-import { Space } from "antd";
+import { Collapse, Modal, Space } from "antd";
 import React, { useState } from "react";
 import "./Meaning.scss";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addWordToSubcategory,
+  getSubcategory,
+} from "../../stores/subcategory/subcategoryThunk";
+import { setVocabDetails } from "../../stores/search-word/searchSlice";
 const Meaning = ({ detail }) => {
   const [isChoice, setIsChoice] = useState(false);
-  const onChoice = (e) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { wordLists } = useSelector((state) => state.wordLists);
+  const { subcategories } = useSelector((state) => state.subcategory);
+  const [wlAdded, setWlAdded] = useState();
+  const dispatch = useDispatch();
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const handleAddLeitner = (e) => {
     setIsChoice(!isChoice);
+  };
+  const handleAddWordlist = (e) => {
+    setWlAdded(e);
+    setIsModalOpen(true);
+  };
+  const addToWL = (value) => {
+    const params = { ...value, vocabId: detail.id, defId: wlAdded };
+    dispatch(addWordToSubcategory(params));
+    dispatch(setVocabDetails(detail.word));
+    setIsModalOpen(false);
   };
 
   const renderDefinitions = detail.definitions.map((definition, index) => (
@@ -33,15 +62,16 @@ const Meaning = ({ detail }) => {
           className={`choice__item ${
             definition?.isWordOfUserLeitner ? "icon--active" : ""
           }`}
-          onClick={onChoice}
+          onClick={handleAddLeitner}
         >
           <InboxOutlined className="choice__icon " />
           <PlusCircleFilled className="choice__icon--sub" />
         </div>
         <div
           className={`choice__item ${
-            definition?.isWordOfUserWordList ? "icon--active" : ""
+            definition.isWordOfUserWordlist ? "icon--active" : ""
           }`}
+          onClick={() => handleAddWordlist(definition.defId)}
         >
           <BookOutlined className="choice__icon" />
           <PlusCircleFilled className="choice__icon--sub" />
@@ -49,6 +79,7 @@ const Meaning = ({ detail }) => {
       </Space>
     </div>
   ));
+
   const posClass = () => {
     switch (detail.pos) {
       case "adverb":
@@ -62,6 +93,34 @@ const Meaning = ({ detail }) => {
         return "border--lightblue";
     }
   };
+
+  const renderItem = wordLists.map((wl, index) => ({
+    key: wl.id,
+    label: wl.title,
+    children: (
+      <Space direction="vertical" style={{ width: "100%" }}>
+        {subcategories.map((sub, index) => (
+          <Space
+            className="item__category"
+            key={sub.subcategoryId}
+            onClick={() =>
+              addToWL({ wordListId: wl.id, SubId: sub.subcategoryId })
+            }
+          >
+            <Space style={{ padding: "0px 16px" }}>{sub.title}</Space>
+          </Space>
+        ))}
+      </Space>
+    ),
+    style: {
+      marginBottom: 24,
+      borderBottom: "1px solid #eee",
+      fontWeight: 600,
+    },
+  }));
+  const handleChangeWL = (key) => {
+    dispatch(getSubcategory(key));
+  };
   return (
     <Space className={`wrap-meaning border ${posClass()}`} direction="vertical">
       <Space style={{ width: "100%", justifyContent: "space-between" }}>
@@ -71,6 +130,25 @@ const Meaning = ({ detail }) => {
       <Space className="meaning__content" direction="vertical">
         {renderDefinitions}
       </Space>
+      <Modal
+        title="Add to a Subcategory"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <Collapse
+          // defaultActiveKey={["1"]}
+          expandIcon={({ isActive }) => (
+            <CaretRightOutlined rotate={isActive ? 90 : 0} />
+          )}
+          ghost
+          items={renderItem}
+          accordion
+          onChange={handleChangeWL}
+          className="collapse__item"
+        />
+      </Modal>
     </Space>
   );
 };
