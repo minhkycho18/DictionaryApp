@@ -13,6 +13,7 @@ import com.pbl6.dictionaryappbe.persistence.Definition;
 import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
 import com.pbl6.dictionaryappbe.persistence.subcategory.SubcategoryType;
 import com.pbl6.dictionaryappbe.persistence.subcategory_detail.SubcategoryDetail;
+import com.pbl6.dictionaryappbe.persistence.subcategory_detail.SubcategoryDetailId;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDefId;
@@ -31,6 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +62,17 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     }
 
     @Override
+    public List<SubcategoryDetail> getSubcategoryDetails(Long subcategoryId, List<VocabularySubcategoryRequestDto> vocabularies) {
+        List<SubcategoryDetailId> subcategoryDetailIds = vocabularies.stream()
+                .map(vocab -> new SubcategoryDetailId(vocab.getVocabId(), vocab.getDefId(), subcategoryId)).toList();
+        return subcategoryDetailIds.stream().map(id ->
+                        subcategoryDetailRepository.findById(id).orElseThrow(
+                                () -> new EntityNotFoundException("Vocabulary not found")
+                        ))
+                .toList();
+    }
+
+    @Override
     public List<VocabularySubcategoryResponseDto> getAllVocabularies(Long subcategoryId) {
         List<SubcategoryDetail> vocabularies = subcategoryDetailRepository.findAllBySubcategoryId(subcategoryId);
         return MapperUtils.toTargetList(subcategoryDetailMapper::toSubcategoryDetailResponseDto, vocabularies);
@@ -66,7 +80,8 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
     @Override
     @Transactional
-    public VocabDefId createCustomVocabulary(CustomVocabularyRequestDto newCustomVocab) {
+    public VocabDefId createCustomVocabulary(Long wordListId, CustomVocabularyRequestDto newCustomVocab) {
+        Subcategory subcategory = getOwnedSubcategory(wordListId, newCustomVocab.getSubcategoryId());
         Vocabulary newVocab = vocabularyRepository.save(Vocabulary.builder()
                 .word(newCustomVocab.getWord())
                 .pos(newCustomVocab.getPos())
@@ -89,7 +104,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
         subcategoryDetailRepository.save(SubcategoryDetail.builder()
                 .vocabId(newVocab.getVocabId())
                 .defId(newDef.getDefId())
-                .subcategoryId(newCustomVocab.getSubcategoryId())
+                .subcategoryId(subcategory.getSubcategoryId())
                 .isQuiz(false)
                 .isReview(false)
                 .isFlashcard(false)
@@ -100,12 +115,18 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
     @Override
     @Transactional
-    public void addVocabToSubcategory(Long subcategoryId,
+    public void addVocabToSubcategory(Long wordlistId, Long subcategoryId,
                                       VocabularySubcategoryRequestDto vocabularySubcategoryRequestDto) {
-        Subcategory subcategory = getOwnedSubcategory(subcategoryId);
+        Subcategory subcategory = getOwnedSubcategory(wordlistId, subcategoryId);
         VocabDef vocabDef = vocabDefRepository.findById(new VocabDefId(vocabularySubcategoryRequestDto.getVocabId(),
                         vocabularySubcategoryRequestDto.getDefId()))
                 .orElseThrow(() -> new RecordNotFoundException("Invalid vocabulary"));
+        if (subcategoryDetailRepository.findById(
+                new SubcategoryDetailId(vocabDef.getVocabId(),
+                        vocabDef.getDefId(),
+                        subcategoryId)).isPresent()) {
+            throw new DuplicateDataException("This vocabulary is existed");
+        }
         if (vocabDef.getVocabulary().getWordType() == WordType.CUSTOM
                 && subcategory.getSubcategoryType() == SubcategoryType.DEFAULT) {
             throw new IllegalArgumentException("CUSTOM vocabulary can not add to DEFAULT subcategory");
@@ -142,9 +163,9 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
     @Override
     @Transactional
-    public SubcategoryResponseDto updateSubcategory(Long subcategoryId, SubcategoryRequestDto subcategory) {
+    public SubcategoryResponseDto updateSubcategory(Long wordlistId, Long subcategoryId, SubcategoryRequestDto subcategory) {
         String title = subcategory.getTitle();
-        Subcategory oldSubcategory = getOwnedSubcategory(subcategoryId);
+        Subcategory oldSubcategory = getOwnedSubcategory(wordlistId, subcategoryId);
         if (subcategoryRepository.findByTitleAndWordList(title, oldSubcategory.getWordList()) != null
                 && !title.equals(oldSubcategory.getTitle())) {
             throw new DuplicateDataException("Duplicate title's subcategory");
@@ -155,19 +176,52 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
     @Override
     @Transactional
-    public void deleteSubcategory(Long subcategoryId) {
-        subcategoryRepository.delete(getOwnedSubcategory(subcategoryId));
+    public void deleteVocabulariesOfSubcategory(Long wordListId, Long subcategoryId, List<SubcategoryDetail> vocabularies) {
+        vocabularies.forEach(subDetail -> {
+            subcategoryDetailRepository.delete(subDetail);
+
+            Long vocabId = subDetail.getVocabId();
+            Vocabulary vocabulary = vocabularyRepository.findById(vocabId)
+                    .orElseThrow(() -> new EntityNotFoundException("Vocabulary not found with ID: " + vocabId));
+
+            if (vocabulary.getWordType() == WordType.CUSTOM) {
+                Long defId = subDetail.getDefId();
+                Definition definition = definitionRepository.findById(defId)
+                        .orElseThrow(() -> new EntityNotFoundException("Definition not found with ID: " + defId));
+
+                VocabDef vocabDef = vocabDefRepository.findById(new VocabDefId(vocabId, defId))
+                        .orElseThrow(() -> new EntityNotFoundException("Vocabulary not found"));
+
+                vocabDefRepository.delete(vocabDef);
+                vocabularyRepository.delete(vocabulary);
+                definitionRepository.delete(definition);
+            }
+        });
     }
 
     @Override
-    public Subcategory getOwnedSubcategory(Long subcategoryId) {
+    @Transactional
+    public void deleteSubcategories(Long wordlistId, List<Long> subcategoryIds) {
+        Map<Subcategory, List<SubcategoryDetail>> subcategoryDetailList = subcategoryIds.stream()
+                .map(id -> {
+                    Subcategory subcategory = getOwnedSubcategory(wordlistId, id);
+                    List<SubcategoryDetail> subcategoryDetails = subcategoryDetailRepository.findAllBySubcategoryId(id);
+                    return Map.entry(subcategory, subcategoryDetails);
+                })
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        subcategoryDetailList.forEach((subcategory, subcategoryDetails) -> {
+            deleteVocabulariesOfSubcategory(wordlistId, subcategory.getSubcategoryId(), subcategoryDetails);
+            subcategoryRepository.delete(subcategory);
+        });
+    }
+
+    @Override
+    public Subcategory getOwnedSubcategory(Long wordListId, Long subcategoryId) {
         User user = AuthenticationUtils.getUserFromSecurityContext();
-        Subcategory subcategory = subcategoryRepository.findById(subcategoryId)
+        WordList wordList = wordListRepository.findByUserAndWordListId(user, wordListId)
+                .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"));
+        return subcategoryRepository.findBySubcategoryIdAndWordList(subcategoryId, wordList)
                 .orElseThrow(() -> new EntityNotFoundException("Subcategory not found with ID:" + subcategoryId));
-        if (wordListRepository.findByUserAndWordListId(user, subcategory.getWordList().getWordListId()).isEmpty()) {
-            throw new AccessDeniedException("You do not have permission to access this WordList");
-        }
-        return subcategory;
     }
 
 }
