@@ -6,7 +6,12 @@ import { Entypo } from "@expo/vector-icons";
 import { Swipeable } from "react-native-gesture-handler";
 import { Fontisto } from "@expo/vector-icons";
 import Modal from "react-native-modal";
+<<<<<<< HEAD
 import { useNavigation } from "@react-navigation/native";
+=======
+import { useFonts } from "expo-font";
+import { configFont } from "~/constants/theme";
+>>>>>>> 90e5c29 (v1)
 export default function ItemWordList({ wordlist, onDelete }) {
   const [title, setTitle] = useState(wordlist.item.title);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -48,6 +53,10 @@ export default function ItemWordList({ wordlist, onDelete }) {
     });
     iconRef.current.setNativeProps({ style: { display: "block" } });
   };
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
   return (
     <TouchableOpacity style={Styles.container} onPress={handleDetailWordList}>
       <View>
@@ -66,7 +75,7 @@ export default function ItemWordList({ wordlist, onDelete }) {
               >
                 <Text
                   style={[
-                    tw`ml-5 tracking-wider text-sm  italic pt-3 pb-3`,
+                    tw`ml-5 tracking-wider text-sm pt-3 pb-3`,
                     { color: "#182B40" },
                   ]}
                 >
@@ -104,20 +113,31 @@ export default function ItemWordList({ wordlist, onDelete }) {
         <View style={[tw`bg-gray-100`, Styles.wrappered]} ref={wrapRef}>
           <Image
             source={require("~/assets/wordlist.png")}
-            style={Styles.Image}
+            style={[tw`bg-gray-100`, Styles.Image]}
           ></Image>
           <View style={Styles.Text_content}>
             <Text
               numberOfLines={1}
-              style={[tw`tracking-wider text-lg italic`, { color: "#182B40" }]}
+              style={[
+                tw`text-lg`,
+                {
+                  color: "#182B40",
+                  fontFamily: "Quicksand-SemiBold",
+                  letterSpacing: 0.2,
+                },
+              ]}
             >
               {title}
             </Text>
 
             <Text
               style={[
-                tw`tracking-wider text-base italic`,
-                { color: "#182B40" },
+                tw`text-base`,
+                {
+                  color: "#182B40",
+                  fontFamily: "Quicksand-Medium",
+                  letterSpacing: 0.2,
+                },
               ]}
             >
               1 sub-list

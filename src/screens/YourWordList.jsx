@@ -15,7 +15,8 @@ import { checkLogin } from "~/helper/Auth";
 import { deleteWordLists, getWordListById } from "~/api/WordList";
 import ItemWordList from "~/components/YourWordList/ItemWordList/ItemWordList";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-
+import { useFonts } from "expo-font";
+import { colors, configFont } from "~/constants/theme";
 export default function YourWordList() {
   const [wordLists, setWordLists] = useState([]);
   const [isLogin, setIsLogin] = useState(false);
@@ -55,7 +56,10 @@ export default function YourWordList() {
       setWordLists([...wordLists, data.params]);
     }
   }, [data.params]);
-
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -63,7 +67,7 @@ export default function YourWordList() {
           <Entypo
             name="chevron-left"
             size={24}
-            color="#182B40"
+            color={colors.textTitle}
             onPress={() => {
               navigation.push("HomeScreen");
             }}
@@ -72,16 +76,20 @@ export default function YourWordList() {
         <View style={{ marginLeft: 40 }}>
           <Text
             style={[
-              tw`pl-2 mt-1 font-bold  tracking-wider text-3xl italic`,
-              { color: "#182B40" },
+              tw`pl-2`,
+              {
+                color: colors.textTitle,
+                fontFamily: "Quicksand-Bold",
+                fontSize: 35,
+              },
             ]}
           >
             Your Wordlist
           </Text>
           <Text
             style={[
-              tw`pl-2 mt-2  tracking-wider text-lg `,
-              { color: "#182B40" },
+              tw`pl-2 text-lg `,
+              { color: colors.textTitle, fontFamily: "Quicksand-Medium" },
             ]}
           >
             {wordLists.length} Wordlist

@@ -20,6 +20,7 @@ export default function NavigationAuth() {
                 name="SignUp"
                 component={SignUpScreen}
                 options={{ headerShown: false }}
+
             />
 
 

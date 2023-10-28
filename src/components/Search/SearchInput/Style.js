@@ -9,10 +9,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     alignItems: 'center'
-
   },
   field: {
-
     paddingLeft: spacing.xl + spacing.s,
     paddingRight: spacing.m,
     borderRadius: sizes.radius,

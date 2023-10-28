@@ -12,6 +12,8 @@ import { Styles } from "./Styles";
 import { AntDesign } from "@expo/vector-icons";
 import ItemWordList from "../ItemWordList/ItemWordList";
 import { getDefault } from "~/api/WordList";
+import { useFonts } from "expo-font";
+import { configFont, colors } from "~/constants/theme";
 export default function WordListDefault() {
   const [defaultList, setDefaultList] = useState([]);
   useEffect(() => {
@@ -21,6 +23,10 @@ export default function WordListDefault() {
     };
     getDefaultWordList();
   }, []);
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
   return (
     <LinearGradient
       colors={["#fff", "rgb(241 245 249)"]}
@@ -33,7 +39,13 @@ export default function WordListDefault() {
           marginBottom: 15,
         }}
       >
-        <Text style={[tw`text-slate-600 tracking-wider text-lg italic`]}>
+        <Text
+          style={{
+            fontFamily: "Quicksand-SemiBold",
+            fontSize: 17,
+            color: colors.textTitle,
+          }}
+        >
           Default Wordlist
         </Text>
         <TouchableOpacity style={Styles.header}>

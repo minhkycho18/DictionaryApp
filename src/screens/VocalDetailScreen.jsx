@@ -8,17 +8,10 @@ import ItemVocalMain from "~/components/VocalDetail/ItemVocalMain/ItemVocalMain"
 import { GetColor } from "~/helper";
 function VocalDetail() {
   const {
-    params: { word },
+    params: { vocals },
   } = useRoute();
-  const [vocal, setVocal] = useState([]);
+  const [vocal, setVocal] = useState(vocals);
 
-  useEffect(() => {
-    const getVocal = async (query) => {
-      const data = await getDetailVocal(query);
-      setVocal(data);
-    };
-    getVocal(word);
-  }, []);
   let count = 0;
   const items = vocal.map((item) => {
     const colorPos = GetColor(item.pos);
@@ -45,7 +38,7 @@ function VocalDetail() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HeaderVocalDetail vocal={word} />
+      <HeaderVocalDetail vocal={vocal[0]?.word} />
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         {items}
       </ScrollView>

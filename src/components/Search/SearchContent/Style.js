@@ -4,21 +4,22 @@ export const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 20,
         left: '10%',
+
     },
     searchResult: {
         position: 'absolute',
         bottom: 100,
         left: 75,
+        // backgroundColor: '#fff'
 
     },
     image: {
         width: 180,
         height: 180,
-        tintColor: '#6b7280'
 
     },
     Text: {
-        fontSize: 20,
+        fontSize: 21,
         color: '#6b7280'
     },
     historySearch: {

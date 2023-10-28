@@ -14,3 +14,24 @@ export const UpperText = text => {
 export const delay = (delayInms) => {
   return new Promise((resolve) => setTimeout(resolve, delayInms));
 };
+export const convertData = (data) => {
+  let key = 0;
+  const result = data.map((item) => {
+    if (item.definitions.length > 0) {
+      return item.definitions.map((i) => {
+        key += 1;
+        return {
+          key: key,
+          id: item.id,
+          word: item.word,
+          pos: item.pos,
+          defId: i.defId,
+          wordDesc: i.wordDesc,
+          isWordOfUserWordlist: i.isWordOfUserWordlist
+        }
+      });
+    }
+  });
+  return result.reduce((acc, subArray) => acc.concat(subArray), []);
+
+}

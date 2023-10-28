@@ -22,16 +22,16 @@ export const Styles = StyleSheet.create({
     },
     Image: {
         width: 70,
-        height: 70
+        height: 70,
+        borderRadius: 40
     },
     Text_content: {
         marginLeft: 20,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
         width: "62%",
-        height: "80%",
-        justifyContent: 'flex-start',
+        height: "90%",
     },
     Icon: {
 

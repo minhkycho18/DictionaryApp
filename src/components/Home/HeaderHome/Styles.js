@@ -13,5 +13,10 @@ export const Styles = StyleSheet.create({
         width: 50,
         height: 50,
         marginLeft: 20
+    },
+    headerText: {
+        fontSize: 25,
+        color: "#fff",
+        fontWeight: "700"
     }
 });

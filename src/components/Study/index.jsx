@@ -14,7 +14,8 @@ import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
 import ItemSub from "./ItemSub/ItemSub";
 import { getAllSubCategory } from "~/api/Subcategory";
-
+import { useFonts } from "expo-font";
+import { configFont } from "~/constants/theme";
 export default function Index() {
   const navigation = useNavigation();
   const [subs, setSubs] = useState([]);
@@ -29,6 +30,11 @@ export default function Index() {
     };
     getAllSub("1");
   }, []);
+
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
   return (
     <SafeAreaView style={Styles.container}>
       <TouchableOpacity
@@ -37,7 +43,7 @@ export default function Index() {
           navigation.goBack();
         }}
       >
-        <Ionicons name="close" size={30} color={colors.icon} />
+        <Ionicons name="close" size={30} color={colors.textTitle} />
       </TouchableOpacity>
       <View style={Styles.content}>
         <View style={Styles.viewImage}>
@@ -51,10 +57,12 @@ export default function Index() {
         <View>
           <Text
             style={[
-              tw`mt-2 tracking-wider text-lg italic`,
+              tw`mt-2`,
               {
                 textAlign: "center",
-                color: colors.textColor,
+                color: colors.textTitle,
+                fontFamily: "Quicksand-SemiBold",
+                fontSize: 20,
               },
             ]}
           >

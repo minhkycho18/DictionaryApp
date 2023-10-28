@@ -95,7 +95,7 @@ export default function BottomTab() {
               }).start();
             }
           })} />
-        <Tab.Screen name="Profile" component={index} options={{ ...styles.tabScreenStyle }}
+        <Tab.Screen name="Profile" component={Profile} options={{ ...styles.tabScreenStyle }}
           listeners={({ navigation, route }) => ({
             tabPress: e => {
               Animated.spring(tabOffsetValue, {

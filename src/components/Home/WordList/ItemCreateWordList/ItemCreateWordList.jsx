@@ -4,8 +4,13 @@ import tw from "twrnc";
 import { Styles } from "./Styles";
 import { colors } from "~/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
-
+import { useFonts } from "expo-font";
+import { configFont } from "~/constants/theme";
 export default function ItemCreateWordList({ onPress }) {
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
   return (
     <View>
       <TouchableOpacity onPress={onPress} style={Styles.container}>
@@ -14,10 +19,12 @@ export default function ItemCreateWordList({ onPress }) {
         </View>
         <Text
           style={[
-            tw`text-white mt-2 tracking-wider text-sm italic`,
+            tw`mt-2 `,
             {
-              textAlign: "center",
+              fontFamily: "Quicksand-SemiBold",
               color: colors.textColor,
+              textAlign: "center",
+              fontSize: 15,
             },
           ]}
         >

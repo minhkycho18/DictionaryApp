@@ -2,15 +2,16 @@ import React, { useState, useRef } from "react";
 import { TextInput, View } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { styles } from "./Style";
 const SearchInput = ({ onChange, onBackPress }) => {
   const [search, setSearch] = useState("");
   const [clear, setClear] = useState(false);
-  const clickClear = useRef();
+  const input = useRef();
   const handleClear = () => {
     setSearch("");
     setClear(false);
-    clickClear.current.focus();
+    input.current.focus();
   };
   const handleTextChange = (text) => {
     setSearch(text);
@@ -37,13 +38,13 @@ const SearchInput = ({ onChange, onBackPress }) => {
           value={search}
           onChangeText={handleTextChange}
           autoFocus={true}
-          ref={clickClear}
+          ref={input}
         />
         {clear && (
           <View style={styles.iconClear}>
-            <EvilIcons
-              name="close"
-              size={30}
+            <AntDesign
+              name="closecircleo"
+              size={24}
               color="#6b7280"
               onPress={handleClear}
             />

@@ -9,11 +9,11 @@ export const styles = StyleSheet.create({
       alignItems: 'center',
       borderBottomColor: '#F1F1F1',
       borderBottomWidth: 3,
-      paddingBottom :10,
-      paddingTop :10,
-      borderBottomRightRadius :10,
-      borderBottomLeftRadius :10
-      
+      paddingBottom: 10,
+      paddingTop: 10,
+      borderBottomRightRadius: 10,
+      borderBottomLeftRadius: 10
+
    },
    imageVocal: {
       width: 75,
@@ -32,38 +32,38 @@ export const styles = StyleSheet.create({
    },
    content_top: {
       width: '100%',
-      height: 24,
+      height: 29,
       display: 'flex',
       flexDirection: 'row',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      alignItems: 'center',
    },
    content_top_Vocal: {
-      fontSize: 19,
+      fontSize: 20,
       color: colors.textColor,
-      letterSpacing :0.5,
-      
-      
+      letterSpacing: 0.2,
+
+
    },
    content_top_Type: {
       fontSize: 14,
-      
+
       height: 20,
       borderRadius: 10,
       color: 'white',
       paddingLeft: 10,
       paddingRight: 10,
-      letterSpacing :0.5,
-       
+      letterSpacing: 0.5,
+
    },
    content_bottom: {
       width: '100%',
       height: 'auto',
-      paddingTop :6
    },
    content_bottom_Mean: {
       color: colors.textColor,
-      letterSpacing :0.5,
-      fontSize: 15,
+      letterSpacing: 0.1,
+      fontSize: 16,
       lineHeight: 24
    }
 
