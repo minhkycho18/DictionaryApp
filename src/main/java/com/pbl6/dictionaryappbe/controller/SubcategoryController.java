@@ -46,7 +46,7 @@ public class SubcategoryController {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))}),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @GetMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}")
-    public List<VocabularySubcategoryResponseDto> getAllVocabulary(@PathVariable Long subcategoryId) {
+    public List<VocabularySubcategoryResponseDto> getAllVocabulary(@PathVariable Long subcategoryId, @PathVariable String wordListId) {
         return subcategoryService.getAllVocabularies(subcategoryId);
     }
 
@@ -67,8 +67,9 @@ public class SubcategoryController {
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @PostMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}")
     public String addVocabularyToSubcategory(@PathVariable Long subcategoryId,
-                                             @Valid @RequestBody VocabularySubcategoryRequestDto vocabSub) {
-        subcategoryService.addVocabToSubcategory(subcategoryId, vocabSub);
+                                             @Valid @RequestBody VocabularySubcategoryRequestDto vocabSub,
+                                             @PathVariable Long wordListId) {
+        subcategoryService.addVocabToSubcategory(wordListId, subcategoryId, vocabSub);
         return "Add successfully";
     }
 
@@ -95,7 +96,7 @@ public class SubcategoryController {
                                              @PathVariable String subcategoryId,
                                              @Valid @RequestBody CustomVocabularyRequestDto customVocab) {
         customVocab.setSubcategoryId(Long.valueOf(subcategoryId));
-        return subcategoryService.createCustomVocabulary(customVocab);
+        return subcategoryService.createCustomVocabulary(wordListId, customVocab);
     }
 
     @Operation(summary = "Edit a subcategory", security = {@SecurityRequirement(name = "bearer-key")})
@@ -106,8 +107,21 @@ public class SubcategoryController {
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @PutMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}")
     public SubcategoryResponseDto updateSubcategory(@PathVariable Long subcategoryId,
-                                                    @RequestBody @Valid @NotNull SubcategoryRequestDto subcategory) {
-        return subcategoryService.updateSubcategory(subcategoryId, subcategory);
+                                                    @RequestBody @Valid @NotNull SubcategoryRequestDto subcategory, @PathVariable Long wordListId) {
+        return subcategoryService.updateSubcategory(wordListId, subcategoryId, subcategory);
+    }
+
+    @Operation(summary = "Delete vocabularies in subcategory", security = {@SecurityRequirement(name = "bearer-key")})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Delete successfully",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),
+            @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
+    @DeleteMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}")
+    public String deleteVocabulariesOfSubcategory(@PathVariable Long wordListId,
+                                                  @RequestBody List<VocabularySubcategoryRequestDto> vocabularies,
+                                                  @PathVariable Long subcategoryId) {
+        subcategoryService.deleteVocabulariesOfSubcategory(wordListId, subcategoryId, subcategoryService.getSubcategoryDetails(subcategoryId, vocabularies));
+        return "Delete successfully";
     }
 
     @Operation(summary = "Delete a subcategory", security = {@SecurityRequirement(name = "bearer-key")})
@@ -115,9 +129,9 @@ public class SubcategoryController {
             @ApiResponse(responseCode = "200", description = "Delete successfully",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
-    @DeleteMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}")
-    public String deleteSubcategory(@PathVariable Long subcategoryId) {
-        subcategoryService.deleteSubcategory(subcategoryId);
+    @DeleteMapping("/wordlists/{wordListId}/subcategories")
+    public String deleteSubcategory(@RequestBody List<Long> subcategoryIds, @PathVariable Long wordListId) {
+        subcategoryService.deleteSubcategories(wordListId, subcategoryIds);
         return "Delete successfully";
     }
 

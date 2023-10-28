@@ -6,6 +6,7 @@ import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
+import com.pbl6.dictionaryappbe.persistence.subcategory_detail.SubcategoryDetail;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDefId;
 
 import java.util.List;
@@ -14,17 +15,22 @@ public interface SubcategoryService {
 
     List<SubcategoryResponseDto> getAllSubcategories(Long wordListId);
 
+    List<SubcategoryDetail> getSubcategoryDetails(Long subcategories, List<VocabularySubcategoryRequestDto> vocabularies);
+
     List<VocabularySubcategoryResponseDto> getAllVocabularies(Long subcategoryId);
 
-    VocabDefId createCustomVocabulary(CustomVocabularyRequestDto customVocabularyRequestDto);
+    void addVocabToSubcategory(Long wordlistId, Long subcategoryId, VocabularySubcategoryRequestDto vocabularySubcategoryRequestDto);
+
+    VocabDefId createCustomVocabulary(Long wordListId, CustomVocabularyRequestDto customVocabularyRequestDto);
 
     SubcategoryResponseDto createSubcategory(Long wordListId, SubcategoryRequestDto subcategory);
 
-    SubcategoryResponseDto updateSubcategory(Long subcategoryId, SubcategoryRequestDto subcategory);
+    SubcategoryResponseDto updateSubcategory(Long wordlistId, Long subcategoryId, SubcategoryRequestDto subcategory);
 
-    void deleteSubcategory(Long subcategoryId);
+    void deleteVocabulariesOfSubcategory(Long wordListId, Long subcategoryId, List<SubcategoryDetail> vocabularies);
 
-    Subcategory getOwnedSubcategory(Long subcategoryId);
+    void deleteSubcategories(Long wordlistId, List<Long> subcategoryId);
 
-    void addVocabToSubcategory(Long subcategoryId, VocabularySubcategoryRequestDto vocabularySubcategoryRequestDto);
+    Subcategory getOwnedSubcategory(Long wordListId, Long subcategoryId);
+
 }
