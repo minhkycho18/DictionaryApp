@@ -30,7 +30,10 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -63,13 +66,9 @@ public class SubcategoryServiceImpl implements SubcategoryService {
         List<SubcategoryDetailId> subcategoryDetailIds = vocabularies.stream()
                 .map(vocab -> new SubcategoryDetailId(vocab.getVocabId(), vocab.getDefId(), subcategoryId)).toList();
         return subcategoryDetailIds.stream().map(id ->
-                {
-                    Optional<SubcategoryDetail> subcategoryDetail = subcategoryDetailRepository.findById(id);
-                    if (subcategoryDetail.isEmpty()) {
-                        throw new EntityNotFoundException("Vocabulary not found");
-                    }
-                    return subcategoryDetail.get();
-                })
+                        subcategoryDetailRepository.findById(id).orElseThrow(
+                                () -> new EntityNotFoundException("Vocabulary not found")
+                        ))
                 .toList();
     }
 
@@ -176,16 +175,24 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     }
 
     @Override
+    @Transactional
     public void deleteVocabulariesOfSubcategory(Long wordListId, Long subcategoryId, List<SubcategoryDetail> vocabularies) {
         vocabularies.forEach(subDetail -> {
             subcategoryDetailRepository.delete(subDetail);
-            Vocabulary vocabulary = vocabularyRepository.findById(subDetail.getVocabId()).orElseThrow(
-                    () -> new EntityNotFoundException("Vocabulary not found with ID:" + subDetail.getVocabId()));
+
+            Long vocabId = subDetail.getVocabId();
+            Vocabulary vocabulary = vocabularyRepository.findById(vocabId)
+                    .orElseThrow(() -> new EntityNotFoundException("Vocabulary not found with ID: " + vocabId));
+
             if (vocabulary.getWordType() == WordType.CUSTOM) {
-                Definition definition = definitionRepository.findById(subDetail.getDefId()).orElseThrow(
-                        () -> new EntityNotFoundException("Definition not found with ID:" + subDetail.getVocabId()));
-                VocabDef vocabdef = vocabDefRepository.findById(new VocabDefId(subDetail.getVocabId(), subDetail.getDefId())).orElseThrow();
-                vocabDefRepository.delete(vocabdef);
+                Long defId = subDetail.getDefId();
+                Definition definition = definitionRepository.findById(defId)
+                        .orElseThrow(() -> new EntityNotFoundException("Definition not found with ID: " + defId));
+
+                VocabDef vocabDef = vocabDefRepository.findById(new VocabDefId(vocabId, defId))
+                        .orElseThrow(() -> new EntityNotFoundException("Vocabulary not found"));
+
+                vocabDefRepository.delete(vocabDef);
                 vocabularyRepository.delete(vocabulary);
                 definitionRepository.delete(definition);
             }
@@ -195,16 +202,13 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     @Override
     @Transactional
     public void deleteSubcategories(Long wordlistId, List<Long> subcategoryIds) {
-        Map<Subcategory, List<SubcategoryDetail>> subcategoryDetailList = new HashMap<>();
-        subcategoryIds.forEach(id -> {
-            try {
-                Subcategory subcategory = getOwnedSubcategory(wordlistId, id);
-                List<SubcategoryDetail> subcategoryDetails = subcategoryDetailRepository.findAllBySubcategoryId(id);
-                subcategoryDetailList.put(subcategory, subcategoryDetails);
-            } catch (AccessDeniedException | EntityNotFoundException e) {
-                System.out.println(e.getMessage());
-            }
-        });
+        Map<Subcategory, List<SubcategoryDetail>> subcategoryDetailList = subcategoryIds.stream()
+                .map(id -> {
+                    Subcategory subcategory = getOwnedSubcategory(wordlistId, id);
+                    List<SubcategoryDetail> subcategoryDetails = subcategoryDetailRepository.findAllBySubcategoryId(id);
+                    return Map.entry(subcategory, subcategoryDetails);
+                })
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         subcategoryDetailList.forEach((subcategory, subcategoryDetails) -> {
             deleteVocabulariesOfSubcategory(wordlistId, subcategory.getSubcategoryId(), subcategoryDetails);
             subcategoryRepository.delete(subcategory);
