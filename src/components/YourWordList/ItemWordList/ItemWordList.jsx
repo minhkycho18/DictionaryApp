@@ -6,13 +6,16 @@ import { Entypo } from "@expo/vector-icons";
 import { Swipeable } from "react-native-gesture-handler";
 import { Fontisto } from "@expo/vector-icons";
 import Modal from "react-native-modal";
+import { useNavigation } from "@react-navigation/native";
 export default function ItemWordList({ wordlist, onDelete }) {
   const [title, setTitle] = useState(wordlist.item.title);
   const [isModalVisible, setModalVisible] = useState(false);
   const wrapRef = useRef();
   const iconRef = useRef();
-  const handleDetailWordList = () => {
-    console.log("Detail");
+  const navigation = useNavigation();
+  const handleDetailWordList = async () => {
+    navigation.push("YourWordlistDetail");
+    console.log("test: ","click item");
   };
 
   const handleDelete = (id) => {
