@@ -133,7 +133,7 @@ function WordListsPage() {
           >
             <Radio.Group>
               <Radio value="CUSTOM">Custom</Radio>
-              <Radio value="PUBLIC">Public</Radio>
+              <Radio value="DEFAULT">Default</Radio>
             </Radio.Group>
           </Form.Item>
         </Form>
