@@ -6,7 +6,6 @@ import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.persistence.subcategory.SubcategoryType;
-import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDefId;
 import com.pbl6.dictionaryappbe.service.SubcategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -62,15 +61,14 @@ public class SubcategoryController {
     @Operation(summary = "Add vocabulary to subcategory", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Add data successfully",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VocabularySubcategoryResponseDto.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid data"),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @PostMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}")
-    public String addVocabularyToSubcategory(@PathVariable Long subcategoryId,
-                                             @Valid @RequestBody VocabularySubcategoryRequestDto vocabSub,
-                                             @PathVariable Long wordListId) {
-        subcategoryService.addVocabToSubcategory(wordListId, subcategoryId, vocabSub);
-        return "Add successfully";
+    public VocabularySubcategoryResponseDto addVocabularyToSubcategory(@PathVariable Long subcategoryId,
+                                                                       @Valid @RequestBody VocabularySubcategoryRequestDto vocabSub,
+                                                                       @PathVariable Long wordListId) {
+        return subcategoryService.addVocabToSubcategory(wordListId, subcategoryId, vocabSub);
     }
 
     @Operation(summary = "Create a new subcategory", security = {@SecurityRequirement(name = "bearer-key")})
@@ -92,9 +90,9 @@ public class SubcategoryController {
             @ApiResponse(responseCode = "400", description = "Invalid data"),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @PostMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}/custom")
-    public VocabDefId createCustomVocabulary(@PathVariable Long wordListId,
-                                             @PathVariable String subcategoryId,
-                                             @Valid @RequestBody CustomVocabularyRequestDto customVocab) {
+    public VocabularySubcategoryResponseDto createCustomVocabulary(@PathVariable Long wordListId,
+                                                                   @PathVariable String subcategoryId,
+                                                                   @Valid @RequestBody CustomVocabularyRequestDto customVocab) {
         customVocab.setSubcategoryId(Long.valueOf(subcategoryId));
         return subcategoryService.createCustomVocabulary(wordListId, customVocab);
     }
