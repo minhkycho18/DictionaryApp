@@ -40,7 +40,6 @@ export const styles = StyleSheet.create({
   },
   phoneticType: {
     fontSize: 18,
-    fontStyle: 'italic',
   },
 
 });

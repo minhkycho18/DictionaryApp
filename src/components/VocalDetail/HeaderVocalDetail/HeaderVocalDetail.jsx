@@ -5,8 +5,14 @@ import { styles } from "./Style";
 import { useNavigation } from "@react-navigation/native";
 import { UpperText } from "~/helper";
 import tw from "twrnc";
+import { useFonts } from "expo-font";
+import { configFont } from "~/constants/theme";
 const HeaderVocalDetail = ({ vocal }) => {
   const navigation = useNavigation();
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
   return (
     <View style={styles.headerSearch}>
       <TouchableOpacity style={{ marginRight: 10 }}>
@@ -20,7 +26,9 @@ const HeaderVocalDetail = ({ vocal }) => {
         />
       </TouchableOpacity>
       <View style={styles.viewText}>
-        <Text style={tw`text-white font-bold tracking-wider text-2xl italic`}>
+        <Text
+          style={{ fontFamily: "Quicksand-Bold", fontSize: 30, color: "#fff" }}
+        >
           {UpperText(vocal)}
         </Text>
       </View>

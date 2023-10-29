@@ -5,19 +5,35 @@ import { Entypo } from "@expo/vector-icons";
 import { colors } from "~/constants/theme";
 import tw from "twrnc";
 import { Feather } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
+import { configFont } from "~/constants/theme";
 export default function ItemSub({ Sub, onPress }) {
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
   return (
     <TouchableOpacity style={Styles.container} onPress={() => onPress()}>
       <View style={Styles.wrapper}>
         <View style={Styles.viewText}>
-          <Text style={[tw`tracking-wider text-lg  text-slate-900`, {}]}>
+          <Text
+            style={[
+              tw`text-lg`,
+              {
+                fontFamily: "Quicksand-SemiBold",
+                color: "#182B40",
+                letterSpacing: 0.2,
+              },
+            ]}
+          >
             {Sub.title}
           </Text>
           <Text
             style={[
-              tw`tracking-wider text-base `,
+              tw`text-base `,
               {
                 color: colors.textColor,
+                fontFamily: "Quicksand-Medium",
               },
             ]}
           >

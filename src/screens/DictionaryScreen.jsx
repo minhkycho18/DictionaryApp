@@ -7,7 +7,7 @@ import SearchAnimated from "~/components/Search/SearchAnimated/SearchAnimated";
 import SearchResult from "~/components/Search/SearchResult/SearchResult";
 import { getVocalByKeyWord } from "~/api/Dictionary";
 import { getSearchHistory, removeHistory } from "~/helper/asyncStorage";
-
+import { useNavigation } from "@react-navigation/native";
 const Dictionary = () => {
   const scrollY = new Animated.Value(0);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
@@ -16,6 +16,7 @@ const Dictionary = () => {
   const [vocals, setVocals] = useState();
   const [history, setHistory] = useState([]);
   const opacity = new Animated.Value(1);
+  const { navigate } = useNavigation();
   const getData = async () => {
     const his = await getSearchHistory();
     setHistory(his);
@@ -38,6 +39,10 @@ const Dictionary = () => {
     setIsHeaderVisible(true);
     setVocals([]), setIsFound(true);
     getData();
+  };
+  const handlePressItem = (text) => {
+    const newArr = vocals.filter((item) => item.word === text);
+    navigate("VocalDetail", { vocals: newArr });
   };
   const handleRemove = async (index) => {
     await removeHistory(index);
@@ -81,7 +86,15 @@ const Dictionary = () => {
         </View>
       )}
       {isHeaderVisible && (
-        <View style={{ height: "60%", width: "100%", position: "relative" }}>
+        <View
+          style={{
+            height: "60%",
+            width: "100%",
+            position: "relative",
+            // backgroundColor: "#fff",
+            zIndex: -1,
+          }}
+        >
           <SearchContent history={history} onRemove={handleRemove} />
         </View>
       )}
@@ -98,7 +111,9 @@ const Dictionary = () => {
             showsVerticalScrollIndicator={false}
             keyExtractor={(item) => item.id}
             data={vocals}
-            renderItem={(item) => <SearchResult vocal={item} />}
+            renderItem={(item) => (
+              <SearchResult vocal={item} onPressItem={handlePressItem} />
+            )}
           />
         ) : (
           <Text
@@ -119,7 +134,6 @@ styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 20,
-    backgroundColor: "#fff",
   },
 });
 export default Dictionary;

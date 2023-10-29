@@ -13,10 +13,15 @@ import Toast, { ErrorToast } from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
 import { delay } from "~/helper";
 import { LinearGradient } from "expo-linear-gradient";
+import { colors } from "~/constants/theme";
+import { configFont } from "~/constants/theme";
+import { useFonts } from "expo-font";
+import { Entypo } from "@expo/vector-icons";
 export default function MyWordList() {
   const [wordLists, setWordLists] = useState([]);
   const [isLogin, setIsLogin] = useState(false);
   const navigation = useNavigation();
+
   const getMyWordList = async () => {
     const data = await getWordListById();
     setWordLists(data);
@@ -57,6 +62,10 @@ export default function MyWordList() {
       />
     ),
   };
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
   const showToast = () => {
     Toast.show({
       position: "top",
@@ -72,19 +81,32 @@ export default function MyWordList() {
   return (
     <LinearGradient
       colors={["#fff", "rgb(241 245 249)"]}
-      style={tw`pt-1.5 pr-2 pl-2 pb-2  mt-5 bg-stone-50`}
+      style={tw`pt-1.5 pr-2 pl-2 pb-2   bg-stone-50`}
     >
       <View style={{ ...Styles.header, justifyContent: "space-between" }}>
-        <Text style={tw`text-slate-600 tracking-wider text-lg italic`}>
+        <Text
+          style={{
+            fontFamily: "Quicksand-SemiBold",
+            fontSize: 18,
+            color: colors.textTitle,
+          }}
+        >
           Your Wordlist
         </Text>
         <TouchableOpacity style={Styles.header} onPress={handlePressSeeAll}>
-          <Text style={tw`text-base text-blue-600`}>See all</Text>
-          <AntDesign
-            name="right"
-            size={14}
+          <Text
+            style={[
+              tw`text-base text-blue-600`,
+              { fontFamily: "Quicksand-SemiBold" },
+            ]}
+          >
+            See all
+          </Text>
+          <Entypo
+            name="chevron-right"
+            size={20}
             color="rgb(37 99 235)"
-            style={{ marginLeft: 3 }}
+            style={{ marginTop: 3 }}
           />
         </TouchableOpacity>
       </View>

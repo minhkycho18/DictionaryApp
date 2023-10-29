@@ -6,7 +6,8 @@ import us from "~/assets/us-square.png";
 import { styles } from "./Style";
 import { UpperText } from "~/helper";
 import { Audio } from "expo-av";
-
+import { useFonts } from "expo-font";
+import { colors, configFont } from "~/constants/theme";
 const ItemVocalMain = ({ item, color }) => {
   const playSound = async (audio) => {
     const sound = new Audio.Sound();
@@ -15,12 +16,24 @@ const ItemVocalMain = ({ item, color }) => {
     });
     await sound.playAsync();
   };
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
   return (
     <View style={styles.container}>
       <View style={{ ...styles.wrappered, borderColor: color }}>
         <View style={styles.phonetic}>
           <View style={styles.phoneticWord}>
-            <Text style={{ fontSize: 24 }}>{UpperText(item.word)}</Text>
+            <Text
+              style={{
+                fontFamily: "Quicksand-SemiBold",
+                fontSize: 25,
+                color: colors.textTitle,
+              }}
+            >
+              {UpperText(item.word)}
+            </Text>
           </View>
           <View style={styles.soundIcon}>
             <Text style={{ ...styles.phoneticType, color: color }}>

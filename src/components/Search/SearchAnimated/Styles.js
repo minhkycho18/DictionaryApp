@@ -34,14 +34,14 @@ export const styles = StyleSheet.create({
         shadowRadius: 4.65,
 
         elevation: 7,
+        zIndex: 1000
     },
     title: {
 
-        marginTop: 10,
-        letterSpacing: 0.6,
+        marginTop: 2,
+        letterSpacing: 0.1,
         color: '#fff',
-        fontSize: 34,
-        fontWeight: 'bold',
+        fontSize: 40,
         alignItems: 'center'
     },
     boxContent: {

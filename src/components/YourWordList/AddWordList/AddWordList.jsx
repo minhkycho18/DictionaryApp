@@ -13,8 +13,9 @@ import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
 import Toast, { ErrorToast } from "react-native-toast-message";
 import { createNewWordLists } from "~/api/WordList";
-import { LinearGradient } from "expo-linear-gradient";
 import RadioGroup from "react-native-radio-buttons-group";
+import { useFonts } from "expo-font";
+import { configFont } from "~/constants/theme";
 const data = [
   {
     id: "1",
@@ -138,92 +139,110 @@ const AddWordList = () => {
     });
   };
 
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
+
   return (
     <SafeAreaView style={Styles.container}>
-      <LinearGradient
-        colors={["#fff", "rgb(241 245 249)", "rgb(248 250 252)"]}
-        style={{ flex: 1 }}
-      >
-        <View style={Styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons
-              name="arrow-back-sharp"
-              size={26}
-              color="white"
-              style={tw`ml-4`}
-            />
-          </TouchableOpacity>
-          <View style={tw`ml-6`}>
-            <Text style={tw`text-white font-bold  text-2xl italic`}>
-              Add Your Word List
-            </Text>
-          </View>
-          <TouchableOpacity
-            style={{ position: "absolute", right: 15 }}
-            onPress={handleCreate}
+      <View style={Styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons
+            name="arrow-back-sharp"
+            size={26}
+            color="white"
+            style={tw`ml-4`}
+          />
+        </TouchableOpacity>
+        <View style={tw`ml-6`}>
+          <Text
+            style={{
+              fontFamily: "Quicksand-Bold",
+              color: "#fff",
+              fontSize: 27,
+            }}
           >
-            <AntDesign name="check" size={26} color="white" style={tw`ml-4`} />
-          </TouchableOpacity>
+            Add Your Word List
+          </Text>
         </View>
-        <View style={{ marginTop: 40, margin: 20 }}>
-          <View style={Styles.inputContent}>
-            <View>
-              <Text style={Styles.formLabel} ref={titlelabel}>
-                Word List Title
-              </Text>
-              <TextInput
-                style={Styles.input}
-                placeholder="Write your title"
-                autoFocus={true}
-                ref={titleRef}
-                value={title}
-                onChangeText={(text) => {
-                  setTitle(text);
-                  titleRef.current.setNativeProps({
-                    style: Styles.remove_warning,
-                  });
-                }}
-                onFocus={handleTitleFocus}
-              />
-            </View>
-            <View>
-              <Text style={Styles.formLabel} ref={descLabel}>
-                Word List Description
-              </Text>
-              <TextInput
-                style={Styles.input}
-                placeholder="Write your description"
-                ref={descRef}
-                value={desc}
-                onChangeText={(text) => {
-                  setDesc(text);
-                  descRef.current.setNativeProps({
-                    style: Styles.remove_warning,
-                  });
-                }}
-                onFocus={handleDescFocus}
-              />
-            </View>
+        <TouchableOpacity
+          style={{ position: "absolute", right: 15 }}
+          onPress={handleCreate}
+        >
+          <AntDesign name="check" size={26} color="white" style={tw`ml-4`} />
+        </TouchableOpacity>
+      </View>
+      <View style={{ marginTop: 40, margin: 20 }}>
+        <View style={Styles.inputContent}>
+          <View>
+            <Text
+              style={{ ...Styles.formLabel, fontFamily: "Quicksand-SemiBold" }}
+              ref={titlelabel}
+            >
+              Word List Title
+            </Text>
+            <TextInput
+              style={{ ...Styles.input, fontFamily: "Quicksand-Regular" }}
+              placeholder="Write your title"
+              autoFocus={true}
+              ref={titleRef}
+              value={title}
+              onChangeText={(text) => {
+                setTitle(text);
+                titleRef.current.setNativeProps({
+                  style: Styles.remove_warning,
+                });
+              }}
+              onFocus={handleTitleFocus}
+            />
+          </View>
+          <View>
+            <Text
+              style={{
+                ...Styles.formLabel,
+                fontFamily: "Quicksand-SemiBold",
+              }}
+              ref={descLabel}
+            >
+              Word List Description
+            </Text>
+            <TextInput
+              style={{ ...Styles.input, fontFamily: "Quicksand-Regular" }}
+              placeholder="Write your description"
+              ref={descRef}
+              value={desc}
+              onChangeText={(text) => {
+                setDesc(text);
+                descRef.current.setNativeProps({
+                  style: Styles.remove_warning,
+                });
+              }}
+              onFocus={handleDescFocus}
+            />
+          </View>
 
-            <View>
-              <Text style={Styles.formLabel}>Word List Type</Text>
-              <RadioGroup
-                radioButtons={data}
-                onPress={setType}
-                selectedId={type}
-                containerStyle={Styles.radioGroup}
-                se
-              />
-            </View>
+          <View>
+            <Text
+              style={{ ...Styles.formLabel, fontFamily: "Quicksand-SemiBold" }}
+            >
+              Word List Type
+            </Text>
+            <RadioGroup
+              radioButtons={data}
+              onPress={setType}
+              selectedId={type}
+              containerStyle={Styles.radioGroup}
+            />
           </View>
         </View>
-        <Toast
-          config={toastConfig}
-          refs={(ref) => {
-            Toast.setRef(ref);
-          }}
-        />
-      </LinearGradient>
+      </View>
+      <Toast
+        config={toastConfig}
+        refs={(ref) => {
+          Toast.setRef(ref);
+        }}
+      />
     </SafeAreaView>
   );
 };

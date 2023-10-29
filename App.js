@@ -5,16 +5,22 @@ import NavigationAuth from '~/navigations/NavigationAuth';
 import { NavigationContainer } from '@react-navigation/native';
 import BottomTab from '~/navigations/bottomTab';
 import AddWordList from '~/components/YourWordList/AddWordList/AddWordList';
-
+import TopTabAddWordToSub from '~/navigations/TopTabAddWordToSub';
+import { useFonts } from "expo-font";
+import { colors, configFont } from "~/constants/theme";
 export default function App() {
   const Stack = createNativeStackNavigator();
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
   return (
     <AuthProvider>
 
       <NavigationContainer>
 
 
-        <Stack.Navigator options={{ headerShown: false }}>
+        <Stack.Navigator options={{ headerShown: false }} screenOptions={{ headerShadowVisible: false }}>
           <Stack.Screen
             name="BottomTab"
             options={{ headerShown: false }}
@@ -30,6 +36,23 @@ export default function App() {
             component={AddWordList}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="AddWordToSub"
+            component={TopTabAddWordToSub}
+            options={
+              {
+                title: "Select words",
+                headerTitleStyle: {
+                  color: colors.textTitle,
+                  fontSize: 26,
+                  fontFamily: 'Quicksand-Bold'
+                }
+
+              }
+            }
+
+
+          />
 
         </Stack.Navigator>
       </NavigationContainer>
@@ -38,5 +61,3 @@ export default function App() {
     // 
   );
 }
-
-

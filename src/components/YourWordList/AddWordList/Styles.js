@@ -6,6 +6,7 @@ export const Styles = StyleSheet.create({
         marginTop: 20,
         flexDirection: "column",
         position: 'relative',
+        backgroundColor: "#fff"
 
     },
     header: {
@@ -29,7 +30,16 @@ export const Styles = StyleSheet.create({
         backgroundColor: "#fff",
         display: 'flex',
         flexDirection: 'column',
-        borderRadius: 10
+        borderRadius: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
     },
 
     warning: {
@@ -41,7 +51,7 @@ export const Styles = StyleSheet.create({
     formLabel: {
         fontWeight: "500",
         fontSize: 16,
-        color: "#07074d",
+        color: colors.textTitle,
         marginBottom: 12,
     },
     input: {

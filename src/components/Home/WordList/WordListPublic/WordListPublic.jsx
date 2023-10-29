@@ -12,6 +12,9 @@ import { AntDesign } from "@expo/vector-icons";
 import ItemWordList from "../ItemWordList/ItemWordList";
 import { getPublic } from "~/api/WordList";
 import { LinearGradient } from "expo-linear-gradient";
+import { useFonts } from "expo-font";
+import { configFont, colors } from "~/constants/theme";
+import { Entypo } from "@expo/vector-icons";
 export default function WordListPublic() {
   const [defaultList, setDefaultList] = useState([]);
   useEffect(() => {
@@ -21,6 +24,11 @@ export default function WordListPublic() {
     };
     getPublicWordList();
   }, []);
+
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
   return (
     <LinearGradient
       colors={["#fff", "rgb(241 245 249)"]}
@@ -33,16 +41,29 @@ export default function WordListPublic() {
           marginBottom: 15,
         }}
       >
-        <Text style={[tw`text-slate-600 tracking-wider text-lg italic`]}>
+        <Text
+          style={{
+            fontFamily: "Quicksand-SemiBold",
+            fontSize: 18,
+            color: colors.textTitle,
+          }}
+        >
           Public Wordlist
         </Text>
         <TouchableOpacity style={Styles.header}>
-          <Text style={tw`text-base text-blue-600`}>See all</Text>
-          <AntDesign
-            name="right"
-            size={14}
+          <Text
+            style={[
+              tw`text-base text-blue-600`,
+              { fontFamily: "Quicksand-SemiBold" },
+            ]}
+          >
+            See all
+          </Text>
+          <Entypo
+            name="chevron-right"
+            size={20}
             color="rgb(37 99 235)"
-            style={{ marginLeft: 3 }}
+            style={{ marginTop: 3 }}
           />
         </TouchableOpacity>
       </View>

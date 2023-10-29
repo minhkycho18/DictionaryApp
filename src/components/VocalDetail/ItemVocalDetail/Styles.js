@@ -50,7 +50,6 @@ export const styles = StyleSheet.create({
         marginLeft: 15
     },
     definition: {
-        marginTop: 8,
         fontSize: 16,
         letterSpacing: 0.5,
         lineHeight: 27,
@@ -75,7 +74,7 @@ export const styles = StyleSheet.create({
     },
     synonym_main: {
         fontSize: 16,
-        letterSpacing: 0.6,
+        letterSpacing: 0.2,
         color: '#5E7172',
 
     },
@@ -99,14 +98,14 @@ export const styles = StyleSheet.create({
     },
     example: {
         fontSize: 16,
-        letterSpacing: 0.5,
+        letterSpacing: 0.2,
         lineHeight: 27,
         color: colors.textColor,
         marginLeft: 5
     },
     example_main: {
         fontSize: 16,
-        letterSpacing: 0.6,
+        letterSpacing: 0.2,
         color: '#5E7172',
     }
 })
