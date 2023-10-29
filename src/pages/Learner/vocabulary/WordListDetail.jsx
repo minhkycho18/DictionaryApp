@@ -20,24 +20,26 @@ const WordListDetail = (props) => {
     return () => {};
   }, [dispatch, query]);
   const renderSubcategory = subcategories.map((subcategory, index) => (
-    <Col span={subcategories.length > 1 ? 12 : 24} key={index}>
-      <Space
-        style={{ width: `${subcategories.length > 1 ? "100%" : "320px"} ` }}
-        className="wldetail__card"
-        direction="vertical"
-      >
+    <Col key={index} className="col-css">
+      <Space className="wldetail__card" direction="vertical">
         <Space>
           <Space className="wldetail__card-title">{subcategory?.title}</Space>
           <Space className="wldetail__card-options"></Space>
         </Space>
-        <Space style={{ paddingTop: 64 }}>
+        <Space
+          style={{
+            paddingTop: 64,
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
           <Space className="wldetail__card-addLeitner" direction="vertical">
             <Space className="wldetail__card-iconAdd">
               <InboxOutlined />
             </Space>
             to leitner
           </Space>
-          <Space className="wldetail__card-iconAdd"></Space>
+          <Space className="wldetail__card-iconLearn">Learn</Space>
         </Space>
       </Space>
     </Col>
@@ -71,9 +73,9 @@ const WordListDetail = (props) => {
           <EditOutlined />
         </Space>
       </Space>
-      <Space style={{ width: "100vw!important", marginTop: 64 }}>
-        <Row gutter={[16, 16]}>{renderSubcategory}</Row>
-      </Space>
+      <Row className="row-css" gutter={[32, 32]}>
+        {renderSubcategory}
+      </Row>
     </Space>
   );
 };

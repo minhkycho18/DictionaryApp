@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  addWordToSubcategory,
   createSubcategory,
   deleteSubcategory,
   getAllVocabInSubcategory,
@@ -91,17 +90,7 @@ const subcategorySlice = createSlice({
         state.error = action.payload.detail;
       })
       //=====================================================
-      .addCase(addWordToSubcategory.pending, (state, action) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(addWordToSubcategory.fulfilled, (state, action) => {
-        state.loading = false;
-      })
-      .addCase(addWordToSubcategory.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.detail;
-      })
+
       //=====================================================
 
       .addCase(getAllVocabInSubcategory.pending, (state, action) => {

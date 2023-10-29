@@ -13,19 +13,27 @@ const Dashboard = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  const breadcrumbs = path.map((item, index) => {
+  const breadcrumbs = path.slice(0, 3).map((item, index) => {
     const isFirst = index === 0;
     if (isFirst) {
       return {
-        title: <Link to={`/`}>{item?.title}</Link>,
+        title: <Link to={`/`}>Home</Link>,
       };
     } else {
       return {
-        title: <Link to={path[1].link}>{decodeURI(item?.title)}</Link>,
+        title: (
+          <Link
+            to={path[1].link}
+            className={
+              index === path.slice(0, 3).length - 1 ? "active-breadcrumb" : ""
+            }
+          >
+            {decodeURI(item?.title)}
+          </Link>
+        ),
       };
     }
   });
-
   return (
     <Layout style={{ position: "relative" }}>
       <CustomSider />

@@ -1,4 +1,4 @@
-import { Avatar, Col, Divider, Input, Row, Space, Spin } from "antd";
+import { Avatar, Col, Divider, Empty, Input, Row, Space, Spin } from "antd";
 import { Content } from "antd/es/layout/layout";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -89,6 +89,11 @@ const Dictionary = () => {
         <Space>
           <Row gutter={[32, 16]}>
             {result.length > 0 ? items : <Spin spinning={loading} />}
+            {result.length <= 0 && !loading && (
+              <Empty
+                description={<span className="notfound">Not Found</span>}
+              />
+            )}
           </Row>
         </Space>
       )}

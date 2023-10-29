@@ -4,22 +4,30 @@ import {
   InboxOutlined,
   PlusCircleFilled,
 } from "@ant-design/icons";
-import { Collapse, Modal, Space } from "antd";
-import React, { useState } from "react";
-import "./Meaning.scss";
+import { Collapse, Modal, Space, message } from "antd";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addWordToSubcategory,
-  getSubcategory,
-} from "../../stores/subcategory/subcategoryThunk";
-import { setVocabDetails } from "../../stores/search-word/searchSlice";
+import { addWordToSubcategory } from "../../stores/subcategory/subcategoryThunk";
+import SubChoice from "../Category/SubChoice/SubChoice";
+import "./Meaning.scss";
+import { setErrorAdd } from "../../stores/search-word/searchSlice";
 const Meaning = ({ detail }) => {
   const [isChoice, setIsChoice] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { wordLists } = useSelector((state) => state.wordLists);
-  const { subcategories } = useSelector((state) => state.subcategory);
+  const { errorAdd, loadingAdd } = useSelector((state) => state.search);
   const [wlAdded, setWlAdded] = useState();
   const dispatch = useDispatch();
+  const [messageApi, contextHolder] = message.useMessage();
+
+  useEffect(() => {
+    if (errorAdd) {
+      messageApi.error("This word has been added");
+    }
+    return () => {
+      dispatch(setErrorAdd());
+    };
+  }, [dispatch, errorAdd, loadingAdd, messageApi]);
 
   const handleOk = () => {
     setIsModalOpen(false);
@@ -37,7 +45,6 @@ const Meaning = ({ detail }) => {
   const addToWL = (value) => {
     const params = { ...value, vocabId: detail.id, defId: wlAdded };
     dispatch(addWordToSubcategory(params));
-    dispatch(setVocabDetails(detail.word));
     setIsModalOpen(false);
   };
 
@@ -49,11 +56,11 @@ const Meaning = ({ detail }) => {
       </div>
       {definition.synonyms.length > 0 && (
         <Space className="synonyms">
-          <span>Synonyms:</span>
+          <Space>Synonyms:</Space>
           {definition?.synonyms.map((synonym, index) => (
-            <span key={index} className="synonyms__word">
+            <Space key={index} className="synonyms__word">
               {synonym}
-            </span>
+            </Space>
           ))}
         </Space>
       )}
@@ -94,35 +101,24 @@ const Meaning = ({ detail }) => {
     }
   };
 
-  const renderItem = wordLists.map((wl, index) => ({
-    key: wl.id,
-    label: wl.title,
-    children: (
-      <Space direction="vertical" style={{ width: "100%" }}>
-        {subcategories.map((sub, index) => (
-          <Space
-            className="item__category"
-            key={sub.subcategoryId}
-            onClick={() =>
-              addToWL({ wordListId: wl.id, SubId: sub.subcategoryId })
-            }
-          >
-            <Space style={{ padding: "0px 16px" }}>{sub.title}</Space>
-          </Space>
-        ))}
-      </Space>
-    ),
-    style: {
-      marginBottom: 24,
-      borderBottom: "1px solid #eee",
-      fontWeight: 600,
-    },
-  }));
+  const renderItem =
+    wordLists &&
+    wordLists.map((wl, index) => ({
+      key: wl.id,
+      label: wl.title,
+      children: <SubChoice onAdd={addToWL} wlId={wl.id}></SubChoice>,
+      style: {
+        marginBottom: 24,
+        borderBottom: "1px solid #eee",
+        fontWeight: 600,
+      },
+    }));
   const handleChangeWL = (key) => {
-    dispatch(getSubcategory(key));
+    // dispatch(getSubcategory(key));
   };
   return (
     <Space className={`wrap-meaning border ${posClass()}`} direction="vertical">
+      {contextHolder}
       <Space style={{ width: "100%", justifyContent: "space-between" }}>
         <h1>{detail.word}</h1>
         <p style={{ fontSize: 20, fontWeight: 500 }}>[{detail.pos}]</p>

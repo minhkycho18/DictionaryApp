@@ -121,8 +121,8 @@ const MyWordLists = () => {
         </Form>
       </Modal>
       {!loading && (
-        <Row>
-          <Col span={wordLists.length < 3 ? 8 : 6}>
+        <Row gutter={[8, 8]}>
+          <Col>
             <Space
               className="
       MyWordLists__add"
@@ -134,7 +134,7 @@ const MyWordLists = () => {
 
           {wordLists &&
             wordLists.map((wordlist) => (
-              <Col span={wordLists.length < 3 ? 8 : 6} key={wordlist.id}>
+              <Col key={wordlist.id}>
                 <ListItem
                   wordlist={wordlist}
                   onSelect={handleSelectWordList}

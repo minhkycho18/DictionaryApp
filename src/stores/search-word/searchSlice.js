@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getSearchResult } from "./searchThunk";
+import { addWordToSubcategory } from "../subcategory/subcategoryThunk";
 
 const initialState = {
   keyword: "",
@@ -7,6 +8,9 @@ const initialState = {
   selectedMeaning: {},
   loading: false,
   error: null,
+  errorAdd: "",
+  loadingAdd: false,
+
   vocabDetails: [
     {
       id: 48279,
@@ -45,6 +49,9 @@ const searchSlice = createSlice({
         (item, index) => item.word === action.payload
       );
     },
+    setErrorAdd: (state, action) => {
+      state.errorAdd = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -59,24 +66,47 @@ const searchSlice = createSlice({
       .addCase(getSearchResult.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.detail;
+      })
+      //============================================================================
+      .addCase(addWordToSubcategory.pending, (state, action) => {
+        state.loadingAdd = true;
+        state.errorAdd = null;
+      })
+      .addCase(addWordToSubcategory.fulfilled, (state, action) => {
+        state.loadingAdd = false;
+        const newDate = action.payload;
+        function updateDefinition(definition) {
+          if (definition.defId === newDate.definition.defId) {
+            return {
+              ...definition,
+              isWordOfUserWordlist: true,
+            };
+          }
+          return definition;
+        }
+        const updatedSubcategories = state.vocabDetails.map((vocabDetail) => {
+          if (newDate.subcategoryId === vocabDetail.subcategoryId) {
+            const newDefUpdate = vocabDetail.definitions.map(updateDefinition);
+            return {
+              ...vocabDetail,
+              definitions: [...newDefUpdate],
+            };
+          }
+          return vocabDetail;
+        });
+        state.vocabDetails = updatedSubcategories;
+        state.errorAdd = null;
+        // console.log(updatedSubcategories);
+      })
+
+      .addCase(addWordToSubcategory.rejected, (state, action) => {
+        state.loadingAdd = false;
+        state.errorAdd = "Da ton tai";
       });
-    //========================================================
-    // .addCase(getVocabDetail.pending, (state, action) => {
-    //   state.loading = true;
-    //   state.error = null;
-    // })
-    // .addCase(getVocabDetail.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   state.vocabDetails = action.payload;
-    // })
-    // .addCase(getVocabDetail.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload.detail;
-    // });
   },
 });
 
-export const { setMeaningWord, setKeyWord, setVocabDetails } =
+export const { setMeaningWord, setKeyWord, setVocabDetails, setErrorAdd } =
   searchSlice.actions;
 
 export default searchSlice.reducer;

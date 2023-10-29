@@ -1,10 +1,10 @@
 @import "../../assets/scss/font.scss";
 @import "../../assets/scss/variable.scss";
 .wordLists {
-  width: inherit;
-  margin: 32px;
+  // width: 100%;
+  margin: 32px 0px;
   &__card {
-    width: 390px;
+    // width: 390px;
     z-index: 14;
     background-color: #ffffff;
     color: #212529;

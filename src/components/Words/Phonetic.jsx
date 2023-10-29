@@ -1,25 +1,23 @@
 import { SoundFilled } from "@ant-design/icons";
-import { Avatar, Col, Row, Space } from "antd";
+import { Avatar, Col, Row, Space, message } from "antd";
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import uk from "../../assets/images/en-circle.png";
 import us from "../../assets/images/us-square.png";
+import { getAllWL } from "../../stores/word-lists/wordLists-thunk";
 import Examples from "./Examples";
 import Meaning from "./Meaning";
 import "./Phonetic.scss";
-import { getAllWL } from "../../stores/word-lists/wordLists-thunk";
 const Phonetic = () => {
   const { vocabDetails } = useSelector((state) => state.search);
+  const [messageApi, contextHolder] = message.useMessage();
+
   const audioUk = useRef();
   const audioUs = useRef();
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllWL());
   }, [dispatch]);
-
-const onReloadState=(e)=>{
-  
-}
 
   const renderExamples = () => {
     const examples = [];
@@ -43,17 +41,19 @@ const onReloadState=(e)=>{
   ));
   const defaultWord = vocabDetails[0];
   const handlePlayAudio = (type) => {
-    if (type === "uk" && defaultWord?.audioUk) {
+    if (type === "uk" && defaultWord.audioUk) {
       audioUk.current.volume = 0.4;
       audioUk.current.play();
-    }
-    if (type === "us" && defaultWord?.audioUs) {
+    } else if (type === "us" && defaultWord.audioUs) {
       audioUs.current.volume = 0.4;
       audioUs.current.play();
+    } else {
+      messageApi.error("Invalid phonetic");
     }
   };
   return (
     <div>
+      {contextHolder}
       <Row gutter={[32, 16]}>
         <Col xs={{ span: 24 }} lg={{ span: 16 }}>
           <Space className="wrappered border border--blue">

@@ -11,7 +11,7 @@ import SignUp from "../pages/sign-up/SignUp";
 import Auth from "../layouts/Auth/Auth";
 import Leitner from "../pages/Learner/leitner/Leitner";
 import WordListsPage from "../pages/Learner/wordlists/WordListsPage";
-import WordListDetail from "../pages/Learner/wordlists/WordListDetail";
+import WordListDetail from "../pages/Learner/vocabulary/WordListDetail";
 const routers = createBrowserRouter([
   {
     path: "/",

@@ -70,11 +70,19 @@
   line-height: 28px;
   color: #6b7280;
   font-weight: 500;
+  overflow-wrap: inherit;
+  display: flex;
+  flex-wrap: wrap;
   &__word {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: max-content;
+    text-align: center;
     color: $text-primary-color;
-    padding-right: 16px;
-    text-decoration: underline dashed;
+    margin-right: 8px;
+    border-bottom: 2px dashed;
+    // text-decoration: underline dashed;
   }
 }
 .item__category {

@@ -21,7 +21,9 @@ const Result = (props) => {
         <span className="result__pos">[{props.result?.pos}]</span>
       </Space>
 
-      <p className="result__content">{props.result?.definitions[0].wordDesc}</p>
+      <p className="result__content">
+        {props.result?.definitions[0]?.wordDesc}
+      </p>
     </Card>
   );
 };
