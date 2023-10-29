@@ -3,7 +3,9 @@ import { Styles } from "./Styles";
 import { View, Text, TextInput } from "react-native";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
-export default function FeildDesc_Ex({ data }) {
+import { Entypo } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
+export default function FeildDesc_Ex({ data, index, onRemove }) {
   const [description, setDescription] = useState("");
   const [example, setExample] = useState("");
 
@@ -20,28 +22,26 @@ export default function FeildDesc_Ex({ data }) {
   if (!loaded) {
     return null;
   }
+  const handleRemove = (key) => {
+    onRemove(key);
+  };
   return (
-    <View
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        borderRadius: 10,
-        justifyContent: "center",
-        width: "100%",
-        height: 202,
-      }}
-    >
+    <View style={Styles.content}>
       <View style={Styles.inputFirstContent}>
         <View>
-          <Text
-            style={{
-              ...Styles.formLabel,
-              fontFamily: "Quicksand-SemiBold",
-            }}
-          >
-            Description
-          </Text>
+          <View style={Styles.titleDesc}>
+            <Text
+              style={{
+                ...Styles.formLabel,
+                fontFamily: "Quicksand-SemiBold",
+              }}
+            >
+              Description
+            </Text>
+            <TouchableOpacity onPress={() => handleRemove(index)}>
+              <Entypo name="trash" size={24} color="#2e3856" />
+            </TouchableOpacity>
+          </View>
           <TextInput
             style={{ ...Styles.input, fontFamily: "Quicksand-Regular" }}
             placeholder="Write description"

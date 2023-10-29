@@ -143,8 +143,8 @@ export const Styles = StyleSheet.create({
         elevation: 5,
     },
     buttonAdd: {
-        width: 50,
-        height: 50,
+        // width: 65,
+        // height: 40,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -152,7 +152,45 @@ export const Styles = StyleSheet.create({
         position: "absolute",
         bottom: 15,
         right: 15,
-        borderRadius: 40
-    }
+        flexDirection: 'row',
+        borderRadius: 20,
+        paddingHorizontal: 10,
+        paddingVertical: 7,
+        gap: 4
+    },
+    viewAddCard: {
+        width: "98%",
+        paddingVertical: 5,
+        paddingHorizontal: 5,
+        backgroundColor: "#fff",
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 4,
+        alignItems: 'center', paddingBottom: 10
+
+    },
+    viewAddCard_content: {
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    Line: {
+        marginTop: 5,
+        borderBottomWidth: 4,
+        width: 115,
+        marginLeft: 10,
+        borderBottomColor: "#4F62F7",
+        borderRadius: 2
+    },
+
 
 })

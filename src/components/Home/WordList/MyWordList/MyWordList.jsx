@@ -16,6 +16,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "~/constants/theme";
 import { configFont } from "~/constants/theme";
 import { useFonts } from "expo-font";
+import { Entypo } from "@expo/vector-icons";
 export default function MyWordList() {
   const [wordLists, setWordLists] = useState([]);
   const [isLogin, setIsLogin] = useState(false);
@@ -86,19 +87,26 @@ export default function MyWordList() {
         <Text
           style={{
             fontFamily: "Quicksand-SemiBold",
-            fontSize: 17,
+            fontSize: 18,
             color: colors.textTitle,
           }}
         >
           Your Wordlist
         </Text>
         <TouchableOpacity style={Styles.header} onPress={handlePressSeeAll}>
-          <Text style={tw`text-base text-blue-600`}>See all</Text>
-          <AntDesign
-            name="right"
-            size={14}
+          <Text
+            style={[
+              tw`text-base text-blue-600`,
+              { fontFamily: "Quicksand-SemiBold" },
+            ]}
+          >
+            See all
+          </Text>
+          <Entypo
+            name="chevron-right"
+            size={20}
             color="rgb(37 99 235)"
-            style={{ marginLeft: 3 }}
+            style={{ marginTop: 3 }}
           />
         </TouchableOpacity>
       </View>

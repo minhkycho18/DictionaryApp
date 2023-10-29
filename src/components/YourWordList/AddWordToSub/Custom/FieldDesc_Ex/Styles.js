@@ -44,6 +44,20 @@ export const Styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+    },
+    content: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        borderRadius: 10,
+        justifyContent: "center",
+        width: "100%",
+        height: 202,
+    },
+    titleDesc: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
     }
 
 })

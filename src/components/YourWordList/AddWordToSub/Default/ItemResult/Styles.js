@@ -64,11 +64,11 @@ export const styles = StyleSheet.create({
       lineHeight: 24
    },
    viewIcon: {
-      borderRadius: 30,
+      borderRadius: 15,
       borderColor: '#ccc',
       borderWidth: 2,
-      width: 25,
-      height: 25,
+      width: 20,
+      height: 20,
    },
 
 })

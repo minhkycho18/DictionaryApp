@@ -1,5 +1,5 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import React, { useLayoutEffect } from 'react'
+import React from 'react'
 import AddCustom from "../components/YourWordList/AddWordToSub/Custom/AddCustom";
 import AddDefault from "../components/YourWordList/AddWordToSub/Default/AddDefault";
 import { useFonts } from "expo-font";

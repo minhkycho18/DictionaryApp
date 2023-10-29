@@ -3,7 +3,14 @@ module.exports = function (api) {
   return {
     presets: ['babel-preset-expo'],
     plugins: [
+      // [
+      //   "module:expo-document-picker",
+      //   {
+      //     "iCloudContainerEnvironment": "Production"
+      //   }
+      // ],
       'react-native-reanimated/plugin',
+
       [
         'babel-plugin-root-import',
         {

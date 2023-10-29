@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import tw from "twrnc";
 import { Styles } from "./Styles";
-import { AntDesign } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import ItemWordList from "../ItemWordList/ItemWordList";
 import { getDefault } from "~/api/WordList";
 import { useFonts } from "expo-font";
@@ -42,19 +42,26 @@ export default function WordListDefault() {
         <Text
           style={{
             fontFamily: "Quicksand-SemiBold",
-            fontSize: 17,
+            fontSize: 18,
             color: colors.textTitle,
           }}
         >
           Default Wordlist
         </Text>
         <TouchableOpacity style={Styles.header}>
-          <Text style={tw`text-base text-blue-600`}>See all</Text>
-          <AntDesign
-            name="right"
-            size={14}
+          <Text
+            style={[
+              tw`text-base text-blue-600`,
+              { fontFamily: "Quicksand-SemiBold" },
+            ]}
+          >
+            See all
+          </Text>
+          <Entypo
+            name="chevron-right"
+            size={20}
             color="rgb(37 99 235)"
-            style={{ marginLeft: 3 }}
+            style={{ marginTop: 3 }}
           />
         </TouchableOpacity>
       </View>

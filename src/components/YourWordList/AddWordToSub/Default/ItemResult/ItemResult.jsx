@@ -43,8 +43,8 @@ function ItemResult({ vocal }) {
                 {vocal.item.pos}
               </Text>
 
-              {vocal.item.isWordOfUserWordlist ? (
-                <AntDesign name="checkcircle" size={23} color="green" />
+              {!vocal.item.isWordOfUserWordlist ? (
+                <AntDesign name="checkcircle" size={20} color="green" />
               ) : (
                 <View style={styles.viewIcon}></View>
               )}

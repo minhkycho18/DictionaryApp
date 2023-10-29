@@ -14,6 +14,7 @@ import { getPublic } from "~/api/WordList";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFonts } from "expo-font";
 import { configFont, colors } from "~/constants/theme";
+import { Entypo } from "@expo/vector-icons";
 export default function WordListPublic() {
   const [defaultList, setDefaultList] = useState([]);
   useEffect(() => {
@@ -43,19 +44,26 @@ export default function WordListPublic() {
         <Text
           style={{
             fontFamily: "Quicksand-SemiBold",
-            fontSize: 17,
+            fontSize: 18,
             color: colors.textTitle,
           }}
         >
           Public Wordlist
         </Text>
         <TouchableOpacity style={Styles.header}>
-          <Text style={tw`text-base text-blue-600`}>See all</Text>
-          <AntDesign
-            name="right"
-            size={14}
+          <Text
+            style={[
+              tw`text-base text-blue-600`,
+              { fontFamily: "Quicksand-SemiBold" },
+            ]}
+          >
+            See all
+          </Text>
+          <Entypo
+            name="chevron-right"
+            size={20}
             color="rgb(37 99 235)"
-            style={{ marginLeft: 3 }}
+            style={{ marginTop: 3 }}
           />
         </TouchableOpacity>
       </View>

@@ -9,14 +9,15 @@ import {
   ScrollView,
 } from "react-native";
 import { useFonts } from "expo-font";
-import { configFont } from "~/constants/theme";
+import { colors, configFont } from "~/constants/theme";
 import { useNavigation } from "@react-navigation/native";
 import Toast, { ErrorToast } from "react-native-toast-message";
 import { createNewWordLists } from "~/api/WordList";
 import { MaterialIcons } from "@expo/vector-icons";
 import FeildDesc_Ex from "./FieldDesc_Ex/FeildDesc_Ex";
 import FieldNoRequired from "./FieldNoRequired/FieldNoRequired";
-import { Button } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
+
 const AddCustom = () => {
   const titleRef = useRef();
   const descRef = useRef();
@@ -139,7 +140,12 @@ const AddCustom = () => {
       desc: "",
     };
     const newFieldMainComponent = (
-      <FeildDesc_Ex key={newIndex} index={newIndex} data={object} />
+      <FeildDesc_Ex
+        key={newIndex}
+        index={newIndex}
+        data={object}
+        onRemove={handleRemove}
+      />
     );
 
     setKey((key) => key + 1);
@@ -153,6 +159,12 @@ const AddCustom = () => {
   };
   const handlePressMore = () => {
     setIsDisplay(!isDisplay);
+  };
+  const handleRemove = (key) => {
+    const newMainComponent = fieldMainComponents.filter(
+      (item, index) => index !== key
+    );
+    setFieldMainComponents(newMainComponent);
   };
   return (
     <SafeAreaView style={Styles.container}>
@@ -268,17 +280,40 @@ const AddCustom = () => {
         {fieldMainComponents.map((component, index) => (
           <React.Fragment key={index}>{component}</React.Fragment>
         ))}
-        <View style={Styles.viewBotton}>
-          <TouchableOpacity style={Styles.button} onPress={handleSave}>
-            <Text
-              style={{
-                fontSize: 18,
-                color: "#6a64f1",
-                fontFamily: "Quicksand-Bold",
-              }}
-            >
-              Save
-            </Text>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            borderRadius: 10,
+            justifyContent: "center",
+            width: "100%",
+            height: 70,
+          }}
+        >
+          <TouchableOpacity
+            style={Styles.viewAddCard}
+            onPress={addFieldMainComponent}
+          >
+            <View style={Styles.viewAddCard_content}>
+              <MaterialIcons
+                name="add"
+                size={25}
+                color={colors.textTitle}
+                style={{ marginTop: 4 }}
+              />
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: colors.textTitle,
+                  fontFamily: "Quicksand-Bold",
+                  marginLeft: 5,
+                }}
+              >
+                Add Card
+              </Text>
+            </View>
+            <View style={Styles.Line}></View>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -288,16 +323,28 @@ const AddCustom = () => {
           Toast.setRef(ref);
         }}
       />
-      <TouchableOpacity
-        style={Styles.buttonAdd}
-        onPress={addFieldMainComponent}
-      >
-        <MaterialIcons
+      <TouchableOpacity style={Styles.buttonAdd} onPress={handleSave}>
+        {/* <MaterialIcons
           name="add"
           size={20}
           color="white"
           style={{ marginTop: 4 }}
+        /> */}
+        <FontAwesome
+          name="cloud-download"
+          size={20}
+          color="white"
+          style={{ marginTop: 4 }}
         />
+        <Text
+          style={{
+            fontSize: 18,
+            color: "white",
+            fontFamily: "Quicksand-Bold",
+          }}
+        >
+          Create
+        </Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

@@ -177,7 +177,7 @@ const AddWordList = () => {
         <View style={Styles.inputContent}>
           <View>
             <Text
-              style={{ ...Styles.formLabel, fontFamily: "Quicksand-Medium" }}
+              style={{ ...Styles.formLabel, fontFamily: "Quicksand-SemiBold" }}
               ref={titlelabel}
             >
               Word List Title
@@ -199,7 +199,10 @@ const AddWordList = () => {
           </View>
           <View>
             <Text
-              style={{ ...Styles.formLabel, fontFamily: "Quicksand-Medium" }}
+              style={{
+                ...Styles.formLabel,
+                fontFamily: "Quicksand-SemiBold",
+              }}
               ref={descLabel}
             >
               Word List Description
@@ -221,7 +224,7 @@ const AddWordList = () => {
 
           <View>
             <Text
-              style={{ ...Styles.formLabel, fontFamily: "Quicksand-Medium" }}
+              style={{ ...Styles.formLabel, fontFamily: "Quicksand-SemiBold" }}
             >
               Word List Type
             </Text>
@@ -230,7 +233,6 @@ const AddWordList = () => {
               onPress={setType}
               selectedId={type}
               containerStyle={Styles.radioGroup}
-              se
             />
           </View>
         </View>

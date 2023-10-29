@@ -141,6 +141,7 @@ export const Styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+
     },
     buttonAdd: {
         width: 50,
@@ -153,6 +154,44 @@ export const Styles = StyleSheet.create({
         bottom: 15,
         right: 15,
         borderRadius: 40
-    }
+    },
+    inputFile: {
+        width: "100%",
+        height: 40,
+        padding: 5,
 
+
+        borderRadius: 6,
+        borderWidth: 1,
+        borderColor: "#e0e0e0",
+        backgroundColor: "white",
+        fontWeight: "500",
+        fontSize: 14,
+        color: "#6b7280",
+        marginBottom: 10,
+        flexDirection: 'row'
+
+    },
+    buttonFile: {
+        width: "25%",
+        height: 25,
+        backgroundColor: "rgb(229 231 235)",
+        borderRadius: 10
+    },
+    textFile: {
+        fontSize: 13,
+        padding: 2,
+        textAlign: 'center'
+    },
+    fileName: {
+        width: "75%",
+        height: 25,
+        justifyContent: 'center',
+
+    },
+    textFileName: {
+        fontSize: 10,
+        marginLeft: 5,
+        color: "#6b7280",
+    }
 })
