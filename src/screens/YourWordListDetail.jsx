@@ -19,7 +19,14 @@ import { SvgXml } from "react-native-svg";
 import { svgstudy } from "~/constants/theme";
 
 export default function YourWordlistDetail() {
+  // const [subCategories, setSubCategories] = useState([]);
   const navigation = useNavigation();
+  // const data = useRoute();
+  // const getMyWordList = async () => {
+    // const data = await getWordListById();
+    // setSubCategories(data);
+  // };
+
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -33,14 +40,7 @@ export default function YourWordlistDetail() {
   const arr = [
     { id: 1 },
     { id: 2 },
-    { id: 3 },
-    { id: 4 },
-    { id: 5 },
-    { id: 6 },
-    { id: 7 },
-    { id: 8 },
-    { id: 9 },
-    { id: 10 },
+
 
   ];
   return (
@@ -118,7 +118,7 @@ export default function YourWordlistDetail() {
               padding: 3,
             }}
             showsVerticalScrollIndicator={false}
-            data={arr}
+            data={arr} //subCategories
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => <ItemSubCategory />}
           />

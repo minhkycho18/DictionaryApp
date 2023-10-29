@@ -85,6 +85,16 @@ export default function Index() {
           ))}
         </ScrollView>
       </View>
+      <Button
+        onPress={async () => {
+          console.log("test: ", "da logout 1");
+
+          await AsyncStorage.clear();
+          console.log("test: ", "da logout 2");
+
+        }}
+        title="Logout"
+      />
     </SafeAreaView>
   );
 }
