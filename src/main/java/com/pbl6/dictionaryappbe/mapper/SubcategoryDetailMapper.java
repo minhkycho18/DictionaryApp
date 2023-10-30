@@ -9,7 +9,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface SubcategoryDetailMapper {
@@ -18,7 +17,7 @@ public interface SubcategoryDetailMapper {
         Vocabulary vocabulary = newSubcategoryDetail.getVocabDef().getVocabulary();
         List<Definition> definitions = subcategoryDetails.stream()
                 .map(subcategoryDetail -> subcategoryDetail.getVocabDef().getDefinition())
-                .collect(Collectors.toList());
+                .toList();
         return CustomVocabularyResponseDto.builder()
                 .vocabId(newSubcategoryDetail.getVocabId())
                 .word(vocabulary.getWord())

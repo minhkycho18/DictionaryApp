@@ -193,7 +193,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
         Subcategory subcategory = getOwnedSubcategory(wordListId, subcategoryId);
         vocabularies.forEach(subDetail -> {
             subcategoryDetailRepository.delete(subDetail);
-            subcategory.setAmountOfWord(subcategory.getAmountOfWord() + 1);
+            subcategory.setAmountOfWord(subcategory.getAmountOfWord() - 1);
             Long vocabId = subDetail.getVocabId();
             Vocabulary vocabulary = vocabularyRepository.findById(vocabId)
                     .orElseThrow(() -> new EntityNotFoundException("Vocabulary not found with ID: " + vocabId));
