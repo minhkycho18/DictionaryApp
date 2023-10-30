@@ -3,8 +3,9 @@ package com.pbl6.dictionaryappbe.controller;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyResponseDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
-import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.persistence.subcategory.SubcategoryType;
 import com.pbl6.dictionaryappbe.service.SubcategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,17 +43,17 @@ public class SubcategoryController {
     @Operation(summary = "Get all vocabulary of subcategory")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Get data successfully",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryDetailResponseDto.class))}),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @GetMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}")
-    public List<VocabularySubcategoryResponseDto> getAllVocabulary(@PathVariable Long subcategoryId, @PathVariable String wordListId) {
+    public List<SubcategoryDetailResponseDto> getAllVocabulary(@PathVariable Long subcategoryId, @PathVariable String wordListId) {
         return subcategoryService.getAllVocabularies(subcategoryId);
     }
 
     @Operation(summary = "Get all type of subcategories")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Get data successfully",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))})})
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryType.class))})})
     @GetMapping("/subcategories/types")
     public SubcategoryType[] getAllSubcategoryType() {
         return SubcategoryType.values();
@@ -61,13 +62,13 @@ public class SubcategoryController {
     @Operation(summary = "Add vocabulary to subcategory", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Add data successfully",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VocabularySubcategoryResponseDto.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryDetailResponseDto.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid data"),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @PostMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}")
-    public VocabularySubcategoryResponseDto addVocabularyToSubcategory(@PathVariable Long subcategoryId,
-                                                                       @Valid @RequestBody VocabularySubcategoryRequestDto vocabSub,
-                                                                       @PathVariable Long wordListId) {
+    public SubcategoryDetailResponseDto addVocabularyToSubcategory(@PathVariable Long subcategoryId,
+                                                                   @Valid @RequestBody VocabularySubcategoryRequestDto vocabSub,
+                                                                   @PathVariable Long wordListId) {
         return subcategoryService.addVocabToSubcategory(wordListId, subcategoryId, vocabSub);
     }
 
@@ -86,13 +87,13 @@ public class SubcategoryController {
     @Operation(summary = "Create custom vocabulary in subcategory", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Add data successfully",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CustomVocabularyResponseDto.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid data"),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @PostMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}/custom")
-    public VocabularySubcategoryResponseDto createCustomVocabulary(@PathVariable Long wordListId,
-                                                                   @PathVariable String subcategoryId,
-                                                                   @Valid @RequestBody CustomVocabularyRequestDto customVocab) {
+    public CustomVocabularyResponseDto createCustomVocabulary(@PathVariable Long wordListId,
+                                                              @PathVariable String subcategoryId,
+                                                              @Valid @RequestBody CustomVocabularyRequestDto customVocab) {
         customVocab.setSubcategoryId(Long.valueOf(subcategoryId));
         return subcategoryService.createCustomVocabulary(wordListId, customVocab);
     }

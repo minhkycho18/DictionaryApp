@@ -1,5 +1,6 @@
 package com.pbl6.dictionaryappbe.persistence.subcategory_detail;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import jakarta.persistence.*;
@@ -42,6 +43,7 @@ public class SubcategoryDetail {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subcategory_id", referencedColumnName = "subcategory_id", insertable = false, updatable = false)
+    @JsonIgnore
     private Subcategory subcategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -49,5 +51,6 @@ public class SubcategoryDetail {
             @JoinColumn(name = "def_id", referencedColumnName = "def_id", insertable = false, updatable = false),
             @JoinColumn(name = "vocab_id", referencedColumnName = "vocab_id", insertable = false, updatable = false)
     })
+    @JsonIgnore
     private VocabDef vocabDef;
 }
