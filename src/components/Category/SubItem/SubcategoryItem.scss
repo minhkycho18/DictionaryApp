@@ -1,0 +1,58 @@
+@import "../../../assets/scss/font.scss";
+@import "../../../assets/scss/variable.scss";
+.subcategory-item {
+  width: 100%;
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  // box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border: 1px solid #ddd;
+}
+.subcategory {
+  &__header {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &_add {
+    &:hover &__icon {
+      color: #6248b1 !important;
+      animation: spin backwards 1s;
+      cursor: pointer;
+    }
+    &:hover {
+      cursor: pointer;
+      color: #6248b1 !important;
+    }
+  }
+  &__content {
+    text-wrap: wrap;
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+.vocabulary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &__title {
+    color: $text-secondary-color;
+    font-weight: 600;
+    font-size: 20px;
+  }
+  &__phonetic {
+    font-weight: 500;
+    color: #808080;
+    font-size: 16px;
+  }
+  &__pos {
+    font-weight: 600;
+    color: $text-sub-color;
+  }
+}

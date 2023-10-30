@@ -11,7 +11,7 @@ export const createSub = (params) => {
 ///===========================================================================
 export const deleteSub = (params) => {
   const { wordListId, SubId } = params;
-  return http.delete(`/wordlists/${wordListId}/subcategories/${SubId}`);
+  return http.delete(`/wordlists/${wordListId}/subcategories`, SubId);
 };
 ///===========================================================================
 export const updateSub = (params) => {

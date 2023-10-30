@@ -1,4 +1,4 @@
-import { Breadcrumb, FloatButton, Layout, Space, theme } from "antd";
+import { Breadcrumb, FloatButton, Image, Layout, Space, theme } from "antd";
 import React from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import CustomSider from "../../components/sider/CustomSider";
@@ -6,6 +6,7 @@ import changeTitle from "../../helpers/changeTitle";
 import getFullPath from "../../helpers/getPath";
 import "./dashboard.scss";
 import Authenticate from "../../guards/Auth/Authenticate";
+import categoryBack from "../../assets/images/category-back.png";
 const { Header, Content } = Layout;
 const Dashboard = () => {
   const { pathname } = useLocation();
@@ -46,10 +47,21 @@ const Dashboard = () => {
               background: colorBgContainer,
               height: 125,
               border: "1px solid #eee",
+              paddingLeft: 16,
             }}
           >
+            {path.slice(0, 3).length === 3 && (
+              <Image
+                src={categoryBack}
+                style={{ width: 100, borderRadius: 100 }}
+                preview={false}
+              ></Image>
+            )}
+
             <Space direction="vertical" className="headerPage">
-              <Space className="headerPage__name">{path[1].title}</Space>
+              <Space className="headerPage__name">
+                {path[path.slice(0, 3).length - 1].title}
+              </Space>
               <Breadcrumb
                 items={breadcrumbs}
                 className="headerPage__breadcum"

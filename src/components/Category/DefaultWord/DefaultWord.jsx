@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSearchResult } from "../../../stores/search-word/searchThunk";
 import "./DefaultWord.scss";
 const DefaultWord = () => {
-  const { result, loading } = useSelector((state) => state.search);
+  const { result } = useSelector((state) => state.search);
   //   const [isSelected, setIsSelected] = useState(true);
   const [inputWord, setInputWord] = useState("");
   const dispatch = useDispatch();

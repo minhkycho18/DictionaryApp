@@ -17,6 +17,7 @@ import Subcategory from "../../../components/Category/Subcategory";
 import { capitalizeFirstLetter } from "../../../helpers/changeTitle";
 import {
   createSubcategory,
+  deleteSubcategory,
   getAllVocabInSubcategory,
   getSubcategory,
 } from "../../../stores/subcategory/subcategoryThunk";
@@ -33,9 +34,20 @@ function WordListsPage() {
   const [isOpen, setIsOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
+
   useEffect(() => {
     dispatch(getSubcategory(id));
   }, [dispatch, id]);
+
+  const handleDeleteSub = (value) => {
+    dispatch(
+      deleteSubcategory({
+        wordListId: id,
+        SubId: value,
+      })
+    );
+    messageApi.success("success!");
+  };
   const renderSub = subcategories.map((subcategory, index) => {
     return {
       key: subcategory.subcategoryId,
@@ -45,6 +57,7 @@ function WordListsPage() {
           key={subcategory.subcategoryId}
           subcategory={subcategory}
           wlID={id}
+          onDel={handleDeleteSub}
         />
       ),
     };
@@ -69,6 +82,7 @@ function WordListsPage() {
   const handleCancel = () => {
     setIsOpen(false);
   };
+
   return (
     <Space
       className={`wordlist__page ${loading ? "loading-css" : ""}`}

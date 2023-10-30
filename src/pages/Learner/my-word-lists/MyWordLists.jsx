@@ -35,14 +35,7 @@ const MyWordLists = () => {
   const handleCancel = () => {
     setOpen(false);
   };
-  // const renderWordList = wordLists.map((wordlist) => (
-  //   <ListItem
-  //     key={wordlist.id}
-  //     wordlist={wordlist}
-  //     onSelect={handleSelectWordList}
-  //     onDel={onDeleteAnItem}
-  //   />
-  // ));
+
   return (
     <Space
       className={`MyWordLists ${loading ? "loading-css" : ""}`}

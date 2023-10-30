@@ -1,19 +1,16 @@
+import { PlusOutlined } from "@ant-design/icons";
 import { Button, Input, Select, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import {
   createSub,
   getSubByWlsId,
 } from "../../../api/Subcategory/subcategory.api";
-import { PlusOutlined } from "@ant-design/icons";
 import "./SubChoice.scss";
-import { useDispatch } from "react-redux";
-import { createSubcategory } from "../../../stores/subcategory/subcategoryThunk";
 const SubChoice = (props) => {
   const [subcategories, setSub] = useState();
   const [isAddWL, setIsAddWL] = useState(false);
   const [subTitle, setSubTitle] = useState("");
   const [subType, setSubType] = useState("DEFAULT");
-  const dispatch = useDispatch();
   useEffect(() => {
     const _getSub = async () => {
       try {
