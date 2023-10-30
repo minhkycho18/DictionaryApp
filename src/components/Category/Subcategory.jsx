@@ -55,10 +55,9 @@ const Subcategory = (props) => {
   const onConfirmDelete = () => {
     props?.onDel([props.subcategory.subcategoryId]);
   };
-  const filterVocab =
-    keyword !== ""
-      ? vocabInSub.filter((vocab) => vocab.word === keyword)
-      : vocabInSub;
+  const filterVocab = vocabInSub.filter((vocab) =>
+    vocab.word.startsWith(keyword)
+  );
   const renderVocabInSub = filterVocab.map((vocab, index) => (
     <SubcategoryItem key={index} vocab={vocab} />
   ));
