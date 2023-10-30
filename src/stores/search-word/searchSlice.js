@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getSearchResult } from "./searchThunk";
 import { addWordToSubcategory } from "../subcategory/subcategoryThunk";
+import getTokenFromStorage from "../../helpers/getTokenFromStorage";
 
 const initialState = {
   keyword: "",
@@ -10,7 +11,6 @@ const initialState = {
   error: null,
   errorAdd: "",
   loadingAdd: false,
-
   vocabDetails: [
     {
       id: 48279,

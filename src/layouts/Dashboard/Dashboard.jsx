@@ -5,6 +5,7 @@ import CustomSider from "../../components/sider/CustomSider";
 import changeTitle from "../../helpers/changeTitle";
 import getFullPath from "../../helpers/getPath";
 import "./dashboard.scss";
+import Authenticate from "../../guards/Auth/Authenticate";
 const { Header, Content } = Layout;
 const Dashboard = () => {
   const { pathname } = useLocation();
@@ -35,34 +36,39 @@ const Dashboard = () => {
     }
   });
   return (
-    <Layout style={{ position: "relative" }}>
-      <CustomSider />
-      <Layout>
-        <Header
-          style={{
-            padding: 0,
-            background: colorBgContainer,
-            height: 125,
-            border: "1px solid #eee",
-          }}
-        >
-          <Space direction="vertical" className="headerPage">
-            <Space className="headerPage__name">{path[1].title}</Space>
-            <Breadcrumb items={breadcrumbs} className="headerPage__breadcum" />
-          </Space>
-        </Header>
-        <Content
-          style={{
-            minHeight: 280,
-            background: colorBgContainer,
-            width: "100%",
-          }}
-        >
-          <Outlet />
-          <FloatButton.BackTop visibilityHeight={0} />
-        </Content>
+    <Authenticate>
+      <Layout style={{ position: "relative" }}>
+        <CustomSider />
+        <Layout>
+          <Header
+            style={{
+              padding: 0,
+              background: colorBgContainer,
+              height: 125,
+              border: "1px solid #eee",
+            }}
+          >
+            <Space direction="vertical" className="headerPage">
+              <Space className="headerPage__name">{path[1].title}</Space>
+              <Breadcrumb
+                items={breadcrumbs}
+                className="headerPage__breadcum"
+              />
+            </Space>
+          </Header>
+          <Content
+            style={{
+              minHeight: 280,
+              background: colorBgContainer,
+              width: "100%",
+            }}
+          >
+            <Outlet />
+            <FloatButton.BackTop visibilityHeight={0} />
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </Authenticate>
   );
 };
 export default Dashboard;

@@ -3,14 +3,18 @@ import {
   CaretRightOutlined,
   InboxOutlined,
   PlusCircleFilled,
+  PlusOutlined,
 } from "@ant-design/icons";
-import { Collapse, Modal, Space, message } from "antd";
+import { Button, Collapse, Input, Modal, Select, Space, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import getTokenFromStorage from "../../helpers/getTokenFromStorage";
+import { setErrorAdd } from "../../stores/search-word/searchSlice";
 import { addWordToSubcategory } from "../../stores/subcategory/subcategoryThunk";
+import { createNewWL } from "../../stores/word-lists/wordLists-thunk";
 import SubChoice from "../Category/SubChoice/SubChoice";
 import "./Meaning.scss";
-import { setErrorAdd } from "../../stores/search-word/searchSlice";
 const Meaning = ({ detail }) => {
   const [isChoice, setIsChoice] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,11 +23,17 @@ const Meaning = ({ detail }) => {
   const [wlAdded, setWlAdded] = useState();
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate();
+  const [isAddWL, setIsAddWL] = useState(false);
+  const [wlTitle, setWlTitle] = useState("");
+  const [wlDesc, setWlDesc] = useState("");
+  const [wlType, setWlType] = useState("PUBLIC");
 
   useEffect(() => {
     if (errorAdd) {
       messageApi.error("This word has been added");
     }
+
     return () => {
       dispatch(setErrorAdd());
     };
@@ -39,13 +49,70 @@ const Meaning = ({ detail }) => {
     setIsChoice(!isChoice);
   };
   const handleAddWordlist = (e) => {
-    setWlAdded(e);
-    setIsModalOpen(true);
+    const token = getTokenFromStorage();
+    if (token) {
+      setWlAdded(e);
+      setIsModalOpen(true);
+    } else {
+      info();
+    }
   };
   const addToWL = (value) => {
     const params = { ...value, vocabId: detail.id, defId: wlAdded };
     dispatch(addWordToSubcategory(params));
     setIsModalOpen(false);
+  };
+
+  const info = () => {
+    Modal.confirm({
+      title: "Login",
+      okText: "Sign In",
+      cancelText: "Cancel",
+      onOk() {
+        navigate("/auth/sign-in");
+      },
+      onCancel() {},
+      content: (
+        <Space className="popconfirm-text">
+          <p>In order to add the word to your categories you must sign in.</p>
+        </Space>
+      ),
+    });
+  };
+
+  const openAddNewWL = () => {
+    handleSetInputDefault();
+    setIsAddWL(!isAddWL);
+  };
+  const handleAddNewWL = () => {
+    const params = {
+      title: wlTitle,
+      listDesc: wlDesc,
+      listType: wlType,
+    };
+    dispatch(createNewWL(params));
+
+    handleSetInputDefault();
+    setIsAddWL(!isAddWL);
+  };
+  const handleSetInputDefault = () => {
+    setWlTitle("");
+    setWlDesc("");
+    setWlType("PUBLIC");
+  };
+
+  const posClass = () => {
+    switch (detail.pos) {
+      case "adverb":
+        return "border--lightblue";
+      case "verb":
+        return "border--orange";
+      case "adjective":
+        return "border--pink";
+
+      default:
+        return "border--lightblue";
+    }
   };
 
   const renderDefinitions = detail.definitions.map((definition, index) => (
@@ -87,20 +154,6 @@ const Meaning = ({ detail }) => {
     </div>
   ));
 
-  const posClass = () => {
-    switch (detail.pos) {
-      case "adverb":
-        return "border--lightblue";
-      case "verb":
-        return "border--orange";
-      case "adjective":
-        return "border--pink";
-
-      default:
-        return "border--lightblue";
-    }
-  };
-
   const renderItem =
     wordLists &&
     wordLists.map((wl, index) => ({
@@ -113,9 +166,7 @@ const Meaning = ({ detail }) => {
         fontWeight: 600,
       },
     }));
-  const handleChangeWL = (key) => {
-    // dispatch(getSubcategory(key));
-  };
+
   return (
     <Space className={`wrap-meaning border ${posClass()}`} direction="vertical">
       {contextHolder}
@@ -132,18 +183,65 @@ const Meaning = ({ detail }) => {
         onOk={handleOk}
         onCancel={handleCancel}
         footer={null}
+        className="Modal_WL"
       >
         <Collapse
-          // defaultActiveKey={["1"]}
           expandIcon={({ isActive }) => (
             <CaretRightOutlined rotate={isActive ? 90 : 0} />
           )}
           ghost
           items={renderItem}
           accordion
-          onChange={handleChangeWL}
           className="collapse__item"
         />
+        <Space className="AddNewWL_btn" direction="vertical">
+          {!isAddWL && (
+            <Space onClick={openAddNewWL}>
+              <PlusOutlined className="AddNewWL_btn__icon" />
+              <div className="AddNewWL_btn__content">Add new wordlist</div>
+            </Space>
+          )}
+          {isAddWL && (
+            <Space className="form-wrap" direction="vertical">
+              <Space className="form-add" direction="vertical">
+                <div className="form-label">Title:</div>
+                <Input
+                  placeholder="title"
+                  onChange={(e) => setWlTitle(e.target.value)}
+                  value={wlTitle}
+                ></Input>
+                <div className="form-label">Descriptions:</div>
+                <Input.TextArea
+                  placeholder="Descriptions"
+                  onChange={(e) => setWlDesc(e.target.value)}
+                  value={wlDesc}
+                ></Input.TextArea>
+                <div className="form-label">Type:</div>
+                <Select
+                  placeholder="Select your type"
+                  onSelect={(e) => setWlType(e)}
+                  defaultValue={wlType}
+                  style={{
+                    width: "100px",
+                  }}
+                >
+                  <Select.Option value="PUBLIC">Public</Select.Option>
+                  <Select.Option value="PRIVATE">Private</Select.Option>
+                </Select>
+                <Space style={{ marginTop: 8 }}>
+                  <Button
+                    className="form-btn--submit"
+                    type="primary"
+                    onClick={handleAddNewWL}
+                  >
+                    Submit
+                  </Button>
+                  <Button onClick={openAddNewWL}>Cancel</Button>
+                </Space>
+              </Space>
+            </Space>
+          )}
+        </Space>
       </Modal>
     </Space>
   );

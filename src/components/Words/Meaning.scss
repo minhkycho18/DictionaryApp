@@ -88,7 +88,6 @@
 .item__category {
   font-family: $font;
   cursor: pointer;
-  // border-bottom: 1px solid #eee;
   border-top: 1px solid #eeeeeeaf;
   width: 100%;
   padding: 16px 0px;
@@ -102,4 +101,81 @@
 }
 .collapse__item {
   font-family: $font;
+}
+.popconfirm-text {
+  font-family: $font;
+  font-weight: 500;
+}
+.AddNewWL_btn {
+  border: 1px dashed #ccc;
+  width: 100%;
+  border-radius: 16px;
+  font-family: $font;
+  &__icon {
+    font-size: 16px;
+    margin-left: 16px;
+    font-weight: 500;
+  }
+  &__content {
+    padding: 16px 0px;
+    font-weight: 500;
+  }
+  &:hover &__icon {
+    color: #6248b1 !important;
+    animation: spin backwards 1s;
+    cursor: pointer;
+  }
+  &:hover &__content {
+    cursor: pointer;
+    color: #6248b1 !important;
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+.form-add {
+  width: 300px;
+  padding: 16px;
+}
+.form-wrap {
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.form-label {
+  color: $text-primary-color;
+  font-weight: 500;
+}
+.form-btn--submit {
+  background-color: $text-primary-color;
+}
+
+.collapse__item {
+  height: 332px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  &::-webkit-scrollbar {
+    width: 8px !important;
+  }
+
+  /* Track (phần nền của thanh cuộn) */
+  &::-webkit-scrollbar-track {
+    background: #fff !important;
+  }
+
+  /* Thumb (thanh cuộn chính) */
+  &::-webkit-scrollbar-thumb {
+    background: #eee !important;
+    border-radius: 100px !important;
+  }
+
+  /* Thumb khi hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #ccc !important;
+  }
 }
