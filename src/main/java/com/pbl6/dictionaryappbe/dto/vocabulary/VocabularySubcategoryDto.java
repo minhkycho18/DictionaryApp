@@ -1,16 +1,14 @@
 package com.pbl6.dictionaryappbe.dto.vocabulary;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.pbl6.dictionaryappbe.persistence.Definition;
-import lombok.Builder;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-
-@Data
-@Builder
-public class VocabularySubcategoryResponseDto {
+@Getter
+@AllArgsConstructor
+public class VocabularySubcategoryDto {
     private Long vocabId;
     private String word;
     private String pos;
@@ -21,7 +19,6 @@ public class VocabularySubcategoryResponseDto {
     private boolean isReview;
     private boolean isFlashcard;
     private boolean isQuiz;
-    private Definition definition;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDateTime lastLearning;
 }

@@ -9,10 +9,11 @@ public class MapperUtils {
 
     }
 
-    public static <T,E> List<T> toTargetList(Function<E,T> function, List<E> sources) {
+    public static <T, E> List<T> toTargetList(Function<E, T> function, List<E> sources) {
         return sources
                 .stream()
                 .map(function)
                 .toList();
     }
+    
 }

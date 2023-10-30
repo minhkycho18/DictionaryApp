@@ -3,8 +3,9 @@ package com.pbl6.dictionaryappbe.service;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyResponseDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
-import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
 import com.pbl6.dictionaryappbe.persistence.subcategory_detail.SubcategoryDetail;
 
@@ -16,11 +17,11 @@ public interface SubcategoryService {
 
     List<SubcategoryDetail> getSubcategoryDetails(Long subcategories, List<VocabularySubcategoryRequestDto> vocabularies);
 
-    List<VocabularySubcategoryResponseDto> getAllVocabularies(Long subcategoryId);
+    List<SubcategoryDetailResponseDto> getAllVocabularies(Long subcategoryId);
 
-    VocabularySubcategoryResponseDto addVocabToSubcategory(Long wordlistId, Long subcategoryId, VocabularySubcategoryRequestDto vocabularySubcategoryRequestDto);
+    SubcategoryDetailResponseDto addVocabToSubcategory(Long wordlistId, Long subcategoryId, VocabularySubcategoryRequestDto vocabularySubcategoryRequestDto);
 
-    VocabularySubcategoryResponseDto createCustomVocabulary(Long wordListId, CustomVocabularyRequestDto customVocabularyRequestDto);
+    CustomVocabularyResponseDto createCustomVocabulary(Long wordListId, CustomVocabularyRequestDto customVocabularyRequestDto);
 
     SubcategoryResponseDto createSubcategory(Long wordListId, SubcategoryRequestDto subcategory);
 
@@ -31,5 +32,4 @@ public interface SubcategoryService {
     void deleteSubcategories(Long wordlistId, List<Long> subcategoryId);
 
     Subcategory getOwnedSubcategory(Long wordListId, Long subcategoryId);
-
 }

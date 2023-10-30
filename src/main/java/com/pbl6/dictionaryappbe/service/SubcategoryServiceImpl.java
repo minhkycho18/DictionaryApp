@@ -3,8 +3,9 @@ package com.pbl6.dictionaryappbe.service;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyResponseDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
-import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.exception.DuplicateDataException;
 import com.pbl6.dictionaryappbe.exception.RecordNotFoundException;
 import com.pbl6.dictionaryappbe.mapper.SubcategoryDetailMapper;
@@ -30,6 +31,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -73,15 +75,16 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     }
 
     @Override
-    public List<VocabularySubcategoryResponseDto> getAllVocabularies(Long subcategoryId) {
+    public List<SubcategoryDetailResponseDto> getAllVocabularies(Long subcategoryId) {
         List<SubcategoryDetail> vocabularies = subcategoryDetailRepository.findAllBySubcategoryId(subcategoryId);
         return MapperUtils.toTargetList(subcategoryDetailMapper::toSubcategoryDetailResponseDto, vocabularies);
     }
 
     @Override
     @Transactional
-    public VocabularySubcategoryResponseDto createCustomVocabulary(Long wordListId, CustomVocabularyRequestDto newCustomVocab) {
+    public CustomVocabularyResponseDto createCustomVocabulary(Long wordListId, CustomVocabularyRequestDto newCustomVocab) {
         Subcategory subcategory = getOwnedSubcategory(wordListId, newCustomVocab.getSubcategoryId());
+        List<SubcategoryDetail> subcategoryDetails = new ArrayList<>();
         Vocabulary newVocab = vocabularyRepository.save(Vocabulary.builder()
                 .word(newCustomVocab.getWord())
                 .pos(newCustomVocab.getPos())
@@ -89,37 +92,41 @@ public class SubcategoryServiceImpl implements SubcategoryService {
                 .phoneUs(newCustomVocab.getPhoneUs())
                 .audioUs(newCustomVocab.getAudioUs())
                 .audioUk(newCustomVocab.getAudioUk())
-                .modifiedAt(null)
+                .modifiedAt(LocalDateTime.now())
                 .modifiedBy(null)
                 .wordType(WordType.CUSTOM)
                 .build());
-        Definition newDef = definitionRepository.save(Definition.builder()
-                .wordDesc(newCustomVocab.getDefinition())
-                .examples(newCustomVocab.getExample())
-                .build());
-        VocabDef newVocabDef = vocabDefRepository.save(VocabDef.builder()
-                .vocabId(newVocab.getVocabId())
-                .defId(newDef.getDefId())
-                .vocabulary(newVocab)
-                .definition(newDef)
-                .build());
+        newCustomVocab.getDefinition().forEach(definition -> {
+            Definition newDef = definitionRepository.save(Definition.builder()
+                    .wordDesc(definition.getWordDesc())
+                    .examples(definition.getExample())
+                    .build());
+            VocabDef newVocabDef = vocabDefRepository.save(VocabDef.builder()
+                    .vocabId(newVocab.getVocabId())
+                    .defId(newDef.getDefId())
+                    .vocabulary(newVocab)
+                    .definition(newDef)
+                    .build());
 
-        return subcategoryDetailMapper.toSubcategoryDetailResponseDto(subcategoryDetailRepository.save(SubcategoryDetail.builder()
-                .vocabId(newVocab.getVocabId())
-                .defId(newDef.getDefId())
-                .subcategoryId(subcategory.getSubcategoryId())
-                .isQuiz(false)
-                .isReview(false)
-                .isFlashcard(false)
-                .lastLearning(null)
-                .vocabDef(newVocabDef)
-                .build()));
+            subcategoryDetails.add(subcategoryDetailRepository.save(SubcategoryDetail.builder()
+                    .vocabId(newVocab.getVocabId())
+                    .defId(newDef.getDefId())
+                    .subcategoryId(subcategory.getSubcategoryId())
+                    .isQuiz(false)
+                    .isReview(false)
+                    .isFlashcard(false)
+                    .lastLearning(null)
+                    .vocabDef(newVocabDef)
+                    .build()));
+            subcategory.setAmountOfWord(subcategory.getAmountOfWord() + 1);
+        });
+        return subcategoryDetailMapper.toCustomVocabularyResponseDto(subcategoryDetails);
     }
 
     @Override
     @Transactional
-    public VocabularySubcategoryResponseDto addVocabToSubcategory(Long wordlistId, Long subcategoryId,
-                                                                  VocabularySubcategoryRequestDto vocabularySubcategoryRequestDto) {
+    public SubcategoryDetailResponseDto addVocabToSubcategory(Long wordlistId, Long subcategoryId,
+                                                              VocabularySubcategoryRequestDto vocabularySubcategoryRequestDto) {
         Subcategory subcategory = getOwnedSubcategory(wordlistId, subcategoryId);
         VocabDef vocabDef = vocabDefRepository.findById(new VocabDefId(vocabularySubcategoryRequestDto.getVocabId(),
                         vocabularySubcategoryRequestDto.getDefId()))
@@ -134,8 +141,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
                 && subcategory.getSubcategoryType() == SubcategoryType.DEFAULT) {
             throw new IllegalArgumentException("CUSTOM vocabulary can not add to DEFAULT subcategory");
         }
-
-        return subcategoryDetailMapper.toSubcategoryDetailResponseDto(subcategoryDetailRepository.save(SubcategoryDetail.builder()
+        SubcategoryDetail subcategoryDetail = subcategoryDetailRepository.save(SubcategoryDetail.builder()
                 .vocabId(vocabDef.getVocabId())
                 .defId(vocabDef.getDefId())
                 .subcategoryId(subcategory.getSubcategoryId())
@@ -144,8 +150,9 @@ public class SubcategoryServiceImpl implements SubcategoryService {
                 .isQuiz(false)
                 .lastLearning(null)
                 .vocabDef(vocabDef)
-                .build()
-        ));
+                .build());
+
+        return subcategoryDetailMapper.toSubcategoryDetailResponseDto(subcategoryDetail);
     }
 
     @Override
@@ -183,9 +190,10 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     @Override
     @Transactional
     public void deleteVocabulariesOfSubcategory(Long wordListId, Long subcategoryId, List<SubcategoryDetail> vocabularies) {
+        Subcategory subcategory = getOwnedSubcategory(wordListId, subcategoryId);
         vocabularies.forEach(subDetail -> {
             subcategoryDetailRepository.delete(subDetail);
-
+            subcategory.setAmountOfWord(subcategory.getAmountOfWord() - 1);
             Long vocabId = subDetail.getVocabId();
             Vocabulary vocabulary = vocabularyRepository.findById(vocabId)
                     .orElseThrow(() -> new EntityNotFoundException("Vocabulary not found with ID: " + vocabId));
@@ -229,5 +237,4 @@ public class SubcategoryServiceImpl implements SubcategoryService {
         return subcategoryRepository.findBySubcategoryIdAndWordList(subcategoryId, wordList)
                 .orElseThrow(() -> new EntityNotFoundException("Subcategory not found with ID:" + subcategoryId));
     }
-
 }
