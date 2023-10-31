@@ -6,7 +6,6 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
-  ScrollView,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -17,32 +16,31 @@ import ItemSubCategory from "~/components/Home/WordList/ItemSubCategory/ItemSubC
 import { Image } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { svgstudy } from "~/constants/theme";
+import { getAllSubCategory } from "~/api/Subcategory";
 
 export default function YourWordlistDetail() {
-  // const [subCategories, setSubCategories] = useState([]);
+  const {
+    params: { Wordlist },
+  } = useRoute();
+  const wl = Wordlist;
+
+  const [subCategories, setSubCategories] = useState([]);
   const navigation = useNavigation();
-  // const data = useRoute();
-  // const getMyWordList = async () => {
-    // const data = await getWordListById();
-    // setSubCategories(data);
-  // };
+  const getSubCategory = async (id) => {
+    const data = await getAllSubCategory(id);
+    console.log("\ntest", "data abc");
+    console.log(data);
 
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: "Apple", value: "apple" },
-    { label: "Banana", value: "banana" },
-  ]);
-  const remoteItems = [
-    { id: 1, title: "Item 1", val: "item-1" },
-    { id: 2, title: "Item 2", val: "item-2" },
-  ];
-  const arr = [
-    { id: 1 },
-    { id: 2 },
+    setSubCategories(data);
+  };
 
+  useEffect(() => {
+    getSubCategory(wl.item.id);
+  }, []);
+  useEffect(() => {
+    console.log(`TEST ::`,subCategories );
+  }, [subCategories]);
 
-  ];
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -81,7 +79,7 @@ export default function YourWordlistDetail() {
                 { color: "#182B40" },
               ]}
             >
-              Free Wordlist
+              {wl.item.title}
             </Text>
             {/* Description */}
             <Text
@@ -90,7 +88,7 @@ export default function YourWordlistDetail() {
                 { color: "#182B40" },
               ]}
             >
-              Free Wordlist
+              {wl.item.listDesc}
             </Text>
           </View>
         </View>
@@ -116,13 +114,19 @@ export default function YourWordlistDetail() {
             style={{
               marginTop: 10,
               padding: 3,
+              // marginBottom: 15,
             }}
             showsVerticalScrollIndicator={false}
-            data={arr} //subCategories
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <ItemSubCategory />}
+            data={subCategories} //subCategories.subcategoryId
+            keyExtractor={(item) => item.subcategoryId}
+            renderItem={({ item }) => (
+            <ItemSubCategory 
+              subcategory={item}
+            />
+            )}
           />
         </View>
+        
 
         {/* Add new Subcategory */}
         <TouchableOpacity style={styles.ButtonAdd}>
@@ -169,8 +173,10 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 40,
   },
   dropdown: {
+    display: 'flex',
     width: "88%",
     marginTop: 12,
+    // marginBottom: 12,
     elevation: 4,
     shadowOffset: {
       width: 0,

@@ -1,98 +1,83 @@
-import React, { useRef } from "react";
-import { View } from "react-native";
-import { Styles } from "./Styles";
-import {SvgXml } from "react-native-svg";
+import React, { useEffect, useRef, useState } from "react";
+import { FlatList, View } from "react-native";
+import { Styles } from "../ItemVocabOfSub/Styles";
+
 import { Text } from "react-native";
 import tw from "twrnc";
-import { svgreview } from "~/constants/theme";
-export default function ItemListVocabOfSub() {
+import { getAllVocabOfSubCategory } from "~/api/Subcategory";
+import ItemVocabOfSub from "../ItemVocabOfSub/ItemVocabOfSub";
+export default function ItemListVocabOfSub({ subcategory }) {
+
+  const [idSub, setIdSub] = useState(subcategory.subcategoryId);
+  const [idWordlist, setIdWordlist] = useState(subcategory.subcategoryId);
+  const [listVocabOfSubCategory, setListVocabOfSubCategory] = useState([]);
+
+  const getVocabOfSubCategory = async (idWL, idSub) => {
+    const data = await getAllVocabOfSubCategory(idWL, idSub);
+    setListVocabOfSubCategory(data);
+  };
+
+
+  useEffect(() => {
+    getVocabOfSubCategory(idWordlist, idSub);
+  }, []);
   const wrapRef = useRef();
-  const data = [
-    {
-      id: 1,
-      title: "wordlist1",
-      listDesc: "wordlist1",
-      createdBy: "learner1",
-      listType: "PUBLIC",
-      createdAt: "10-10-2023",
-    },
-    {
-      id: 2,
-      title: "wordlist2",
-      listDesc: "wordlist2",
-      createdBy: "learner1",
-      listType: "PRIVATE",
-      createdAt: "10-10-2023",
-    },
-    {
-      id: 3,
-      title: "wordlist1",
-      listDesc: "wordlist1",
-      createdBy: "learner1",
-      listType: "PUBLIC",
-      createdAt: "10-10-2023",
-    },
-    {
-      id: 4,
-      title: "wordlist2",
-      listDesc: "wordlist2",
-      createdBy: "learner1",
-      listType: "PRIVATE",
-      createdAt: "10-10-2023",
-    },
-  ];
+  // const data = [
+  //   {
+  //     id: 1,
+  //     title: "wordlist1",
+  //     listDesc: "wordlist1",
+  //     createdBy: "learner1",
+  //     listType: "PUBLIC",
+  //     createdAt: "10-10-2023",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "wordlist2",
+  //     listDesc: "wordlist2",
+  //     createdBy: "learner1",
+  //     listType: "PRIVATE",
+  //     createdAt: "10-10-2023",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "wordlist1",
+  //     listDesc: "wordlist1",
+  //     createdBy: "learner1",
+  //     listType: "PUBLIC",
+  //     createdAt: "10-10-2023",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "wordlist2",
+  //     listDesc: "wordlist2",
+  //     createdBy: "learner1",
+  //     listType: "PRIVATE",
+  //     createdAt: "10-10-2023",
+  //   },
+  // ];
   // setWordLists(data);
   return (
-    <>
-      {data.map((item) => (
-        <View style={[tw`bg-stone-100`, Styles.wrappered]} ref={wrapRef}>
-          <View style={Styles.Text_content}>
-            <View style={Styles.Title_Status}>
-              <View>
-                <Text
-                  numberOfLines={1}
-                  style={[tw`tracking-wide text-xl italic`, { color: "#182B40" }]}
-                >
-                  Word {item.id}
-                </Text>
-              </View>
+    <FlatList
+      // style={{
+      //   backgroundColor: 'red'
+      // }}
+      showsVerticalScrollIndicator={false}
+      vertical
+      keyExtractor={(item) => item.vocabId}
+      data={listVocabOfSubCategory}
+      renderItem={(item) => (
+        // <GestureHandlerRootView>
+        //   <ItemWordList 
+        //   wordlist={item} 
+        //   onDelete={handleDelete}
+        //   />
+        // </GestureHandlerRootView>
 
-              {/* Status */}
-              <View style={Styles.viewItem}>
-                <View Styles={Styles.item}>
-                  <View style={Styles.circle}>
-                    <SvgXml width="20" height="20" xml={svgreview} />
-                  </View>
-                </View>
-
-                <View Styles={Styles.item}>
-                  <View style={Styles.circle}>
-                    <SvgXml width="20" height="20" xml={svgreview} />
-                  </View>
-                </View>
-
-                <View Styles={Styles.item}>
-                  <View style={Styles.circle}>
-                    <SvgXml width="20" height="20" xml={svgreview} />
-                  </View>
-                </View>
-
-              </View>
-            </View>
-
-            <View>
-              <Text
-                style={[
-                  tw`tracking-normal text-base non-italic`,
-                  { color: "#182B40" },
-                ]}
-              >
-                the word mean that you say hello word mean that you say hello
-              </Text>
-            </View>
-          </View>
-        </View>
-      ))}
-    </>
+        <ItemVocabOfSub
+        Vocab={item}
+        />
+      )}
+    />
   );
 }
