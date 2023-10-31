@@ -1,0 +1,104 @@
+@import "../../assets/scss/font.scss";
+@import "../../assets/scss/variable.scss";
+
+.layout-container {
+  font-family: $font;
+  height: 100vh;
+  .sidebar {
+    height: 100vh;
+    border-right: solid 1px #dadada;
+    &__ava {
+      height: 30%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &__name {
+        font-family: $font-manager;
+        font-size: 17px;
+        font-weight: 500;
+        color: #05041B;
+      }
+
+      &__role {
+        font-family: $font-manager;
+        font-size: 15px;
+        font-weight: 500;
+        color: #808396;
+      }
+    }
+
+    &__nav {
+      height: 60%;
+      font-family: $font-manager;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      .ant-menu-item {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 35px;
+        height: 60px;
+        //margin-left: 15px;
+        .anticon {
+          font-size: 22px;
+          color: #B5BAD4;
+        }
+
+        .ant-menu-title-content {
+          margin-right: 24px;
+          font-size: 17px;
+          color: #B5BAD4;
+        }
+      }
+      .ant-menu-item-selected {
+        background-color: white;
+        border-right: solid 4px #5E81F4;
+        border-radius: 0;
+        .anticon {
+          color: #5E81F4;
+        }
+
+        .ant-menu-title-content {
+          color: #05041B;
+        }
+      }
+    }
+    &__logout {
+      height: 15%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      &_button{
+        width: 100%;
+        border: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        height: 60px;
+      }
+      &_button:hover{
+        background-color: #5E81F4;
+      }
+      &_button:hover > *{
+        color: white;
+      }
+      &_icon {
+        font-size: 22px;
+        color: #B5BAD4;
+      }
+      &_text {
+        font-family: $font-manager;
+        margin-right: 24px;
+        font-size: 17px;
+        color: #B5BAD4;
+      }
+    }
+  }
+
+  .content-container {
+    background-color: #F5F5FB;
+  }
+}

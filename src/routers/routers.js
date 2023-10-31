@@ -9,6 +9,7 @@ import MyWordLists from "../pages/Learner/my-word-lists/MyWordLists";
 import SignIn from "../pages/sign-in/SignIn";
 import SignUp from "../pages/sign-up/SignUp";
 import Auth from "../layouts/Auth/Auth";
+import Manager from "../layouts/Manager/Manager"
 import Leitner from "../pages/Learner/leitner/Leitner";
 import WordListsPage from "../pages/Learner/wordlists/WordListsPage";
 import WordListDetail from "../pages/Learner/vocabulary/WordListDetail";
@@ -76,6 +77,28 @@ const routers = createBrowserRouter([
       { path: "sign-up", element: <SignUp /> },
     ],
   },
+  {
+    path: "/manager",
+    element: <Manager />,
+    children: [
+      {
+        path: "account",
+        element: <Profile />,
+      },
+      {
+        path: "vocabulary",
+        element: <Profile />,
+      },
+      {
+        path: "wordlist",
+        element: <Leitner />,
+      },
+      {
+        path: "video",
+        element: <Leitner />,
+      },
+    ],
+  }
 ]);
 
 export default routers;
