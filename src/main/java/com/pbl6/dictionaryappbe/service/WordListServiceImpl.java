@@ -68,7 +68,7 @@ public class WordListServiceImpl implements WordListService {
     public WordListResponseDto createWordList(WordListRequestDto wordList) {
         String title = wordList.getTitle();
         User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
-        if (wordListRepository.findByTitleAndUser(wordList.getTitle(), user) != null) {
+        if (wordListRepository.findByTitleAndUser(title, user) != null) {
             throw new DuplicateDataException("Title is existed");
         }
         WordList newWordList = WordList.builder()
@@ -82,7 +82,7 @@ public class WordListServiceImpl implements WordListService {
             newWordList.setListType(ListType.PUBLIC);
         } else {
             String listType = wordList.getListType();
-            if (listType == null || listType.isEmpty()) {
+            if (listType.isEmpty()) {
                 throw new FieldNotNullException("Type of wordlist");
             }
             newWordList.setListType(ListType.valueOf(listType.toUpperCase()));
@@ -98,7 +98,7 @@ public class WordListServiceImpl implements WordListService {
         if (wordListRepository.findByTitleAndUser(newTitle, ownedWordList.getUser()) != null && !Objects.equals(newTitle, ownedWordList.getTitle())) {
             throw new DuplicateDataException("Title is existed");
         }
-        ownedWordList.setTitle(wordList.getTitle());
+        ownedWordList.setTitle(newTitle);
         ownedWordList.setListDesc(wordList.getListDesc());
         ownedWordList.setListType(ListType.valueOf(wordList.getListType().toUpperCase()));
         return wordListMapper.toWordListDto(wordListRepository.save(ownedWordList));

@@ -11,6 +11,7 @@ import com.pbl6.dictionaryappbe.exception.RecordNotFoundException;
 import com.pbl6.dictionaryappbe.mapper.SubcategoryDetailMapper;
 import com.pbl6.dictionaryappbe.mapper.SubcategoryMapper;
 import com.pbl6.dictionaryappbe.persistence.Definition;
+import com.pbl6.dictionaryappbe.persistence.role.RoleName;
 import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
 import com.pbl6.dictionaryappbe.persistence.subcategory.SubcategoryType;
 import com.pbl6.dictionaryappbe.persistence.subcategory_detail.SubcategoryDetail;
@@ -35,6 +36,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -107,7 +109,6 @@ public class SubcategoryServiceImpl implements SubcategoryService {
                     .vocabulary(newVocab)
                     .definition(newDef)
                     .build());
-
             subcategoryDetails.add(subcategoryDetailRepository.save(SubcategoryDetail.builder()
                     .vocabId(newVocab.getVocabId())
                     .defId(newDef.getDefId())
@@ -151,7 +152,6 @@ public class SubcategoryServiceImpl implements SubcategoryService {
                 .lastLearning(null)
                 .vocabDef(vocabDef)
                 .build());
-
         return subcategoryDetailMapper.toSubcategoryDetailResponseDto(subcategoryDetail);
     }
 
@@ -159,6 +159,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     @Transactional
     public SubcategoryResponseDto createSubcategory(Long wordListId, SubcategoryRequestDto subcategory) {
         String title = subcategory.getTitle();
+        User user = AuthenticationUtils.getUserFromSecurityContext();
         WordList wordList = wordListRepository.findByUserAndWordListId(AuthenticationUtils.getUserFromSecurityContext(), wordListId)
                 .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"));
         if (subcategoryRepository.findByTitleAndWordList(title, wordList) != null) {
@@ -171,6 +172,9 @@ public class SubcategoryServiceImpl implements SubcategoryService {
                 .wordList(wordList)
                 .subcategoryDetails(new ArrayList<>())
                 .build();
+        if (Objects.requireNonNull(user).getRole().getName() != RoleName.LEARNER) {
+            newSubcategory.setSubcategoryType(SubcategoryType.DEFAULT);
+        }
         return subcategoryMapper.toSubcategoryResponseDto(subcategoryRepository.save(newSubcategory));
     }
 
