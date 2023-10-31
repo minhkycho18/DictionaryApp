@@ -57,8 +57,9 @@ public class SubcategoryServiceImpl implements SubcategoryService {
         User user = AuthenticationUtils.getUserFromSecurityContext();
         WordList wordList = wordListRepository.findById(wordListId)
                 .orElseThrow(() -> new RecordNotFoundException("WordList not found with ID: " + wordListId));
+        assert user != null;
         if (wordList.getListType() == ListType.PRIVATE
-                && !wordList.getUser().equals(user)) {
+                && !wordList.getUser().getUserId().equals(user.getUserId())) {
             throw new AccessDeniedException("You do not have permission to access this WordList");
         }
         List<Subcategory> subcategories = subcategoryRepository.findAllByWordList(wordList);
