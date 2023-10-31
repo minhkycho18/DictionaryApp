@@ -1,18 +1,30 @@
 import {
   DeleteOutlined,
+  EditOutlined,
   EllipsisOutlined,
   ExclamationCircleOutlined,
   PlusOutlined,
   SearchOutlined,
-  WarningOutlined,
 } from "@ant-design/icons";
-import { Button, Dropdown, Input, Menu, Modal, Space, Spin } from "antd";
+import {
+  Button,
+  Checkbox,
+  Dropdown,
+  Input,
+  Menu,
+  Modal,
+  Space,
+  Spin,
+} from "antd";
 import { debounce } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { FaGraduationCap } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getAllVocabInSubcategory } from "../../stores/subcategory/subcategoryThunk";
+import {
+  addWordToSubcategory,
+  getAllVocabInSubcategory,
+} from "../../stores/subcategory/subcategoryThunk";
 import CustomWord from "./CustomWord/CustomWord";
 import DefaultWord from "./DefaultWord/DefaultWord";
 import SubcategoryItem from "./SubItem/SubcategoryItem";
@@ -29,6 +41,12 @@ const Subcategory = (props) => {
   const [modal, contextHolder] = Modal.useModal();
   const [inputWord, setInputWord] = useState("");
   const [keyword, setKeyword] = useState("");
+  const [selectedIds, setSelectedIds] = useState([]);
+  const plainOptions = vocabInSub;
+  const checkAll = plainOptions.length === selectedIds.length;
+  const indeterminate =
+    selectedIds.length > 0 && selectedIds.length < plainOptions.length;
+
   useEffect(() => {
     const params = {
       wordListId: id,
@@ -37,9 +55,12 @@ const Subcategory = (props) => {
     dispatch(getAllVocabInSubcategory(params));
   }, [dispatch, id, props.subcategory.subcategoryId]);
 
+  //==============================================================================================================
   const handleSetCustom = () => {
     setIsCustom(!isCustom);
   };
+
+  //==============================================================================================================
   const onChangeInput = (event) => {
     const newValue = event.target.value;
     setInputWord(newValue);
@@ -49,18 +70,66 @@ const Subcategory = (props) => {
   const debounceInputKey = useRef(
     debounce((nextValue) => {
       setKeyword(nextValue);
-      console.log(nextValue);
     }, 500)
   ).current;
+
+  //==============================================================================================================
   const onConfirmDelete = () => {
     props?.onDel([props.subcategory.subcategoryId]);
   };
+
+  //==============================================================================================================
+  const onCheckAllChange = (e) => {
+    const checkAllItem = vocabInSub.map((vocab) => ({
+      vocabId: vocab.vocabId,
+      defId: vocab.definition.defId,
+    }));
+    setSelectedIds(e.target.checked ? checkAllItem : []);
+  };
+
+  const onChangeList = (items) => {
+    if (
+      selectedIds.some(
+        (item) => item.vocabId === items.vocabId && item.defId === items.defId
+      )
+    ) {
+      setSelectedIds(
+        selectedIds.filter(
+          (selectedItem) =>
+            selectedItem.vocabId !== items.vocabId &&
+            selectedItem.defId !== items.defId
+        )
+      );
+    } else {
+      setSelectedIds([...selectedIds, items]);
+    }
+  };
+
+  //==============================================================================================================
   const filterVocab = vocabInSub.filter((vocab) =>
     vocab.word.startsWith(keyword)
   );
   const renderVocabInSub = filterVocab.map((vocab, index) => (
-    <SubcategoryItem key={index} vocab={vocab} />
+    <SubcategoryItem
+      key={index}
+      vocab={vocab}
+      setList={onChangeList}
+      isChecked={selectedIds.some(
+        (item) =>
+          item.vocabId === vocab.vocabId &&
+          item.defId === vocab.definition.defId
+      )}
+    />
   ));
+  //==============================================================================================================
+  const handleAddVocab = (value) => {
+    const params = {
+      wordListId: id,
+      SubId: props.subcategory.subcategoryId,
+      ...value,
+    };
+    dispatch(addWordToSubcategory(params));
+  };
 
   return (
     <Space className="subcategory" direction="vertical">
@@ -79,6 +148,14 @@ const Subcategory = (props) => {
             value={inputWord}
             onChange={onChangeInput}
           ></Input>
+          <Space className="delete-btn">
+            <DeleteOutlined />
+            <Checkbox
+              indeterminate={indeterminate}
+              onChange={onCheckAllChange}
+              checked={checkAll}
+            ></Checkbox>
+          </Space>
 
           <Dropdown
             placement="bottomRight"
@@ -87,8 +164,8 @@ const Subcategory = (props) => {
                 items={[
                   {
                     key: "1",
-                    label: "Report",
-                    icon: <WarningOutlined />,
+                    label: "Edit",
+                    icon: <EditOutlined />,
                   },
 
                   {
@@ -149,8 +226,13 @@ const Subcategory = (props) => {
               </div>
             </Space>
 
-            {!isCustom && <DefaultWord />}
-            {isCustom && <CustomWord />}
+            {!isCustom && (
+              <DefaultWord
+                vocabInSub={vocabInSub}
+                onAddVocab={handleAddVocab}
+              />
+            )}
+            {isCustom && <CustomWord vocabInSub={vocabInSub} />}
           </Space>
         </Modal>
 

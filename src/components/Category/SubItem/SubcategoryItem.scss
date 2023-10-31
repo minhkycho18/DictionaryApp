@@ -7,14 +7,17 @@
   border-radius: 8px;
   // box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   border: 1px solid #ddd;
+  justify-content: space-between;
 }
 .subcategory {
   &__header {
     width: 100%;
-    justify-content: space-between;
-    align-items: center;
+    // justify-content: space-between;
+    align-items: flex-start;
+    justify-content: flex-start;
   }
   &_add {
+    justify-content: flex-start;
     &:hover &__icon {
       color: #6248b1 !important;
       animation: spin backwards 1s;
@@ -27,6 +30,9 @@
   }
   &__content {
     text-wrap: wrap;
+  }
+  &__body {
+    width: 100% !important;
   }
 }
 @keyframes spin {
@@ -54,5 +60,15 @@
   &__pos {
     font-weight: 600;
     color: $text-sub-color;
+    font-size: 18px;
   }
+}
+.checkbox__del {
+  margin-right: 8px;
+}
+.delete-btn {
+  border: 1px solid #ccc;
+  padding: 4px;
+  border-radius: 6px;
+  cursor: pointer;
 }

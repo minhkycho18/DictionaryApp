@@ -1,6 +1,4 @@
 import {
-  CarryOutOutlined,
-  ClockCircleOutlined,
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleFilled,
@@ -9,12 +7,13 @@ import {
 } from "@ant-design/icons";
 import { Image, Input, Modal, Popover, Space } from "antd";
 import React, { useState } from "react";
+import { MdLock, MdOutlinePublic } from "react-icons/md";
+import { PiClockCountdown } from "react-icons/pi";
 import { useDispatch } from "react-redux";
 import category from "../../assets/images/category-back.png";
 import calculateDateTime from "../../helpers/calculateDateTime";
 import { updateWl } from "../../stores/word-lists/wordLists-thunk";
 import "./ListItem.scss";
-
 const ListItem = (props) => {
   const { confirm } = Modal;
   const [isOpenModel, setIsOpenModel] = useState(false);
@@ -72,12 +71,12 @@ const ListItem = (props) => {
   };
 
   const content = (
-    <Space wrap direction="vertical">
-      <Space style={{ cursor: "pointer" }} onClick={showModal}>
+    <Space direction="vertical">
+      <Space className="option__item" onClick={showModal}>
         <EditOutlined style={{ marginRight: 8 }} />
         Edit
       </Space>
-      <Space style={{ cursor: "pointer" }} onClick={showDeleteConfirm}>
+      <Space className="option__item" onClick={showDeleteConfirm}>
         <DeleteOutlined style={{ marginRight: 8 }} />
         Delete
       </Space>
@@ -85,6 +84,12 @@ const ListItem = (props) => {
   );
   const handleSelectWordList = (e) => {
     props.onSelect(e);
+  };
+  const days = calculateDateTime(props.wordlist.createdAt);
+  const renderDay = () => {
+    if (days > 0) {
+      return `Created at ` + days + " ago";
+    } else return "Created today";
   };
   return (
     <Space className="MyWordLists__item ListItem" direction="vertical">
@@ -120,7 +125,6 @@ const ListItem = (props) => {
       <Space className="ListItem__top">
         <Image className="" width={100} src={category} preview={false}></Image>
         <Popover
-          title=" "
           trigger="hover"
           showArrow="hide"
           placement="bottomRight"
@@ -141,14 +145,18 @@ const ListItem = (props) => {
         </Popover>
       </Space>
       <Space direction="vertical" className="ListItem__middle">
-        <span>
-          <CarryOutOutlined style={{ marginRight: 8 }} />
+        <Space>
+          {type() === "Public" ? (
+            <MdOutlinePublic style={{ fontSize: 16 }} />
+          ) : (
+            <MdLock style={{ fontSize: 16 }} />
+          )}
           {type()}
-        </span>
-        <span>
-          <ClockCircleOutlined style={{ marginRight: 8 }} />
-          Created at {calculateDateTime(props.wordlist.createdAt)} days ago
-        </span>
+        </Space>
+        <Space>
+          <PiClockCountdown style={{ fontSize: 16 }} />
+          {renderDay()}
+        </Space>
       </Space>
       <Space
         className="ListItem__bottom"

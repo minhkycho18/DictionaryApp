@@ -5,24 +5,26 @@
   background-color: #fff !important;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  // justify-content: space-between;
   align-items: center;
   border-right: 1px solid #eee;
   position: sticky !important;
   top: 0;
   left: 0;
   height: 100vh;
+  min-width: min-content !important;
 }
 .infor {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 8px 54px;
+  font-family: $font;
   // margin: 0px 16px;
   &__name {
     display: block;
     margin-top: 16px;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 18px;
   }
   &__ava {
@@ -37,15 +39,15 @@
     font-family: $font;
     font-weight: 600;
     font-size: 16px;
-    color: #0b043d;
+    color: $text-sub-color;
     cursor: pointer;
+    font-size: 20px;
   }
 }
 .menu2 {
   display: flex;
   justify-content: center;
-  //   align-items: flex-start;
-  margin: 32px 0px;
+  // margin: 32px 0px;
   padding: 32px 0px;
   &__item {
     display: flex;
@@ -59,8 +61,9 @@
     font-size: 16px;
     line-height: 24px;
     font-weight: 600;
+
     &:hover {
-      background-color: #eeeeee;
+      // background-color: #eeeeee;
       color: #0b043d;
       cursor: pointer;
     }

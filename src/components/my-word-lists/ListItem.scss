@@ -2,6 +2,9 @@
 @import "../../assets/scss/variable.scss";
 .ListItem {
   font-family: $font;
+  // box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+  // border: none !important;
   &__top {
     display: flex;
     justify-content: space-between;
@@ -34,5 +37,11 @@
   }
   &_input {
     width: 100% !important;
+  }
+}
+.option__item {
+  cursor: pointer;
+  &:hover {
+    color: $text-sub-color;
   }
 }

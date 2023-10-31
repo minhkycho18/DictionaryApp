@@ -29,7 +29,7 @@ const CustomSider = (props) => {
   };
 
   return (
-    <Sider collapsed={false} width={286} className="sidermenu">
+    <Sider collapsed={false} className="sidermenu">
       <Space direction="vertical" className="infor">
         <Space className="infor__logo" onClick={() => navigate("/")}>
           <Image src={logo} preview={false} width={48} />

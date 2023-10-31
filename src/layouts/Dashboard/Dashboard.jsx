@@ -60,7 +60,7 @@ const Dashboard = () => {
 
             <Space direction="vertical" className="headerPage">
               <Space className="headerPage__name">
-                {path[path.slice(0, 3).length - 1].title}
+                {decodeURI(path[path.slice(0, 3).length - 1].title)}
               </Space>
               <Breadcrumb
                 items={breadcrumbs}

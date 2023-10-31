@@ -1,6 +1,6 @@
 import {
-  BookOutlined,
   CaretRightOutlined,
+  FolderOutlined,
   InboxOutlined,
   PlusCircleFilled,
   PlusOutlined,
@@ -147,7 +147,7 @@ const Meaning = ({ detail }) => {
           }`}
           onClick={() => handleAddWordlist(definition.defId)}
         >
-          <BookOutlined className="choice__icon" />
+          <FolderOutlined className="choice__icon" />
           <PlusCircleFilled className="choice__icon--sub" />
         </div>
       </Space>
