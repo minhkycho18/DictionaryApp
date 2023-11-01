@@ -4,12 +4,15 @@ import AddCustom from "../components/YourWordList/AddWordToSub/Custom/AddCustom"
 import AddDefault from "../components/YourWordList/AddWordToSub/Default/AddDefault";
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
-export default function TopTabAddWordToSub() {
+import { useRoute } from "@react-navigation/native";
+export default function TopTabAddWordToSub(props) {
     const TopTabs = createMaterialTopTabNavigator();
     const [loaded] = useFonts(configFont);
     if (!loaded) {
         return null;
     }
+    // const { params } = useRoute()
+    const params = props.route.params
     return (
         <TopTabs.Navigator
             screenOptions={{
@@ -23,7 +26,7 @@ export default function TopTabAddWordToSub() {
                 tabBarIndicatorStyle: {
                     height: 3,
                     borderRadius: 5,
-                    backgroundColor: "#1DA1F2",
+                    backgroundColor: "#4F62F7",
                 },
 
             }}
@@ -31,8 +34,9 @@ export default function TopTabAddWordToSub() {
             <TopTabs.Screen
                 name="Default"
                 component={AddDefault}
+                initialParams={params}
             />
-            <TopTabs.Screen name="Custom" component={AddCustom} />
+            <TopTabs.Screen name="Custom" component={AddCustom} initialParams={params} />
         </TopTabs.Navigator>
     )
 }

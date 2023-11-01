@@ -7,7 +7,6 @@ import { styles } from "../styles/Style";
 import SplashScreen from "~/components/SplashScreen";
 import { useRef, useState, useEffect } from 'react'
 import { Dimensions, Animated, Keyboard, Platform } from "react-native";
-
 import index from "~/components/Study";
 export default function BottomTab() {
   const tabOffsetValue = useRef(new Animated.Value(0)).current;

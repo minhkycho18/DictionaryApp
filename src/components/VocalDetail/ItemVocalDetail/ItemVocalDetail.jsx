@@ -5,11 +5,27 @@ import { AntDesign } from "@expo/vector-icons";
 import { colors, configFont } from "~/constants/theme";
 import { useFonts } from "expo-font";
 
-function ItemVocalDetail({ definition, color, item, count }) {
+function ItemVocalDetail({
+  definition,
+  color,
+  item,
+  count,
+  onPresentModal,
+  stateOfSub,
+}) {
+  const [isWordlist, setIsWordlist] = useState(definition.isWordOfUserWordlist);
+  useEffect(() => {
+    if (stateOfSub.state && stateOfSub.defId === definition.defId) {
+      console.log(`Sucessfully`);
+      setIsWordlist(stateOfSub);
+    }
+  }, [stateOfSub]);
+
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
   }
+
   return (
     <View style={styles.container}>
       <View style={{ ...styles.wrapper, borderColor: color }}>
@@ -33,7 +49,7 @@ function ItemVocalDetail({ definition, color, item, count }) {
               <TouchableOpacity
                 style={
                   definition.isWordOfUserLeitner
-                    ? { ...styles.viewIcon, borderColor: "#00BFA5" }
+                    ? { ...styles.viewIcon, borderColor: "#3BC8F7" }
                     : styles.viewIcon
                 }
               >
@@ -42,25 +58,26 @@ function ItemVocalDetail({ definition, color, item, count }) {
                   style={{
                     width: 24,
                     height: 24,
-                    tintColor: definition.isWordOfUserWordlist
-                      ? "#00BFA5"
+                    tintColor: definition.isWordOfUserLeitner
+                      ? "#3BC8F7"
                       : "#5E7172",
                   }}
                 />
               </TouchableOpacity>
               <TouchableOpacity
                 style={
-                  definition.isWordOfUserWordlist
+                  isWordlist
                     ? { ...styles.viewIcon, borderColor: "#00BFA5" }
                     : styles.viewIcon
+                }
+                onPress={() =>
+                  onPresentModal({ vocabId: item.id, defId: definition.defId })
                 }
               >
                 <AntDesign
                   name="addfolder"
                   size={24}
-                  color={
-                    definition.isWordOfUserWordlist ? "#00BFA5" : "#5E7172"
-                  }
+                  color={isWordlist ? "#00BFA5" : "#5E7172"}
                 />
               </TouchableOpacity>
             </View>

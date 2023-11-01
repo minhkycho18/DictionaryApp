@@ -8,10 +8,12 @@ import SearchResult from "~/components/Search/SearchResult/SearchResult";
 import { getVocalByKeyWord } from "~/api/Dictionary";
 import { getSearchHistory, removeHistory } from "~/helper/asyncStorage";
 import { useNavigation } from "@react-navigation/native";
+import CardLoader from "~/components/CardLoader";
 const Dictionary = () => {
   const scrollY = new Animated.Value(0);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [isFound, setIsFound] = useState(true);
+  const [isSearch, setIsSearch] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [vocals, setVocals] = useState();
   const [history, setHistory] = useState([]);
@@ -34,6 +36,7 @@ const Dictionary = () => {
   };
   const handleTextChange = (searchValue) => {
     setSearchText(searchValue);
+    setIsSearch(true);
   };
   const handleBackPress = () => {
     setIsHeaderVisible(true);
@@ -59,8 +62,10 @@ const Dictionary = () => {
       if (data.content.length > 0) {
         setVocals(data.content);
         setIsFound(true);
+        setIsSearch(false);
       } else {
         setIsFound(false);
+        setIsSearch(false);
       }
     };
     if (searchText !== "") {
@@ -106,7 +111,16 @@ const Dictionary = () => {
         />
       )}
       {!isHeaderVisible &&
-        (isFound ? (
+        (isSearch ? (
+          <View style={styles.viewLoaderSearch}>
+            <View style={styles.itemLoader}>
+              <CardLoader />
+            </View>
+            <View style={styles.itemLoader}>
+              <CardLoader />
+            </View>
+          </View>
+        ) : isFound ? (
           <FlatList
             showsVerticalScrollIndicator={false}
             keyExtractor={(item) => item.id}
@@ -134,6 +148,16 @@ styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 20,
+    backgroundColor: "#fff",
+  },
+  viewLoaderSearch: {
+    flex: 1,
+    flexDirection: "column",
+    backgroundColor: "#fff",
+  },
+  itemLoader: {
+    borderBottomColor: "#F1F1F1",
+    borderBottomWidth: 2,
   },
 });
 export default Dictionary;

@@ -15,7 +15,7 @@ export default function ItemWordList({ src, wordlist }) {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.push("AddWordToSub");
+        navigation.push("YourWordlistDetail");
       }}
       style={Styles.container}
     >

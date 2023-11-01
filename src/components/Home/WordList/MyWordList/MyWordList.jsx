@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import tw from "twrnc";
 import ItemWordList from "../ItemWordList/ItemWordList";

@@ -1,16 +1,94 @@
-import React, { useEffect, useState } from "react";
-import { View, ScrollView, StyleSheet, SafeAreaView } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  SafeAreaView,
+  Text,
+  TextInput,
+} from "react-native";
 import { useRoute } from "@react-navigation/native";
 import HeaderVocalDetail from "~/components/VocalDetail/HeaderVocalDetail/HeaderVocalDetail";
 import ItemVocalDetail from "~/components/VocalDetail/ItemVocalDetail/ItemVocalDetail";
-import { getDetailVocal } from "~/api/Dictionary";
 import ItemVocalMain from "~/components/VocalDetail/ItemVocalMain/ItemVocalMain";
 import { GetColor } from "~/helper";
+import { useFonts } from "expo-font";
+import { colors, configFont } from "~/constants/theme";
+import ItemAddNewWordlist from "~/components/BottomSheet/ItemAddWordlist/ItemAddWordlist";
+import ItemWordlist from "~/components/BottomSheet/ItemWordList/ItemWordList";
+import Modal from "react-native-modal";
+import FormAdd from "~/components/BottomSheet/FormAdd/FormAdd";
+import { checkLogin } from "~/helper/Auth";
+import Toast, { ErrorToast } from "react-native-toast-message";
+import { getWordListById } from "~/api/WordList";
+import { delay } from "~/helper/index";
+
 function VocalDetail() {
   const {
     params: { vocals },
   } = useRoute();
   const [vocal, setVocal] = useState(vocals);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenModaAdd, setIsOpenModaAdd] = useState(false);
+  const [isWordList, setIsWordList] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
+  const [wordlists, setWordlists] = useState([]);
+  const [dataUpdate, setDataUpdate] = useState({});
+  const [isWordOfSub, setIsWordOfSub] = useState({});
+  const [wordlistId, setWordlistId] = useState("");
+  useEffect(() => {
+    const checkToken = async () => {
+      const check = await checkLogin();
+      setIsLogin(check);
+    };
+
+    checkToken();
+  }, []);
+  useEffect(() => {
+    const getMyWordList = async () => {
+      const result = await getWordListById();
+      setWordlists(result);
+    };
+    if (isOpen) {
+      getMyWordList();
+      // console.log("huy");
+    }
+  }, [isOpen]);
+  const handlePresentModal = (data) => {
+    if (!isLogin) {
+      showToast("Add to wordlist fail", "Please login to add");
+    } else {
+      setDataUpdate(data);
+      // console.log(`Object`, data);
+      setIsOpen(!isOpen);
+    }
+  };
+  const showToast = (text1, text2) => {
+    Toast.show({
+      position: "top",
+      type: "error",
+      text1: text1,
+      text2: text2,
+      visibilityTime: 2000,
+      autoHide: true,
+      topOffset: 40,
+      zIndex: 1000,
+    });
+  };
+
+  const toastConfig = {
+    error: (props) => (
+      <ErrorToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
+  };
 
   let count = 0;
   const items = vocal.map((item) => {
@@ -28,6 +106,8 @@ function VocalDetail() {
                 color={colorPos}
                 item={item}
                 count={count}
+                onPresentModal={handlePresentModal}
+                stateOfSub={isWordOfSub}
               />
             </View>
           );
@@ -35,6 +115,33 @@ function VocalDetail() {
       </View>
     );
   });
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
+  const handlePresentModalAdd = () => {
+    setIsWordList(true);
+    setIsOpen(false);
+    setIsOpenModaAdd(!isOpenModaAdd);
+  };
+  const handleCloseModalAdd = () => {
+    setIsOpenModaAdd(false);
+    delay(1000);
+    setIsOpen(!isOpen);
+  };
+  const handleAddSub = (wordlistId) => {
+    setWordlistId(wordlistId);
+    setIsWordList(false);
+    setIsOpenModaAdd(!isOpenModaAdd);
+    setIsOpen(false);
+  };
+  const handleAddWordToSub = (data) => {
+    setIsOpen(false);
+    setIsWordOfSub(data);
+  };
+  const handleError = (text1, text2) => {
+    showToast(text1, text2);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -42,13 +149,114 @@ function VocalDetail() {
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         {items}
       </ScrollView>
+      <Modal
+        onBackdropPress={() => setIsOpen(false)}
+        onBackButtonPress={() => setIsOpen(false)}
+        isVisible={isOpen}
+        animationIn="bounceInUp"
+        animationOut="bounceOutDown"
+        animationInTiming={1000}
+        animationOutTiming={500}
+        backdropTransitionInTiming={1000}
+        backdropTransitionOutTiming={500}
+        style={styles.modal}
+      >
+        <View style={styles.modalContent}>
+          <View style={styles.viewBottomSheet}>
+            <Text style={styles.headerBottomSheet}>Add to your wordlist</Text>
+            <View style={styles.scrollBottom}>
+              <ScrollView
+                keyboardDismissMode="on-drag"
+                keyboardShouldPersistTaps="never"
+                style={{ marginBottom: 10 }}
+                showsVerticalScrollIndicator={false}
+              >
+                {wordlists.map((item) => (
+                  <ItemWordlist
+                    onAddSub={handleAddSub}
+                    key={item.id}
+                    wordlist={item}
+                    data={dataUpdate}
+                    onAddWordToSub={handleAddWordToSub}
+                    onError={handleError}
+                  />
+                ))}
+
+                <ItemAddNewWordlist onAddWordList={handlePresentModalAdd} />
+              </ScrollView>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        onBackdropPress={() => {
+          setIsOpenModaAdd(false);
+          setIsOpen(true);
+        }}
+        onBackButtonPress={() => setIsOpenModaAdd(false)}
+        isVisible={isOpenModaAdd}
+        onSwipeComplete={handlePresentModalAdd}
+        animationIn="bounceInUp"
+        animationOut="bounceOutDown"
+        animationInTiming={900}
+        animationOutTiming={500}
+        backdropTransitionInTiming={1000}
+        backdropTransitionOutTiming={500}
+        style={styles.modal}
+      >
+        <View style={styles.modalContent}>
+          <View style={styles.viewBottomSheet}>
+            <FormAdd
+              isAddWordlist={isWordList}
+              onCancel={handleCloseModalAdd}
+              onCreate={handleCloseModalAdd}
+              wordlistId={wordlistId}
+            />
+          </View>
+        </View>
+      </Modal>
+
+      <Toast
+        config={toastConfig}
+        refs={(ref) => {
+          Toast.setRef(ref);
+        }}
+      />
     </SafeAreaView>
   );
 }
-styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 20,
+    backgroundColor: "#fff",
+  },
+  viewBottomSheet: {
+    marginHorizontal: 20,
+  },
+  headerBottomSheet: {
+    fontSize: 23,
+    fontFamily: "Quicksand-Bold",
+    color: colors.textTitle,
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  scrollBottom: {
+    height: "90%",
+    marginTop: 10,
+  },
+  modal: {
+    justifyContent: "flex-end",
+    margin: 0,
+  },
+  modalContent: {
+    backgroundColor: "white",
+    paddingTop: 12,
+    paddingHorizontal: 12,
+    borderTopRightRadius: 50,
+    borderTopLeftRadius: 50,
+    height: "70%",
   },
 });
 export default VocalDetail;
