@@ -42,17 +42,18 @@ const Subcategory = (props) => {
   const [inputWord, setInputWord] = useState("");
   const [keyword, setKeyword] = useState("");
   const [selectedIds, setSelectedIds] = useState([]);
+  const [numItem, setNumItem] = useState(10);
   const plainOptions = vocabInSub;
   const checkAll = plainOptions.length === selectedIds.length;
   const indeterminate =
     selectedIds.length > 0 && selectedIds.length < plainOptions.length;
-
   useEffect(() => {
     const params = {
       wordListId: id,
       SubId: props.subcategory.subcategoryId,
     };
     dispatch(getAllVocabInSubcategory(params));
+    setNumItem(10);
   }, [dispatch, id, props.subcategory.subcategoryId]);
 
   //==============================================================================================================
@@ -109,7 +110,8 @@ const Subcategory = (props) => {
   const filterVocab = vocabInSub.filter((vocab) =>
     vocab.word.startsWith(keyword)
   );
-  const renderVocabInSub = filterVocab.map((vocab, index) => (
+  const limitVocab = filterVocab.splice(0, numItem);
+  const renderVocabInSub = limitVocab.map((vocab, index) => (
     <SubcategoryItem
       key={index}
       vocab={vocab}
@@ -196,7 +198,7 @@ const Subcategory = (props) => {
           </Dropdown>
         </Space>
       </Space>
-      <Space className="subcategory__back" direction="vertical">
+      <div className="subcategory__back" direction="vertical">
         {contextHolder}
         <Modal
           centered
@@ -247,11 +249,19 @@ const Subcategory = (props) => {
               <span>Add more...</span>
             </Space>
             {renderVocabInSub}
+            {vocabInSub.length > 10 && (
+              <Button
+                className="showMore"
+                onClick={() => setNumItem((prevNum) => prevNum + 10)}
+              >
+                More...
+              </Button>
+            )}
           </>
         )}
 
         {VocabLoading && <Spin spinning={VocabLoading} />}
-      </Space>
+      </div>
     </Space>
   );
 };

@@ -7,9 +7,9 @@ import { getSearchResult } from "../../../stores/search-word/searchThunk";
 import "./DefaultWord.scss";
 const DefaultWord = ({ vocabInSub, onAddVocab }) => {
   const { result } = useSelector((state) => state.search);
-  //   const [isSelected, setIsSelected] = useState(true);
   const [inputWord, setInputWord] = useState("");
   const dispatch = useDispatch();
+
   const onChangeInput = (event) => {
     const newValue = event.target.value;
     setInputWord(newValue);

@@ -10,6 +10,8 @@
     background-color: #e0e7f2;
     padding: 16px;
     border-radius: 16px;
+    display: flex;
+    flex-direction: column;
   }
   &__study {
     font-family: $font;
@@ -82,4 +84,8 @@
       rgb(209, 202, 232) 0px 0px 4px 3px;
     border: 1px solid #6248b1 !important;
   }
+}
+.showMore {
+  align-self: center;
+  margin: 8px;
 }
