@@ -16,10 +16,8 @@ export default function ItemWordList({ wordlist, onDelete }) {
   const iconRef = useRef();
   const navigation = useNavigation();
   const handleDetailWordList = async () => {
-    navigation.push("YourWordlistDetail");
-    console.log("test: ", "click item");
+    navigation.push("YourWordlistDetail", { Wordlist : wordlist });
   };
-
   const handleDelete = (id) => {
     onDelete(id);
   };

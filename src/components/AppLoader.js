@@ -10,11 +10,12 @@ const AppLoader = () => {
         <View style={[StyleSheet.absoluteFillObject, styles.container]}>
             <LottieView
                 style={[{
-                    flex: 1,
+                    // flex: 1,
                     height: size_logo,
                     width: size_logo
                 }]}
                 source={require('~/assets/loading.json')}
+
                 autoPlay
                 loop />
         </View>
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         alignItems: 'center',
-        paddingRight: screenWidth/2-size_logo/2,
+        // paddingRight: screenWidth/2-size_logo/2,
         backgroundColor: 'rgba(0,0,0,0.3)',
         zIndex: 1
     }
