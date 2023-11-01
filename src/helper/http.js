@@ -5,7 +5,7 @@ import { getTokenFromAsyncStorage } from "./Auth";
 class Http {
   constructor() {
     this.instance = axios.create({
-      baseURL: "http://192.168.0.6:8080",
+      baseURL: "http://192.168.1.10:8080",
       // baseURL: "http://192.168.1.140:8080", //URL Quoc Thanh
       name: "Dictionary App",
       timeout: 10000,
@@ -19,7 +19,8 @@ class Http {
         return response.data;
       },
       ({ response }) => {
-        if (response.status === 401) {
+        if (response.status === 400) {
+          return Promise.reject(response.data);
         }
         const result = { ...response.data, status: response.status };
         return Promise.reject(result);

@@ -16,6 +16,7 @@ import { createNewWordLists } from "~/api/WordList";
 import RadioGroup from "react-native-radio-buttons-group";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
+import { getIdValueInArr } from "~/helper";
 const data = [
   {
     id: "1",
@@ -99,16 +100,16 @@ const AddWordList = () => {
       }
     } else {
       const create = async () => {
-        const listType = type === "1" ? "PUBLIC" : "PRIVATE";
+        // const listType = type === "1" ? "PUBLIC" : "PRIVATE";
         try {
           const res = await createNewWordLists({
             title: title,
             listDesc: desc,
-            listType: listType,
+            listType: getIdValueInArr(data, type),
           });
           navigation.navigate("YourWordlist", res);
         } catch (error) {
-          showToast("Error", "Create word list fail");
+          showToast("Error", error);
         }
       };
       create();
@@ -183,7 +184,7 @@ const AddWordList = () => {
               Word List Title
             </Text>
             <TextInput
-              style={{ ...Styles.input, fontFamily: "Quicksand-Regular" }}
+              style={{ ...Styles.input, fontFamily: "Quicksand-Medium" }}
               placeholder="Write your title"
               autoFocus={true}
               ref={titleRef}
@@ -208,7 +209,7 @@ const AddWordList = () => {
               Word List Description
             </Text>
             <TextInput
-              style={{ ...Styles.input, fontFamily: "Quicksand-Regular" }}
+              style={{ ...Styles.input, fontFamily: "Quicksand-Medium" }}
               placeholder="Write your description"
               ref={descRef}
               value={desc}

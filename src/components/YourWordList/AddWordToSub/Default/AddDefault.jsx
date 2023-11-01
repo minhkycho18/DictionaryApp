@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { EvilIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import {
@@ -6,9 +6,9 @@ import {
   Text,
   SafeAreaView,
   Image,
-  Pressable,
   TextInput,
   FlatList,
+  Animated,
 } from "react-native";
 import { Styles } from "./Styles";
 import { getVocalByKeyWord } from "~/api/Dictionary";
@@ -16,17 +16,27 @@ import ItemResult from "./ItemResult/ItemResult";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
 import { convertData } from "~/helper";
-export default function AddDefault() {
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import CardLoader from "~/components/CardLoader";
+export default function AddDefault(props) {
   const [words, setWords] = useState([]);
   const [isFound, setIsFound] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAddSucess, setIsAddSucess] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
   const [search, setSearch] = useState("");
   const [clear, setClear] = useState(false);
+  const [countWord, setcountWord] = useState(0);
   const clickClear = useRef();
+  // const data = useRoute();
+  const params = props.route.params;
   const handleTextChange = (text) => {
     setSearch(text);
     setClear(true);
     setIsLoading(false);
+    setIsSearch(true);
   };
   const handleClear = () => {
     setSearch("");
@@ -41,8 +51,10 @@ export default function AddDefault() {
         const newVocal = convertData(data.content);
         setWords(newVocal);
         setIsFound(true);
+        setIsSearch(false);
       } else {
         setIsFound(false);
+        setIsSearch(false);
       }
     };
     if (search !== "") {
@@ -55,6 +67,10 @@ export default function AddDefault() {
       };
     }
   }, [search]);
+  const handleAddSucess = () => {
+    setIsAddSucess(true);
+    setcountWord((pre) => pre + 1);
+  };
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
@@ -99,11 +115,26 @@ export default function AddDefault() {
           </View>
         )}
         {!isLoading &&
-          (isFound ? (
+          (isSearch ? (
+            <View style={Styles.viewLoaderSearch}>
+              <View style={Styles.itemLoader}>
+                <CardLoader />
+              </View>
+              <View style={Styles.itemLoader}>
+                <CardLoader />
+              </View>
+            </View>
+          ) : isFound ? (
             <FlatList
               showsVerticalScrollIndicator={false}
               data={words}
-              renderItem={(item) => <ItemResult vocal={item} />}
+              renderItem={(item) => (
+                <ItemResult
+                  vocal={item}
+                  params={params}
+                  onAddSucess={handleAddSucess}
+                />
+              )}
               keyExtractor={(item) => item.key}
             />
           ) : (
@@ -121,6 +152,23 @@ export default function AddDefault() {
             </View>
           ))}
       </View>
+      {isAddSucess && (
+        <TouchableOpacity style={Styles.viewButtonReturn}>
+          <View style={Styles.buttonReturn}>
+            <Ionicons name="return-up-back" size={24} color="#fff" />
+            <Text
+              style={{
+                fontFamily: "Quicksand-SemiBold",
+                fontSize: 16,
+                marginLeft: 4,
+                color: "#fff",
+              }}
+            >
+              New words ( {countWord} )
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 }

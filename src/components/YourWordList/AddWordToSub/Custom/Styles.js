@@ -115,8 +115,8 @@ export const Styles = StyleSheet.create({
         fontSize: 14,
         color: "#6b7280",
         marginTop: 15,
-        borderBottomWidth: 2,
-        borderBottomColor: colors.textTitle
+        borderBottomWidth: 3,
+        borderBottomColor: "#e0e0e0"
     },
     more: {
         height: 25,

@@ -24,6 +24,7 @@ const AppLoader = () => {
 
 const styles = StyleSheet.create({
     container: {
+        width: screenWidth,
         justifyContent: 'center',
         alignItems: 'center',
         // paddingRight: screenWidth/2-size_logo/2,

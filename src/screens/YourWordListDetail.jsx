@@ -38,7 +38,7 @@ export default function YourWordlistDetail() {
     getSubCategory(wl.item.id);
   }, []);
   useEffect(() => {
-    console.log(`TEST ::`,subCategories );
+    console.log(`TEST ::`, subCategories);
   }, [subCategories]);
 
   return (
@@ -55,13 +55,15 @@ export default function YourWordlistDetail() {
           />
         </TouchableOpacity>
 
-        <View style={{
-          marginLeft: 40,
-          display: 'flex',
-          flexDirection: 'row',
-          // alignItems: 'center',
-          // position: 'relative',
-        }}>
+        <View
+          style={{
+            marginLeft: 40,
+            display: "flex",
+            flexDirection: "row",
+            // alignItems: 'center',
+            // position: 'relative',
+          }}
+        >
           <Image
             source={require("~/assets/wordlist.png")}
             style={{
@@ -119,14 +121,9 @@ export default function YourWordlistDetail() {
             showsVerticalScrollIndicator={false}
             data={subCategories} //subCategories.subcategoryId
             keyExtractor={(item) => item.subcategoryId}
-            renderItem={({ item }) => (
-            <ItemSubCategory 
-              subcategory={item}
-            />
-            )}
+            renderItem={({ item }) => <ItemSubCategory subcategory={item} />}
           />
         </View>
-        
 
         {/* Add new Subcategory */}
         <TouchableOpacity style={styles.ButtonAdd}>
@@ -134,7 +131,7 @@ export default function YourWordlistDetail() {
             name="add"
             size={27}
             color="#3C2D4E"
-          // backgroundColor="#BBBBBB"
+            // backgroundColor="#BBBBBB"
           />
           <Text
             style={[
@@ -173,7 +170,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 40,
   },
   dropdown: {
-    display: 'flex',
+    display: "flex",
     width: "88%",
     marginTop: 12,
     // marginBottom: 12,
@@ -194,8 +191,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     zIndex: 100,
-    flexDirection: 'row',
-    top: '-4.5%',
+    flexDirection: "row",
+    top: "-4.5%",
     paddingTop: 7,
     paddingBottom: 7,
     paddingLeft: 35,
@@ -213,8 +210,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     zIndex: 100,
-    flexDirection: 'row',
-    top: '4.5%',
+    flexDirection: "row",
+    top: "4.5%",
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 20,
@@ -222,5 +219,5 @@ const styles = StyleSheet.create({
     top: "88%",
     // bottom: 20,
     right: "6.5%",
-  }
+  },
 });
