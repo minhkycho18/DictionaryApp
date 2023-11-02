@@ -2,10 +2,8 @@ package com.pbl6.dictionaryappbe.repository;
 
 
 import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
-import com.pbl6.dictionaryappbe.persistence.vocabulary.WordType;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -13,9 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface VocabularyRepository extends JpaRepository<Vocabulary, Long> {
-    Page<Vocabulary> findByWordStartsWithAndWordType(String word, WordType wordType, Pageable pageable);
-
+public interface VocabularyRepository extends JpaRepository<Vocabulary, Long>, JpaSpecificationExecutor<Vocabulary> {
     @Query(value = """
                             SELECT scd.def_id as defId
                             FROM users u
@@ -39,4 +35,7 @@ public interface VocabularyRepository extends JpaRepository<Vocabulary, Long> {
             @Param("email") String email,
             @Param("vocabDefs") List<String> vocabDefs
     );
+
+    @Query(value = "SELECT distinct pos FROM vocabularies", nativeQuery = true)
+    List<String> findAllPos();
 }
