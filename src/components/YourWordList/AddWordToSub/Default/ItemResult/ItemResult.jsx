@@ -6,8 +6,8 @@ import { AntDesign } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
 import { GetColor } from "~/helper";
-import { addWordDefaultToSub } from "~/api/Subcategory";
-function ItemResult({ vocal, params, onAddSucess }) {
+import { addWordDefaultToSub, getAllWordOfSub } from "~/api/Subcategory";
+function ItemResult({ vocal, params, onAddSucess, onError }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const [isWordOfSub, setIsWordOfSub] = useState(
@@ -25,18 +25,29 @@ function ItemResult({ vocal, params, onAddSucess }) {
   const handleAddWordToSub = async () => {
     setIsLoading(!isLoading);
     try {
-      const result = await addWordDefaultToSub(
+      const words = await getAllWordOfSub(
         params.wordlistId,
-        params.subcategoryId,
-        {
+        params.subcategoryId
+      );
+      const check = words.find(
+        (item) => item.definition.defId === vocal.item.defId
+      )
+        ? true
+        : false;
+      console.log("check ::", check);
+      if (check) {
+        setIsLoading(false);
+        onError("Error", "Word is exist in subcategory");
+      } else {
+        await addWordDefaultToSub(params.wordlistId, params.subcategoryId, {
           vocabId: vocal.item.wordid,
           defId: vocal.item.defId,
-        }
-      );
-      console.log(`Result ::`, result);
-      setIsLoading(false);
-      setIsWordOfSub(!isWordOfSub);
-      onAddSucess();
+        });
+        console.log(`Result ::`, "add sucess");
+        setIsLoading(false);
+        setIsWordOfSub(!isWordOfSub);
+        onAddSucess();
+      }
     } catch (error) {
       console.log(`Add word to subcategory error ::`, error);
     }
@@ -86,7 +97,7 @@ function ItemResult({ vocal, params, onAddSucess }) {
               numberOfLines={2}
               style={{
                 ...styles.content_bottom_Mean,
-                fontFamily: "Quicksand-Regular",
+                fontFamily: "Quicksand-Medium",
               }}
             >
               {vocal.item.wordDesc}

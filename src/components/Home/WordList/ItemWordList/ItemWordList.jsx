@@ -15,7 +15,13 @@ export default function ItemWordList({ src, wordlist }) {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.push("YourWordlistDetail");
+        navigation.push("YourWordlistDetail", {
+          Wordlist: {
+            id: wordlist.id,
+            title: wordlist.title,
+            listDesc: wordlist.listDesc,
+          },
+        });
       }}
       style={Styles.container}
     >
@@ -27,10 +33,11 @@ export default function ItemWordList({ src, wordlist }) {
         style={[
           tw`ml-3  mt-2 `,
           {
-            fontFamily: "Quicksand-Medium",
+            fontFamily: "Quicksand-SemiBold",
             color: colors.textColor,
             textAlign: "center",
             fontSize: 15,
+            letterSpacing: 0.1,
           },
         ]}
       >
