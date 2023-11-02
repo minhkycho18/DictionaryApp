@@ -4,6 +4,7 @@ import {
   createCustomWordInWL,
   createSub,
   deleteSub,
+  deleteVocabsInSub,
   getAllVocabInSub,
   getSubByWlsId,
   getSubType,
@@ -93,6 +94,18 @@ export const getAllVocabInSubcategory = createAsyncThunk(
   async (params, thunkApi) => {
     try {
       const response = await getAllVocabInSub(params);
+      return response;
+    } catch (error) {
+      throw thunkApi.rejectWithValue(error);
+    }
+  }
+);
+// deleteVocabsInSub;
+export const deleteVocabulariesInSubCategory = createAsyncThunk(
+  "subcategory/deleteVocabulariesInSubCategory",
+  async (params, thunkApi) => {
+    try {
+      const response = await deleteVocabsInSub(params);
       return response;
     } catch (error) {
       throw thunkApi.rejectWithValue(error);

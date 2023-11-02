@@ -125,7 +125,7 @@ const VocabularyManagement = () => {
             const result = await getAllPos();
             setPos(result);
         };
-        return () => getPos();
+        getPos();
     }, []);
 
     useEffect(() => {

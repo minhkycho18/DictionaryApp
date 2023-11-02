@@ -22,10 +22,9 @@ const DefaultWord = ({ vocabInSub, onAddVocab }) => {
     }, 500)
   ).current;
   const checkValid = (vocabId, defId) => {
-    const checkValid = vocabInSub.some(
+    return vocabInSub.some(
       (vocab) => vocab.vocabId === vocabId && vocab.definition.defId === defId
     );
-    return checkValid;
   };
 
   const handleAddVocab = (data) => {
@@ -39,8 +38,8 @@ const DefaultWord = ({ vocabInSub, onAddVocab }) => {
         className="wordWrap"
         onClick={() =>
           handleAddVocab({
-            vocabId: word.id,
-            defId: definition.defId,
+            word: word,
+            definition: definition,
           })
         }
       >

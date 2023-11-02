@@ -25,7 +25,6 @@ import "./WordListsPage.scss";
 import { PlusOutlined } from "@ant-design/icons";
 
 function WordListsPage() {
-  const dispatch = useDispatch();
   let { id } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
   const { loading, error, subcategories } = useSelector(
@@ -34,6 +33,7 @@ function WordListsPage() {
   const [isOpen, setIsOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getSubcategory(id));
