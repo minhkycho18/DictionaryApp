@@ -1,15 +1,12 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  getSearchResultByKeyword,
-  getVocabDetailByKey,
-} from "../../api/Search/search.api";
+import {createAsyncThunk} from "@reduxjs/toolkit";
+import {getSearchResultByKeyword, getVocabDetailByKey,} from "../../api/Search/search.api";
 
 export const getSearchResult = createAsyncThunk(
   "search/getSearchResult",
-  async (keyword, thunkAPi) => {
+  async (params, thunkAPi) => {
     try {
-      const response = await getSearchResultByKeyword(keyword);
-      return response.content;
+        const {keyword, offset, pos} = params;
+        return await getSearchResultByKeyword(keyword, offset, pos);
     } catch (error) {
       throw thunkAPi.rejectWithValue(error);
     }

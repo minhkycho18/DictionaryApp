@@ -2,52 +2,10 @@
 @import "../../assets/scss/variable.scss";
 
 .content-container {
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   border-radius: 30px 0 0 30px;
-  &_box{
-    width: 95%;
-    margin-top: 40px;
-    .box_title {
-      .ant-col {
-        font-family: $font-manager;
-        color: #05041B;
-        font-weight: 500;
-        font-size: 25px;
-        padding: 0;
-      }
-    }
-    .box_data {
-      margin-top: 40px;
-      background-color: #FEFEFE;
-      border-radius: 30px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 50px;
-      &_item{
-        width: 100%;
-      }
-      .search_box {
-        margin-top: 30px;
-        margin-right: 90px;
-      }
-      .table_box {
-        table {
-          border: solid 1px #dadada;
-          thead {
-            font-size: 18px;
-          }
-          td {
-            font-size: 15px;
-          }
-
-        }
-      }
-    }
-  }
 }

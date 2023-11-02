@@ -15,15 +15,15 @@
 
       &__name {
         font-family: $font-manager;
+        font-weight: bold !important;
         font-size: 17px;
-        font-weight: 500;
         color: #05041B;
       }
 
       &__role {
         font-family: $font-manager;
+        font-weight: bold !important;
         font-size: 15px;
-        font-weight: 500;
         color: #808396;
       }
     }
@@ -50,6 +50,7 @@
           margin-right: 24px;
           font-size: 17px;
           color: #B5BAD4;
+          font-weight: bold !important;
         }
       }
       .ant-menu-item-selected {
@@ -91,6 +92,7 @@
       }
       &_text {
         font-family: $font-manager;
+        font-weight: bold !important;
         margin-right: 24px;
         font-size: 17px;
         color: #B5BAD4;
