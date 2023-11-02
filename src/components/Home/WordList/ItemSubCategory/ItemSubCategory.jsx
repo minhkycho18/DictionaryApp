@@ -6,6 +6,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { SlideInUp } from "react-native-reanimated";
 import ItemListVocabOfSub from "../ItemListVocabOfSub/ItemListVocabOfSub";
 import ItemAddNewWord from "../ItemAddNewWord/ItemAddNewWord";
+import { colors, configFont } from "~/constants/theme";
+import { useFonts } from "expo-font";
 
 export default function ItemSubCategory({ subcategory }) {
   const [title, setTitle] = useState(subcategory.title);
@@ -17,11 +19,16 @@ export default function ItemSubCategory({ subcategory }) {
   ]);
   const navigation = useNavigation();
   const handleAddWordToSub = () => {
+    setOpen(false);
     navigation.navigate("AddWordToSub", {
-      wordlistId: "1",
-      subcategoryId: "1",
+      wordlistId: subcategory.wordListId,
+      subcategoryId: subcategory.subcategoryId,
     });
   };
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
   return (
     //item sub
     <View>
@@ -47,8 +54,11 @@ export default function ItemSubCategory({ subcategory }) {
           // placeholder="Sub Category"
           placeholder={title}
           placeholderStyle={{
-            color: "#462D4E",
-            fontWeight: "bold",
+            color: colors.textTitle,
+            fontFamily: "Quicksand-Bold",
+            marginLeft: 5,
+            fontSize: 18,
+            letterSpacing: 0.2,
           }}
           showTickIcon={false}
           dropDownContainerStyle={{

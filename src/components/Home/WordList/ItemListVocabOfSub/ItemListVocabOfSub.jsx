@@ -7,7 +7,6 @@ import tw from "twrnc";
 import { getAllVocabOfSubCategory } from "~/api/Subcategory";
 import ItemVocabOfSub from "../ItemVocabOfSub/ItemVocabOfSub";
 export default function ItemListVocabOfSub({ subcategory }) {
-
   const [idSub, setIdSub] = useState(subcategory.subcategoryId);
   const [idWordlist, setIdWordlist] = useState(subcategory.subcategoryId);
   const [listVocabOfSubCategory, setListVocabOfSubCategory] = useState([]);
@@ -17,46 +16,11 @@ export default function ItemListVocabOfSub({ subcategory }) {
     setListVocabOfSubCategory(data);
   };
 
-
   useEffect(() => {
     getVocabOfSubCategory(idWordlist, idSub);
   }, []);
   const wrapRef = useRef();
-  // const data = [
-  //   {
-  //     id: 1,
-  //     title: "wordlist1",
-  //     listDesc: "wordlist1",
-  //     createdBy: "learner1",
-  //     listType: "PUBLIC",
-  //     createdAt: "10-10-2023",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "wordlist2",
-  //     listDesc: "wordlist2",
-  //     createdBy: "learner1",
-  //     listType: "PRIVATE",
-  //     createdAt: "10-10-2023",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "wordlist1",
-  //     listDesc: "wordlist1",
-  //     createdBy: "learner1",
-  //     listType: "PUBLIC",
-  //     createdAt: "10-10-2023",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "wordlist2",
-  //     listDesc: "wordlist2",
-  //     createdBy: "learner1",
-  //     listType: "PRIVATE",
-  //     createdAt: "10-10-2023",
-  //   },
-  // ];
-  // setWordLists(data);
+
   return (
     <FlatList
       // style={{
@@ -64,19 +28,17 @@ export default function ItemListVocabOfSub({ subcategory }) {
       // }}
       showsVerticalScrollIndicator={false}
       vertical
-      keyExtractor={(item) => item.vocabId}
+      keyExtractor={(item) => item.definition.defId}
       data={listVocabOfSubCategory}
       renderItem={(item) => (
         // <GestureHandlerRootView>
-        //   <ItemWordList 
-        //   wordlist={item} 
+        //   <ItemWordList
+        //   wordlist={item}
         //   onDelete={handleDelete}
         //   />
         // </GestureHandlerRootView>
 
-        <ItemVocabOfSub
-        Vocab={item}
-        />
+        <ItemVocabOfSub Vocab={item} />
       )}
     />
   );

@@ -20,6 +20,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CardLoader from "~/components/CardLoader";
+import Toast, { ErrorToast } from "react-native-toast-message";
 export default function AddDefault(props) {
   const [words, setWords] = useState([]);
   const [isFound, setIsFound] = useState(true);
@@ -30,7 +31,7 @@ export default function AddDefault(props) {
   const [clear, setClear] = useState(false);
   const [countWord, setcountWord] = useState(0);
   const clickClear = useRef();
-  // const data = useRoute();
+  const navigation = useNavigation();
   const params = props.route.params;
   const handleTextChange = (text) => {
     setSearch(text);
@@ -71,10 +72,40 @@ export default function AddDefault(props) {
     setIsAddSucess(true);
     setcountWord((pre) => pre + 1);
   };
+  const handleBack = () => {
+    navigation.goBack();
+  };
+  const handleError = (text1, text2) => {
+    showToast(text1, text2);
+  };
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
   }
+  const toastConfig = {
+    error: (props) => (
+      <ErrorToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
+  };
+  const showToast = (text1, text2) => {
+    Toast.show({
+      position: "left",
+      type: "error",
+      text1: text1,
+      text2: text2,
+      visibilityTime: 2000,
+      autoHide: true,
+      topOffset: 10,
+    });
+  };
   return (
     <SafeAreaView style={Styles.container}>
       <View style={Styles.Seach}>
@@ -133,6 +164,7 @@ export default function AddDefault(props) {
                   vocal={item}
                   params={params}
                   onAddSucess={handleAddSucess}
+                  onError={handleError}
                 />
               )}
               keyExtractor={(item) => item.key}
@@ -153,7 +185,7 @@ export default function AddDefault(props) {
           ))}
       </View>
       {isAddSucess && (
-        <TouchableOpacity style={Styles.viewButtonReturn}>
+        <TouchableOpacity style={Styles.viewButtonReturn} onPress={handleBack}>
           <View style={Styles.buttonReturn}>
             <Ionicons name="return-up-back" size={24} color="#fff" />
             <Text
@@ -169,6 +201,12 @@ export default function AddDefault(props) {
           </View>
         </TouchableOpacity>
       )}
+      <Toast
+        config={toastConfig}
+        refs={(ref) => {
+          Toast.setRef(ref);
+        }}
+      />
     </SafeAreaView>
   );
 }

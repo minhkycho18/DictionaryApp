@@ -16,7 +16,7 @@ export const Styles = StyleSheet.create({
         paddingLeft: 20
     },
     Image: {
-        width: 60,
-        height: 60
+        width: 50,
+        height: 50
     },
 })

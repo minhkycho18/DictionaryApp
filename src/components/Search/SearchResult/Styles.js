@@ -61,9 +61,9 @@ export const styles = StyleSheet.create({
       height: 'auto',
    },
    content_bottom_Mean: {
-      color: colors.textColor,
+      color: 'rgb(161 161 170)',
       letterSpacing: 0.1,
-      fontSize: 16,
+      fontSize: 15,
       lineHeight: 24
    }
 
