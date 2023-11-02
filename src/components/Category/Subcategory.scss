@@ -7,7 +7,7 @@
   padding: 12px;
   &__back {
     width: 100%;
-    background-color: #e0e7f2;
+    background-color: $background-sub-color;
     padding: 16px;
     border-radius: 16px;
     display: flex;
@@ -88,4 +88,8 @@
 .showMore {
   align-self: center;
   margin: 8px;
+}
+.ant-pagination-item-active {
+  border: 1px #ccc solid !important;
+  color: $text-primary-color !important;
 }

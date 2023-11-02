@@ -88,7 +88,7 @@ const ListItem = (props) => {
   const days = calculateDateTime(props.wordlist.createdAt);
   const renderDay = () => {
     if (days > 0) {
-      return `Created at ` + days + " ago";
+      return `Created at ` + days + " days ago";
     } else return "Created today";
   };
   return (

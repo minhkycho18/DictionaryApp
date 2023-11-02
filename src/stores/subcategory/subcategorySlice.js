@@ -3,6 +3,7 @@ import {
   addWordToSubcategory,
   createSubcategory,
   deleteSubcategory,
+  deleteVocabulariesInSubCategory,
   getAllVocabInSubcategory,
   getSubcategory,
   updateSubcategory,
@@ -16,6 +17,7 @@ const initialState = {
   selectedWL: {},
   messageDel: "",
   vocabInSub: [],
+  messageDelVocab: "",
 };
 
 const subcategorySlice = createSlice({
@@ -107,9 +109,23 @@ const subcategorySlice = createSlice({
       .addCase(getAllVocabInSubcategory.rejected, (state, action) => {
         state.VocabLoading = false;
         state.error = action.payload.detail;
+      })
+      //=====================================================
+
+      .addCase(deleteVocabulariesInSubCategory.pending, (state, action) => {
+        // state.VocabLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteVocabulariesInSubCategory.fulfilled, (state, action) => {
+        // state.VocabLoading = false;
+        state.messageDelVocab = action.payload;
+      })
+      .addCase(deleteVocabulariesInSubCategory.rejected, (state, action) => {
+        state.VocabLoading = false;
+        state.error = action.payload.detail;
       }),
 });
 
-export const { selectWl, deleteASub } = subcategorySlice.actions;
+export const { selectWl, deleteASub, deleteVocabs } = subcategorySlice.actions;
 
 export default subcategorySlice.reducer;

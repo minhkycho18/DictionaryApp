@@ -44,3 +44,7 @@ export const getAllVocabInSub = (params) => {
   return http.get(`/wordlists/${wordListId}/subcategories/${SubId}`);
 };
 ///===========================================================================
+export const deleteVocabsInSub = (params) => {
+  const { wordListId, SubId, data } = params;
+  return http.delete(`/wordlists/${wordListId}/subcategories/${SubId}`, data);
+};

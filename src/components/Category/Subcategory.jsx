@@ -1,8 +1,8 @@
 import {
   DeleteOutlined,
   EditOutlined,
-  EllipsisOutlined,
   ExclamationCircleOutlined,
+  MoreOutlined,
   PlusOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
@@ -13,8 +13,10 @@ import {
   Input,
   Menu,
   Modal,
+  Pagination,
   Space,
   Spin,
+  message,
 } from "antd";
 import { debounce } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
@@ -23,38 +25,47 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
   addWordToSubcategory,
-  getAllVocabInSubcategory,
+  deleteVocabulariesInSubCategory,
 } from "../../stores/subcategory/subcategoryThunk";
 import CustomWord from "./CustomWord/CustomWord";
 import DefaultWord from "./DefaultWord/DefaultWord";
 import SubcategoryItem from "./SubItem/SubcategoryItem";
 import "./Subcategory.scss";
+import {
+  addWordToSub,
+  getAllVocabInSub,
+} from "../../api/Subcategory/subcategory.api";
 
 const Subcategory = (props) => {
   const dispatch = useDispatch();
   let { id } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const [isCustom, setIsCustom] = useState(false);
-  const { vocabInSub, VocabLoading } = useSelector(
-    (state) => state.subcategory
-  );
+  const { VocabLoading } = useSelector((state) => state.subcategory);
   const [modal, contextHolder] = Modal.useModal();
   const [inputWord, setInputWord] = useState("");
   const [keyword, setKeyword] = useState("");
+  const [vocabsInSub, setVocabsInSub] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
-  const [numItem, setNumItem] = useState(10);
-  const plainOptions = vocabInSub;
-  const checkAll = plainOptions.length === selectedIds.length;
-  const indeterminate =
-    selectedIds.length > 0 && selectedIds.length < plainOptions.length;
+  const [page, setPage] = useState(1);
+  const [, ctxHolder] = message.useMessage();
+
   useEffect(() => {
     const params = {
       wordListId: id,
       SubId: props.subcategory.subcategoryId,
     };
-    dispatch(getAllVocabInSubcategory(params));
-    setNumItem(10);
-  }, [dispatch, id, props.subcategory.subcategoryId]);
+    const getAllVocab = async () => {
+      const result = await getAllVocabInSub(params);
+      setVocabsInSub(result);
+    };
+    getAllVocab();
+  }, [id, props.subcategory.subcategoryId]);
+  const plainOptions = vocabsInSub;
+  const checkAll =
+    plainOptions.length === selectedIds.length && plainOptions.length !== 0;
+  const indeterminate =
+    selectedIds.length > 0 && selectedIds.length < plainOptions.length;
 
   //==============================================================================================================
   const handleSetCustom = () => {
@@ -81,7 +92,7 @@ const Subcategory = (props) => {
 
   //==============================================================================================================
   const onCheckAllChange = (e) => {
-    const checkAllItem = vocabInSub.map((vocab) => ({
+    const checkAllItem = vocabsInSub.map((vocab) => ({
       vocabId: vocab.vocabId,
       defId: vocab.definition.defId,
     }));
@@ -107,10 +118,10 @@ const Subcategory = (props) => {
   };
 
   //==============================================================================================================
-  const filterVocab = vocabInSub.filter((vocab) =>
+  const filterVocab = vocabsInSub.filter((vocab) =>
     vocab.word.startsWith(keyword)
   );
-  const limitVocab = filterVocab.splice(0, numItem);
+  const limitVocab = filterVocab.splice((page - 1) * 10, 10);
   const renderVocabInSub = limitVocab.map((vocab, index) => (
     <SubcategoryItem
       key={index}
@@ -128,33 +139,55 @@ const Subcategory = (props) => {
     const params = {
       wordListId: id,
       SubId: props.subcategory.subcategoryId,
-      ...value,
+      vocabId: value.word.id,
+      defId: value.definition.defId,
     };
-    dispatch(addWordToSubcategory(params));
+    // dispatch(addWordToSubcategory(params));
+    const addVocab = async () => {
+      const result = await addWordToSub(params);
+      setVocabsInSub([...vocabsInSub, result]);
+    };
+    addVocab();
+  };
+  const onChange = (pageNumber) => {
+    setPage(pageNumber);
+  };
+  //==============================================================================================================
+  const handleDeleteVocabs = () => {
+    const params = {
+      wordListId: id,
+      SubId: props.subcategory.subcategoryId,
+      data: [...selectedIds],
+    };
+    const rs = dispatch(deleteVocabulariesInSubCategory(params));
+    rs.unwrap()
+      .then((rss) => {
+        message.success(rss);
+        const newVocab = vocabsInSub.filter((vocab) => {
+          return !params.data.some(
+            (delVocab) =>
+              delVocab.vocabId === vocab.vocabId &&
+              delVocab.defId === vocab.definition.defId
+          );
+        });
+        setVocabsInSub([...newVocab]);
+        setSelectedIds([]);
+      })
+      .catch((error) => {
+        message.error(error);
+      });
   };
 
   return (
     <Space className="subcategory" direction="vertical">
+      {ctxHolder}
       <Space style={{ justifyContent: "space-between", width: "100%" }}>
-        <Button className="subcategory__study">
-          <span style={{ marginRight: 8 }}>Study</span>
-          <FaGraduationCap size={22} />
-        </Button>
         <Space style={{ float: "right" }} className="subcategory__options">
-          <Input
-            className="search__sub search__vocab"
-            placeholder="Search"
-            prefix={
-              <SearchOutlined style={{ color: "#bbb", padding: "0px 4px" }} />
-            }
-            value={inputWord}
-            onChange={onChangeInput}
-          ></Input>
           <Space className="delete-btn">
-            <DeleteOutlined />
+            <DeleteOutlined onClick={handleDeleteVocabs} />
             <Checkbox
               indeterminate={indeterminate}
-              onChange={onCheckAllChange}
+              onClick={onCheckAllChange}
               checked={checkAll}
             ></Checkbox>
           </Space>
@@ -194,10 +227,24 @@ const Subcategory = (props) => {
             }
             trigger={["click"]}
           >
-            <Button icon={<EllipsisOutlined />} />
+            <Button icon={<MoreOutlined />} />
           </Dropdown>
+          <Input
+            className="search__sub search__vocab"
+            placeholder="Search"
+            prefix={
+              <SearchOutlined style={{ color: "#bbb", padding: "0px 4px" }} />
+            }
+            value={inputWord}
+            onChange={onChangeInput}
+          ></Input>
         </Space>
+        <Button className="subcategory__study">
+          <span style={{ marginRight: 8 }}>Study</span>
+          <FaGraduationCap size={22} />
+        </Button>
       </Space>
+
       <div className="subcategory__back" direction="vertical">
         {contextHolder}
         <Modal
@@ -230,16 +277,24 @@ const Subcategory = (props) => {
 
             {!isCustom && (
               <DefaultWord
-                vocabInSub={vocabInSub}
+                vocabInSub={vocabsInSub}
                 onAddVocab={handleAddVocab}
               />
             )}
-            {isCustom && <CustomWord vocabInSub={vocabInSub} />}
+            {isCustom && <CustomWord vocabInSub={vocabsInSub} />}
           </Space>
         </Modal>
 
         {!VocabLoading && (
-          <>
+          <Space direction="vertical">
+            <Space style={{ marginTop: 8, float: "right" }}>
+              <Pagination
+                defaultCurrent={1}
+                total={filterVocab.length}
+                onChange={onChange}
+                size="small"
+              />
+            </Space>
             <Space
               className="subcategory-item subcategory_add"
               style={{ cursor: "pointer" }}
@@ -248,16 +303,9 @@ const Subcategory = (props) => {
               <PlusOutlined className="subcategory_add__icon" />
               <span>Add more...</span>
             </Space>
+
             {renderVocabInSub}
-            {vocabInSub.length > 10 && (
-              <Button
-                className="showMore"
-                onClick={() => setNumItem((prevNum) => prevNum + 10)}
-              >
-                More...
-              </Button>
-            )}
-          </>
+          </Space>
         )}
 
         {VocabLoading && <Spin spinning={VocabLoading} />}
