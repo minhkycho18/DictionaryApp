@@ -183,6 +183,22 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
     @Override
     @Transactional
+    public void createMultipleSubcategory(Long wordListId) {
+        WordList wordList = wordListRepository.findById(wordListId).orElseThrow(
+                () -> new RecordNotFoundException("WordList not found with ID: " + wordListId)
+        );
+        List<Subcategory> subcategories = subcategoryRepository.findAllByWordList(wordList);
+        subcategories.forEach(subcategory -> {
+            SubcategoryResponseDto newSubcategory = createSubcategory(wordListId,
+                    SubcategoryRequestDto.builder()
+                            .title(subcategory.getTitle())
+                            .subcategoryType(subcategory.getSubcategoryType().name())
+                            .build());
+        });
+    }
+
+    @Override
+    @Transactional
     public SubcategoryResponseDto updateSubcategory(Long wordlistId, Long subcategoryId, SubcategoryRequestDto subcategory) {
         String title = subcategory.getTitle();
         Subcategory oldSubcategory = getOwnedSubcategory(wordlistId, subcategoryId);

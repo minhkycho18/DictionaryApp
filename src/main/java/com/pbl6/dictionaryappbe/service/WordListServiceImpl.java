@@ -95,6 +95,18 @@ public class WordListServiceImpl implements WordListService {
     }
 
     @Override
+    public void cloneWordList(Long wordListId) {
+        WordList oldWordList = wordListRepository.findById(wordListId).orElseThrow(
+                () -> new RecordNotFoundException("WordList not found with ID: " + wordListId)
+        );
+        WordList newWordList = wordListRepository.save(WordList.builder()
+                .title(oldWordList.getTitle())
+                .listDesc(oldWordList.getListDesc())
+                .listType(oldWordList.getListType())
+                .build());
+    }
+
+    @Override
     @Transactional
     public WordListResponseDto updateWordList(Long wordListId, WordListRequestDto wordList) {
         String newTitle = wordList.getTitle();
