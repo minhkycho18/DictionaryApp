@@ -12,8 +12,11 @@ const SignIn = () => {
   const { userInformation, error } = useSelector((state) => state.auth);
   useEffect(() => {
     if (userInformation) {
-      // localStorage.setItem("token", userInformation.access_token);
-      navigate("/");
+      if(userInformation.user.role.name === 'LEARNER') {
+        navigate("/");
+      } else {
+        navigate("/manager");
+      }
     }
 
     if (error) {

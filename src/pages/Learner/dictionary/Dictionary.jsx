@@ -30,7 +30,7 @@ const Dictionary = () => {
   const debounceInputKey = useRef(
     debounce((nextValue) => {
       setIsSelected(false);
-      dispatch(getSearchResult(nextValue));
+      dispatch(getSearchResult({keyword: nextValue, offset: 0}));
     }, 500)
   ).current;
 

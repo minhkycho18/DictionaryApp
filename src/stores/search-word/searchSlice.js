@@ -5,6 +5,8 @@ import { addWordToSubcategory } from "../subcategory/subcategoryThunk";
 const initialState = {
   keyword: "",
   result: [],
+  currentPage: 1,
+  totalElements: 0,
   selectedMeaning: {},
   loading: false,
   error: null,
@@ -60,7 +62,9 @@ const searchSlice = createSlice({
       })
       .addCase(getSearchResult.fulfilled, (state, action) => {
         state.loading = false;
-        state.result = action.payload;
+        state.result = action.payload.content;
+        state.currentPage = action.payload.pageable.pageNumber + 1;
+        state.totalElements = action.payload.totalElements;
       })
       .addCase(getSearchResult.rejected, (state, action) => {
         state.loading = false;
