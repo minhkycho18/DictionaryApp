@@ -152,6 +152,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
                 .lastLearning(null)
                 .vocabDef(vocabDef)
                 .build());
+        subcategory.setAmountOfWord(subcategory.getAmountOfWord() + 1);
         return subcategoryDetailMapper.toSubcategoryDetailResponseDto(subcategoryDetail);
     }
 
@@ -195,26 +196,35 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     @Transactional
     public void deleteVocabulariesOfSubcategory(Long wordListId, Long subcategoryId, List<SubcategoryDetail> vocabularies) {
         Subcategory subcategory = getOwnedSubcategory(wordListId, subcategoryId);
-        vocabularies.forEach(subDetail -> {
-            subcategoryDetailRepository.delete(subDetail);
-            subcategory.setAmountOfWord(subcategory.getAmountOfWord() - 1);
-            Long vocabId = subDetail.getVocabId();
+        Map<Long, List<SubcategoryDetail>> vocabDefs = vocabularies.stream()
+                .collect(Collectors.groupingBy(SubcategoryDetail::getVocabId
+                ));
+        vocabDefs.forEach((vocabId, subDetailList) -> {
             Vocabulary vocabulary = vocabularyRepository.findById(vocabId)
                     .orElseThrow(() -> new EntityNotFoundException("Vocabulary not found with ID: " + vocabId));
-
+            List<Definition> definitions = new ArrayList<>();
             if (vocabulary.getWordType() == WordType.CUSTOM) {
-                Long defId = subDetail.getDefId();
-                Definition definition = definitionRepository.findById(defId)
-                        .orElseThrow(() -> new EntityNotFoundException("Definition not found with ID: " + defId));
-
-                VocabDef vocabDef = vocabDefRepository.findById(new VocabDefId(vocabId, defId))
-                        .orElseThrow(() -> new EntityNotFoundException("Vocabulary not found"));
-
-                vocabDefRepository.delete(vocabDef);
-                vocabularyRepository.delete(vocabulary);
-                definitionRepository.delete(definition);
+                subDetailList.forEach(subDetail -> {
+                    Long defId = subDetail.getDefId();
+                    System.out.println(subDetail.getDefId() + " " + subDetail.getVocabId());
+                    subcategoryDetailRepository.delete(subDetail);
+                    subcategory.setAmountOfWord(subcategory.getAmountOfWord() - 1);
+                    Definition definition = definitionRepository.findById(defId)
+                            .orElseThrow(() -> new EntityNotFoundException("Definition not found with ID: " + defId));
+                    VocabDef vocabDef = vocabDefRepository.findById(new VocabDefId(vocabId, defId))
+                            .orElseThrow(() -> new EntityNotFoundException("Vocabulary not found"));
+                    vocabDefRepository.delete(vocabDef);
+                    definitions.add(definition);
+//                    definitionRepository.delete(definition);
+                });
+//                vocabularyRepository.delete(vocabulary);
+            } else {
+                subcategory.setAmountOfWord(subcategory.getAmountOfWord() - subDetailList.size());
+                subcategoryDetailRepository.deleteAll(subDetailList);
+                System.out.println(subDetailList.get(0).getDefId() + " " + subDetailList.get(0).getVocabId());
             }
         });
+
     }
 
     @Override
