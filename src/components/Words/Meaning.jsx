@@ -30,14 +30,13 @@ const Meaning = ({ detail }) => {
   const [wlType, setWlType] = useState("PUBLIC");
 
   useEffect(() => {
-    if (errorAdd) {
-      messageApi.error("This word has been added");
-    }
-
+    // if (errorAdd) {
+    //   // messageApi.error("This word has been added");
+    // }
     return () => {
       dispatch(setErrorAdd());
     };
-  }, [dispatch, errorAdd, loadingAdd, messageApi]);
+  }, [dispatch, loadingAdd, messageApi]);
 
   const handleOk = () => {
     setIsModalOpen(false);
@@ -59,7 +58,10 @@ const Meaning = ({ detail }) => {
   };
   const addToWL = (value) => {
     const params = { ...value, vocabId: detail.id, defId: wlAdded };
-    dispatch(addWordToSubcategory(params));
+    const dp = dispatch(addWordToSubcategory(params));
+    dp.unwrap()
+      .then((rs) => messageApi.success("Successful !"))
+      .catch((rs) => messageApi.error("This word has been added"));
     setIsModalOpen(false);
   };
 
@@ -159,7 +161,14 @@ const Meaning = ({ detail }) => {
     wordLists.map((wl, index) => ({
       key: wl.id,
       label: wl.title,
-      children: <SubChoice onAdd={addToWL} wlId={wl.id}></SubChoice>,
+      children: (
+        <SubChoice
+          onAdd={addToWL}
+          wlId={wl.id}
+          vocabId={detail.id}
+          defId={wlAdded}
+        ></SubChoice>
+      ),
       style: {
         marginBottom: 24,
         borderBottom: "1px solid #eee",

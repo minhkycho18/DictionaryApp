@@ -6,6 +6,7 @@ import {
   getSubByWlsId,
 } from "../../../api/Subcategory/subcategory.api";
 import "./SubChoice.scss";
+import SubcategoryItem from "./SubcategoryItem";
 const SubChoice = (props) => {
   const [subcategories, setSub] = useState();
   const [isAddWL, setIsAddWL] = useState(false);
@@ -52,15 +53,13 @@ const SubChoice = (props) => {
     <Space direction="vertical" style={{ width: "100%" }}>
       {subcategories &&
         subcategories.map((sub) => (
-          <Space
-            className="item__category"
+          <SubcategoryItem
+            sub={sub}
+            wordListId={props.wlId}
             key={sub.subcategoryId}
-            onClick={() =>
-              props.onAdd({ wordListId: props.wlId, SubId: sub.subcategoryId })
-            }
-          >
-            <Space style={{ padding: "0px 16px" }}>{sub?.title}</Space>
-          </Space>
+            onHandleAdd={props.onAdd}
+            selectedVocab={{ vocabId: props.vocabId, defId: props.defId }}
+          />
         ))}
 
       <Space className="AddNewWL_btn AddNewSub_btn">
