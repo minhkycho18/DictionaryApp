@@ -11,6 +11,13 @@ export const Styles = StyleSheet.create({
         position: 'relative',
         marginTop: 2,
         backgroundColor: "#FEFEFE",
+        elevation: 4,
+        shadowOffset: {
+          width: 0,
+          height: 3,
+        },
+        shadowOpacity: 0.17,
+        shadowRadius: 4,  
     },
     Title_Add: {
         paddingLeft: 20

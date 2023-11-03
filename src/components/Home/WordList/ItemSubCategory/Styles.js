@@ -1,63 +1,19 @@
 import { StyleSheet } from "react-native";
 
 export const Styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingHorizontal: 25,
-        paddingTop: 20,
-        zIndex: -1,
-        marginBottom: 10,
-        borderBottomLeftRadius: 20,
-        
-
-    },
     wrappered: {
-        padding: 20,
-        borderRadius: 20,
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        position: 'relative',
-
-
-    },
-    Image: {
-        width: 70,
-        height: 70,
-        borderRadius: 40
-    },
-    Text_content: {
-        marginLeft: 20,
+        // padding: 20,
+        // borderRadius: 15,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-around',
-        width: "62%",
-        height: "90%",
-    },
-    Icon: {
+        // alignItems: 'center',
+        position: 'relative',
+        borderBottomLeftRadius: 0,
+        borderTopLeftRadius: 0,
+        width: "100%",
+        borderBottomRightRadius: 15,
+        borderTopRightRadius: 15,
 
-        height: "130%",
-        width: 30,
-        marginLeft: 7,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    Icon_delete: {
-        position: "absolute",
-        right: 5,
-        top: 5,
-        width: 30,
-        height: 30,
-    },
-    Content_input: {
-        width: 70,
-        height: 50,
-        position: "absolute",
-        right: 0,
-        top: -33,
-        display: 'flex',
-        flexDirection: 'row',
     },
     button: {
         borderWidth: 1,
@@ -73,25 +29,26 @@ export const Styles = StyleSheet.create({
         backgroundColor: "red",
         width: 50,
         height: "100%",
-        borderBottomLeftRadius: 20,
-        borderTopLeftRadius: 20,
+        borderBottomLeftRadius: 15,
+        borderTopLeftRadius: 15,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        
 
     },
     wrappered_open: {
         borderBottomLeftRadius: 0,
         borderTopLeftRadius: 0,
-        width: "85%",
-        borderBottomRightRadius: 20,
-        borderTopRightRadius: 20,
+        width: "100%",
+        borderBottomRightRadius: 15,
+        borderTopRightRadius: 15,
     },
     wrappered_close: {
-        borderBottomLeftRadius: 20,
-        borderTopLeftRadius: 20,
-        borderBottomRightRadius: 20,
-        borderTopRightRadius: 20,
+        borderBottomLeftRadius: 15,
+        borderTopLeftRadius: 15,
+        borderBottomRightRadius: 15,
+        borderTopRightRadius: 15,
         width: "100%",
 
 
@@ -99,7 +56,7 @@ export const Styles = StyleSheet.create({
     modal_container: {
         flex: 1,
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "center"
     },
     modal_content: {
         backgroundColor: "white",
@@ -139,6 +96,4 @@ export const Styles = StyleSheet.create({
         alignItems: "center",
         borderRadius: 10,
     },
-
-
 })

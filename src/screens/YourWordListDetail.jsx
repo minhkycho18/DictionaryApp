@@ -11,12 +11,13 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import tw from "twrnc";
-
+import Toast, { ErrorToast } from "react-native-toast-message";
 import ItemSubCategory from "~/components/Home/WordList/ItemSubCategory/ItemSubCategory";
 import { Image } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { svgstudy } from "~/constants/theme";
-import { getAllSubCategory } from "~/api/Subcategory";
+import { deleteSubCategory, getAllSubCategory } from "~/api/Subcategory";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function YourWordlistDetail() {
   const {
@@ -34,11 +35,40 @@ export default function YourWordlistDetail() {
     setSubCategories(data);
   };
 
+  const handleDelete = async (idWL, idSub) => {
+    try {
+      await deleteSubCategory(idWL, idSub);
+      const newSubCategoties = subCategories.filter((item) => item.subcategoryId !== idSub);
+      setSubCategories(newSubCategoties);
+      showToast(
+        "Success",
+        "Delete Sub Category success!"
+      );
+      console.log("Delete Sub Category success!")
+
+    } catch (error) {
+      console.log(error);
+    }
+  }; 
+  //Toast
+  const showToast = (text1, text2) => {
+    Toast.show({
+      position: "top",
+      type: "error",
+      text1: text1,
+      text2: text2,
+      // text1: "Login Fail",
+      // text2: "Invalid Email or Password, please try again!",
+      visibilityTime: 2000,
+      autoHide: true,
+      topOffset: 55,
+    });
+  };
   useEffect(() => {
     getSubCategory(wl.item.id);
   }, []);
   useEffect(() => {
-    console.log(`TEST ::`,subCategories );
+    console.log(`TEST ::`, subCategories);
   }, [subCategories]);
 
   return (
@@ -120,13 +150,17 @@ export default function YourWordlistDetail() {
             data={subCategories} //subCategories.subcategoryId
             keyExtractor={(item) => item.subcategoryId}
             renderItem={({ item }) => (
-            <ItemSubCategory 
-              subcategory={item}
-            />
+              <GestureHandlerRootView>
+                <ItemSubCategory
+                  subcategory={item}
+                  onDelete = {handleDelete}
+                />
+              </GestureHandlerRootView>
+
             )}
           />
         </View>
-        
+
 
         {/* Add new Subcategory */}
         <TouchableOpacity style={styles.ButtonAdd}>

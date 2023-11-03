@@ -24,6 +24,8 @@ export default function YourWordList() {
   const data = useRoute();
   const getMyWordList = async () => {
     const data = await getWordListById();
+    console.log("\ntest", "data wordlist");
+    console.log(data);
     setWordLists(data);
   };
   const handleDelete = async (id) => {

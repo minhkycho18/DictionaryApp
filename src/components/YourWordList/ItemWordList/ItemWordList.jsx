@@ -9,7 +9,7 @@ import Modal from "react-native-modal";
 import { useNavigation } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
-export default function ItemWordList({ wordlist, onDelete }) {
+export default function setModalVisibleItemWordList({ wordlist, onDelete }) {
   const [title, setTitle] = useState(wordlist.item.title);
   const [isModalVisible, setModalVisible] = useState(false);
   const wrapRef = useRef();

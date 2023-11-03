@@ -28,6 +28,7 @@ export default function ItemVocabOfSub({ Vocab }) {
         return null;
     }
     return (
+
         <>
             <TouchableOpacity style={Styles.container} onPress={handleDetailWordList}>
 
