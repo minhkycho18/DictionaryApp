@@ -33,6 +33,7 @@ import SubcategoryItem from "./SubItem/SubcategoryItem";
 import "./Subcategory.scss";
 import {
   addWordToSub,
+  deleteVocabsInSub,
   getAllVocabInSub,
 } from "../../api/Subcategory/subcategory.api";
 
@@ -135,56 +136,61 @@ const Subcategory = (props) => {
     />
   ));
   //==============================================================================================================
-  const handleAddVocab = (value) => {
-    const params = {
-      wordListId: id,
-      SubId: props.subcategory.subcategoryId,
-      vocabId: value.word.id,
-      defId: value.definition.defId,
-    };
-    // dispatch(addWordToSubcategory(params));
-    const addVocab = async () => {
-      const result = await addWordToSub(params);
-      setVocabsInSub([...vocabsInSub, result]);
-    };
-    addVocab();
+  const handleAddAndRemoveVocab = (value) => {
+    if (value.isAdded) {
+      handleDeleteVocabInSub([
+        {
+          vocabId: value.word.id,
+          defId: value.definition.defId,
+        },
+      ]);
+    } else {
+      const params = {
+        wordListId: id,
+        SubId: props.subcategory.subcategoryId,
+        vocabId: value.word.id,
+        defId: value.definition.defId,
+      };
+      const addVocab = async () => {
+        const result = await addWordToSub(params);
+        setVocabsInSub([...vocabsInSub, result]);
+      };
+      addVocab();
+    }
   };
   const onChange = (pageNumber) => {
     setPage(pageNumber);
   };
   //==============================================================================================================
-  const handleDeleteVocabs = () => {
+
+  const handleDeleteVocabInSub = (values) => {
     const params = {
       wordListId: id,
       SubId: props.subcategory.subcategoryId,
-      data: [...selectedIds],
+      data: [...values],
     };
-    const rs = dispatch(deleteVocabulariesInSubCategory(params));
-    rs.unwrap()
-      .then((rss) => {
-        message.success(rss);
-        const newVocab = vocabsInSub.filter((vocab) => {
-          return !params.data.some(
-            (delVocab) =>
-              delVocab.vocabId === vocab.vocabId &&
-              delVocab.defId === vocab.definition.defId
-          );
-        });
-        setVocabsInSub([...newVocab]);
-        setSelectedIds([]);
-      })
-      .catch((error) => {
-        message.error(error);
+    const removeVocab = async () => {
+      const result = await deleteVocabsInSub(params);
+      const newVocab = vocabsInSub.filter((vocab) => {
+        return !params.data.some(
+          (delVocab) =>
+            delVocab.vocabId === vocab.vocabId &&
+            delVocab.defId === vocab.definition.defId
+        );
       });
+      setVocabsInSub([...newVocab]);
+    };
+    removeVocab();
   };
-
   return (
     <Space className="subcategory" direction="vertical">
       {ctxHolder}
       <Space style={{ justifyContent: "space-between", width: "100%" }}>
         <Space style={{ float: "right" }} className="subcategory__options">
           <Space className="delete-btn">
-            <DeleteOutlined onClick={handleDeleteVocabs} />
+            <DeleteOutlined
+              onClick={() => handleDeleteVocabInSub(selectedIds)}
+            />
             <Checkbox
               indeterminate={indeterminate}
               onClick={onCheckAllChange}
@@ -278,7 +284,7 @@ const Subcategory = (props) => {
             {!isCustom && (
               <DefaultWord
                 vocabInSub={vocabsInSub}
-                onAddVocab={handleAddVocab}
+                onAddVocab={handleAddAndRemoveVocab}
               />
             )}
             {isCustom && <CustomWord vocabInSub={vocabsInSub} />}

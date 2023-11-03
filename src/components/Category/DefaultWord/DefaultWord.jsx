@@ -18,7 +18,7 @@ const DefaultWord = ({ vocabInSub, onAddVocab }) => {
 
   const debounceInputKey = useRef(
     debounce((nextValue) => {
-        dispatch(getSearchResult({keyword: nextValue, offset: 0}));
+      dispatch(getSearchResult({ keyword: nextValue, offset: 0 }));
     }, 500)
   ).current;
   const checkValid = (vocabId, defId) => {
@@ -40,6 +40,7 @@ const DefaultWord = ({ vocabInSub, onAddVocab }) => {
           handleAddVocab({
             word: word,
             definition: definition,
+            isAdded: checkValid(word.id, definition.defId),
           })
         }
       >
