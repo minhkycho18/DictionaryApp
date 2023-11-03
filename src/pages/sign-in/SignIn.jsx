@@ -12,7 +12,7 @@ const SignIn = () => {
   const { userInformation, error } = useSelector((state) => state.auth);
   useEffect(() => {
     if (userInformation) {
-      if(userInformation.user.role.name === 'LEARNER') {
+      if (userInformation?.user?.role?.name === "LEARNER") {
         navigate("/");
       } else {
         navigate("/manager");

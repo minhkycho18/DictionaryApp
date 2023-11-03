@@ -10,11 +10,15 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import getTokenFromStorage from "../../helpers/getTokenFromStorage";
-import { setErrorAdd } from "../../stores/search-word/searchSlice";
+import {
+  setErrorAdd,
+  setVocabDetails,
+} from "../../stores/search-word/searchSlice";
 import { addWordToSubcategory } from "../../stores/subcategory/subcategoryThunk";
 import { createNewWL } from "../../stores/word-lists/wordLists-thunk";
 import SubChoice from "../Category/SubChoice/SubChoice";
 import "./Meaning.scss";
+import { getSearchResult } from "../../stores/search-word/searchThunk";
 const Meaning = ({ detail }) => {
   const [isChoice, setIsChoice] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,7 +32,9 @@ const Meaning = ({ detail }) => {
   const [wlTitle, setWlTitle] = useState("");
   const [wlDesc, setWlDesc] = useState("");
   const [wlType, setWlType] = useState("PUBLIC");
-
+  const { result, selectedMeaning, loading } = useSelector(
+    (state) => state.search
+  );
   useEffect(() => {
     // if (errorAdd) {
     //   // messageApi.error("This word has been added");
@@ -116,7 +122,12 @@ const Meaning = ({ detail }) => {
         return "border--lightblue";
     }
   };
-
+  const handleSelectWord = (result) => {
+    navigate(`/dictionary?entry=${result}`);
+    dispatch(getSearchResult({ keyword: result, offset: 0 }))
+      .unwrap()
+      .then((rs) => dispatch(setVocabDetails(result)));
+  };
   const renderDefinitions = detail.definitions.map((definition, index) => (
     <div key={definition.defId} className="group-meaning">
       <div className="meaning__content">
@@ -127,7 +138,11 @@ const Meaning = ({ detail }) => {
         <Space className="synonyms">
           <Space>Synonyms:</Space>
           {definition?.synonyms.map((synonym, index) => (
-            <Space key={index} className="synonyms__word">
+            <Space
+              key={index}
+              className="synonyms__word"
+              onClick={() => handleSelectWord(synonym)}
+            >
               {synonym}
             </Space>
           ))}

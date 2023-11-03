@@ -7,14 +7,14 @@ import changeTitle from "../../helpers/changeTitle";
 import "./Header.scss";
 import SignInBtn from "./SignInBtn";
 import { getUserProfile } from "../../stores/user/userThunk";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Header = () => {
   const { pathname } = useLocation();
   const [isScroll, setIsScroll] = useState();
   const [isLogin, setIsLogin] = useState(false);
   const dispatch = useDispatch();
-
+  const { profile } = useSelector((state) => state.profile);
   changeTitle(pathname);
   useEffect(() => {
     const handleScroll = () => {
@@ -30,12 +30,14 @@ const Header = () => {
     };
   }, [pathname]);
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      dispatch(getUserProfile());
+    dispatch(getUserProfile());
+  }, [dispatch]);
+  useEffect(() => {
+    if (profile) {
       setIsLogin(true);
     }
-  }, [dispatch]);
+    return () => {};
+  }, [profile]);
 
   const links = [
     {
