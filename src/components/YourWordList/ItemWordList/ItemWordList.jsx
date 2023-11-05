@@ -8,19 +8,39 @@ import { Fontisto } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 import { useNavigation } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { configFont } from "~/constants/theme";
-export default function setModalVisibleItemWordList({ wordlist, onDelete }) {
+import { colors, configFont } from "~/constants/theme";
+import { getAllSubCategory } from "~/api/Subcategory";
+export default function ItemWordList({ wordlist, onDelete }) {
   const [title, setTitle] = useState(wordlist.item.title);
+  const [subs, setSubs] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const wrapRef = useRef();
   const iconRef = useRef();
   const navigation = useNavigation();
   const handleDetailWordList = async () => {
-    navigation.push("YourWordlistDetail", { Wordlist : wordlist });
+    navigation.push("YourWordlistDetail", {
+      Wordlist: {
+        id: wordlist.item.id,
+        title: wordlist.item.title,
+        listDesc: wordlist.item.listDesc,
+      },
+    });
   };
+
   const handleDelete = (id) => {
     onDelete(id);
   };
+
+  useEffect(() => {
+    const getAllSub = async (id) => {
+      try {
+        const listSub = await getAllSubCategory(id);
+        setSubs(listSub);
+      } catch (error) {}
+    };
+    getAllSub(wordlist.item.id);
+  }, []);
+
   const leftSwipe = () => {
     return (
       <TouchableOpacity
@@ -116,7 +136,7 @@ export default function setModalVisibleItemWordList({ wordlist, onDelete }) {
               style={[
                 tw`text-lg`,
                 {
-                  color: "#182B40",
+                  color: colors.textTitle,
                   fontFamily: "Quicksand-SemiBold",
                   letterSpacing: 0.2,
                 },
@@ -135,7 +155,7 @@ export default function setModalVisibleItemWordList({ wordlist, onDelete }) {
                 },
               ]}
             >
-              1 sub-list
+              {subs.length} sub-list
             </Text>
           </View>
           <View style={Styles.Icon}>

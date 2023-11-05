@@ -71,5 +71,31 @@ export const Styles = StyleSheet.create({
         color: colors.textTitle,
         marginLeft: 30,
         // fontFamily: 'QuicksandBold'
+    },
+    viewButtonReturn: {
+        backgroundColor: '#2C94E6',
+        position: 'absolute',
+        borderRadius: 20,
+        right: 20,
+        bottom: 20
+    },
+    buttonReturn: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: "100%",
+        padding: 8
+
+
+
+    },
+    viewLoaderSearch: {
+        flex: 1,
+        flexDirection: 'column',
+        backgroundColor: "#fff"
+    },
+    itemLoader: {
+        borderBottomColor: "#F1F1F1",
+        borderBottomWidth: 2
     }
+
 })

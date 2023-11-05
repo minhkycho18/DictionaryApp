@@ -41,13 +41,11 @@ export const styles = StyleSheet.create({
    },
    content_top_Type: {
       fontSize: 14,
-
-      height: 20,
       borderRadius: 10,
       color: 'white',
-      paddingLeft: 10,
-      paddingRight: 10,
+      paddingHorizontal: 10,
       letterSpacing: 0.5,
+      paddingVertical: 2
 
    },
    content_bottom: {
@@ -58,9 +56,9 @@ export const styles = StyleSheet.create({
       // paddingTop: 6,
    },
    content_bottom_Mean: {
-      color: colors.textColor,
+      color: 'rgb(161 161 170)',
       letterSpacing: 0.1,
-      fontSize: 16,
+      fontSize: 15,
       lineHeight: 24
    },
    viewIcon: {

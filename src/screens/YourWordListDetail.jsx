@@ -7,7 +7,11 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import {
+  useNavigation,
+  useRoute,
+  useFocusEffect,
+} from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import tw from "twrnc";
@@ -15,24 +19,25 @@ import Toast, { ErrorToast } from "react-native-toast-message";
 import ItemSubCategory from "~/components/Home/WordList/ItemSubCategory/ItemSubCategory";
 import { Image } from "react-native";
 import { SvgXml } from "react-native-svg";
-import { svgstudy } from "~/constants/theme";
+import { colors, svgstudy } from "~/constants/theme";
 import { deleteSubCategory, getAllSubCategory } from "~/api/Subcategory";
+import { configFont } from "~/constants/theme";
+import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function YourWordlistDetail() {
-  const {
-    params: { Wordlist },
-  } = useRoute();
-  const wl = Wordlist;
+  const { params } = useRoute();
+  const wl = params.Wordlist;
 
   const [subCategories, setSubCategories] = useState([]);
   const navigation = useNavigation();
   const getSubCategory = async (id) => {
     const data = await getAllSubCategory(id);
-    console.log("\ntest", "data abc");
-    console.log(data);
-
     setSubCategories(data);
+  };
+  const handleStudy = () => {
+    console.log("huy bui");
+    navigation.navigate("StudySub", { wordlist: wl });
   };
 
   const handleDelete = async (idWL, idSub) => {
@@ -65,12 +70,22 @@ export default function YourWordlistDetail() {
     });
   };
   useEffect(() => {
-    getSubCategory(wl.item.id);
+    getSubCategory(wl.id);
   }, []);
   useEffect(() => {
     console.log(`TEST ::`, subCategories);
   }, [subCategories]);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      // console.log("huy");
+      getSubCategory(wl.id);
+    }, [])
+  );
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -80,18 +95,22 @@ export default function YourWordlistDetail() {
             size={24}
             color="#182B40"
             onPress={() => {
-              navigation.push("YourWordlist");
+              navigation.goBack();
+
             }}
           />
         </TouchableOpacity>
 
-        <View style={{
-          marginLeft: 40,
-          display: 'flex',
-          flexDirection: 'row',
-          // alignItems: 'center',
-          // position: 'relative',
-        }}>
+        <View
+          style={{
+            marginLeft: 40,
+            display: "flex",
+            flexDirection: "row",
+            // alignItems: "center",
+            // alignItems: 'center',
+            // position: 'relative',
+          }}
+        >
           <Image
             source={require("~/assets/wordlist.png")}
             style={{
@@ -101,24 +120,35 @@ export default function YourWordlistDetail() {
               // top: -10
             }}
           />
-          <View>
+
+          <View style={{ marginLeft: 10 }}>
             {/* Title */}
             <Text
               style={[
-                tw`pl-2 mt-1 font-bold  tracking-wider text-3xl`,
-                { color: "#182B40" },
+                {
+                  color: colors.textTitle,
+                  fontFamily: "Quicksand-Bold",
+                  fontSize: 32,
+                  letterSpacing: 0.2,
+                  marginTop: -10,
+                },
               ]}
             >
-              {wl.item.title}
+              {wl.title}
             </Text>
             {/* Description */}
             <Text
+              numberOfLines={2}
               style={[
-                tw`pl-2 mt-1 font-normal  tracking-wider text-lg`,
-                { color: "#182B40" },
+                {
+                  color: colors.textTitle,
+                  fontFamily: "Quicksand-SemiBold",
+                  fontSize: 16,
+                  letterSpacing: 0.1,
+                },
               ]}
             >
-              {wl.item.listDesc}
+              {wl.listDesc}
             </Text>
           </View>
         </View>
@@ -126,12 +156,19 @@ export default function YourWordlistDetail() {
 
       <View style={styles.body}>
         {/* Button Study */}
-        <TouchableOpacity style={styles.ButtonStudy}>
+        <TouchableOpacity
+          style={styles.ButtonStudy}
+          onPress={() => handleStudy()}
+        >
           <SvgXml width="30" height="30" xml={svgstudy} />
           <Text
             style={[
-              tw`pl-2 mt-1 font-normal  tracking-wider text-base `,
-              { color: "#FFF7FF" },
+              {
+                color: "#FFF7FF",
+                fontFamily: "Quicksand-SemiBold",
+                marginLeft: 5,
+                fontSize: 15,
+              },
             ]}
           >
             Study
@@ -167,13 +204,16 @@ export default function YourWordlistDetail() {
           <Ionicons
             name="add"
             size={27}
-            color="#3C2D4E"
-          // backgroundColor="#BBBBBB"
+            color={colors.textTitle}
+            // backgroundColor="#BBBBBB"
           />
           <Text
             style={[
-              tw`pl-2 mt-1 font-normal  tracking-wider text-base `,
-              { color: "#3C2D4E" },
+              {
+                color: colors.textTitle,
+                fontFamily: "Quicksand-Bold",
+                fontSize: 15,
+              },
             ]}
           >
             Add
@@ -207,7 +247,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 40,
   },
   dropdown: {
-    display: 'flex',
+    display: "flex",
     width: "88%",
     marginTop: 12,
     // marginBottom: 12,
@@ -218,6 +258,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.17,
     shadowRadius: 4,
+    marginBottom: 20,
   },
   ButtonStudy: {
     backgroundColor: "#3D3A4D",
@@ -228,12 +269,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     zIndex: 100,
-    flexDirection: 'row',
-    top: '-4.5%',
-    paddingTop: 7,
-    paddingBottom: 7,
-    paddingLeft: 35,
-    paddingRight: 35,
+    flexDirection: "row",
+    top: "-3.5%",
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 20,
+    paddingRight: 20,
     // marginRight: 1
   },
   ButtonAdd: {
@@ -247,14 +288,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     zIndex: 100,
-    flexDirection: 'row',
-    top: '4.5%',
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 20,
-    paddingRight: 20,
-    top: "88%",
+    flexDirection: "row",
+    paddingTop: 6,
+    paddingBottom: 6,
+    paddingLeft: 15,
+    paddingRight: 15,
+    top: "90%",
     // bottom: 20,
-    right: "6.5%",
-  }
+    right: "3.5%",
+  },
 });

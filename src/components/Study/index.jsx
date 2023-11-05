@@ -16,7 +16,7 @@ import ItemSub from "./ItemSub/ItemSub";
 import { getAllSubCategory } from "~/api/Subcategory";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
-export default function Index() {
+export default function Index(props) {
   const navigation = useNavigation();
   const [subs, setSubs] = useState([]);
   const handlePress = () => {
@@ -24,11 +24,12 @@ export default function Index() {
   };
 
   useEffect(() => {
+    console.log(props.route.params.wordlist);
     const getAllSub = async (id) => {
       const subCategories = await getAllSubCategory(id);
       setSubs(subCategories);
     };
-    getAllSub("1");
+    getAllSub(props.route.params.wordlist.id);
   }, []);
 
   const [loaded] = useFonts(configFont);
@@ -61,12 +62,12 @@ export default function Index() {
               {
                 textAlign: "center",
                 color: colors.textTitle,
-                fontFamily: "Quicksand-SemiBold",
-                fontSize: 20,
+                fontFamily: "Quicksand-Bold",
+                fontSize: 22,
               },
             ]}
           >
-            Free Word List
+            {props.route.params.wordlist.title}
           </Text>
         </View>
         <ScrollView
@@ -85,16 +86,6 @@ export default function Index() {
           ))}
         </ScrollView>
       </View>
-      <Button
-        onPress={async () => {
-          console.log("test: ", "da logout 1");
-
-          await AsyncStorage.clear();
-          console.log("test: ", "da logout 2");
-
-        }}
-        title="Logout"
-      />
     </SafeAreaView>
   );
 }

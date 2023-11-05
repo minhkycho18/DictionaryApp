@@ -22,7 +22,7 @@ export const convertData = (data) => {
         key += 1;
         return {
           key: key,
-          id: item.id,
+          wordid: item.id,
           word: item.word,
           pos: item.pos,
           defId: i.defId,
@@ -30,8 +30,16 @@ export const convertData = (data) => {
           isWordOfUserWordlist: i.isWordOfUserWordlist
         }
       });
+
     }
   });
-  return result.reduce((acc, subArray) => acc.concat(subArray), []);
+  return result.reduce((acc, subArray) => acc.concat(subArray), []).filter(element => element !== undefined);
 
+}
+export const getIdValueInArr = (arr, newId) => {
+  for (const item of arr) {
+    if (item.id === newId) {
+      return item.value;
+    }
+  }
 }

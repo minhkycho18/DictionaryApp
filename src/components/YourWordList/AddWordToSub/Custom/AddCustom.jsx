@@ -21,8 +21,8 @@ import { FontAwesome } from "@expo/vector-icons";
 const AddCustom = () => {
   const titleRef = useRef();
   const descRef = useRef();
-  const titlelabel = useRef();
-  const descLabel = useRef();
+  const exampleRef = useRef();
+
   // const [type, setType] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
@@ -32,47 +32,6 @@ const AddCustom = () => {
   const [key, setKey] = useState(0);
   const navigation = useNavigation();
 
-  const handleTitleFocus = () => {
-    titleRef.current.setNativeProps({
-      style: {
-        borderColor: "#6a64f1",
-      },
-    });
-    titlelabel.current.setNativeProps({
-      style: {
-        color: "#6a64f1",
-      },
-    });
-
-    descRef.current.setNativeProps({
-      borderColor: "#e0e0e0",
-    });
-    descLabel.current.setNativeProps({
-      style: {
-        color: "#07074d",
-      },
-    });
-  };
-  const handleDescFocus = () => {
-    descRef.current.setNativeProps({
-      style: {
-        borderColor: "#6a64f1",
-      },
-    });
-    titleRef.current.setNativeProps({
-      borderColor: "#e0e0e0",
-    });
-    titlelabel.current.setNativeProps({
-      style: {
-        color: "#07074d",
-      },
-    });
-    descLabel.current.setNativeProps({
-      style: {
-        color: "#6a64f1",
-      },
-    });
-  };
   const handleCreate = () => {
     if (title === "" || desc === "" || type === "") {
       showToast("Warning", "Please fill in all field");
@@ -174,12 +133,23 @@ const AddCustom = () => {
       >
         <View>
           <TextInput
-            style={{ ...Styles.inputTitle, fontFamily: "Quicksand-Regular" }}
+            style={{ ...Styles.inputTitle, fontFamily: "Quicksand-Medium" }}
             placeholder="Write your word"
-            // ref={descRef}
             value={title}
+            ref={titleRef}
             onChangeText={setTitle}
-            // onFocus={handleDescFocus}
+            onFocus={() => {
+              titleRef.current.setNativeProps({
+                borderColor: "#6a64f1",
+                borderBottomWidth: 4,
+              });
+            }}
+            onBlur={() => {
+              titleRef.current.setNativeProps({
+                borderColor: "#e0e0e0",
+                borderBottomWidth: 3,
+              });
+            }}
           />
           <Text
             style={{
@@ -188,7 +158,6 @@ const AddCustom = () => {
               marginTop: 2,
               marginBottom: -2,
             }}
-            ref={titlelabel}
           >
             Word
           </Text>
@@ -247,15 +216,25 @@ const AddCustom = () => {
                   ...Styles.formLabel,
                   fontFamily: "Quicksand-SemiBold",
                 }}
-                ref={titlelabel}
               >
                 Description
               </Text>
               <TextInput
-                style={{ ...Styles.input, fontFamily: "Quicksand-Regular" }}
+                style={{ ...Styles.input, fontFamily: "Quicksand-Medium" }}
                 placeholder="Write description"
                 value={desc}
+                ref={descRef}
                 onChangeText={setDesc}
+                onBlur={() => {
+                  descRef.current.setNativeProps({
+                    borderColor: "#e0e0e0",
+                  });
+                }}
+                onFocus={() => {
+                  descRef.current.setNativeProps({
+                    borderColor: "#6a64f1",
+                  });
+                }}
               />
             </View>
             <View>
@@ -264,15 +243,25 @@ const AddCustom = () => {
                   ...Styles.formLabel,
                   fontFamily: "Quicksand-SemiBold",
                 }}
-                ref={descLabel}
               >
                 Example
               </Text>
               <TextInput
-                style={{ ...Styles.input, fontFamily: "Quicksand-Regular" }}
+                style={{ ...Styles.input, fontFamily: "Quicksand-Medium" }}
                 placeholder="Write example"
                 value={example}
                 onChangeText={setExample}
+                ref={exampleRef}
+                onFocus={() => {
+                  exampleRef.current.setNativeProps({
+                    borderColor: "#6a64f1",
+                  });
+                }}
+                onBlur={() => {
+                  exampleRef.current.setNativeProps({
+                    borderColor: "#e0e0e0",
+                  });
+                }}
               />
             </View>
           </View>
@@ -324,12 +313,6 @@ const AddCustom = () => {
         }}
       />
       <TouchableOpacity style={Styles.buttonAdd} onPress={handleSave}>
-        {/* <MaterialIcons
-          name="add"
-          size={20}
-          color="white"
-          style={{ marginTop: 4 }}
-        /> */}
         <FontAwesome
           name="cloud-download"
           size={20}

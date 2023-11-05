@@ -9,21 +9,19 @@ export const Styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         position: 'relative',
-        marginTop: 2,
+        marginTop: 10,
         backgroundColor: "#FEFEFE",
-        elevation: 4,
-        shadowOffset: {
-          width: 0,
-          height: 3,
-        },
-        shadowOpacity: 0.17,
-        shadowRadius: 4,  
+        borderRadius: 10,
+        borderStyle: 'dashed',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        marginBottom: 10
     },
     Title_Add: {
         paddingLeft: 20
     },
     Image: {
-        width: 50,
-        height: 50
+        width: 30,
+        height: 30
     },
 })

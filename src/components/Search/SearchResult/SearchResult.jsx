@@ -42,7 +42,7 @@ function SearchResult({ vocal, onPressItem }) {
               numberOfLines={2}
               style={{
                 ...styles.content_bottom_Mean,
-                fontFamily: "Quicksand-Regular",
+                fontFamily: "Quicksand-Medium",
               }}
             >
               {vocal.item.definitions[0]?.wordDesc}

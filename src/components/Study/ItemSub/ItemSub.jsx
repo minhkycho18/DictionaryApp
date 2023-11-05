@@ -21,8 +21,8 @@ export default function ItemSub({ Sub, onPress }) {
               tw`text-lg`,
               {
                 fontFamily: "Quicksand-SemiBold",
-                color: "#182B40",
-                letterSpacing: 0.2,
+                color: colors.textTitle,
+                letterSpacing: 0.1,
               },
             ]}
           >

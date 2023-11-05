@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Animated, Text } from "react-native";
 import { View } from "react-native";
-import Modal from "react-native-modal";
+import { useNavigation } from "@react-navigation/native";import Modal from "react-native-modal";
 import DropDownPicker from "react-native-dropdown-picker";
 import { SlideInUp } from "react-native-reanimated";
 import ItemListVocabOfSub from "../ItemListVocabOfSub/ItemListVocabOfSub";
@@ -11,6 +11,9 @@ import { TouchableOpacity } from "react-native";
 import { Fontisto } from "@expo/vector-icons";
 import { Styles } from "./Styles";
 import tw from "twrnc";
+
+import { colors, configFont } from "~/constants/theme";
+import { useFonts } from "expo-font";
 
 export default function ItemSubCategory({ subcategory, onDelete }) {
   const [title, setTitle] = useState(subcategory.title);
@@ -63,7 +66,18 @@ export default function ItemSubCategory({ subcategory, onDelete }) {
     });
     // iconRef.current.setNativeProps({ style: { display: "block" } });
   };
-
+  const navigation = useNavigation();
+  const handleAddWordToSub = () => {
+    setOpen(false);
+    navigation.navigate("AddWordToSub", {
+      wordlistId: subcategory.wordListId,
+      subcategoryId: subcategory.subcategoryId,
+    });
+  };
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
   return (
     <View
       style={{
@@ -154,8 +168,11 @@ export default function ItemSubCategory({ subcategory, onDelete }) {
             placeholder={title}
 
             placeholderStyle={{
-              color: "#462D4E",
-              fontWeight: "bold",
+              color: colors.textTitle,
+              fontFamily: "Quicksand-Bold",
+              marginLeft: 5,
+              fontSize: 18,
+              letterSpacing: 0.2,
             }}
             showTickIcon={false}
             dropDownContainerStyle={{
