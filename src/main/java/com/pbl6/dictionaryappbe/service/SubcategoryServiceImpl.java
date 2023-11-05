@@ -108,6 +108,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
                     .defId(newDef.getDefId())
                     .vocabulary(newVocab)
                     .definition(newDef)
+                    .isDeleted(false)
                     .build());
             subcategoryDetails.add(subcategoryDetailRepository.save(SubcategoryDetail.builder()
                     .vocabId(newVocab.getVocabId())
@@ -202,29 +203,24 @@ public class SubcategoryServiceImpl implements SubcategoryService {
         vocabDefs.forEach((vocabId, subDetailList) -> {
             Vocabulary vocabulary = vocabularyRepository.findById(vocabId)
                     .orElseThrow(() -> new EntityNotFoundException("Vocabulary not found with ID: " + vocabId));
-            List<Definition> definitions = new ArrayList<>();
             if (vocabulary.getWordType() == WordType.CUSTOM) {
                 subDetailList.forEach(subDetail -> {
-                    Long defId = subDetail.getDefId();
-                    System.out.println(subDetail.getDefId() + " " + subDetail.getVocabId());
-                    subcategoryDetailRepository.delete(subDetail);
-                    subcategory.setAmountOfWord(subcategory.getAmountOfWord() - 1);
-                    Definition definition = definitionRepository.findById(defId)
-                            .orElseThrow(() -> new EntityNotFoundException("Definition not found with ID: " + defId));
-                    VocabDef vocabDef = vocabDefRepository.findById(new VocabDefId(vocabId, defId))
+                    VocabDef vocabDef = vocabDefRepository.findById(new VocabDefId(vocabId, subDetail.getDefId()))
                             .orElseThrow(() -> new EntityNotFoundException("Vocabulary not found"));
-                    vocabDefRepository.delete(vocabDef);
-                    definitions.add(definition);
-//                    definitionRepository.delete(definition);
+                    subcategoryDetailRepository.delete(subDetail);
+                    vocabDef.setDeleted(true);
                 });
-//                vocabularyRepository.delete(vocabulary);
+                if (vocabDefRepository.isDeletable(vocabId)) {
+                    List<Definition> definitions = definitionRepository.findAllByVocabId(vocabId);
+                    vocabDefRepository.deleteAll(vocabDefRepository.findAllByVocabId(vocabId));
+                    definitionRepository.deleteAll(definitions);
+                    vocabularyRepository.delete(vocabulary);
+                }
             } else {
-                subcategory.setAmountOfWord(subcategory.getAmountOfWord() - subDetailList.size());
                 subcategoryDetailRepository.deleteAll(subDetailList);
-                System.out.println(subDetailList.get(0).getDefId() + " " + subDetailList.get(0).getVocabId());
             }
+            subcategory.setAmountOfWord(subcategory.getAmountOfWord() - subDetailList.size());
         });
-
     }
 
     @Override

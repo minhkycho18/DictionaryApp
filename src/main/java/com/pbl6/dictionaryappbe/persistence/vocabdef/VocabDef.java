@@ -27,6 +27,9 @@ public class VocabDef {
     @Column(name = "def_id")
     private Long defId;
 
+    @Column
+    private boolean isDeleted;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "def_id", referencedColumnName = "def_id", insertable = false, updatable = false)
     @JsonIgnore
@@ -41,7 +44,7 @@ public class VocabDef {
     @JsonIgnore
     private List<VocabLeitner> vocabLeitners;
 
-    @OneToMany(mappedBy = "vocabDef")
+    @OneToMany(mappedBy = "vocabDef", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<SubcategoryDetail> subcategoryDetails;
 }
