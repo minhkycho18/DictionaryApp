@@ -15,14 +15,15 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import tw from "twrnc";
-
+import Toast, { ErrorToast } from "react-native-toast-message";
 import ItemSubCategory from "~/components/Home/WordList/ItemSubCategory/ItemSubCategory";
 import { Image } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { colors, svgstudy } from "~/constants/theme";
-import { getAllSubCategory } from "~/api/Subcategory";
+import { deleteSubCategory, getAllSubCategory } from "~/api/Subcategory";
 import { configFont } from "~/constants/theme";
 import { useFonts } from "expo-font";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function YourWordlistDetail() {
   const { params } = useRoute();
@@ -39,9 +40,42 @@ export default function YourWordlistDetail() {
     navigation.navigate("StudySub", { wordlist: wl });
   };
 
+  const handleDelete = async (idWL, idSub) => {
+    try {
+      await deleteSubCategory(idWL, idSub);
+      const newSubCategoties = subCategories.filter((item) => item.subcategoryId !== idSub);
+      setSubCategories(newSubCategoties);
+      showToast(
+        "Success",
+        "Delete Sub Category success!"
+      );
+      console.log("Delete Sub Category success!")
+
+    } catch (error) {
+      console.log(error);
+    }
+  }; 
+  //Toast
+  const showToast = (text1, text2) => {
+    Toast.show({
+      position: "top",
+      type: "error",
+      text1: text1,
+      text2: text2,
+      // text1: "Login Fail",
+      // text2: "Invalid Email or Password, please try again!",
+      visibilityTime: 2000,
+      autoHide: true,
+      topOffset: 55,
+    });
+  };
   useEffect(() => {
     getSubCategory(wl.id);
   }, []);
+  useEffect(() => {
+    console.log(`TEST ::`, subCategories);
+  }, [subCategories]);
+
   useFocusEffect(
     React.useCallback(() => {
       // console.log("huy");
@@ -62,6 +96,7 @@ export default function YourWordlistDetail() {
             color="#182B40"
             onPress={() => {
               navigation.goBack();
+
             }}
           />
         </TouchableOpacity>
@@ -151,9 +186,18 @@ export default function YourWordlistDetail() {
             showsVerticalScrollIndicator={false}
             data={subCategories} //subCategories.subcategoryId
             keyExtractor={(item) => item.subcategoryId}
-            renderItem={({ item }) => <ItemSubCategory subcategory={item} />}
+            renderItem={({ item }) => (
+              <GestureHandlerRootView>
+                <ItemSubCategory
+                  subcategory={item}
+                  onDelete = {handleDelete}
+                />
+              </GestureHandlerRootView>
+
+            )}
           />
         </View>
+
 
         {/* Add new Subcategory */}
         <TouchableOpacity style={styles.ButtonAdd}>

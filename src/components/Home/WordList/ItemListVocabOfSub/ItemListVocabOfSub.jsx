@@ -6,6 +6,7 @@ import { Text } from "react-native";
 import tw from "twrnc";
 import { getAllVocabOfSubCategory } from "~/api/Subcategory";
 import ItemVocabOfSub from "../ItemVocabOfSub/ItemVocabOfSub";
+
 export default function ItemListVocabOfSub({ subcategory }) {
   const [idSub, setIdSub] = useState(subcategory.subcategoryId);
   const [idWordlist, setIdWordlist] = useState(subcategory.subcategoryId);

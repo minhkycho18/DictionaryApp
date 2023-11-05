@@ -1,6 +1,22 @@
 import { StyleSheet } from "react-native";
 
 export const Styles = StyleSheet.create({
+        container: {
+        // flex: 1,
+        // zIndex: -1,
+        // marginBottom: 10,
+        // borderBottomLeftRadius: 20,
+
+        
+        elevation: 4,
+        shadowOffset: {
+          width: 0,
+          height: 3,
+        },
+        shadowOpacity: 0.17,
+        shadowRadius: 4,
+
+    },
     wrappered: {
         paddingTop: 10,
         paddingRight: 20,

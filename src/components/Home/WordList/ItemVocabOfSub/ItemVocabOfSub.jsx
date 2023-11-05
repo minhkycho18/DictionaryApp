@@ -17,7 +17,7 @@ export default function ItemVocabOfSub({ Vocab }) {
   const iconRef = useRef();
   const navigation = useNavigation();
   const handleDetailWordList = async () => {
-    // navigation.push("YourWordlistDetail", { Wordlist: wordlist });
+    navigation.push("YourWordlistDetail", { Wordlist: wordlist });
   };
 
   const [loaded] = useFonts(configFont);
@@ -25,6 +25,7 @@ export default function ItemVocabOfSub({ Vocab }) {
     return null;
   }
   return (
+
     <>
       <TouchableOpacity style={Styles.container} onPress={handleDetailWordList}>
         <View style={[tw`bg-stone-100`, Styles.wrappered]} ref={wrapRef}>
