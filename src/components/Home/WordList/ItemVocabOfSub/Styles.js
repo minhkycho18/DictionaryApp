@@ -21,16 +21,11 @@ export const Styles = StyleSheet.create({
         paddingTop: 10,
         paddingRight: 20,
         paddingBottom: 25,
-        paddingLeft: 15,
-        // borderRadius: 20,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         position: 'relative',
-        marginTop: 2,
-        backgroundColor: "#FEFEFE",
-        //   marginVertical: 10, // Thêm khoảng cách dọc giữa các phần tử
-        // marginHorizontal: 10, 
+        marginTop: 2
     },
     Text_content: {
         marginLeft: 5,
@@ -45,7 +40,7 @@ export const Styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 12,
+        marginBottom: 5,
         // borderStyle: 'solid',
         // borderBottomWidth: 1,
         // borderTopWidth: 1,
@@ -74,6 +69,14 @@ export const Styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 40,
-        backgroundColor: '#fff'
     },
+    checkbox: {
+        position: 'absolute',
+        top: 45,
+        left: 5,
+        zIndex: 1000,
+        width: 12,
+        height: 12,
+        borderWidth: 1
+    }
 })

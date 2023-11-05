@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
+  Dimensions,
 } from "react-native";
 import {
   useNavigation,
@@ -16,6 +17,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import tw from "twrnc";
 import Toast, { ErrorToast } from "react-native-toast-message";
+import { MaterialIcons } from "@expo/vector-icons";
+
 import ItemSubCategory from "~/components/Home/WordList/ItemSubCategory/ItemSubCategory";
 import { Image } from "react-native";
 import { SvgXml } from "react-native-svg";
@@ -24,37 +27,40 @@ import { deleteSubCategory, getAllSubCategory } from "~/api/Subcategory";
 import { configFont } from "~/constants/theme";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ListVocalContext } from "~/context/ListVocal";
 
 export default function YourWordlistDetail() {
   const { params } = useRoute();
   const wl = params.Wordlist;
 
   const [subCategories, setSubCategories] = useState([]);
+  const [isDisplayDel, setIsDisplayDel] = useState(false);
+  const [delSucess, setdelSucess] = useState(false);
+
   const navigation = useNavigation();
+
+  const { deleteWord, setVocalSelect } = useContext(ListVocalContext);
   const getSubCategory = async (id) => {
     const data = await getAllSubCategory(id);
     setSubCategories(data);
   };
   const handleStudy = () => {
-    console.log("huy bui");
     navigation.navigate("StudySub", { wordlist: wl });
   };
 
   const handleDelete = async (idWL, idSub) => {
     try {
       await deleteSubCategory(idWL, idSub);
-      const newSubCategoties = subCategories.filter((item) => item.subcategoryId !== idSub);
-      setSubCategories(newSubCategoties);
-      showToast(
-        "Success",
-        "Delete Sub Category success!"
+      const newSubCategoties = subCategories.filter(
+        (item) => item.subcategoryId !== idSub
       );
-      console.log("Delete Sub Category success!")
-
+      setSubCategories(newSubCategoties);
+      showToast("Success", "Delete Sub Category success!");
+      console.log("Delete Sub Category success!");
     } catch (error) {
       console.log(error);
     }
-  }; 
+  };
   //Toast
   const showToast = (text1, text2) => {
     Toast.show({
@@ -69,8 +75,22 @@ export default function YourWordlistDetail() {
       topOffset: 55,
     });
   };
+  const handleDeleteWord = async () => {
+    try {
+      deleteWord(wl.id);
+      setIsDisplayDel(false);
+      setdelSucess(!delSucess);
+    } catch (error) {
+      console.log(`Delete Error ::`, error);
+    }
+  };
+  const handleDisplayButtonDel = () => {
+    setIsDisplayDel(!isDisplayDel);
+  };
+
   useEffect(() => {
     getSubCategory(wl.id);
+    setVocalSelect([]);
   }, []);
   useEffect(() => {
     console.log(`TEST ::`, subCategories);
@@ -96,7 +116,6 @@ export default function YourWordlistDetail() {
             color="#182B40"
             onPress={() => {
               navigation.goBack();
-
             }}
           />
         </TouchableOpacity>
@@ -190,35 +209,58 @@ export default function YourWordlistDetail() {
               <GestureHandlerRootView>
                 <ItemSubCategory
                   subcategory={item}
-                  onDelete = {handleDelete}
+                  onDelete={handleDelete}
+                  onDisplayButtonDel={handleDisplayButtonDel}
+                  delSucess={delSucess}
+                  isDisplayDel={isDisplayDel}
                 />
               </GestureHandlerRootView>
-
             )}
           />
         </View>
 
-
         {/* Add new Subcategory */}
-        <TouchableOpacity style={styles.ButtonAdd}>
-          <Ionicons
-            name="add"
-            size={27}
-            color={colors.textTitle}
-            // backgroundColor="#BBBBBB"
-          />
-          <Text
-            style={[
-              {
-                color: colors.textTitle,
-                fontFamily: "Quicksand-Bold",
-                fontSize: 15,
-              },
-            ]}
+        {!isDisplayDel && (
+          <TouchableOpacity style={styles.ButtonAdd}>
+            <Ionicons
+              name="add"
+              size={27}
+              color={colors.textTitle}
+              // backgroundColor="#BBBBBB"
+            />
+            <Text
+              style={[
+                {
+                  color: colors.textTitle,
+                  fontFamily: "Quicksand-Bold",
+                  fontSize: 15,
+                },
+              ]}
+            >
+              Add
+            </Text>
+          </TouchableOpacity>
+        )}
+
+        {isDisplayDel && (
+          <TouchableOpacity
+            style={{ ...styles.ButtonDelete }}
+            onPress={handleDeleteWord}
           >
-            Add
-          </Text>
-        </TouchableOpacity>
+            <MaterialIcons name="delete-forever" size={27} color="white" />
+            <Text
+              style={[
+                {
+                  color: "#ffff",
+                  fontFamily: "Quicksand-Bold",
+                  fontSize: 15,
+                },
+              ]}
+            >
+              Delete
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -296,5 +338,26 @@ const styles = StyleSheet.create({
     top: "90%",
     // bottom: 20,
     right: "3.5%",
+  },
+  ButtonDelete: {
+    // display: "flex",
+    backgroundColor: "rgb(225 29 72)",
+    borderRadius: 25,
+    position: "absolute",
+    // right: 25,
+    // top: 170,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 100,
+    flexDirection: "row",
+    paddingTop: 6,
+    paddingBottom: 6,
+    paddingLeft: 15,
+    paddingRight: 15,
+    top: "91%",
+    left: "50%",
+    transform: [{ translateX: -50 }],
+    textAlign: "center",
   },
 });

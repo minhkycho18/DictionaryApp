@@ -3,8 +3,8 @@ import { Styles } from "./Styles";
 import { View, Text, TextInput } from "react-native";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
-import { Entypo } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 export default function FeildDesc_Ex({ data, index, onRemove }) {
   const descRef = useRef();
   const exampleRef = useRef();
@@ -41,7 +41,7 @@ export default function FeildDesc_Ex({ data, index, onRemove }) {
               Description
             </Text>
             <TouchableOpacity onPress={() => handleRemove(index)}>
-              <Entypo name="trash" size={24} color="#2e3856" />
+              <Ionicons name="md-close-sharp" size={24} color="#2e3856" />
             </TouchableOpacity>
           </View>
           <TextInput
