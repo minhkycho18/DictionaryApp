@@ -1,45 +1,40 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FlatList, View } from "react-native";
 import { Styles } from "../ItemVocabOfSub/Styles";
-
-import { Text } from "react-native";
-import tw from "twrnc";
-import { getAllVocabOfSubCategory } from "~/api/Subcategory";
 import ItemVocabOfSub from "../ItemVocabOfSub/ItemVocabOfSub";
+export default function ItemListVocabOfSub({
+  onSelect,
+  onDisplayButtonDel,
+  onDisplayCheckBox,
+  listVocabOfSubCategory,
+  isDisplayDel,
+}) {
+  const [isDisplayCheck, setIsDisplayCheck] = useState(false);
 
-export default function ItemListVocabOfSub({ subcategory }) {
-  const [idSub, setIdSub] = useState(subcategory.subcategoryId);
-  const [idWordlist, setIdWordlist] = useState(subcategory.subcategoryId);
-  const [listVocabOfSubCategory, setListVocabOfSubCategory] = useState([]);
-
-  const getVocabOfSubCategory = async (idWL, idSub) => {
-    const data = await getAllVocabOfSubCategory(idWL, idSub);
-    setListVocabOfSubCategory(data);
+  const handleDisplayCheckBox = async () => {
+    setIsDisplayCheck(!isDisplayCheck);
+    onDisplayButtonDel();
+    onDisplayCheckBox();
   };
-
-  useEffect(() => {
-    getVocabOfSubCategory(idWordlist, idSub);
-  }, []);
-  const wrapRef = useRef();
+  const handleSelect = (data) => {
+    onSelect(data);
+  };
 
   return (
     <FlatList
-      // style={{
-      //   backgroundColor: 'red'
-      // }}
       showsVerticalScrollIndicator={false}
       vertical
       keyExtractor={(item) => item.definition.defId}
       data={listVocabOfSubCategory}
       renderItem={(item) => (
-        // <GestureHandlerRootView>
-        //   <ItemWordList
-        //   wordlist={item}
-        //   onDelete={handleDelete}
-        //   />
-        // </GestureHandlerRootView>
-
-        <ItemVocabOfSub Vocab={item} />
+        <ItemVocabOfSub
+          Vocab={item}
+          words={listVocabOfSubCategory}
+          onDisplayCheckBox={handleDisplayCheckBox}
+          isDisplay={isDisplayCheck}
+          onSelect={handleSelect}
+          isDisplayDel={isDisplayDel}
+        />
       )}
     />
   );

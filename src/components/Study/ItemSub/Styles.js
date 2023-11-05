@@ -4,8 +4,9 @@ import { StyleSheet } from "react-native"
 
 export const Styles = StyleSheet.create({
     container: {
-        paddingHorizontal: 25,
-        paddingVertical: 10
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+
     },
     wrapper: {
         width: "100%",

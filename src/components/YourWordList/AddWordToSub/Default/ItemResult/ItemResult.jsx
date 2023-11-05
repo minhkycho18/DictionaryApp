@@ -37,13 +37,18 @@ function ItemResult({ vocal, params, onAddSucess, onError }) {
       console.log("check ::", check);
       if (check) {
         setIsLoading(false);
+        // xoa tu khoi sub
         onError("Error", "Word is exist in subcategory");
       } else {
-        await addWordDefaultToSub(params.wordlistId, params.subcategoryId, {
-          vocabId: vocal.item.wordid,
-          defId: vocal.item.defId,
-        });
-        console.log(`Result ::`, "add sucess");
+        const res = await addWordDefaultToSub(
+          params.wordlistId,
+          params.subcategoryId,
+          {
+            vocabId: vocal.item.wordid,
+            defId: vocal.item.defId,
+          }
+        );
+        // console.log(`Result ::`, res);
         setIsLoading(false);
         setIsWordOfSub(!isWordOfSub);
         onAddSucess();

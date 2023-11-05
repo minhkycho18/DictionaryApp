@@ -1,37 +1,87 @@
-import React, { useEffect, useRef, useState } from "react";
-import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useContext,
+  useLayoutEffect,
+} from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 import { Styles } from "./Styles";
 import { SvgXml } from "react-native-svg";
 import tw from "twrnc";
 import { colors, svgreview } from "~/constants/theme";
+import Checkbox from "expo-checkbox";
 
 import { useNavigation } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
+import { ListVocalContext } from "~/context/ListVocal";
 
-export default function ItemVocabOfSub({ Vocab }) {
+export default function ItemVocabOfSub({
+  Vocab,
+  onDisplayCheckBox,
+  isDisplay,
+  onSelect,
+  isDisplayDel,
+}) {
   const [word, setWord] = useState(Vocab.item.word);
   const [definition, setDefinition] = useState(Vocab.item.definition.wordDesc);
-
+  const [isChecked, setChecked] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
+  const { isDel } = useContext(ListVocalContext);
   const wrapRef = useRef();
-  const iconRef = useRef();
-  const navigation = useNavigation();
-  const handleDetailWordList = async () => {
-    navigation.push("YourWordlistDetail", { Wordlist: wordlist });
+
+  const handleSelect = () => {
+    if (isDelete) {
+      console.log("click delete");
+      setChecked(!isChecked);
+      onSelect({
+        vocabId: Vocab.item.vocabId,
+        defId: Vocab.item.definition.defId,
+      });
+    }
   };
+
+  useLayoutEffect(() => {
+    setIsDelete(isDisplay);
+  }, [isDisplay]);
+
+  useLayoutEffect(() => {
+    setIsDelete(isDisplayDel);
+  }, [isDisplayDel]);
 
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
   }
   return (
-
     <>
-      <TouchableOpacity style={Styles.container} onPress={handleDetailWordList}>
-        <View style={[tw`bg-stone-100`, Styles.wrappered]} ref={wrapRef}>
+      <TouchableOpacity
+        style={Styles.container}
+        onLongPress={() => onDisplayCheckBox()}
+        onPress={() => handleSelect()}
+      >
+        {isDelete && (
+          <View>
+            <Checkbox
+              style={Styles.checkbox}
+              value={isChecked}
+              onValueChange={setChecked}
+              color={isChecked ? "#2C94E6" : undefined}
+            />
+          </View>
+        )}
+        <View
+          style={{
+            ...Styles.wrappered,
+            paddingLeft: isDelete ? 20 : 10,
+            backgroundColor: isChecked ? "rgb(186 230 253)" : "#FEFEFE",
+          }}
+          ref={wrapRef}
+        >
           <View style={Styles.Text_content}>
             <View style={Styles.Title_Status}>
-              <View>
+              <View style={{ width: "62%" }}>
                 <Text
                   numberOfLines={1}
                   style={[
@@ -51,7 +101,12 @@ export default function ItemVocabOfSub({ Vocab }) {
               {/* Status */}
               <View style={Styles.viewItem}>
                 <View Styles={Styles.item}>
-                  <View style={Styles.circle}>
+                  <View
+                    style={{
+                      ...Styles.circle,
+                      backgroundColor: isChecked ? "rgb(186 230 253)" : "#fff",
+                    }}
+                  >
                     <SvgXml width="20" height="20" xml={svgreview} />
                   </View>
                 </View>
