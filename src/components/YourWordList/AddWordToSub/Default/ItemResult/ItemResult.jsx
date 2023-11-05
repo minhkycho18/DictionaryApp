@@ -48,7 +48,7 @@ function ItemResult({ vocal, params, onAddSucess, onError }) {
             defId: vocal.item.defId,
           }
         );
-        console.log(`Result ::`, res);
+        // console.log(`Result ::`, res);
         setIsLoading(false);
         setIsWordOfSub(!isWordOfSub);
         onAddSucess();

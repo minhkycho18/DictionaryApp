@@ -92,9 +92,6 @@ export default function YourWordlistDetail() {
     getSubCategory(wl.id);
     setVocalSelect([]);
   }, []);
-  useEffect(() => {
-    console.log(`TEST ::`, subCategories);
-  }, [subCategories]);
 
   useFocusEffect(
     React.useCallback(() => {

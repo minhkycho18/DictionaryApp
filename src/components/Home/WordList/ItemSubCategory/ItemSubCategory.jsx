@@ -240,7 +240,7 @@ export default function ItemSubCategory({
 
           {/* View list word of subcategory */}
           <Animated.View>
-            {open && <ItemAddNewWord />}
+            {open && <ItemAddNewWord onAddWordToSub={handleAddWordToSub} />}
             {open && (
               <ItemListVocabOfSub
                 subcategory={subcategory}
