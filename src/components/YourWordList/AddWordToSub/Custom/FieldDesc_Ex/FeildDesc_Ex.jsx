@@ -1,15 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { Styles } from "./Styles";
 import { View, Text, TextInput } from "react-native";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-export default function FeildDesc_Ex({ data, index, onRemove }) {
+import { ListComponentDescContext } from "~/context/ListComponentDesc";
+export default function FeildDesc_Ex({ data, index }) {
+  const { Remove } = useContext(ListComponentDescContext);
   const descRef = useRef();
   const exampleRef = useRef();
-  const [description, setDescription] = useState("");
-  const [example, setExample] = useState("");
+  const [description, setDescription] = useState(data?.desc);
+  const [example, setExample] = useState(data?.example);
 
   const handleExampleChange = (text) => {
     data.example = text;
@@ -25,7 +27,7 @@ export default function FeildDesc_Ex({ data, index, onRemove }) {
     return null;
   }
   const handleRemove = (key) => {
-    onRemove(key);
+    Remove(key);
   };
   return (
     <View style={Styles.content}>
