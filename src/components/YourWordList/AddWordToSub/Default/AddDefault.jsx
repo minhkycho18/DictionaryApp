@@ -44,12 +44,21 @@ export default function AddDefault(props) {
     setClear(false);
     clickClear.current.focus();
   };
+  const checkValid = (vocabId, defId) => {
+    return params.listVocabOfSubCategory.some(
+      (vocab) => vocab.vocabId === vocabId && vocab.definition.defId === defId
+    );
+  };
   useEffect(() => {
     const getVocals = async (query) => {
       const data = await getVocalByKeyWord(query);
 
       if (data.content.length > 0) {
-        const newVocal = convertData(data.content);
+        const newVocal = convertData(data.content).map((item) => ({
+          ...item,
+          isAdded: checkValid(item.wordid, item.defId),
+        }));
+
         setWords(newVocal);
         setIsFound(true);
         setIsSearch(false);
@@ -68,10 +77,20 @@ export default function AddDefault(props) {
       };
     }
   }, [search]);
+
+  useEffect(() => {
+    if (countWord === 0) {
+      setIsAddSucess(false);
+    }
+  }, [countWord]);
   const handleAddSucess = () => {
     setIsAddSucess(true);
     setcountWord((pre) => pre + 1);
   };
+  const handleRemove = () => {
+    setcountWord((pre) => pre - 1);
+  };
+
   const handleBack = () => {
     navigation.goBack();
   };
@@ -165,6 +184,7 @@ export default function AddDefault(props) {
                   params={params}
                   onAddSucess={handleAddSucess}
                   onError={handleError}
+                  onRemove={handleRemove}
                 />
               )}
               keyExtractor={(item) => item.key}
