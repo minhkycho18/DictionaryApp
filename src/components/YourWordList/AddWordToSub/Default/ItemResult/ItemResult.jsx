@@ -5,59 +5,78 @@ import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
-import { GetColor } from "~/helper";
-import { addWordDefaultToSub, getAllWordOfSub } from "~/api/Subcategory";
-function ItemResult({ vocal, params, onAddSucess, onError }) {
+import { GetColor, delay } from "~/helper";
+import {
+  addWordDefaultToSub,
+  deleteWordInSub,
+  getAllWordOfSub,
+} from "~/api/Subcategory";
+function ItemResult({ vocal, params, onAddSucess, onRemove }) {
   const [isLoading, setIsLoading] = useState(false);
-
-  const [isWordOfSub, setIsWordOfSub] = useState(
-    vocal.item.isWordOfUserWordlist
-  );
+  const [isAdd, setIsAdd] = useState(false);
+  const [isWordOfSub, setIsWordOfSub] = useState(vocal.item.isAdded);
+  const colorPos = GetColor(vocal.item.pos);
   useEffect(() => {
-    setIsWordOfSub(vocal.item.isWordOfUserWordlist);
+    setIsWordOfSub(vocal.item.isAdded);
   }, [vocal.item]);
-  const { navigate } = useNavigation();
+
+  const deleteWord = async () => {
+    try {
+      await deleteWordInSub(params.wordlistId, params.subcategoryId, [
+        {
+          vocabId: vocal.item.wordid,
+          defId: vocal.item.defId,
+        },
+      ]);
+    } catch (error) {
+      console.log(`Delete word in sub Error`, error);
+    }
+  };
+  const addWord = async () => {
+    try {
+      await addWordDefaultToSub(params.wordlistId, params.subcategoryId, {
+        vocabId: vocal.item.wordid,
+        defId: vocal.item.defId,
+      });
+    } catch (error) {
+      console.log(`Add word Error`, error);
+    }
+  };
+
+  const handleAddWordToSub = async () => {
+    setIsLoading(!isLoading);
+    if (vocal.item.isAdded) {
+      // xoa tu khoi sub
+      if (isWordOfSub) {
+        await deleteWord();
+        setIsLoading(false);
+        setIsWordOfSub(!isWordOfSub);
+      } else {
+        await addWord();
+        setIsLoading(false);
+        setIsWordOfSub(!isWordOfSub);
+      }
+    } else {
+      if (!isAdd) {
+        await addWord();
+        setIsLoading(false);
+        setIsWordOfSub(!isWordOfSub);
+        setIsAdd(!isAdd);
+        onAddSucess();
+      } else {
+        await deleteWord();
+        setIsLoading(false);
+        setIsWordOfSub(!isWordOfSub);
+        setIsAdd(!isAdd);
+        onRemove();
+      }
+    }
+  };
+  //config font
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
   }
-  const colorPos = GetColor(vocal.item.pos);
-  const handleAddWordToSub = async () => {
-    setIsLoading(!isLoading);
-    try {
-      const words = await getAllWordOfSub(
-        params.wordlistId,
-        params.subcategoryId
-      );
-      const check = words.find(
-        (item) => item.definition.defId === vocal.item.defId
-      )
-        ? true
-        : false;
-      console.log("check ::", check);
-      if (check) {
-        setIsLoading(false);
-        // xoa tu khoi sub
-        onError("Error", "Word is exist in subcategory");
-      } else {
-        const res = await addWordDefaultToSub(
-          params.wordlistId,
-          params.subcategoryId,
-          {
-            vocabId: vocal.item.wordid,
-            defId: vocal.item.defId,
-          }
-        );
-        // console.log(`Result ::`, res);
-        setIsLoading(false);
-        setIsWordOfSub(!isWordOfSub);
-        onAddSucess();
-      }
-    } catch (error) {
-      console.log(`Add word to subcategory error ::`, error);
-    }
-  };
-
   return (
     <TouchableOpacity onPress={handleAddWordToSub}>
       <View style={styles.result}>

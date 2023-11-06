@@ -17,7 +17,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import FeildDesc_Ex from "./FieldDesc_Ex/FeildDesc_Ex";
 import FieldNoRequired from "./FieldNoRequired/FieldNoRequired";
 import { FontAwesome } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 
 const AddCustom = () => {
   const titleRef = useRef();
@@ -185,21 +185,22 @@ const AddCustom = () => {
         )}
         {isDisplay && (
           <TouchableOpacity style={Styles.more} onPress={handlePressMore}>
-            <Ionicons
-              name="md-close-sharp"
+            <AntDesign
+              name="minus"
               size={20}
-              color="red"
+              color="#4F62F7"
               style={{ marginTop: 4 }}
             />
+
             <Text
               style={{
                 fontFamily: "Quicksand-Bold",
                 fontSize: 17,
-                marginLeft: 1,
-                color: "red",
+                marginLeft: 2,
+                color: "#4F62F7",
               }}
             >
-              Cancel
+              Less
             </Text>
           </TouchableOpacity>
         )}
