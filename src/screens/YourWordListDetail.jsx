@@ -28,6 +28,9 @@ import { configFont } from "~/constants/theme";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ListVocalContext } from "~/context/ListVocal";
+import Modal from "react-native-modal";
+import FormAdd from "~/components/BottomSheet/FormAdd/FormAdd";
+import { delay } from "~/helper/index";
 
 export default function YourWordlistDetail() {
   const { params } = useRoute();
@@ -36,6 +39,8 @@ export default function YourWordlistDetail() {
   const [subCategories, setSubCategories] = useState([]);
   const [isDisplayDel, setIsDisplayDel] = useState(false);
   const [delSucess, setdelSucess] = useState(false);
+  const [isOpenModaAdd, setIsOpenModaAdd] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const navigation = useNavigation();
 
@@ -103,6 +108,29 @@ export default function YourWordlistDetail() {
   if (!loaded) {
     return null;
   }
+
+  const handleModalAdd = () => {
+    // setIsWordList(true);
+    // setIsOpen(false);
+    setIsOpenModaAdd(!isOpenModaAdd);
+  };
+  const handleCloseModalAdd = async () => {
+    setIsOpenModaAdd(false);
+    delay(1000);
+    console.log("tes"," saewqe")
+    
+    try {
+      setSubCategories([]);
+      getSubCategory(wl.id);
+
+    } catch (error) {
+      console.log(error);
+    }
+
+
+    // setIsOpen(!isOpen);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -218,7 +246,7 @@ export default function YourWordlistDetail() {
 
         {/* Add new Subcategory */}
         {!isDisplayDel && (
-          <TouchableOpacity style={styles.ButtonAdd}>
+          <TouchableOpacity style={styles.ButtonAdd} onPress={handleModalAdd}>
             <Ionicons
               name="add"
               size={27}
@@ -259,6 +287,33 @@ export default function YourWordlistDetail() {
           </TouchableOpacity>
         )}
       </View>
+      <Modal
+        onBackdropPress={() => {
+          setIsOpenModaAdd(false);
+          setIsOpen(true);
+        }}
+        onBackButtonPress={() => setIsOpenModaAdd(false)}
+        isVisible={isOpenModaAdd}
+        // onSwipeComplete={handlePresentModalAdd}
+        animationIn="bounceInUp"
+        animationOut="bounceOutDown"
+        animationInTiming={900}
+        animationOutTiming={500}
+        backdropTransitionInTiming={1000}
+        backdropTransitionOutTiming={500}
+        style={styles.modal}
+      >
+        <View style={styles.modalContent}>
+          <View style={styles.viewBottomSheet}>
+            <FormAdd
+              isAddWordlist={false}
+              onCancel={handleCloseModalAdd}
+              onCreate={handleCloseModalAdd}
+              wordlistId={wl.id}
+            />
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -303,7 +358,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#3D3A4D",
     borderRadius: 18,
     position: "absolute",
-    right: 25,
+    right: "6.6%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -334,7 +389,7 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     top: "90%",
     // bottom: 20,
-    right: "3.5%",
+    right: "6.6%",
   },
   ButtonDelete: {
     // display: "flex",
@@ -356,5 +411,20 @@ const styles = StyleSheet.create({
     left: "50%",
     transform: [{ translateX: -50 }],
     textAlign: "center",
+  },
+    viewBottomSheet: {
+    marginHorizontal: 20,
+  },
+  modal: {
+    justifyContent: "flex-end",
+    margin: 0,
+  },
+  modalContent: {
+    backgroundColor: "white",
+    paddingTop: 12,
+    paddingHorizontal: 12,
+    borderTopRightRadius: 50,
+    borderTopLeftRadius: 50,
+    height: "77%",
   },
 });

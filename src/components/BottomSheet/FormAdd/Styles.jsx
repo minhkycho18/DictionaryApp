@@ -45,7 +45,8 @@ export const styles = StyleSheet.create({
   headerBottomSheet: {
     fontSize: 23,
     color: colors.textTitle,
-    marginBottom: 10,
+    marginBottom: 15,
+    marginTop: 15,
     textAlign: "center",
   },
   button: {
