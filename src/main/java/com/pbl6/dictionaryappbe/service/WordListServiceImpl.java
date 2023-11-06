@@ -7,10 +7,12 @@ import com.pbl6.dictionaryappbe.exception.FieldNotNullException;
 import com.pbl6.dictionaryappbe.exception.RecordNotFoundException;
 import com.pbl6.dictionaryappbe.mapper.WordListMapper;
 import com.pbl6.dictionaryappbe.persistence.role.RoleName;
+import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.persistence.wordlist.ListType;
 import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import com.pbl6.dictionaryappbe.repository.RoleRepository;
+import com.pbl6.dictionaryappbe.repository.SubcategoryRepository;
 import com.pbl6.dictionaryappbe.repository.WordListRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
 import com.pbl6.dictionaryappbe.utils.MapperUtils;
@@ -29,8 +31,10 @@ import java.util.Objects;
 public class WordListServiceImpl implements WordListService {
 
     private final WordListRepository wordListRepository;
+    private final SubcategoryRepository subcategoryRepository;
     private final RoleRepository roleRepository;
     private final WordListMapper wordListMapper;
+    private final SubcategoryService subcategoryService;
 
     @Override
     public WordListResponseDto getWordListById(Long wordListId) {
@@ -107,7 +111,12 @@ public class WordListServiceImpl implements WordListService {
     @Override
     @Transactional
     public void deleteWordList(Long id) {
-        wordListRepository.delete(getOwnedWordList(id));
+        WordList wordList = getOwnedWordList(id);
+        List<Long> subcategories = subcategoryRepository.findAllByWordList(wordList).stream()
+                .map(Subcategory::getSubcategoryId)
+                .toList();
+        subcategoryService.deleteSubcategories(id, subcategories);
+        wordListRepository.delete(wordList);
     }
 
     @Override

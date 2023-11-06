@@ -1,0 +1,1 @@
+ALTER TABLE `vocab_def` ADD COLUMN `is_deleted` TINYINT(1) DEFAULT 0;
