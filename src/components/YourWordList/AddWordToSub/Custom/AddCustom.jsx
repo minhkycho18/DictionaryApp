@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { Styles } from "./Styles";
 import {
   SafeAreaView,
@@ -14,12 +14,15 @@ import { useNavigation } from "@react-navigation/native";
 import Toast, { ErrorToast } from "react-native-toast-message";
 import { createNewWordLists } from "~/api/WordList";
 import { MaterialIcons } from "@expo/vector-icons";
-import FeildDesc_Ex from "./FieldDesc_Ex/FeildDesc_Ex";
 import FieldNoRequired from "./FieldNoRequired/FieldNoRequired";
 import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { ListComponentDescContext } from "~/context/ListComponentDesc";
 
 const AddCustom = () => {
+  const { fieldMain, addFieldMain, Remove } = useContext(
+    ListComponentDescContext
+  );
   const titleRef = useRef();
   const descRef = useRef();
   const exampleRef = useRef();
@@ -28,9 +31,8 @@ const AddCustom = () => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [example, setExample] = useState("");
-  const [fieldMainComponents, setFieldMainComponents] = useState([]);
+  const [fieldMainComponents, setFieldMainComponents] = useState(fieldMain);
   const [isDisplay, setIsDisplay] = useState(false);
-  const [key, setKey] = useState(0);
   const navigation = useNavigation();
 
   const handleCreate = () => {
@@ -63,11 +65,10 @@ const AddCustom = () => {
       create();
     }
   };
+  useEffect(() => {
+    setFieldMainComponents(fieldMain);
+  }, [fieldMain]);
 
-  const [loaded] = useFonts(configFont);
-  if (!loaded) {
-    return null;
-  }
   const toastConfig = {
     error: (props) => (
       <ErrorToast
@@ -94,22 +95,7 @@ const AddCustom = () => {
   };
 
   const addFieldMainComponent = () => {
-    const newIndex = key;
-    const object = {
-      example: "",
-      desc: "",
-    };
-    const newFieldMainComponent = (
-      <FeildDesc_Ex
-        key={newIndex}
-        index={newIndex}
-        data={object}
-        onRemove={handleRemove}
-      />
-    );
-
-    setKey((key) => key + 1);
-    setFieldMainComponents([...fieldMainComponents, newFieldMainComponent]);
+    addFieldMain();
   };
   const handleSave = () => {
     const updatedData = fieldMainComponents.map(
@@ -120,12 +106,10 @@ const AddCustom = () => {
   const handlePressMore = () => {
     setIsDisplay(!isDisplay);
   };
-  const handleRemove = (key) => {
-    const newMainComponent = fieldMainComponents.filter(
-      (item, index) => index !== key
-    );
-    setFieldMainComponents(newMainComponent);
-  };
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
   return (
     <SafeAreaView style={Styles.container}>
       <ScrollView
