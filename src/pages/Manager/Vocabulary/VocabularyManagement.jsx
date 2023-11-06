@@ -1,88 +1,14 @@
-import {Col, Input, Row, Select, Space, Table, Tag} from "antd";
+import {Col, Input, Row, Select, Space} from "antd";
 import React, {useEffect, useRef, useState} from "react";
 import "./VocabularyManagement.scss";
 import {useDispatch, useSelector} from "react-redux";
 import {getSearchResult} from "../../../stores/search-word/searchThunk";
-import {BiSolidVolumeFull, BiSolidVolumeMute} from "react-icons/bi";
-import colorPos from "../../../helpers/ColorPos";
 import {upperFirst} from "lodash/string";
 import {SearchOutlined} from "@ant-design/icons";
 import {debounce} from "lodash";
 import {getAllPos} from "../../../api/Vocabulary/vocabulary.api";
-
-const columns = [
-    {
-        title: 'Word',
-        dataIndex: 'word',
-        key: 'word',
-        className: 'word_cell'
-    },
-    {
-        title: 'Part of speech',
-        dataIndex: 'pos',
-        key: 'pos',
-        align: 'center',
-        render: (text) =>
-            <Tag color={colorPos.get(text)} key={text} style={{fontSize: "15px"}}>
-                {upperFirst(text)}
-            </Tag>
-    },
-    {
-        title: 'Phonetic US',
-        dataIndex: 'phoneUs',
-        key: 'phoneUs',
-        align: 'center',
-        render: (text) =>
-            <>
-                {!text && "--"}
-                {text}
-            </>
-    },
-    {
-        title: 'Phonetic UK',
-        key: 'phoneUk',
-        dataIndex: 'phoneUk',
-        align: 'center',
-        render: (text) =>
-            <>
-                {!text && "--"}
-                {text}
-            </>
-    },
-    {
-        title: 'Audio US',
-        key: 'audioUs',
-        dataIndex: 'audioUs',
-        align: 'center',
-        render: (text) =>
-            <span className="phonetic__content">
-                {text && <BiSolidVolumeFull
-                    disabled={false}
-                    style={{cursor: "pointer"}}
-                    onClick={() => new Audio(text).play()}
-                />
-                }
-                {!text && <BiSolidVolumeMute style={{opacity: 0.5}}/>}
-
-            </span>
-    },
-    {
-        title: 'Audio UK',
-        key: 'audioUk',
-        dataIndex: 'audioUk',
-        align: 'center',
-        render: (text) =>
-            <span className="phonetic__content">
-                 {text && <BiSolidVolumeFull
-                     disabled={false}
-                     style={{cursor: "pointer"}}
-                     onClick={() => new Audio(text).play()}
-                 />
-                 }
-                {!text && <BiSolidVolumeMute style={{opacity: 0.5}}/>}
-            </span>
-    },
-];
+import VocabularyDataTable from "../../../components/data-table/VocabularyDataTable";
+import VocabularyDetailModal from "../../../components/Modal/VocabularyDetailModal";
 
 const VocabularyManagement = () => {
     const {result, loading, currentPage, totalElements} = useSelector(
@@ -90,9 +16,11 @@ const VocabularyManagement = () => {
     );
     const dispatch = useDispatch();
     const [pagination, setPaginations] = useState({});
-    const [keyword, setKeywords] = useState('a');
+    const [keyword, setKeywords] = useState('');
     const [pos, setPos] = useState([]);
     const [currentPos, setCurrentPos] = useState(null);
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [selectedVocab, setSelectedVocab] = useState({});
 
     const onChangeSearch = (event) => {
         const newValue = event.target.value;
@@ -101,7 +29,6 @@ const VocabularyManagement = () => {
             keyword: newValue,
             currentPos
         });
-
     };
 
     const onChangePosFilter = (value) => {
@@ -115,9 +42,18 @@ const VocabularyManagement = () => {
         }, 500)
     ).current;
 
-    const handleTableChange = (paginationParam) => {
-        dispatch(getSearchResult({keyword: keyword, offset: (paginationParam.current - 1) * 10, pos: currentPos}));
+    const handleTableChange = (currentPage) => {
+        dispatch(getSearchResult({keyword: keyword, offset: currentPage, pos: currentPos}));
     };
+
+    const handleClickItem = (record) => {
+        handleShow()
+        setSelectedVocab(record);
+    }
+
+    const handleShow = () => {
+        setModalOpen(!isModalOpen);
+    }
 
     useEffect(() => {
         dispatch(getSearchResult({keyword: keyword, offset: 0, pos: currentPos}));
@@ -172,7 +108,7 @@ const VocabularyManagement = () => {
                     <Col offset={7} span={8} style={{display: "flex", justifyContent: "center"}}>
                         <Input
                             className="search_vocab"
-                            placeholder="Search 'name'"
+                            placeholder="Search 'vocab'"
                             prefix={
                                 <SearchOutlined style={{color: "#bbb", padding: "0px 4px"}}/>
                             }
@@ -182,21 +118,25 @@ const VocabularyManagement = () => {
                 </Row>
                 <Row justify={"center"} className={"box_data_item table_box"}>
                     <Col span={22}>
-                        <Table
+                        <VocabularyDataTable
                             loading={loading}
-                            bordered
-                            columns={columns}
                             pagination={pagination}
-                            size={"small"}
                             dataSource={result.map((item) => ({
                                 ...item,
                                 key: item.id
                             }))}
-                            onChange={handleTableChange}
+                            onTableChange={handleTableChange}
+                            onClickItem={handleClickItem}
                         />
                     </Col>
                 </Row>
             </div>
+            {isModalOpen && <VocabularyDetailModal
+                vocabDetail={selectedVocab}
+                isOpen={isModalOpen}
+                handleShow={handleShow}
+            />} 
+
         </Space>
     );
 };

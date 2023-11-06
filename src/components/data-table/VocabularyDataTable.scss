@@ -1,0 +1,25 @@
+@import "../../assets/scss/font.scss";
+@import "../../assets/scss/variable.scss";
+
+.function-box {
+  .ant-space-item {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: 0.25s;
+    &:hover {
+      background-color: #e7e7e7;
+    }
+  }
+
+  &__edit {
+    font-size: 20px;
+  }
+
+  &__delete {
+    font-size: 20px;
+  }
+}

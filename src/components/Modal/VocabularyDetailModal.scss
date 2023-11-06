@@ -1,0 +1,96 @@
+@import "../../assets/scss/font.scss";
+@import "../../assets/scss/variable.scss";
+
+.phonetic {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+
+  &__word {
+    font-size: 30px;
+    line-height: 48px;
+    font-family: $font;
+    font-weight: 800;
+    width: max-content;
+  }
+  &__pos {
+    font-size: 18px;
+    font-weight: 500;
+  }
+  &__symbol {
+    padding-top: 16px;
+    align-items: start;
+    display: flex;
+  }
+  &__icon {
+    font-size: 20px;
+    line-height: 20px;
+    margin-left: 16px;
+    margin-right: auto;
+    cursor: pointer;
+    &:hover {
+      color: #000;
+    }
+  }
+  &__content {
+    display: flex;
+    align-items: center;
+  }
+  &__type {
+    font-size: 20px;
+    font-family: $font;
+    font-weight: 500;
+  }
+
+}
+.meaning {
+  &__content {
+    width: 100% !important;
+    font-family: $font;
+    font-size: 20px;
+    line-height: 28px;
+    color: #6b7280;
+    font-weight: 500;
+    margin-top: 15px;
+    &--num {
+      font-weight: 600;
+    }
+  }
+}
+.wrappered {
+  width: 100%;
+  align-items: flex-start !important;
+  justify-content: space-between;
+  border-radius: 16px;
+  padding: 32px;
+  font-family: $font;
+}
+.language__flag {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.synonym, .example {
+  padding: 8px 0 8px 16px;
+  font-family: "Quicksand", sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+  color: #6b7280;
+  font-weight: 500;
+  overflow-wrap: inherit;
+  display: flex;
+  flex-wrap: wrap; 
+  .synonym__word {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: max-content;
+    text-align: center;
+    color: #0d47a1;
+    margin-right: 8px;
+    border-bottom: 2px dashed; 
+  }
+}
+  
+    
+
+

@@ -12,7 +12,7 @@
   &_box {
     font-family: $font-manager !important;
     width: 95%;
-    margin-top: 40px;
+    margin-top: 10px;
 
     .box_title {
       .title {
@@ -29,7 +29,6 @@
     }
 
     .box_data {
-      margin-top: 30px;
       background-color: #FEFEFE;
       border-radius: 30px;
       display: flex;
@@ -43,7 +42,7 @@
       }
 
       .search_box{
-        margin-top: 30px;
+        margin-top: 10px;
         .pos_filter-title {
           font-size: 16px;
           font-family: $font-manager;
@@ -60,8 +59,8 @@
           box-shadow: none;
           margin-top: 20px;
           &:hover {
-            box-shadow: rgb(209, 202, 232) 0px 1px 4px,
-            rgb(209, 202, 232) 0px 0px 4px 3px;
+            box-shadow: rgb(209, 202, 232) 0 1px 4px,
+            rgb(209, 202, 232) 0 0 4px 3px;
             border: 1px solid #6248b1 !important;
           }
         }
@@ -75,7 +74,7 @@
 
           thead {
             font-family: $font-manager;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
           }
 
@@ -86,7 +85,7 @@
           }
 
           .word_cell {
-            font-size: 17px;
+            font-size: 15px;
           }
         }
       }
