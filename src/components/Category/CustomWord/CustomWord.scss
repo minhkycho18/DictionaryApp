@@ -1,0 +1,41 @@
+@import "../../../assets/scss/font.scss";
+@import "../../../assets/scss/variable.scss";
+.custom-word {
+  &__wrap {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-family: $font;
+  }
+  &__form {
+    max-height: 645px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    /* Track (phần nền của thanh cuộn) */
+    &::-webkit-scrollbar-track {
+      background: #fff !important;
+    }
+
+    /* Thumb (thanh cuộn chính) */
+    &::-webkit-scrollbar-thumb {
+      background: #eee;
+      border-radius: 100px;
+    }
+
+    /* Thumb khi hover */
+    &::-webkit-scrollbar-thumb:hover {
+      background: #ccc;
+    }
+  }
+}
+.form__upload {
+  display: flex;
+  flex-direction: row;
+  &__btn {
+    margin-right: 8px;
+  }
+}

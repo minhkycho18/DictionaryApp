@@ -31,16 +31,24 @@ const VocabularyManagement = () => {
         });
     };
 
-    const onChangePosFilter = (value) => {
-        setCurrentPos(value);
-        dispatch(getSearchResult({keyword: keyword, offset: currentPage, pos: value}));
-    };
+  const onChangePosFilter = (value) => {
+    setCurrentPos(value);
+    dispatch(
+      getSearchResult({ keyword: keyword, offset: currentPage, pos: value })
+    );
+  };
 
-    const debounceInputKey = useRef(
-        debounce((nextValue) => {
-            dispatch(getSearchResult({keyword: nextValue.keyword, offset: currentPage, pos: nextValue.currentPos}));
-        }, 500)
-    ).current;
+  const debounceInputKey = useRef(
+    debounce((nextValue) => {
+      dispatch(
+        getSearchResult({
+          keyword: nextValue.keyword,
+          offset: currentPage,
+          pos: nextValue.currentPos,
+        })
+      );
+    }, 500)
+  ).current;
 
     const handleTableChange = (currentPage) => {
         dispatch(getSearchResult({keyword: keyword, offset: currentPage, pos: currentPos}));
@@ -55,55 +63,55 @@ const VocabularyManagement = () => {
         setModalOpen(!isModalOpen);
     }
 
-    useEffect(() => {
-        dispatch(getSearchResult({keyword: keyword, offset: 0, pos: currentPos}));
-        const getPos = async () => {
-            const result = await getAllPos();
-            setPos(result);
-        };
-        getPos();
-    }, []);
+  useEffect(() => {
+    dispatch(getSearchResult({ keyword: keyword, offset: 0, pos: currentPos }));
+    const getPos = async () => {
+      const result = await getAllPos();
+      setPos(result);
+    };
+    getPos();
+  }, []);
 
-    useEffect(() => {
-        setPaginations({
-            current: currentPage,
-            total: totalElements,
-            showSizeChanger: false,
-            position: ["bottomCenter", "right"],
-            simple: true,
-            responsive: true
-        })
-    }, [currentPage, totalElements])
+  useEffect(() => {
+    setPaginations({
+      current: currentPage,
+      total: totalElements,
+      showSizeChanger: false,
+      position: ["bottomCenter", "right"],
+      simple: true,
+      responsive: true,
+    });
+  }, [currentPage, totalElements]);
 
-
-    return (
-        <Space
-            className={"content-container_box"}
-            direction={"vertical"}
-            size={"large"}
-        >
-            <Row className={"box_title"}>
-                <Col className={"title"} span={24}>Vocabulary Management</Col>
-            </Row>
-            <div className={"box_data"}>
-                <Row className={"box_data_item search_box"}>
-                    <Col offset={1} span={8}>
-                        <Space direction={"vertical"}>
-                            <span className="pos_filter-title">Part of speech</span>
-                            <Select
-                                bordered
-                                placeholder="Part of speech"
-                                style={{width: 200}}
-                                className="pos_filter-select"
-                                options={pos.map(item => ({
-                                    value: upperFirst(item),
-                                    label: upperFirst(item)
-                                }))}
-                                onChange={onChangePosFilter}
-                            />
-                        </Space>
-
-                    </Col>
+  return (
+    <Space
+      className={"content-container_box"}
+      direction={"vertical"}
+      size={"large"}
+    >
+      <Row className={"box_title"}>
+        <Col className={"title"} span={24}>
+          Vocabulary Management
+        </Col>
+      </Row>
+      <div className={"box_data"}>
+        <Row className={"box_data_item search_box"}>
+          <Col offset={1} span={8}>
+            <Space direction={"vertical"}>
+              <span className="pos_filter-title">Part of speech</span>
+              <Select
+                bordered
+                placeholder="Part of speech"
+                style={{ width: 200 }}
+                className="pos_filter-select"
+                options={pos.map((item) => ({
+                  value: upperFirst(item),
+                  label: upperFirst(item),
+                }))}
+                onChange={onChangePosFilter}
+              />
+            </Space>
+          </Col>
 
                     <Col offset={7} span={8} style={{display: "flex", justifyContent: "center"}}>
                         <Input

@@ -9,6 +9,9 @@ export const getWordListById = (id) => {
 export const getPublic = () => {
   return http.get("/wordlists/public");
 };
+export const getWordListTypes = () => {
+  return http.get("/wordlists/types");
+};
 export const getDefault = () => {
   return http.get("/wordlists/default");
 };

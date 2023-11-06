@@ -5,8 +5,8 @@ import {
   MoreOutlined,
   RightOutlined,
 } from "@ant-design/icons";
-import { Image, Input, Modal, Popover, Space } from "antd";
-import React, { useState } from "react";
+import { Image, Input, Modal, Popover, Select, Space } from "antd";
+import React, { useEffect, useState } from "react";
 import { MdLock, MdOutlinePublic } from "react-icons/md";
 import { PiClockCountdown } from "react-icons/pi";
 import { useDispatch } from "react-redux";
@@ -14,6 +14,8 @@ import category from "../../assets/images/category-back.png";
 import calculateDateTime from "../../helpers/calculateDateTime";
 import { updateWl } from "../../stores/word-lists/wordLists-thunk";
 import "./ListItem.scss";
+import { getWordListTypes } from "../../api/WordLists/word-lists.api";
+import { upperFirst } from "lodash";
 const ListItem = (props) => {
   const { confirm } = Modal;
   const [isOpenModel, setIsOpenModel] = useState(false);
@@ -21,7 +23,19 @@ const ListItem = (props) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [newTitle, setNewTitle] = useState(props.wordlist?.title);
   const [newDesc, setNewDesc] = useState(props.wordlist?.listDesc);
+  const [newListType, setNewListType] = useState(props.wordlist?.listType);
+  const [typeWL, setTypeWL] = useState([]);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getType = async () => {
+      const result = await getWordListTypes();
+      setTypeWL(result);
+    };
+    getType();
+
+    return () => {};
+  }, []);
 
   const showDeleteConfirm = () => {
     setIsOpenModel(true);
@@ -49,7 +63,7 @@ const ListItem = (props) => {
     id: props.wordlist.id,
     title: newTitle,
     listDesc: newDesc,
-    listType: props.wordlist.listType,
+    listType: newListType,
   };
 
   const handleOk = () => {
@@ -120,6 +134,19 @@ const ListItem = (props) => {
             onChange={(e) => setNewDesc(e.target.value)}
             value={newDesc}
           ></Input>
+          <label htmlFor="inputType">Type:</label>
+          <Select
+            name="inputType"
+            defaultValue={newListType}
+            onChange={(e) => setNewListType(e.target.value)}
+          >
+            {typeWL &&
+              typeWL.map((type) => (
+                <Select.Option value={type}>
+                  {upperFirst(type.toLowerCase())}
+                </Select.Option>
+              ))}
+          </Select>
         </Space>
       </Modal>
       <Space className="ListItem__top">

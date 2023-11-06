@@ -21,24 +21,19 @@ import {
 import { debounce } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { FaGraduationCap } from "react-icons/fa6";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import {
-  addWordToSubcategory,
-  deleteVocabulariesInSubCategory,
-} from "../../stores/subcategory/subcategoryThunk";
-import CustomWord from "./CustomWord/CustomWord";
-import DefaultWord from "./DefaultWord/DefaultWord";
-import SubcategoryItem from "./SubItem/SubcategoryItem";
-import "./Subcategory.scss";
 import {
   addWordToSub,
   deleteVocabsInSub,
   getAllVocabInSub,
 } from "../../api/Subcategory/subcategory.api";
+import CustomWord from "./CustomWord/CustomWord";
+import DefaultWord from "./DefaultWord/DefaultWord";
+import SubcategoryItem from "./SubItem/SubcategoryItem";
+import "./Subcategory.scss";
 
 const Subcategory = (props) => {
-  const dispatch = useDispatch();
   let { id } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const [isCustom, setIsCustom] = useState(false);
@@ -62,6 +57,7 @@ const Subcategory = (props) => {
     };
     getAllVocab();
   }, [id, props.subcategory.subcategoryId]);
+
   const plainOptions = vocabsInSub;
   const checkAll =
     plainOptions.length === selectedIds.length && plainOptions.length !== 0;
@@ -69,9 +65,6 @@ const Subcategory = (props) => {
     selectedIds.length > 0 && selectedIds.length < plainOptions.length;
 
   //==============================================================================================================
-  const handleSetCustom = () => {
-    setIsCustom(!isCustom);
-  };
 
   //==============================================================================================================
   const onChangeInput = (event) => {
@@ -170,6 +163,7 @@ const Subcategory = (props) => {
       data: [...values],
     };
     const removeVocab = async () => {
+      // eslint-disable-next-line no-unused-vars
       const result = await deleteVocabsInSub(params);
       const newVocab = vocabsInSub.filter((vocab) => {
         return !params.data.some(
@@ -269,25 +263,41 @@ const Subcategory = (props) => {
             >
               <div
                 className={`tab__options ${isCustom ? "" : "active"}`}
-                onClick={handleSetCustom}
+                onClick={() => setIsCustom(false)}
               >
                 Default word
               </div>
               <div
-                className={`tab__options ${!isCustom ? "" : "active"}`}
-                onClick={handleSetCustom}
+                className={`tab__options ${!isCustom ? "" : "active"} ${
+                  props.subcategory?.subcategoryType === "CUSTOM"
+                    ? ""
+                    : " disable-custom"
+                }`}
+                onClick={() => {
+                  if (props.subcategory?.subcategoryType === "CUSTOM") {
+                    setIsCustom(true);
+                  } else {
+                    message.error(
+                      "Custom words can only be added to custom subcategories"
+                    );
+                  }
+                }}
               >
                 Custom word
               </div>
             </Space>
-
             {!isCustom && (
               <DefaultWord
                 vocabInSub={vocabsInSub}
                 onAddVocab={handleAddAndRemoveVocab}
               />
             )}
-            {isCustom && <CustomWord vocabInSub={vocabsInSub} />}
+            {isCustom && (
+              <CustomWord
+                type={props?.subcategory?.subcategoryType}
+                vocabInSub={vocabsInSub}
+              />
+            )}
           </Space>
         </Modal>
 
