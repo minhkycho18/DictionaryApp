@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import { getAllSubCategory } from "~/api/Subcategory";
+import { delay } from "~/helper";
 export default function ItemWordList({ wordlist, onDelete }) {
   const [title, setTitle] = useState(wordlist.item.title);
   const [subs, setSubs] = useState([]);

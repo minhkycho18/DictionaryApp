@@ -17,6 +17,7 @@ import { colors, configFont } from "~/constants/theme";
 import { useFonts } from "expo-font";
 import { getAllVocabOfSubCategory } from "~/api/Subcategory";
 import { ListVocalContext } from "~/context/ListVocal";
+import { delay } from "~/helper";
 export default function ItemSubCategory({
   subcategory,
   onDisplayButtonDel,
@@ -84,6 +85,7 @@ export default function ItemSubCategory({
     navigation.navigate("AddWordToSub", {
       wordlistId: subcategory.wordListId,
       subcategoryId: subcategory.subcategoryId,
+      listVocabOfSubCategory: listVocabOfSubCategory,
     });
   };
   const getVocabOfSubCategory = async (idWL, idSub) => {
@@ -115,11 +117,13 @@ export default function ItemSubCategory({
   }, [open]);
   useEffect(() => {
     getVocabOfSubCategory(subcategory.wordListId, subcategory.subcategoryId);
+    delay(500);
   }, []);
 
   useFocusEffect(
     React.useCallback(() => {
       getVocabOfSubCategory(subcategory.wordListId, subcategory.subcategoryId);
+      delay(500);
     }, [])
   );
 
