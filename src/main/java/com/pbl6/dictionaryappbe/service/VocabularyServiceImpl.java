@@ -4,12 +4,15 @@ import com.pbl6.dictionaryappbe.dto.definition.DefinitionDetailUserDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabDetailDto;
 import com.pbl6.dictionaryappbe.mapper.VocabularyMapper;
 import com.pbl6.dictionaryappbe.persistence.user.User;
+import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
 import com.pbl6.dictionaryappbe.persistence.vocabulary.WordType;
 import com.pbl6.dictionaryappbe.repository.VocabularyRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,13 +41,26 @@ public class VocabularyServiceImpl implements VocabularyService {
 
         Specification<Vocabulary> filterSpec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
-            if (keyword != null) {
-                predicates.add(cb.like(root.get("word"), keyword + "%"));
+            if (!keyword.isEmpty()) {
+                String triggerKeyword;
+                if (Character.isUpperCase(keyword.charAt(0))) {
+                    triggerKeyword = StringUtils.capitalize(keyword);
+                } else {
+                    triggerKeyword = StringUtils.uncapitalize(keyword);
+                }
+                predicates.add(
+                        cb.or(
+                                cb.like(root.get("word"), keyword + "%"),
+                                cb.like(root.get("word"), triggerKeyword + "%")
+                        ));
             }
             if (pos != null) {
                 predicates.add(cb.equal(root.get("pos"), pos.toLowerCase()));
             }
             predicates.add(cb.equal(root.get("wordType"), WordType.DEFAULT));
+            Join<Vocabulary, VocabDef> vocabDefs = root.join("vocabDefs");
+            // Don't select vocabulary if all definitions of the word have been deleted.
+            predicates.add(cb.equal(vocabDefs.get("isDeleted"), false));
             return cb.and(predicates.toArray(new Predicate[0]));
         };
 
@@ -60,7 +76,7 @@ public class VocabularyServiceImpl implements VocabularyService {
 
     @Override
     public void setInfoVocabOfUser(
-            Page<VocabDetailDto> detailDtoList, Page<Vocabulary> vocabularies,  User user
+            Page<VocabDetailDto> detailDtoList, Page<Vocabulary> vocabularies, User user
     ) {
         // Get all defId in detailDtoList
         List<String> defIds = vocabularies.stream()
