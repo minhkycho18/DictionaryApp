@@ -107,11 +107,10 @@ public class SubcategoryController {
             @ApiResponse(responseCode = "400", description = "Invalid data"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
-    @PostMapping("/wordlists/{wordListId}/subcategories/{oldSubcategoryId}/clone/{newSubcategoryId}")
-    public SubcategoryResponseDto cloneSubcategory(@PathVariable Long wordListId,
-                                                   @PathVariable Long oldSubcategoryId,
-                                                   @PathVariable Long newSubcategoryId) {
-        return subcategoryMapper.toSubcategoryResponseDto(subcategoryService.cloneSubcategory(oldSubcategoryId, newSubcategoryId));
+    @PostMapping("/wordlists/{wordListId}/subcategories/{sourceSubcategoryId}/clone/{targetSubcategoryId}")
+    public SubcategoryResponseDto cloneSubcategory(@PathVariable Long sourceSubcategoryId,
+                                                   @PathVariable Long targetSubcategoryId) {
+        return subcategoryMapper.toSubcategoryResponseDto(subcategoryService.cloneSubcategory(sourceSubcategoryId, targetSubcategoryId));
 
     }
 

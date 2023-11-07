@@ -97,20 +97,33 @@ public class WordListServiceImpl implements WordListService {
     @Override
     @Transactional
     public WordListResponseDto cloneWordList(Long wordListId) {
-        WordList oldWordList = wordListRepository.findById(wordListId).orElseThrow(
+        WordList sourceWordList = wordListRepository.findById(wordListId).orElseThrow(
                 () -> new RecordNotFoundException("WordList not found with ID: " + wordListId)
         );
-        String title = generateUniqueTitle(oldWordList.getTitle());
-        WordList newWordList = wordListRepository.save(WordList.builder()
+        String title = generateUniqueTitle(sourceWordList.getTitle());
+        WordList targetWordList = wordListRepository.save(WordList.builder()
                 .title(title)
-                .listDesc(oldWordList.getListDesc())
-                .listType(oldWordList.getListType())
+                .listDesc(sourceWordList.getListDesc())
+                .listType(sourceWordList.getListType())
                 .createdAt(LocalDateTime.now())
                 .user(AuthenticationUtils.getUserFromSecurityContext())
                 .build());
-        List<Subcategory> newSubcategories = subcategoryService.cloneMultipleSubcategories(wordListId, newWordList.getWordListId());
-        newWordList.setSubcategories(newSubcategories);
-        return wordListMapper.toWordListDto(newWordList);
+        List<Subcategory> sourceSubcategories = subcategoryRepository.findAllByWordList(sourceWordList);
+        List<Subcategory> targetSubcategories = new ArrayList<>();
+        //Create new subcategory and clone
+        for (Subcategory subcategory : sourceSubcategories) {
+            Subcategory newSubcategory = subcategoryRepository.save(Subcategory.builder()
+                    .title(subcategory.getTitle())
+                    .subcategoryType(subcategory.getSubcategoryType())
+                    .wordList(targetWordList)
+                    .amountOfWord(0)
+                    .build());
+            subcategoryService.cloneSubcategory(subcategory.getSubcategoryId(),
+                    newSubcategory.getSubcategoryId());
+            targetSubcategories.add(newSubcategory);
+        }
+        targetWordList.setSubcategories(targetSubcategories);
+        return wordListMapper.toWordListDto(targetWordList);
     }
 
     @Override
