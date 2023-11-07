@@ -7,8 +7,8 @@ export const Styles = StyleSheet.create({
         paddingTop: 20,
         zIndex: -1,
         marginBottom: 10,
-        borderBottomLeftRadius: 20,
-        
+        // backgroundColor: 'red'
+
 
     },
     wrappered: {
@@ -80,10 +80,10 @@ export const Styles = StyleSheet.create({
         justifyContent: 'center',
 
     },
-    wrappered_open: {
+    wrappered_open_swipe_left: {
         borderBottomLeftRadius: 0,
         borderTopLeftRadius: 0,
-        width: "85%",
+        // width: "85%",
         borderBottomRightRadius: 20,
         borderTopRightRadius: 20,
     },
@@ -140,5 +140,39 @@ export const Styles = StyleSheet.create({
         borderRadius: 10,
     },
 
+    edit: {
+        backgroundColor: "blue",
+        width: 50,
+        height: "100%",
+        borderBottomRightRadius: 20,
+        borderTopRightRadius: 20,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
 
+    },
+    wrappered_open_swipe_right: {
+        borderBottomLeftRadius: 20,
+        borderTopLeftRadius: 20,
+        width: "85%",
+        borderBottomRightRadius: 0,
+        borderTopRightRadius: 0,
+    },
+    viewBottomSheet: {
+        marginHorizontal: 20,
+    },
+    modal: {
+        justifyContent: "center",
+        margin: 15,
+    },
+    modalContent: {
+        backgroundColor: "white",
+        paddingTop: 12,
+        paddingBottom: 12,
+        paddingHorizontal: 12,
+        // borderTopRightRadius: 50,
+        // borderTopLeftRadius: 50,
+        borderRadius:50
+        // height: "50%",
+    },
 })

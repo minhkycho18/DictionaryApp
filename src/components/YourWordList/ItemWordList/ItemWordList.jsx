@@ -11,10 +11,15 @@ import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import { getAllSubCategory } from "~/api/Subcategory";
 import { delay } from "~/helper";
-export default function ItemWordList({ wordlist, onDelete }) {
+import FormEdit from "~/components/BottomSheet/FormEdit/FormEdit";
+export default function ItemWordList({ wordlist, onRefresh, onDelete }) {
   const [title, setTitle] = useState(wordlist.item.title);
   const [subs, setSubs] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isLeftSwipe, setIsLeftSwipe] = useState(false);
+  const [isRightSwipe, setIsRightSwipe] = useState(false);
+  const [isOpenModaEdit, setIsOpenModaEdit] = useState(false);
+
   const wrapRef = useRef();
   const iconRef = useRef();
   const navigation = useNavigation();
@@ -37,12 +42,14 @@ export default function ItemWordList({ wordlist, onDelete }) {
       try {
         const listSub = await getAllSubCategory(id);
         setSubs(listSub);
-      } catch (error) {}
+      } catch (error) { }
     };
     getAllSub(wordlist.item.id);
   }, []);
 
   const leftSwipe = () => {
+    // setIsLeftSwipe(true);
+    // console.log("test left swipe : ", isLeftSwipe);
     return (
       <TouchableOpacity
         style={Styles.trash}
@@ -55,15 +62,25 @@ export default function ItemWordList({ wordlist, onDelete }) {
     );
   };
   const onSwipeableOpen = () => {
-    wrapRef.current.setNativeProps({
-      style: {
-        ...Styles.wrappered,
-        ...Styles.wrappered_open,
-      },
-    });
+      wrapRef.current.setNativeProps({
+        style: {
+          ...Styles.wrappered,
+          ...Styles.wrappered_open_swipe_left,
+        },
+      });
+    // else if(rightSwipe){
+    //   wrapRef.current.setNativeProps({
+    //     style: {
+    //       ...Styles.wrappered,
+    //       ...Styles.wrappered_open_swipe_right,
+    //     },
+    //   });
+    // }
     iconRef.current.setNativeProps({ style: { display: "none" } });
   };
   const onSwipeableClose = () => {
+    setIsLeftSwipe(false);
+    setIsRightSwipe(false);
     wrapRef.current.setNativeProps({
       style: { ...Styles.wrappered, ...Styles.wrappered_close },
     });
@@ -73,6 +90,25 @@ export default function ItemWordList({ wordlist, onDelete }) {
   if (!loaded) {
     return null;
   }
+
+  const rightSwipe = () => {
+    // setIsRightSwipe(true);
+    return (
+      <TouchableOpacity
+        style={Styles.edit}
+        onPress={() => {
+          setIsOpenModaEdit(!isOpenModaEdit);
+        }}
+      >
+        <Fontisto name="trash" size={24} color="white" />
+      </TouchableOpacity>
+    );
+  };
+  const handleCloseModalEdit = async () => {
+    setIsOpenModaEdit(false);
+    delay(1000);
+    onRefresh();
+  };
   return (
     <TouchableOpacity style={Styles.container} onPress={handleDetailWordList}>
       <View>
@@ -119,12 +155,42 @@ export default function ItemWordList({ wordlist, onDelete }) {
             </View>
           </View>
         </Modal>
+
+        <Modal
+        // onBackdropPress={() => {
+        //   setIsOpenModaAdd(false);
+        //   setIsOpen(true);
+        // }}
+        // onBackButtonPress={() => setIsOpenModaAdd(false)}
+        isVisible={isOpenModaEdit}
+        // onSwipeComplete={handlePresentModalAdd}
+        animationIn="bounceIn"
+        animationOut="bounceOut"
+        animationInTiming={900}
+        animationOutTiming={500}
+        backdropTransitionInTiming={1000}
+        backdropTransitionOutTiming={500}
+        style={Styles.modal}
+      >
+        <View style={Styles.modalContent}>
+          <View style={Styles.viewBottomSheet}>
+            <FormEdit
+              isEditWordlist={true}
+              onCancel={handleCloseModalEdit}
+              onConfirm={handleCloseModalEdit}
+              wordlist={wordlist}
+            />
+          </View>
+        </View>
+      </Modal>
       </View>
 
       <Swipeable
         renderLeftActions={leftSwipe}
+        renderRightActions={rightSwipe}
         onSwipeableOpen={onSwipeableOpen}
         onSwipeableWillClose={onSwipeableClose}
+        
       >
         <View style={[tw`bg-gray-100`, Styles.wrappered]} ref={wrapRef}>
           <Image

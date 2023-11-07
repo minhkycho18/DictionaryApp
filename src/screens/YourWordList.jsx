@@ -26,6 +26,11 @@ export default function YourWordList() {
     const data = await getWordListById();
     setWordLists(data);
   };
+  const refreshWordlist = async () => {
+    setWordLists([]);
+    const data = await getWordListById();
+    setWordLists(data);
+  };
   const handleDelete = async (id) => {
     try {
       await deleteWordLists(id);
@@ -111,7 +116,7 @@ export default function YourWordList() {
         data={wordLists}
         renderItem={(item) => (
           <GestureHandlerRootView>
-            <ItemWordList wordlist={item} onDelete={handleDelete} />
+            <ItemWordList wordlist={item} onRefresh ={refreshWordlist} onDelete={handleDelete} />
           </GestureHandlerRootView>
         )}
       />

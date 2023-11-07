@@ -114,10 +114,14 @@ export default function YourWordlistDetail() {
     // setIsOpen(false);
     setIsOpenModaAdd(!isOpenModaAdd);
   };
-  const handleCloseModalAdd = async () => {
+  const handleCloseModalAdd = () => {
     setIsOpenModaAdd(false);
     delay(1000);
-    console.log("tes"," saewqe")
+    
+  };
+
+  const handleCreateCloseModalAdd= async () => {
+    handleCloseModalAdd();
     
     try {
       setSubCategories([]);
@@ -126,9 +130,6 @@ export default function YourWordlistDetail() {
     } catch (error) {
       console.log(error);
     }
-
-
-    // setIsOpen(!isOpen);
   };
 
   return (
@@ -308,7 +309,7 @@ export default function YourWordlistDetail() {
             <FormAdd
               isAddWordlist={false}
               onCancel={handleCloseModalAdd}
-              onCreate={handleCloseModalAdd}
+              onCreate={handleCreateCloseModalAdd}
               wordlistId={wl.id}
             />
           </View>
