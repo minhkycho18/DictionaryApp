@@ -24,6 +24,7 @@ import { FaGraduationCap } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
+  addCustomVocabInSub,
   addWordToSub,
   deleteVocabsInSub,
   getAllVocabInSub,
@@ -115,8 +116,12 @@ const Subcategory = (props) => {
   const filterVocab = vocabsInSub.filter((vocab) =>
     vocab.word.startsWith(keyword)
   );
-  const limitVocab = filterVocab.splice((page - 1) * 10, 10);
-  const renderVocabInSub = limitVocab.map((vocab, index) => (
+  const itemsPerPage = 10;
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const wordsToDisplay = filterVocab.slice(startIndex, endIndex);
+  const renderVocabInSub = wordsToDisplay.map((vocab, index) => (
     <SubcategoryItem
       key={index}
       vocab={vocab}
@@ -156,8 +161,23 @@ const Subcategory = (props) => {
   };
   //==============================================================================================================
   const handleAddCustomVocab = (value) => {
-    setVocabsInSub([...vocabsInSub, value]);
+    const addVocab = async () => {
+      try {
+        const result = await addCustomVocabInSub(value);
+        const generateResult = result.definitions.map((definition) => ({
+          ...result,
+          definition: definition,
+        }));
+        const newWords = generateResult.map(({ definitions, ...rest }) => rest);
+        setVocabsInSub([...vocabsInSub, ...newWords]);
+      } catch (error) {
+        message.error("Cannot add this word to subcategory!");
+      }
+    };
+    addVocab();
   };
+  //==============================================================================================================
+
   const handleDeleteVocabInSub = (values) => {
     const params = {
       wordListId: id,
@@ -174,6 +194,7 @@ const Subcategory = (props) => {
             delVocab.defId === vocab.definition.defId
         );
       });
+      setSelectedIds([]);
       setVocabsInSub([...newVocab]);
     };
     removeVocab();
@@ -312,7 +333,7 @@ const Subcategory = (props) => {
           <Space direction="vertical">
             <Space style={{ marginTop: 8, float: "right" }}>
               <Pagination
-                defaultCurrent={1}
+                defaultCurrent={page}
                 total={filterVocab.length}
                 onChange={onChange}
                 size="small"

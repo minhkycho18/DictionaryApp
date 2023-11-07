@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { CloseOutlined, UploadOutlined } from "@ant-design/icons";
 import {
   Button,
   Card,
@@ -11,15 +11,14 @@ import {
   Upload,
   message,
 } from "antd";
-import { getAllPos } from "../../../api/Vocabulary/vocabulary.api";
 import { upperFirst } from "lodash";
-import { CloseOutlined, UploadOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import { getAllPos } from "../../../api/Vocabulary/vocabulary.api";
 import "./CustomWord.scss";
-import { addCustomVocabInSub } from "../../../api/Subcategory/subcategory.api";
 const CustomWord = (props) => {
   const [pos, setPos] = useState([]);
   const [form] = Form.useForm();
-  const [definitions] = useState([
+  const [definition] = useState([
     {
       wordDesc: "",
       example: "",
@@ -35,34 +34,25 @@ const CustomWord = (props) => {
   }, []);
   useEffect(() => {
     form.setFieldsValue({
-      definitions,
+      definition,
     });
-  }, [form, definitions]);
-  const handleAddCustom = async (value) => {
-    try {
-      const result = await addCustomVocabInSub(value);
-      props.handleAddCustomVocab(result);
-    } catch (error) {
-      console.log(error);
-      message.error("Looix roi");
-    }
-  };
+  }, [form, definition]);
+
   const onSubmit = (values) => {
     const data = {
       ...values,
       audioUs: values?.audioUs?.file,
       audioUk: values?.audioUk?.file,
+      wordType: "CUSTOM",
     };
     const params = {
       ...props.subInfo,
       data: data,
     };
-    //====cloud
-    handleAddCustom(params);
-    console.log(params);
+    props.handleAddCustomVocab(params);
     form.resetFields();
     form.setFieldsValue({
-      definitions,
+      definition,
     });
   };
 
@@ -191,7 +181,7 @@ const CustomWord = (props) => {
           </Form.Item>
         </Space>
 
-        <Form.List name="definitions">
+        <Form.List name="definition">
           {(fields, { add, remove }) => (
             <div
               style={{
