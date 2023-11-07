@@ -15,6 +15,7 @@ import { getAllPos } from "../../../api/Vocabulary/vocabulary.api";
 import { upperFirst } from "lodash";
 import { CloseOutlined, UploadOutlined } from "@ant-design/icons";
 import "./CustomWord.scss";
+import { addCustomVocabInSub } from "../../../api/Subcategory/subcategory.api";
 const CustomWord = (props) => {
   const [pos, setPos] = useState([]);
   const [form] = Form.useForm();
@@ -37,13 +38,27 @@ const CustomWord = (props) => {
       definitions,
     });
   }, [form, definitions]);
+  const handleAddCustom = async (value) => {
+    try {
+      const result = await addCustomVocabInSub(value);
+      props.handleAddCustomVocab(result);
+    } catch (error) {
+      console.log(error);
+      message.error("Looix roi");
+    }
+  };
   const onSubmit = (values) => {
-    const params = {
+    const data = {
       ...values,
       audioUs: values?.audioUs?.file,
       audioUk: values?.audioUk?.file,
     };
+    const params = {
+      ...props.subInfo,
+      data: data,
+    };
     //====cloud
+    handleAddCustom(params);
     console.log(params);
     form.resetFields();
     form.setFieldsValue({

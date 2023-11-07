@@ -155,7 +155,9 @@ const Subcategory = (props) => {
     setPage(pageNumber);
   };
   //==============================================================================================================
-
+  const handleAddCustomVocab = (value) => {
+    setVocabsInSub([...vocabsInSub, value]);
+  };
   const handleDeleteVocabInSub = (values) => {
     const params = {
       wordListId: id,
@@ -296,6 +298,11 @@ const Subcategory = (props) => {
               <CustomWord
                 type={props?.subcategory?.subcategoryType}
                 vocabInSub={vocabsInSub}
+                handleAddCustomVocab={handleAddCustomVocab}
+                subInfo={{
+                  wordListId: id,
+                  SubId: props.subcategory.subcategoryId,
+                }}
               />
             )}
           </Space>
