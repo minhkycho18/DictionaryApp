@@ -16,6 +16,7 @@ import React, { useEffect, useState } from "react";
 import { getAllPos } from "../../../api/Vocabulary/vocabulary.api";
 import "./CustomWord.scss";
 import getAudioUpload from "../../../helpers/uploadCloudinary";
+
 const CustomWord = (props) => {
   const [pos, setPos] = useState([]);
   const [form] = Form.useForm();
@@ -46,6 +47,12 @@ const CustomWord = (props) => {
       ...values,
       audioUs: audioUs,
       audioUk: audioUk,
+=======
+  const onSubmit = (values) => {
+    const data = {
+      ...values,
+      audioUs: values?.audioUs?.file,
+      audioUk: values?.audioUk?.file,
       wordType: "CUSTOM",
     };
     const params = {
