@@ -25,7 +25,9 @@ public interface SubcategoryService {
 
     SubcategoryResponseDto createSubcategory(Long wordListId, SubcategoryRequestDto subcategory);
 
-    void createMultipleSubcategory(Long wordListId);
+    List<Subcategory> cloneMultipleSubcategories(Long oldWordListId, Long newWordListId);
+
+    Subcategory cloneSubcategory(Long oldSubcategoryId, Long newSubcategoryId);
 
     SubcategoryResponseDto updateSubcategory(Long wordlistId, Long subcategoryId, SubcategoryRequestDto subcategory);
 

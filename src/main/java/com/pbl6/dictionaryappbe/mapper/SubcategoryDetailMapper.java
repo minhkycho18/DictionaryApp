@@ -1,5 +1,7 @@
 package com.pbl6.dictionaryappbe.mapper;
 
+import com.pbl6.dictionaryappbe.dto.definition.DefinitionRequestDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
 import com.pbl6.dictionaryappbe.persistence.Definition;
@@ -31,6 +33,26 @@ public interface SubcategoryDetailMapper {
                 .isQuiz(newSubcategoryDetail.getIsQuiz())
                 .definitions(definitions)
                 .lastLearning(newSubcategoryDetail.getLastLearning())
+                .build();
+    }
+
+    default CustomVocabularyRequestDto toCustomVocabularyRequestDto(Long newSubcategoryId, List<SubcategoryDetail> subcategoryDetails) {
+        SubcategoryDetail newSubcategoryDetail = subcategoryDetails.get(0);
+        Vocabulary vocabulary = newSubcategoryDetail.getVocabDef().getVocabulary();
+        List<DefinitionRequestDto> definitions = subcategoryDetails.stream()
+                .map(subcategoryDetail -> new DefinitionRequestDto(subcategoryDetail.getVocabDef().getDefinition().getWordDesc(),
+                        subcategoryDetail.getVocabDef().getDefinition().getExamples()))
+                .toList();
+        return CustomVocabularyRequestDto.builder()
+                .word(vocabulary.getWord())
+                .wordType(vocabulary.getWordType())
+                .pos(vocabulary.getPos())
+                .phoneUk(vocabulary.getPhoneUk())
+                .phoneUs(vocabulary.getPhoneUs())
+                .audioUk(vocabulary.getAudioUk())
+                .audioUs(vocabulary.getAudioUs())
+                .definition(definitions)
+                .subcategoryId(newSubcategoryId)
                 .build();
     }
 

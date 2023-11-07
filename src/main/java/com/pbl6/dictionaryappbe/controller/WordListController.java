@@ -81,6 +81,18 @@ public class WordListController {
         return wordListService.createWordList(wordList);
     }
 
+    @Operation(summary = "Clone wordList to personal wordList", security = {@SecurityRequirement(name = "bearer-key")})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Clone successfully",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = WordListResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid data"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
+    @PostMapping("/{wordListId}")
+    public WordListResponseDto cloneWordList(@PathVariable @NotNull Long wordListId) {
+        return wordListService.cloneWordList(wordListId);
+    }
+
     @Operation(summary = "Edit WordLists", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Edit successfully",

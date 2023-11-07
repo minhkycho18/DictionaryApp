@@ -19,11 +19,13 @@ public interface WordListService {
 
     WordListResponseDto createWordList(WordListRequestDto wordList);
 
-    void cloneWordList(Long wordListId);
+    WordListResponseDto cloneWordList(Long wordListId);
 
     WordListResponseDto updateWordList(Long wordListId, WordListRequestDto wordList);
 
     void deleteWordList(Long id);
 
     WordList getOwnedWordList(Long id);
+
+    String generateUniqueTitle(String title);
 }

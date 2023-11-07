@@ -183,18 +183,64 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
     @Override
     @Transactional
-    public void createMultipleSubcategory(Long wordListId) {
-        WordList wordList = wordListRepository.findById(wordListId).orElseThrow(
-                () -> new RecordNotFoundException("WordList not found with ID: " + wordListId)
+    public List<Subcategory> cloneMultipleSubcategories(Long oldWordListId, Long newWordListId) {
+        WordList oldWordList = wordListRepository.findById(oldWordListId).orElseThrow(
+                () -> new RecordNotFoundException("WordList not found with ID: " + oldWordListId)
         );
-        List<Subcategory> subcategories = subcategoryRepository.findAllByWordList(wordList);
-        subcategories.forEach(subcategory -> {
-            SubcategoryResponseDto newSubcategory = createSubcategory(wordListId,
-                    SubcategoryRequestDto.builder()
-                            .title(subcategory.getTitle())
-                            .subcategoryType(subcategory.getSubcategoryType().name())
-                            .build());
+        WordList newWordList = wordListRepository.findById(newWordListId).orElseThrow(
+                () -> new RecordNotFoundException("WordList not found with ID: " + newWordListId)
+        );
+        List<Subcategory> oldSubcategories = subcategoryRepository.findAllByWordList(oldWordList);
+        List<Subcategory> newSubcategories = new ArrayList<>();
+        //Create new subcategory and clone
+        oldSubcategories.forEach(subcategory -> {
+            Subcategory newSubcategory = subcategoryRepository.save(Subcategory.builder()
+                    .title(subcategory.getTitle())
+                    .subcategoryType(subcategory.getSubcategoryType())
+                    .wordList(newWordList)
+                    .amountOfWord(0)
+                    .build());
+            cloneSubcategory(subcategory.getSubcategoryId(),
+                    newSubcategory.getSubcategoryId());
+            newSubcategories.add(newSubcategory);
         });
+        return newSubcategories;
+    }
+
+    @Override
+    @Transactional
+    public Subcategory cloneSubcategory(Long oldSubcategoryId, Long newSubcategoryId) {
+        Subcategory newSubcategory = subcategoryRepository.findById(newSubcategoryId).orElseThrow(
+                () -> new RecordNotFoundException("Subcategory not found with ID: " + newSubcategoryId)
+        );
+        WordList wordList = newSubcategory.getWordList();
+        //Get all subcategory_detail of old subcategory
+        List<SubcategoryDetail> subcategoryDetails = subcategoryDetailRepository.findAllBySubcategoryId(oldSubcategoryId);
+        //Get all default vocab and convert to dto
+        List<VocabularySubcategoryRequestDto> defaultVocabularies = subcategoryDetails.stream()
+                .filter(subcategoryDetail -> subcategoryDetail.getVocabDef().getVocabulary().getWordType() == WordType.DEFAULT)
+                .map(subcategoryDetail -> new VocabularySubcategoryRequestDto(subcategoryDetail.getVocabId(), subcategoryDetail.getDefId()))
+                .toList();
+        //Add all default vocab
+        defaultVocabularies.forEach(vocab -> {
+            try {
+                addVocabToSubcategory(wordList.getWordListId(),
+                        newSubcategoryId,
+                        vocab);
+            } catch (DuplicateDataException ignored) {
+
+            }
+        });
+        //Group by custom vocab by vocabId
+        Map<Long, List<SubcategoryDetail>> customVocabularies = subcategoryDetails.stream()
+                .filter(subcategoryDetail -> subcategoryDetail.getVocabDef().getVocabulary().getWordType() == WordType.CUSTOM)
+                .collect(Collectors.groupingBy(SubcategoryDetail::getVocabId));
+        //Convert to dto and add custom vocabulary
+        customVocabularies.forEach((vocabId, customVocabs) -> {
+            createCustomVocabulary(newSubcategory.getWordList().getWordListId(),
+                    subcategoryDetailMapper.toCustomVocabularyRequestDto(newSubcategoryId, customVocabs));
+        });
+        return newSubcategory;
     }
 
     @Override

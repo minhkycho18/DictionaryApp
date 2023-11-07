@@ -95,15 +95,22 @@ public class WordListServiceImpl implements WordListService {
     }
 
     @Override
-    public void cloneWordList(Long wordListId) {
+    @Transactional
+    public WordListResponseDto cloneWordList(Long wordListId) {
         WordList oldWordList = wordListRepository.findById(wordListId).orElseThrow(
                 () -> new RecordNotFoundException("WordList not found with ID: " + wordListId)
         );
+        String title = generateUniqueTitle(oldWordList.getTitle());
         WordList newWordList = wordListRepository.save(WordList.builder()
-                .title(oldWordList.getTitle())
+                .title(title)
                 .listDesc(oldWordList.getListDesc())
                 .listType(oldWordList.getListType())
+                .createdAt(LocalDateTime.now())
+                .user(AuthenticationUtils.getUserFromSecurityContext())
                 .build());
+        List<Subcategory> newSubcategories = subcategoryService.cloneMultipleSubcategories(wordListId, newWordList.getWordListId());
+        newWordList.setSubcategories(newSubcategories);
+        return wordListMapper.toWordListDto(newWordList);
     }
 
     @Override
@@ -136,5 +143,23 @@ public class WordListServiceImpl implements WordListService {
         User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
         return wordListRepository.findByUserAndWordListId(user, id)
                 .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"));
+    }
+
+    @Override
+    public String generateUniqueTitle(String title) {
+        User user = AuthenticationUtils.getUserFromSecurityContext();
+        List<String> existingWordLists = wordListRepository.findAllByTitleStartingWithAndUser(title, user).stream()
+                .map(WordList::getTitle).toList();
+        if (existingWordLists.isEmpty()) {
+            return title;
+        } else {
+            int count = 1;
+            String newTitle;
+            do {
+                count++;
+                newTitle = title + " (" + count + ")";
+            } while (existingWordLists.contains(newTitle));
+            return newTitle;
+        }
     }
 }
