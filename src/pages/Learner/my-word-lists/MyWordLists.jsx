@@ -129,6 +129,7 @@ const MyWordLists = () => {
             wordLists.map((wordlist) => (
               <Col key={wordlist.id}>
                 <ListItem
+                  key={wordlist.id}
                   wordlist={wordlist}
                   onSelect={handleSelectWordList}
                   onDel={onDeleteAnItem}

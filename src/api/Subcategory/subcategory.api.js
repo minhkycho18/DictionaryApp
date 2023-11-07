@@ -51,7 +51,6 @@ export const deleteVocabsInSub = (params) => {
 // /wordlists/{wordListId}/subcategories/{subcategoryId}/custom
 ///===========================================================================
 export const addCustomVocabInSub = (params) => {
-  
   const { wordListId, SubId, data } = params;
   return http.post(
     `/wordlists/${wordListId}/subcategories/${SubId}/custom`,
