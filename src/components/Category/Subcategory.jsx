@@ -174,6 +174,7 @@ const Subcategory = (props) => {
         message.error("Cannot add this word to subcategory!");
       }
     };
+    //
     addVocab();
   };
   //==============================================================================================================
