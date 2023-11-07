@@ -16,6 +16,8 @@ public interface WordListRepository extends JpaRepository<WordList, Long> {
 
     WordList findByTitleAndUser(String title, User user);
 
+    List<WordList> findAllByTitleStartingWithAndUser(String title, User user);
+
     @Query(value = """
                 SELECT wl.* FROM word_list wl
                 LEFT JOIN users u ON wl.user_id = u.user_id

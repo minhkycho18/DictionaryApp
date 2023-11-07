@@ -6,6 +6,7 @@ import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
+import com.pbl6.dictionaryappbe.mapper.SubcategoryMapper;
 import com.pbl6.dictionaryappbe.persistence.subcategory.SubcategoryType;
 import com.pbl6.dictionaryappbe.service.SubcategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,6 +30,7 @@ import java.util.List;
 public class SubcategoryController {
 
     private final SubcategoryService subcategoryService;
+    private final SubcategoryMapper subcategoryMapper;
 
     @Operation(summary = "Get all subcategories of WordList by id")
     @ApiResponses(value = {
@@ -96,6 +98,20 @@ public class SubcategoryController {
                                                               @Valid @RequestBody CustomVocabularyRequestDto customVocab) {
         customVocab.setSubcategoryId(Long.valueOf(subcategoryId));
         return subcategoryService.createCustomVocabulary(wordListId, customVocab);
+    }
+
+    @Operation(summary = "Clone subcategory to personal subcategory", security = {@SecurityRequirement(name = "bearer-key")})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Clone successfully",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid data"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
+    @PostMapping("/wordlists/{wordListId}/subcategories/{sourceSubcategoryId}/clone/{targetSubcategoryId}")
+    public SubcategoryResponseDto cloneSubcategory(@PathVariable Long sourceSubcategoryId,
+                                                   @PathVariable Long targetSubcategoryId) {
+        return subcategoryMapper.toSubcategoryResponseDto(subcategoryService.cloneSubcategory(sourceSubcategoryId, targetSubcategoryId));
+
     }
 
     @Operation(summary = "Edit a subcategory", security = {@SecurityRequirement(name = "bearer-key")})

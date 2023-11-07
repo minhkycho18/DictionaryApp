@@ -96,6 +96,38 @@ public class WordListServiceImpl implements WordListService {
 
     @Override
     @Transactional
+    public WordListResponseDto cloneWordList(Long wordListId) {
+        WordList sourceWordList = wordListRepository.findById(wordListId).orElseThrow(
+                () -> new RecordNotFoundException("WordList not found with ID: " + wordListId)
+        );
+        String title = generateUniqueTitle(sourceWordList.getTitle());
+        WordList targetWordList = wordListRepository.save(WordList.builder()
+                .title(title)
+                .listDesc(sourceWordList.getListDesc())
+                .listType(sourceWordList.getListType())
+                .createdAt(LocalDateTime.now())
+                .user(AuthenticationUtils.getUserFromSecurityContext())
+                .build());
+        List<Subcategory> sourceSubcategories = subcategoryRepository.findAllByWordList(sourceWordList);
+        List<Subcategory> targetSubcategories = new ArrayList<>();
+        //Create new subcategory and clone
+        for (Subcategory subcategory : sourceSubcategories) {
+            Subcategory newSubcategory = subcategoryRepository.save(Subcategory.builder()
+                    .title(subcategory.getTitle())
+                    .subcategoryType(subcategory.getSubcategoryType())
+                    .wordList(targetWordList)
+                    .amountOfWord(0)
+                    .build());
+            subcategoryService.cloneSubcategory(subcategory.getSubcategoryId(),
+                    newSubcategory.getSubcategoryId());
+            targetSubcategories.add(newSubcategory);
+        }
+        targetWordList.setSubcategories(targetSubcategories);
+        return wordListMapper.toWordListDto(targetWordList);
+    }
+
+    @Override
+    @Transactional
     public WordListResponseDto updateWordList(Long wordListId, WordListRequestDto wordList) {
         String newTitle = wordList.getTitle();
         WordList ownedWordList = getOwnedWordList(wordListId);
@@ -124,5 +156,23 @@ public class WordListServiceImpl implements WordListService {
         User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
         return wordListRepository.findByUserAndWordListId(user, id)
                 .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"));
+    }
+
+    @Override
+    public String generateUniqueTitle(String title) {
+        User user = AuthenticationUtils.getUserFromSecurityContext();
+        List<String> existingWordLists = wordListRepository.findAllByTitleStartingWithAndUser(title, user).stream()
+                .map(WordList::getTitle).toList();
+        if (existingWordLists.isEmpty()) {
+            return title;
+        } else {
+            int count = 1;
+            String newTitle;
+            do {
+                count++;
+                newTitle = title + " (" + count + ")";
+            } while (existingWordLists.contains(newTitle));
+            return newTitle;
+        }
     }
 }

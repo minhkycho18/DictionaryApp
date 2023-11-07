@@ -57,8 +57,9 @@ public class SubcategoryServiceImpl implements SubcategoryService {
         User user = AuthenticationUtils.getUserFromSecurityContext();
         WordList wordList = wordListRepository.findById(wordListId)
                 .orElseThrow(() -> new RecordNotFoundException("WordList not found with ID: " + wordListId));
+        assert user != null;
         if (wordList.getListType() == ListType.PRIVATE
-                && !wordList.getUser().equals(user)) {
+                && !wordList.getUser().getUserId().equals(user.getUserId())) {
             throw new AccessDeniedException("You do not have permission to access this WordList");
         }
         List<Subcategory> subcategories = subcategoryRepository.findAllByWordList(wordList);
@@ -178,6 +179,48 @@ public class SubcategoryServiceImpl implements SubcategoryService {
             newSubcategory.setSubcategoryType(SubcategoryType.DEFAULT);
         }
         return subcategoryMapper.toSubcategoryResponseDto(subcategoryRepository.save(newSubcategory));
+    }
+
+    @Override
+    @Transactional
+    public Subcategory cloneSubcategory(Long sourceSubcategoryId, Long targetSubcategoryId) {
+        Subcategory sourceSubcategory = subcategoryRepository.findById(sourceSubcategoryId).orElseThrow(
+                () -> new RecordNotFoundException("Subcategory not found with ID: " + sourceSubcategoryId)
+        );
+        Subcategory targetSubcategory = subcategoryRepository.findById(targetSubcategoryId).orElseThrow(
+                () -> new RecordNotFoundException("Subcategory not found with ID: " + targetSubcategoryId)
+        );
+        if (sourceSubcategory.getSubcategoryType() == SubcategoryType.CUSTOM
+                && targetSubcategory.getSubcategoryType() == SubcategoryType.DEFAULT) {
+            throw new IllegalArgumentException("CUSTOM subcategory can not copy to DEFAULT subcategory");
+        }
+        WordList targetWordList = targetSubcategory.getWordList();
+        //Get all subcategory_detail of old subcategory
+        List<SubcategoryDetail> subcategoryDetails = subcategoryDetailRepository.findAllBySubcategoryId(sourceSubcategoryId);
+        //Get all default vocab and convert to dto
+        List<VocabularySubcategoryRequestDto> defaultVocabularies = subcategoryDetails.stream()
+                .filter(subcategoryDetail -> subcategoryDetail.getVocabDef().getVocabulary().getWordType() == WordType.DEFAULT)
+                .map(subcategoryDetail -> new VocabularySubcategoryRequestDto(subcategoryDetail.getVocabId(), subcategoryDetail.getDefId()))
+                .toList();
+        //Add all default vocab
+        defaultVocabularies.forEach(vocab -> {
+            try {
+                addVocabToSubcategory(targetWordList.getWordListId(),
+                        targetSubcategoryId,
+                        vocab);
+            } catch (DuplicateDataException ignored) {
+            }
+        });
+        //Group by custom vocab by vocabId
+        Map<Long, List<SubcategoryDetail>> customVocabularies = subcategoryDetails.stream()
+                .filter(subcategoryDetail -> subcategoryDetail.getVocabDef().getVocabulary().getWordType() == WordType.CUSTOM)
+                .collect(Collectors.groupingBy(SubcategoryDetail::getVocabId));
+        //Convert to dto and add custom vocabulary
+        customVocabularies.forEach((vocabId, customVocabs) -> {
+            createCustomVocabulary(targetSubcategory.getWordList().getWordListId(),
+                    subcategoryDetailMapper.toCustomVocabularyRequestDto(targetSubcategoryId, customVocabs));
+        });
+        return targetSubcategory;
     }
 
     @Override
