@@ -70,7 +70,7 @@ const wordListsSlice = createSlice({
       })
       .addCase(getWordListsPublic.fulfilled, (state, action) => {
         state.loading = false;
-        state.wordListsDefault = action.payload;
+        state.wordListsPublic = action.payload;
       })
       .addCase(getWordListsPublic.rejected, (state, action) => {
         state.loading = false;

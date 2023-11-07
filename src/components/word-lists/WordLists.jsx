@@ -7,15 +7,46 @@ import "./WordLists.scss";
 import Category from "./category/Category";
 import { useDispatch } from "react-redux";
 import { selectWl } from "../../stores/subcategory/subcategorySlice";
-
+import category_self from "../../assets/images/category-back.png";
+import category_default from "../../assets/images/category-back-default.png";
+import category_public from "../../assets/images/public_wordlist.png";
 const WordLists = ({ type, wordLists }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isSelf, setIsSelf] = useState(true);
+  // const [isSelf, setIsSelf] = useState(true);
+
+  const [typeRender, setTypeRender] = useState({
+    title: "",
+    description: ``,
+    color: "",
+    btn: "btn-blue",
+    bgImage: "",
+  });
   useEffect(() => {
     if (type === "self") {
-      setIsSelf(true);
-    } else setIsSelf(false);
+      setTypeRender({
+        title: "Your Word Lists",
+        description: `Create your own word list`,
+        color: "borderCard--orange",
+        btn: "",
+        bgImage: category_self,
+      });
+    } else if (type === "default") {
+      setTypeRender({
+        title: "Default WordLists",
+        description: `Here you will find different Word lists categorized`,
+        color: "borderCard--blue",
+        btn: "btn-blue",
+        bgImage: category_default,
+      });
+    } else
+      setTypeRender({
+        title: "Public WordLists",
+        description: `Find different Word lists from another people`,
+        color: "borderCard--blue",
+        btn: "btn-blue",
+        bgImage: category_public,
+      });
   }, [type]);
   const handleAddNewWL = (e) => {
     const token = getTokenFromStorage();
@@ -31,7 +62,7 @@ const WordLists = ({ type, wordLists }) => {
 
   const renderCategory = wordLists.map((wordlist, index) => (
     <Category
-      isSelf={isSelf}
+      bgImage={typeRender.bgImage}
       key={wordlist.id}
       wl={wordlist}
       onSelect={handleSelectCategory}
@@ -42,26 +73,19 @@ const WordLists = ({ type, wordLists }) => {
     if (type === "self") {
       navigate("/dashboard/wordLists");
     }
+    if (type === "public") {
+      navigate("/vocabulary/public");
+    }
   };
 
   return (
     <Space className="wordLists" direction="horizontal">
-      <Card
-        className={`wordLists__card ${
-          isSelf ? "borderCard--orange" : "borderCard--blue"
-        }`}
-      >
-        <p className="wordLists__card--title">
-          {!isSelf ? "Default WordLists" : "Your Word Lists"}
-        </p>
-        <p className="wordLists__card--intro">
-          {isSelf
-            ? "Create your own word list"
-            : "Here you will find different Word lists categorized"}
-        </p>
+      <Card className={`wordLists__card ${typeRender.color}`}>
+        <p className="wordLists__card--title">{typeRender.title}</p>
+        <p className="wordLists__card--intro">{typeRender.description}</p>
 
         <Button
-          className={`wordLists__card--btn ${isSelf ? "" : "btn-blue"}`}
+          className={`wordLists__card--btn ${typeRender.btn}`}
           onClick={handleExplore}
         >
           Explore
@@ -80,7 +104,7 @@ const WordLists = ({ type, wordLists }) => {
         }}
         className="wordLists__categories"
       >
-        {isSelf && (
+        {type === "self" && (
           <Space
             direction="vertical"
             style={{ margin: "0px 16px", cursor: "pointer" }}

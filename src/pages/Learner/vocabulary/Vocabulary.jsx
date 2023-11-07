@@ -5,21 +5,18 @@ import WordLists from "../../../components/word-lists/WordLists";
 import {
   getAllWL,
   getWordListsDefault,
+  getWordListsPublic,
 } from "../../../stores/word-lists/wordLists-thunk";
 import "./Vocabulary.scss";
 const Vocabulary = () => {
   const dispatch = useDispatch();
-  const {
-    // loading,
-    // error,
-    // message,
-    wordLists,
-    // wordListsPublic,
-    wordListsDefault,
-  } = useSelector((state) => state.wordLists);
+  const { wordLists, wordListsDefault, wordListsPublic } = useSelector(
+    (state) => state.wordLists
+  );
   useEffect(() => {
     dispatch(getAllWL());
     dispatch(getWordListsDefault());
+    dispatch(getWordListsPublic());
     return () => {};
   }, [dispatch]);
   return (
@@ -30,6 +27,7 @@ const Vocabulary = () => {
       </Space>
       <WordLists type="self" wordLists={wordLists} />
       <WordLists type="default" wordLists={wordListsDefault} />
+      <WordLists type="public" wordLists={wordListsPublic} />
     </Space>
   );
 };
