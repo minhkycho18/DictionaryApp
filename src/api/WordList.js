@@ -18,3 +18,6 @@ export const deleteWordLists = (id) => {
 export const updateWordLists = (id, data) => {
     return http.put(`/wordlists/${id}`, data);
 };
+export const getWordListByWordlistId = (id) => {
+    return http.get(`/wordlists/${id}`);
+};

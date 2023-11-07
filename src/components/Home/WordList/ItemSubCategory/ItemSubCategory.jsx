@@ -86,6 +86,7 @@ export default function ItemSubCategory({
       wordlistId: subcategory.wordListId,
       subcategoryId: subcategory.subcategoryId,
       listVocabOfSubCategory: listVocabOfSubCategory,
+      typeSub: subcategory.subcategoryType,
     });
   };
   const getVocabOfSubCategory = async (idWL, idSub) => {

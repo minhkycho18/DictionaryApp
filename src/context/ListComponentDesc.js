@@ -12,7 +12,7 @@ export const ListComponentDescProvider = ({ children }) => {
         const newIndex = key;
         const object = {
             example: "",
-            desc: "",
+            wordDesc: "",
         };
         const newFieldMainComponent = (
             <FeildDesc_Ex
