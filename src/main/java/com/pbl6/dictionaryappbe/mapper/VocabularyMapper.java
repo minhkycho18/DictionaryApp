@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 import java.util.List;
+import java.util.Objects;
 
 @Mapper(componentModel = "spring")
 public interface VocabularyMapper {
@@ -19,16 +20,22 @@ public interface VocabularyMapper {
     @Named("convertVocabDefsToDefDetail")
     static List<DefinitionDetailDto> convertVocabDefsToDefDetail(List<VocabDef> vocabDefs) {
         return vocabDefs.stream()
-                .map(vocabDef -> DefinitionDetailDto.builder()
-                        .defId(vocabDef.getDefinition().getDefId())
-                        .wordDesc(vocabDef.getDefinition().getWordDesc())
-                        .examples(vocabDef.getDefinition().getExamples())
-                        .synonyms(vocabDef.getDefinition().getVocabDefs()
-                                .stream()
-                                .map(vocabDefInner -> vocabDefInner.getVocabulary().getWord())
-                                .filter(s -> !s.equals(vocabDef.getVocabulary().getWord()))
-                                .toList())
-                        .build())
+                .map(vocabDef -> {
+                    if(!vocabDef.isDeleted()) {
+                        return DefinitionDetailDto.builder()
+                                .defId(vocabDef.getDefinition().getDefId())
+                                .wordDesc(vocabDef.getDefinition().getWordDesc())
+                                .examples(vocabDef.getDefinition().getExamples())
+                                .synonyms(vocabDef.getDefinition().getVocabDefs()
+                                        .stream()
+                                        .map(vocabDefInner -> vocabDefInner.getVocabulary().getWord())
+                                        .filter(s -> !s.equals(vocabDef.getVocabulary().getWord()))
+                                        .toList())
+                                .build();
+                    }
+                    return null;
+                })
+                .filter(Objects::nonNull)
                 .toList();
     }
 }
