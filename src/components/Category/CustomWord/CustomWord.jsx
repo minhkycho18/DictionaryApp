@@ -47,12 +47,6 @@ const CustomWord = (props) => {
       ...values,
       audioUs: audioUs,
       audioUk: audioUk,
-=======
-  const onSubmit = (values) => {
-    const data = {
-      ...values,
-      audioUs: values?.audioUs?.file,
-      audioUk: values?.audioUk?.file,
       wordType: "CUSTOM",
     };
     const params = {
