@@ -8,11 +8,8 @@ import React, {
 import { View, Text, TouchableOpacity } from "react-native";
 import { Styles } from "./Styles";
 import { SvgXml } from "react-native-svg";
-import tw from "twrnc";
 import { colors, svgreview } from "~/constants/theme";
 import Checkbox from "expo-checkbox";
-
-import { useNavigation } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
 import { ListVocalContext } from "~/context/ListVocal";

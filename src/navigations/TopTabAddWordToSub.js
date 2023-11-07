@@ -39,11 +39,12 @@ export default function TopTabAddWordToSub(props) {
                 />
 
 
-                <TopTabs.Screen
-                    name="Custom"
-                    component={AddCustom}
-                    initialParams={params}
-                />
+                {params.typeSub === "CUSTOM" && (
+                    <TopTabs.Screen
+                        name="Custom"
+                        component={AddCustom}
+                        initialParams={params}
+                    />)}
             </TopTabs.Navigator>
         </ListComponentDescProvider>
     )

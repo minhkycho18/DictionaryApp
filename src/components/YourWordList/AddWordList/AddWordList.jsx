@@ -11,12 +11,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
-import Toast, { ErrorToast } from "react-native-toast-message";
+import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
 import { createNewWordLists } from "~/api/WordList";
 import RadioGroup from "react-native-radio-buttons-group";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
-import { getIdValueInArr } from "~/helper";
+import { delay, getIdValueInArr } from "~/helper";
 const data = [
   {
     id: "1",
@@ -87,7 +87,7 @@ const AddWordList = () => {
   };
   const handleCreate = () => {
     if (title === "" || desc === "" || type === "") {
-      showToast("Warning", "Please fill in all field");
+      showToast("Warning", "Please fill in all field", "error");
       if (title === "") {
         titleRef.current.setNativeProps({
           style: Styles.warning,
@@ -107,9 +107,11 @@ const AddWordList = () => {
             listDesc: desc,
             listType: getIdValueInArr(data, type),
           });
+          showToast("Success", "Create new wordlist successfully", "success");
+          await delay(1500);
           navigation.navigate("YourWordlist", res);
         } catch (error) {
-          showToast("Error", error);
+          showToast("Error", error, "error");
         }
       };
       create();
@@ -127,14 +129,25 @@ const AddWordList = () => {
         }}
       />
     ),
+    success: (props) => (
+      <SuccessToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
   };
-  const showToast = (text1, text2) => {
+  const showToast = (text1, text2, type) => {
     Toast.show({
       position: "left",
-      type: "error",
+      type: type,
       text1: text1,
       text2: text2,
-      visibilityTime: 2000,
+      visibilityTime: 1300,
       autoHide: true,
       topOffset: 50,
     });

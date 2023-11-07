@@ -11,15 +11,18 @@ import {
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import { useNavigation } from "@react-navigation/native";
-import Toast, { ErrorToast } from "react-native-toast-message";
-import { createNewWordLists } from "~/api/WordList";
+import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
+import { createNewWordLists, getWordListByWordlistId } from "~/api/WordList";
 import { MaterialIcons } from "@expo/vector-icons";
 import FieldNoRequired from "./FieldNoRequired/FieldNoRequired";
 import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { ListComponentDescContext } from "~/context/ListComponentDesc";
+import { Ionicons } from "@expo/vector-icons";
+import { addWordCustomToSub } from "~/api/Subcategory";
+import { delay } from "~/helper";
 
-const AddCustom = () => {
+const AddCustom = (props) => {
   const { fieldMain, addFieldMain, Remove } = useContext(
     ListComponentDescContext
   );
@@ -27,17 +30,24 @@ const AddCustom = () => {
   const descRef = useRef();
   const exampleRef = useRef();
 
-  // const [type, setType] = useState("");
+  // field of cusword
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [example, setExample] = useState("");
+  const [fileResponseUS, setFileResponseUS] = useState("");
+  const [fileResponseUK, setFileResponseUK] = useState("");
+  const [phoneUs, setPhoneUs] = useState("");
+  const [phoneUk, setPhoneUk] = useState("");
+  const [pos, setPos] = useState(null);
+  ////////
   const [fieldMainComponents, setFieldMainComponents] = useState(fieldMain);
   const [isDisplay, setIsDisplay] = useState(false);
+  const params = props.route.params;
   const navigation = useNavigation();
 
-  const handleCreate = () => {
-    if (title === "" || desc === "" || type === "") {
-      showToast("Warning", "Please fill in all field");
+  const handleSave = async () => {
+    if (title === "" || desc === "") {
+      showToast("Warning", "Please fill in all field", "error");
       if (title === "") {
         titleRef.current.setNativeProps({
           style: Styles.warning,
@@ -49,20 +59,50 @@ const AddCustom = () => {
         });
       }
     } else {
-      const create = async () => {
-        const listType = type === "1" ? "PUBLIC" : "PRIVATE";
-        try {
-          const res = await createNewWordLists({
-            title: title,
-            listDesc: desc,
-            listType: listType,
-          });
-          navigation.navigate("YourWordlist", res);
-        } catch (error) {
-          showToast("Error", "Create word list fail");
-        }
-      };
-      create();
+      // params.wordlistId, params.subcategoryId
+      try {
+        const listDef = fieldMainComponents.map(
+          (component) => component.props.data
+        );
+        const customWord = {
+          word: title,
+          wordType: "DEFAULT",
+          pos: pos,
+          phoneUs: phoneUs,
+          phoneUk: phoneUk,
+          audioUs: fileResponseUS,
+          audioUk: fileResponseUK,
+          definition: [
+            {
+              wordDesc: desc,
+              example: example,
+            },
+            ...listDef,
+          ],
+          subcategoryId: params.subcategoryId,
+        };
+        const res = await addWordCustomToSub(
+          params.wordlistId,
+          params.subcategoryId,
+          customWord
+        );
+        console.log(`word custom ::`, res);
+        showToast(
+          "Success",
+          "Create custom vocabulary successfully",
+          "success"
+        );
+
+        const wordlist = await getWordListByWordlistId(params.wordlistId);
+        await delay(1000);
+        navigation.navigate("YourWordlistDetail", {
+          Wordlist: {
+            id: wordlist.id,
+            title: wordlist.title,
+            listDesc: wordlist.listDesc,
+          },
+        });
+      } catch (error) {}
     }
   };
   useEffect(() => {
@@ -81,28 +121,34 @@ const AddCustom = () => {
         }}
       />
     ),
+    success: (props) => (
+      <SuccessToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
   };
-  const showToast = (text1, text2) => {
+  const showToast = (text1, text2, type) => {
     Toast.show({
       position: "left",
-      type: "error",
+      type: type,
       text1: text1,
       text2: text2,
-      visibilityTime: 2000,
+      visibilityTime: 800,
       autoHide: true,
-      topOffset: 50,
+      topOffset: 10,
     });
   };
 
   const addFieldMainComponent = () => {
     addFieldMain();
   };
-  const handleSave = () => {
-    const updatedData = fieldMainComponents.map(
-      (component) => component.props.data
-    );
-    console.log(updatedData);
-  };
+
   const handlePressMore = () => {
     setIsDisplay(!isDisplay);
   };
@@ -123,6 +169,7 @@ const AddCustom = () => {
             value={title}
             ref={titleRef}
             onChangeText={setTitle}
+            autoFocus={true}
             onFocus={() => {
               titleRef.current.setNativeProps({
                 borderColor: "#6a64f1",
@@ -202,7 +249,16 @@ const AddCustom = () => {
               marginBottom: 10,
             }}
           >
-            <FieldNoRequired />
+            <FieldNoRequired
+              onSetPos={(text) => setPos(text)}
+              onSetPhoneUk={(text) => setPhoneUk(text)}
+              onSetPhoneUs={(text) => setPhoneUs(text)}
+              onSetFileResponseUK={(text) => setFileResponseUK(text)}
+              onSetFileResponseUS={(text) => setFileResponseUS(text)}
+              onGetFileError={(text1, text2) =>
+                showToast(text1, text2, "error")
+              }
+            />
           </View>
         )}
 
@@ -321,8 +377,8 @@ const AddCustom = () => {
         }}
       />
       <TouchableOpacity style={Styles.buttonAdd} onPress={handleSave}>
-        <FontAwesome
-          name="cloud-download"
+        <Ionicons
+          name="add-circle"
           size={20}
           color="white"
           style={{ marginTop: 4 }}

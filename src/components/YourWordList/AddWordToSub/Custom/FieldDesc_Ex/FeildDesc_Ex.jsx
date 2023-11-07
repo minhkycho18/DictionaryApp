@@ -10,7 +10,7 @@ export default function FeildDesc_Ex({ data, index }) {
   const { Remove } = useContext(ListComponentDescContext);
   const descRef = useRef();
   const exampleRef = useRef();
-  const [description, setDescription] = useState(data?.desc);
+  const [description, setDescription] = useState(data?.wordDesc);
   const [example, setExample] = useState(data?.example);
 
   const handleExampleChange = (text) => {
@@ -19,7 +19,7 @@ export default function FeildDesc_Ex({ data, index }) {
   };
 
   const handleDescriptionChange = (text) => {
-    data.desc = text;
+    data.wordDesc = text;
     setDescription(text);
   };
   const [loaded] = useFonts(configFont);

@@ -117,16 +117,13 @@ export default function YourWordlistDetail() {
   const handleCloseModalAdd = async () => {
     setIsOpenModaAdd(false);
     delay(1000);
-    console.log("tes"," saewqe")
-    
+
     try {
       setSubCategories([]);
       getSubCategory(wl.id);
-
     } catch (error) {
       console.log(error);
     }
-
 
     // setIsOpen(!isOpen);
   };
@@ -412,7 +409,7 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -50 }],
     textAlign: "center",
   },
-    viewBottomSheet: {
+  viewBottomSheet: {
     marginHorizontal: 20,
   },
   modal: {

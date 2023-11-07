@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect, forwardRef } from 'react'
+import { Audio } from 'expo-av';
 import { Styles } from "./Styles";
 import * as DocumentPicker from 'expo-document-picker';
 import {
@@ -6,18 +7,24 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    ScrollView
+    ActivityIndicator
 
 } from "react-native";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
 import DropDownPicker from "react-native-dropdown-picker";
-export default function FieldNoRequired() {
+import { getAudioUpload } from '~/helper/cloudinary';
+import { getAllPartOfSpeech } from '~/api/Dictionary';
+export default function FieldNoRequired({ onSetFileResponseUS, onSetFileResponseUK, onSetPhoneUs, onSetPhoneUk, onSetPos, onGetFileError }) {
     const PhoneUS = useRef();
     const PhoneUk = useRef();
-    const [fileResponse, setFileResponse] = useState([]);
-    const [loaded] = useFonts(configFont);
-    const [value, setValue] = useState(null);
+    const [isLoadingUs, setIsLoadingUs] = useState(false);
+    const [isLoadingUk, setIsLoadingUk] = useState(false);
+    const [fileResponseUS, setFileResponseUS] = useState("");
+    const [fileResponseUK, setFileResponseUK] = useState("");
+    const [phoneUs, setPhoneUs] = useState("");
+    const [phoneUk, setPhoneUk] = useState("");
+    const [pos, setPos] = useState(null);
     const [items, setItems] = useState([
         { label: 'Adv', value: 'adv' },
         { label: 'Adj', value: 'adj' },
@@ -25,18 +32,60 @@ export default function FieldNoRequired() {
         { label: 'Verb', value: 'Verb' },
     ]);
     const [open, setOpen] = useState(false);
-    // const [pos, setPos] = useState(["adv", "adj", "noun"]);
+
+    useEffect(() => {
+        const getAllPos = async () => {
+            const res = await getAllPartOfSpeech();
+            const customRes = res.map(item => ({ label: item, value: item }))
+            setItems(customRes);
+        }
+        getAllPos()
+    }, [])
+
+    const [loaded] = useFonts(configFont);
     if (!loaded) {
         return null;
     }
-    const pickDocument = async () => {
+    const pickDocument = async (type) => {
         try {
             const result = await DocumentPicker.getDocumentAsync({
-                type: '*/*', // Specify the allowed MIME types for audio files
+                type: 'audio/*', // Specify the allowed MIME types for audio files
             });
-            // setFileResponse()
-            // 
-            setFileResponse(result.assets[0].name)
+
+            // get thoi gian 
+            const soundObject = new Audio.Sound();
+            await soundObject.loadAsync({ uri: result.assets[0].uri });
+            const { durationMillis } = await soundObject.getStatusAsync()
+            await soundObject.unloadAsync();
+
+
+
+            if (durationMillis / 1000 < 5 && result.assets[0].size < 50000) {
+                type ? setIsLoadingUs(!isLoadingUs) : setIsLoadingUk(!isLoadingUk)
+                const res = await getAudioUpload({
+                    uri: result.assets[0].uri,
+                    type: result.assets[0].mimeType,
+                    name: result.assets[0].name
+                })
+                type ? setIsLoadingUs(false) : setIsLoadingUk(false)
+
+                if (type) {
+                    onSetFileResponseUS(res)
+                    setFileResponseUS(result.assets[0].name)
+                }
+                else {
+                    onSetFileResponseUK(res)
+                    setFileResponseUK(result.assets[0].name)
+                }
+            } else {
+                if (durationMillis / 1000 > 5) {
+                    onGetFileError("Error", "Time limit exceeded")
+                }
+                if (result.assets[0].size > 50000) {
+                    onGetFileError("Error", "Over size")
+                }
+            }
+
         } catch (err) {
             console.error(err);
         }
@@ -55,10 +104,13 @@ export default function FieldNoRequired() {
 
                     <DropDownPicker
                         open={open}
-                        value={value}
+                        value={pos}
                         items={items}
                         setOpen={setOpen}
-                        setValue={setValue}
+                        setValue={(value) => {
+                            onSetPos(value)
+                            setPos(value)
+                        }}
                         setItems={setItems}
                         style={{
                             backgroundColor: "#FEFEFE",
@@ -113,6 +165,10 @@ export default function FieldNoRequired() {
                                 borderColor: "#e0e0e0",
                             })
                         }}
+                        onChangeText={(text) => {
+                            onSetPhoneUs(text)
+                            setPhoneUs(text)
+                        }}
                     />
                 </View>
                 <View style={{ width: "60%" }}>
@@ -122,11 +178,11 @@ export default function FieldNoRequired() {
                         Audio US
                     </Text>
                     <View style={Styles.inputFile}>
-                        <TouchableOpacity style={Styles.buttonFile} onPress={pickDocument}>
+                        <TouchableOpacity style={Styles.buttonFile} onPress={() => pickDocument(true)}>
                             <Text style={{ fontFamily: "Quicksand-Medium", ...Styles.textFile }}>file</Text>
                         </TouchableOpacity>
                         <View style={Styles.fileName}>
-                            <Text style={Styles.textFileName}>{fileResponse}</Text>
+                            {!isLoadingUs ? <Text style={Styles.textFileName}>{fileResponseUS}</Text> : <ActivityIndicator size="small" color="#2C94E6" />}
                         </View>
                     </View>
 
@@ -159,6 +215,10 @@ export default function FieldNoRequired() {
                                 borderColor: "#e0e0e0",
                             })
                         }}
+                        onChangeText={(text) => {
+                            onSetPhoneUk(text)
+                            setPhoneUk(text)
+                        }}
                     />
                 </View>
                 <View style={{ width: "60%" }}>
@@ -168,11 +228,11 @@ export default function FieldNoRequired() {
                         Audio UK
                     </Text>
                     <View style={Styles.inputFile}>
-                        <TouchableOpacity style={Styles.buttonFile} onPress={pickDocument}>
+                        <TouchableOpacity style={Styles.buttonFile} onPress={() => pickDocument(false)}>
                             <Text style={{ fontFamily: "Quicksand-Medium", ...Styles.textFile }}>file</Text>
                         </TouchableOpacity>
                         <View style={Styles.fileName}>
-                            <Text style={Styles.textFileName}>{fileResponse}</Text>
+                            {!isLoadingUk ? <Text style={Styles.textFileName}>{fileResponseUK}</Text> : <ActivityIndicator size="small" color="#2C94E6" />}
                         </View>
                     </View>
                 </View>

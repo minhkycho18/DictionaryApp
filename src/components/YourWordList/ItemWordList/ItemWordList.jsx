@@ -6,7 +6,7 @@ import { Entypo } from "@expo/vector-icons";
 import { Swipeable } from "react-native-gesture-handler";
 import { Fontisto } from "@expo/vector-icons";
 import Modal from "react-native-modal";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import { getAllSubCategory } from "~/api/Subcategory";
@@ -27,18 +27,22 @@ export default function ItemWordList({ wordlist, onDelete }) {
       },
     });
   };
-
+  const getAllSub = async (id) => {
+    try {
+      const listSub = await getAllSubCategory(id);
+      setSubs(listSub);
+    } catch (error) {}
+  };
   const handleDelete = (id) => {
     onDelete(id);
   };
+  useFocusEffect(
+    React.useCallback(() => {
+      getAllSub(wordlist.item.id);
+    }, [])
+  );
 
   useEffect(() => {
-    const getAllSub = async (id) => {
-      try {
-        const listSub = await getAllSubCategory(id);
-        setSubs(listSub);
-      } catch (error) {}
-    };
     getAllSub(wordlist.item.id);
   }, []);
 

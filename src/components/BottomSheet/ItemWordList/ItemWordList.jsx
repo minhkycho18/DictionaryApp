@@ -50,7 +50,8 @@ export default function ItemWordlist({
         ? true
         : false;
       if (check) {
-        onError("Error", "the word is exist");
+        const sub = subs.find((item) => item.subcategoryId === subId);
+        onError("Error", `the vocabulary is exist in ${sub.title}`);
       } else {
         await addWordDefaultToSub(wordlistId, subId, data);
         onAddWordToSub({ state: true, defId: data.defId });

@@ -1,17 +1,17 @@
 import { StyleSheet } from "react-native";
 
 export const Styles = StyleSheet.create({
-        container: {
+    container: {
         // flex: 1,
         // zIndex: -1,
         // marginBottom: 10,
         // borderBottomLeftRadius: 20,
 
-        
+
         elevation: 4,
         shadowOffset: {
-          width: 0,
-          height: 3,
+            width: 0,
+            height: 3,
         },
         shadowOpacity: 0.17,
         shadowRadius: 4,
@@ -72,7 +72,7 @@ export const Styles = StyleSheet.create({
     },
     checkbox: {
         position: 'absolute',
-        top: 45,
+        top: 47,
         left: 5,
         zIndex: 1000,
         width: 12,

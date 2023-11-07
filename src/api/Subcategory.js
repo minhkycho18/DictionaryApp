@@ -9,6 +9,9 @@ export const getAllWordOfSub = (wordlistId, subId) => {
 export const addWordDefaultToSub = (wordlistId, subId, data) => {
     return http.post(`/wordlists/${wordlistId}/subcategories/${subId}`, data);
 }
+export const addWordCustomToSub = (wordlistId, subId, data) => {
+    return http.post(`/wordlists/${wordlistId}/subcategories/${subId}/custom`, data);
+}
 export const createNewSub = (wordlistId, data) => {
     return http.post(`/wordlists/${wordlistId}/subcategories`, data);
 }
@@ -23,3 +26,6 @@ export const getAllVocabOfSubCategory = (wordlistid, subcategoryid) => {
 export const deleteSubCategory = (wordlistid, subcategoryid) => {
     return http.delete(`/wordlists/${wordlistid}/subcategories`, [subcategoryid]);
 };
+export const getTypeOfSub = () => {
+    return http.get(`/subcategories/types`)
+}
