@@ -19,7 +19,7 @@ import ItemWordlist from "~/components/BottomSheet/ItemWordList/ItemWordList";
 import Modal from "react-native-modal";
 import FormAdd from "~/components/BottomSheet/FormAdd/FormAdd";
 import { checkLogin } from "~/helper/Auth";
-import Toast, { ErrorToast } from "react-native-toast-message";
+import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
 import { getWordListById } from "~/api/WordList";
 import { delay } from "~/helper/index";
 
@@ -56,20 +56,20 @@ function VocalDetail() {
   }, [isOpen]);
   const handlePresentModal = (data) => {
     if (!isLogin) {
-      showToast("Add to wordlist fail", "Please login to add");
+      showToast("Error", "Please login to add", "error");
     } else {
       setDataUpdate(data);
       // console.log(`Object`, data);
       setIsOpen(!isOpen);
     }
   };
-  const showToast = (text1, text2) => {
+  const showToast = (text1, text2, type) => {
     Toast.show({
       position: "top",
-      type: "error",
+      type: type,
       text1: text1,
       text2: text2,
-      visibilityTime: 2000,
+      visibilityTime: 1300,
       autoHide: true,
       topOffset: 40,
       zIndex: 1000,
@@ -79,6 +79,17 @@ function VocalDetail() {
   const toastConfig = {
     error: (props) => (
       <ErrorToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
+    success: (props) => (
+      <SuccessToast
         {...props}
         text1Style={{
           fontSize: 14,
@@ -124,9 +135,9 @@ function VocalDetail() {
     setIsOpen(false);
     setIsOpenModaAdd(!isOpenModaAdd);
   };
-  const handleCloseModalAdd = () => {
+  const handleCloseModalAdd = async () => {
     setIsOpenModaAdd(false);
-    delay(1000);
+    await delay(500);
     setIsOpen(!isOpen);
   };
   const handleAddSub = (wordlistId) => {
@@ -135,12 +146,14 @@ function VocalDetail() {
     setIsOpenModaAdd(!isOpenModaAdd);
     setIsOpen(false);
   };
-  const handleAddWordToSub = (data) => {
+  const handleAddWordToSub = async (data) => {
+    showToast("Success", "Add word to vocabulary successfully", "success");
+    await delay(1400);
     setIsOpen(false);
     setIsWordOfSub(data);
   };
   const handleError = (text1, text2) => {
-    showToast(text1, text2);
+    showToast(text1, text2, "error");
   };
 
   return (
@@ -187,6 +200,12 @@ function VocalDetail() {
             </View>
           </View>
         </View>
+        <Toast
+          config={toastConfig}
+          refs={(ref) => {
+            Toast.setRef(ref);
+          }}
+        />
       </Modal>
 
       <Modal
@@ -216,13 +235,6 @@ function VocalDetail() {
           </View>
         </View>
       </Modal>
-
-      <Toast
-        config={toastConfig}
-        refs={(ref) => {
-          Toast.setRef(ref);
-        }}
-      />
     </SafeAreaView>
   );
 }

@@ -74,7 +74,7 @@ export default function MyWordList() {
       text2: "Please login to see your wordlist",
       visibilityTime: 2000,
       autoHide: true,
-      topOffset: -10,
+      topOffset: 0,
     });
   };
 

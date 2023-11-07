@@ -126,10 +126,12 @@ export default function YourWordlistDetail() {
     try {
       setSubCategories([]);
       getSubCategory(wl.id);
-
     } catch (error) {
       console.log(error);
     }
+
+
+    // setIsOpen(!isOpen);
   };
 
   return (
@@ -413,7 +415,7 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -50 }],
     textAlign: "center",
   },
-    viewBottomSheet: {
+  viewBottomSheet: {
     marginHorizontal: 20,
   },
   modal: {
