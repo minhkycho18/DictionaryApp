@@ -15,6 +15,7 @@ import { upperFirst } from "lodash";
 import React, { useEffect, useState } from "react";
 import { getAllPos } from "../../../api/Vocabulary/vocabulary.api";
 import "./CustomWord.scss";
+import getAudioUpload from "../../../helpers/uploadCloudinary";
 const CustomWord = (props) => {
   const [pos, setPos] = useState([]);
   const [form] = Form.useForm();
@@ -38,11 +39,13 @@ const CustomWord = (props) => {
     });
   }, [form, definition]);
 
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
+    const audioUs = await getAudioUpload(values?.audioUs?.file);
+    const audioUk = await getAudioUpload(values?.audioUk?.file);
     const data = {
       ...values,
-      audioUs: values?.audioUs?.file,
-      audioUk: values?.audioUk?.file,
+      audioUs: audioUs,
+      audioUk: audioUk,
       wordType: "CUSTOM",
     };
     const params = {
