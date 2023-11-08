@@ -122,13 +122,12 @@ public class VocabularyServiceImpl implements VocabularyService {
         vocabulary.setPhoneUk(updateDefaultVocabRequest.getPhoneUk());
         updateDefaultVocabRequest.getDefinitions().forEach(definitionShortDetail -> {
             Definition definition =
-                    definitionRepository.findByVocabDefs_VocabIdAndVocabDefs_DefId(
+                    definitionRepository.findByVocabIdAndDefId(
                             vocabId, definitionShortDetail.getDefId()
                             )
                     .orElseThrow(() -> new RecordNotFoundException("Definition of vocabulary not found"));
             definition.setWordDesc(definitionShortDetail.getWordDesc());
             definition.setExamples(definitionShortDetail.getExamples());
-            definitionRepository.save(definition);
         });
         return vocabularyMapper.toVocabDetailDto(vocabularyRepository.save(vocabulary));
     }
