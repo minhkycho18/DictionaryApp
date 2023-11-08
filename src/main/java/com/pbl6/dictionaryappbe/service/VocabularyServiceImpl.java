@@ -59,9 +59,10 @@ public class VocabularyServiceImpl implements VocabularyService {
             }
             predicates.add(cb.equal(root.get("wordType"), WordType.DEFAULT));
             Join<Vocabulary, VocabDef> vocabDefs = root.join("vocabDefs");
-            // Don't select vocabulary if all definitions of the word have been deleted.
+//             Don't select vocabulary if all definitions of the word have been deleted.
             predicates.add(cb.equal(vocabDefs.get("isDeleted"), false));
-            return cb.and(predicates.toArray(new Predicate[0]));
+            query.groupBy(root.get("vocabId")).where(cb.and(predicates.toArray(new Predicate[0])));
+            return query.getRestriction();
         };
 
         Page<Vocabulary> vocabularies = vocabularyRepository.findAll(filterSpec, pageable);
