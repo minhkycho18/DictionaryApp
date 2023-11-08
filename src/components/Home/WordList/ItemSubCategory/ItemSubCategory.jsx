@@ -18,15 +18,8 @@ import { useFonts } from "expo-font";
 import { getAllVocabOfSubCategory } from "~/api/Subcategory";
 import { ListVocalContext } from "~/context/ListVocal";
 import { delay } from "~/helper";
-export default function ItemSubCategory({
-  subcategory,
-  onDisplayButtonDel,
-  delSucess,
-  isDisplayDel,
-  onDelete,
-}) {
+export default function ItemSubCategory({ subcategory }) {
   const [title, setTitle] = useState(subcategory.title);
-  const [displayDel, setDisplayDel] = useState(false);
   const [listVocabOfSubCategory, setListVocabOfSubCategory] = useState([]);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -77,8 +70,7 @@ export default function ItemSubCategory({
     });
     // iconRef.current.setNativeProps({ style: { display: "block" } });
   };
-  const { handleWordSelect, vocalSelect, setVocalSelect } =
-    useContext(ListVocalContext);
+
   const navigation = useNavigation();
   const handleAddWordToSub = () => {
     // setOpen(false);
@@ -93,38 +85,21 @@ export default function ItemSubCategory({
     const data = await getAllVocabOfSubCategory(idWL, idSub);
     setListVocabOfSubCategory(data);
   };
-  const handleSelect = (data) => {
-    handleWordSelect({
-      subcategoryId: subcategory.subcategoryId,
-      ...data,
-    });
-  };
-  useEffect(() => {
-    // setOpen(false);
-
-    setDisplayDel(false);
+  const handleDeleteVocal = (vocalId, defId) => {
     const listWordFilter = listVocabOfSubCategory.filter(
-      (item) => !vocalSelect.some((i) => i.defId === item.definition.defId)
+      (item) => defId !== item.definition.defId
     );
-    setListVocabOfSubCategory(listWordFilter);
-  }, [delSucess]);
 
-  useEffect(() => {
-    if (displayDel) {
-      setDisplayDel(false);
-      onDisplayButtonDel();
-      setVocalSelect([]);
-    }
-  }, [open]);
+    setListVocabOfSubCategory(listWordFilter);
+  };
+
   useEffect(() => {
     getVocabOfSubCategory(subcategory.wordListId, subcategory.subcategoryId);
-    delay(500);
   }, []);
 
   useFocusEffect(
     React.useCallback(() => {
       getVocabOfSubCategory(subcategory.wordListId, subcategory.subcategoryId);
-      delay(500);
     }, [])
   );
 
@@ -249,12 +224,8 @@ export default function ItemSubCategory({
             {open && (
               <ItemListVocabOfSub
                 subcategory={subcategory}
-                isopen={open}
-                onSelect={handleSelect}
-                onDisplayButtonDel={() => onDisplayButtonDel()}
-                onDisplayCheckBox={() => setDisplayDel(true)}
                 listVocabOfSubCategory={listVocabOfSubCategory}
-                isDisplayDel={isDisplayDel}
+                onDeleteVocal={handleDeleteVocal}
               />
             )}
           </Animated.View>
