@@ -5,6 +5,8 @@ import HomeScreen from '~/screens/HomeScreen';
 import YourWordList from '~/screens/YourWordList';
 import YourWordlistDetail from '~/screens/YourWordListDetail';
 import { ListVocalProvider } from '~/context/ListVocal';
+import PublicWordlistStack from './publicWordlistStack';
+import { colors } from '~/constants/theme';
 export default function HomeStack() {
     const Stack = createNativeStackNavigator();
 
@@ -12,6 +14,8 @@ export default function HomeStack() {
         <ListVocalProvider>
             <Stack.Navigator
                 initialRouteName="HomeStack"
+                screenOptions={{ headerShadowVisible: false }}
+
             >
                 <Stack.Screen
                     name="HomeScreen"
@@ -27,6 +31,21 @@ export default function HomeStack() {
                     name="YourWordlistDetail"
                     component={YourWordlistDetail}
                     options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="publicWordlist"
+                    component={PublicWordlistStack}
+                    options={
+                        {
+                            title: "Public Wordlist",
+                            headerTitleStyle: {
+                                color: colors.textTitle,
+                                fontSize: 25,
+                                fontFamily: 'Quicksand-Bold',
+                            },
+                            headerTitleAlign: 'center',
+                        }
+                    }
                 />
 
 

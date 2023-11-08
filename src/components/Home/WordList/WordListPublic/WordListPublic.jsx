@@ -15,8 +15,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useFonts } from "expo-font";
 import { configFont, colors } from "~/constants/theme";
 import { Entypo } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 export default function WordListPublic() {
   const [defaultList, setDefaultList] = useState([]);
+  const navigation = useNavigation();
   useEffect(() => {
     const getPublicWordList = async () => {
       const data = await getPublic();
@@ -50,7 +52,10 @@ export default function WordListPublic() {
         >
           Public Wordlist
         </Text>
-        <TouchableOpacity style={Styles.header}>
+        <TouchableOpacity
+          style={Styles.header}
+          onPress={() => navigation.push("publicWordlist")}
+        >
           <Text
             style={[
               tw`text-base text-blue-600`,
