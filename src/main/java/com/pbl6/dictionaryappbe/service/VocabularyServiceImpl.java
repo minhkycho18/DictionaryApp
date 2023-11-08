@@ -50,9 +50,9 @@ public class VocabularyServiceImpl implements VocabularyService {
             if (!keyword.isEmpty()) {
                 String triggerKeyword;
                 if (Character.isUpperCase(keyword.charAt(0))) {
-                    triggerKeyword = StringUtils.capitalize(keyword);
-                } else {
                     triggerKeyword = StringUtils.uncapitalize(keyword);
+                } else {
+                    triggerKeyword = StringUtils.capitalize(keyword);
                 }
                 predicates.add(
                         cb.or(
