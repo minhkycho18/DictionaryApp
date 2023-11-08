@@ -7,9 +7,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DefinitionRepository extends JpaRepository<Definition, Long> {
+    Optional<Definition> findByVocabDefs_VocabIdAndVocabDefs_DefId(Long vocabId, Long defId);
+
     @Query(value = """
                SELECT d.* FROM definitions d
                    JOIN vocab_def vcd

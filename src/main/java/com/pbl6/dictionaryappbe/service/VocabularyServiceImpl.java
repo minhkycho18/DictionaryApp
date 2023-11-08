@@ -1,12 +1,16 @@
 package com.pbl6.dictionaryappbe.service;
 
 import com.pbl6.dictionaryappbe.dto.definition.DefinitionDetailUserDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.UpdateDefaultVocabRequest;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabDetailDto;
+import com.pbl6.dictionaryappbe.exception.RecordNotFoundException;
 import com.pbl6.dictionaryappbe.mapper.VocabularyMapper;
+import com.pbl6.dictionaryappbe.persistence.Definition;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
 import com.pbl6.dictionaryappbe.persistence.vocabulary.WordType;
+import com.pbl6.dictionaryappbe.repository.DefinitionRepository;
 import com.pbl6.dictionaryappbe.repository.VocabularyRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
 import jakarta.persistence.criteria.Join;
@@ -19,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +33,7 @@ import java.util.List;
 public class VocabularyServiceImpl implements VocabularyService {
     private final VocabularyRepository vocabularyRepository;
     private final VocabularyMapper vocabularyMapper;
+    private final DefinitionRepository definitionRepository;
 
     @Override
     public List<String> findAllPos() {
@@ -103,5 +109,27 @@ public class VocabularyServiceImpl implements VocabularyService {
                         )
                         .toList())
         );
+    }
+
+    @Override
+    @Transactional
+    public VocabDetailDto updateDefaultVocab(Long vocabId, UpdateDefaultVocabRequest updateDefaultVocabRequest) {
+        Vocabulary vocabulary = vocabularyRepository.findById(vocabId)
+                .orElseThrow(() -> new RecordNotFoundException("Vocabulary not found"));
+        vocabulary.setAudioUs(updateDefaultVocabRequest.getAudioUs());
+        vocabulary.setAudioUk(updateDefaultVocabRequest.getAudioUk());
+        vocabulary.setPhoneUs(updateDefaultVocabRequest.getAudioUs());
+        vocabulary.setPhoneUk(updateDefaultVocabRequest.getPhoneUk());
+        updateDefaultVocabRequest.getDefinitions().forEach(definitionShortDetail -> {
+            Definition definition =
+                    definitionRepository.findByVocabDefs_VocabIdAndVocabDefs_DefId(
+                            vocabId, definitionShortDetail.getDefId()
+                            )
+                    .orElseThrow(() -> new RecordNotFoundException("Definition of vocabulary not found"));
+            definition.setWordDesc(definitionShortDetail.getWordDesc());
+            definition.setExamples(definitionShortDetail.getExamples());
+            definitionRepository.save(definition);
+        });
+        return vocabularyMapper.toVocabDetailDto(vocabularyRepository.save(vocabulary));
     }
 }
