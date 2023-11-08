@@ -1,0 +1,79 @@
+@import "../../../../assets/scss/font.scss";
+@import "../../../../assets/scss/variable.scss";
+.col-css {
+  display: flex;
+  justify-content: center;
+}
+.ExploredWordList {
+  font-family: $font !important;
+  &__item {
+    display: flex;
+    width: 100%;
+    background-color: #f1f5f9;
+    padding: 32px;
+    border-radius: 16px;
+    align-items: flex-start;
+  }
+  &__header {
+    padding: 64px 0px;
+  }
+  &__title {
+    color: $text-secondary-color;
+    font-size: 44px;
+    font-weight: 700;
+  }
+  &__description {
+    margin: 16px 0px;
+    color: #092550;
+    font-weight: 100;
+    font-size: 18px;
+  }
+}
+.item {
+  &_image {
+    border-radius: 8px;
+    background-color: #fff;
+    border-left: 8px solid #dababc;
+    border-right: 8px solid #fff;
+    padding: 16px 0px;
+  }
+  &_content {
+    font-family: $font;
+    margin-left: 16px;
+
+    &__title {
+      text-transform: capitalize;
+      font-size: 32px;
+      line-height: 38px;
+      letter-spacing: 0.5px;
+      font-weight: 800;
+    }
+    &__description {
+      width: inherit;
+      font-size: 14px;
+      color: #6c757d;
+      word-spacing: 1px;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-wrap: break-word;
+      margin-top: 4px;
+    }
+    &__time {
+      font-size: 14px;
+      color: #6c757d;
+      font-weight: 500;
+    }
+    &__user {
+      font-weight: 600;
+    }
+    &__btn {
+      background-color: #fff;
+    }
+  }
+  &_body {
+    flex: 1;
+    justify-content: space-between;
+    height: 100%;
+  }
+}

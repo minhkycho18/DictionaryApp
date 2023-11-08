@@ -8,6 +8,7 @@ import "./Header.scss";
 import SignInBtn from "./SignInBtn";
 import { getUserProfile } from "../../stores/user/userThunk";
 import { useDispatch, useSelector } from "react-redux";
+import getFullPath from "../../helpers/getPath";
 
 const Header = () => {
   const { pathname } = useLocation();
@@ -16,6 +17,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.profile);
   changeTitle(pathname);
+  const path = getFullPath(pathname);
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 630) {
@@ -59,7 +61,7 @@ const Header = () => {
       <div key={index} className="nav__item ">
         <Link
           className={`nav__item-content ${
-            pathname === item.href ? "active" : ""
+            path[0].title === item.label ? "active" : ""
           }`}
           to={item.href}
         >
