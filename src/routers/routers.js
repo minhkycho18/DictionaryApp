@@ -14,7 +14,7 @@ import VocabularyManagement from "../pages/Manager/Vocabulary/VocabularyManageme
 import Leitner from "../pages/Learner/leitner/Leitner";
 import WordListsPage from "../pages/Learner/wordlists/WordListsPage";
 import WordListDetail from "../pages/Learner/wordlists/WordListDetail";
-import PublicWordList from "../pages/Learner/wordlists/PublicWordList/PublicWordList";
+import ExploredWordList from "../pages/Learner/wordlists/ExploredWordList/ExploredWordList";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -42,7 +42,11 @@ const routers = createBrowserRouter([
           },
           {
             path: "public",
-            element: <PublicWordList />,
+            element: <ExploredWordList type={"public"} />,
+          },
+          {
+            path: "default",
+            element: <ExploredWordList type={"default"} />,
           },
         ],
       },
