@@ -78,7 +78,7 @@ export default function YourWordList() {
             }}
           />
         </TouchableOpacity>
-        <View style={{ marginLeft: 40 }}>
+        <View style={{ marginLeft: 10 }}>
           <Text
             style={[
               tw`pl-2`,
@@ -109,17 +109,19 @@ export default function YourWordList() {
           onPress={handleAddWordlist}
         />
       </TouchableOpacity>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        vertical
-        keyExtractor={(item) => item.id}
-        data={wordLists}
-        renderItem={(item) => (
-          <GestureHandlerRootView>
-            <ItemWordList wordlist={item} onRefresh ={refreshWordlist} onDelete={handleDelete} />
-          </GestureHandlerRootView>
-        )}
-      />
+      <View style={styles.flatlist}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          vertical
+          keyExtractor={(item) => item.id}
+          data={wordLists}
+          renderItem={(item) => (
+            <GestureHandlerRootView>
+              <ItemWordList wordlist={item} onRefresh={refreshWordlist} onDelete={handleDelete} />
+            </GestureHandlerRootView>
+          )}
+        />
+      </View>
     </SafeAreaView>
   );
 }
@@ -135,6 +137,9 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 130,
     borderBottomRightRadius: 60,
+    display: 'flex',
+    flexDirection:'row',
+    alignItems:'center'
   },
   Button: {
     width: 40,
@@ -148,5 +153,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     zIndex: 100,
+  },
+  flatlist: {
+    display: "flex",
+    elevation: 4,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
   },
 });
