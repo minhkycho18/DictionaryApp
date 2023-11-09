@@ -12,6 +12,8 @@ import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import { getAllSubCategory } from "~/api/Subcategory";
 import { delay } from "~/helper";
+import { MaterialIcons } from "@expo/vector-icons";
+
 import FormEdit from "~/components/BottomSheet/FormEdit/FormEdit";
 export default function ItemWordList({ wordlist, onRefresh, onDelete }) {
   const [title, setTitle] = useState(wordlist.item.title);
@@ -41,7 +43,7 @@ export default function ItemWordList({ wordlist, onRefresh, onDelete }) {
     try {
       const listSub = await getAllSubCategory(id);
       setSubs(listSub);
-    } catch (error) { }
+    } catch (error) {}
   };
   const handleDelete = (id) => {
     onDelete(id);
@@ -166,35 +168,35 @@ export default function ItemWordList({ wordlist, onRefresh, onDelete }) {
             </View>
           </Modal>
 
-          <Modal
-            // onBackdropPress={() => {
-            //   setIsOpenModaAdd(false);
-            //   setIsOpen(true);
-            // }}
-            // onBackButtonPress={() => setIsOpenModaAdd(false)}
-            isVisible={isOpenModaEdit}
-            // onSwipeComplete={handlePresentModalAdd}
-            animationIn="bounceIn"
-            animationOut="bounceOut"
-            animationInTiming={900}
-            animationOutTiming={500}
-            backdropTransitionInTiming={1000}
-            backdropTransitionOutTiming={500}
-            style={Styles.modal}
-          >
-            <View style={Styles.modalContent}>
-              <View style={Styles.viewBottomSheet}>
-                <FormEdit
-                  isEditWordlist={true}
-                  onCancel={() => setIsOpenModaEdit(false)}
-                  onConfirm={handleCloseModalEdit}
-                  wordlist={wordlist}
-                />
-              </View>
-            </View>
-          </Modal>
+        <Modal
+        // onBackdropPress={() => {
+        //   setIsOpenModaAdd(false);
+        //   setIsOpen(true);
+        // }}
+        // onBackButtonPress={() => setIsOpenModaAdd(false)}
+        isVisible={isOpenModaEdit}
+        // onSwipeComplete={handlePresentModalAdd}
+        animationIn="bounceIn"
+        animationOut="bounceOut"
+        animationInTiming={900}
+        animationOutTiming={500}
+        backdropTransitionInTiming={1000}
+        backdropTransitionOutTiming={500}
+        style={Styles.modal}
+      >
+        <View style={Styles.modalContent}>
+          <View style={Styles.viewBottomSheet}>
+            <FormEdit
+              isEditWordlist={true}
+              onCancel={() => setIsOpenModaEdit(false)}
+              onConfirm={handleCloseModalEdit}
+              wordlist={wordlist}
+            />
+          </View>
         </View>
-        <View style={Styles.background}>
+      </Modal>
+      </View>
+      <View style={Styles.background}>
           <View
             style={{
               backgroundColor: '#E51400',
@@ -210,33 +212,51 @@ export default function ItemWordList({ wordlist, onRefresh, onDelete }) {
             }}
           />
         </View>
-        <Swipeable
+      <Swipeable
           friction={2.7}
           renderLeftActions={leftSwipe}
           renderRightActions={rightSwipe}
           onSwipeableLeftOpen={onSwipeableOpen}
           onSwipeableWillClose={onSwipeableClose}
           onSwipeableRightOpen={onSwipeableRightOpen}
-        >
-          <View style={[tw`bg-gray-100`, Styles.wrappered]} ref={wrapRef}>
-            <Image
-              source={require("~/assets/wordlist.png")}
-              style={[tw`bg-gray-100`, Styles.Image]}
-            ></Image>
-            <View style={Styles.Text_content}>
-              <Text
-                numberOfLines={1}
-                style={[
-                  tw`text-lg`,
-                  {
-                    color: colors.textTitle,
-                    fontFamily: "Quicksand-SemiBold",
-                    letterSpacing: 0.2,
-                  },
-                ]}
-              >
-                {title}
-              </Text>
+      >
+        <View style={[tw`bg-gray-100`, Styles.wrappered]} ref={wrapRef}>
+          <Image
+            source={require("~/assets/wordlist.png")}
+            style={[tw`bg-gray-100`, Styles.Image]}
+          ></Image>
+          <View style={Styles.Text_content}>
+          <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 5,
+              }}
+            >
+            <Text
+              numberOfLines={1}
+              style={[
+                tw`text-lg`,
+                {
+                  color: colors.textTitle,
+                  fontFamily: "Quicksand-SemiBold",
+                  letterSpacing: 0.2,
+                },
+              ]}
+            >
+              {title}
+            </Text>
+            {wordlist.item.listType === "PRIVATE" ? (
+                <MaterialIcons name="lock" size={20} color={colors.textTitle} />
+              ) : (
+                <MaterialIcons
+                  name="public"
+                  size={20}
+                  color={colors.textTitle}
+                />
+              )}
+              </View>
 
               <Text
                 style={[
