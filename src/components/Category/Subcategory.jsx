@@ -1,6 +1,5 @@
 import {
   DeleteOutlined,
-  EditOutlined,
   ExclamationCircleOutlined,
   MoreOutlined,
   PlusOutlined,
@@ -16,6 +15,7 @@ import {
   Pagination,
   Space,
   Spin,
+  Tooltip,
   message,
 } from "antd";
 import { debounce } from "lodash";
@@ -204,31 +204,14 @@ const Subcategory = (props) => {
       {ctxHolder}
       <Space style={{ justifyContent: "space-between", width: "100%" }}>
         <Space style={{ float: "right" }} className="subcategory__options">
-          <Space className="delete-btn">
-            <DeleteOutlined
-              onClick={() => handleDeleteVocabInSub(selectedIds)}
-            />
-            <Checkbox
-              indeterminate={indeterminate}
-              onClick={onCheckAllChange}
-              checked={checkAll}
-            ></Checkbox>
-          </Space>
-
           <Dropdown
-            placement="bottomRight"
+            placement="topLeft"
             overlay={
               <Menu
                 items={[
                   {
                     key: "1",
-                    label: "Edit",
-                    icon: <EditOutlined />,
-                  },
-
-                  {
-                    key: "2",
-                    label: "Delete",
+                    label: "Delete subcategory",
                     icon: <DeleteOutlined />,
                     style: {
                       color: "red",
@@ -331,12 +314,38 @@ const Subcategory = (props) => {
 
         {!VocabLoading && (
           <Space direction="vertical">
-            <Space style={{ marginTop: 8, float: "right" }}>
+            <Space
+              style={{
+                marginTop: 8,
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              <Space className="delete-btn">
+                <Checkbox
+                  style={{
+                    marginLeft: 12,
+                  }}
+                  indeterminate={indeterminate}
+                  onClick={onCheckAllChange}
+                  checked={checkAll}
+                ></Checkbox>
+                <Tooltip title="Delete selected items" color={"danger"}>
+                  <DeleteOutlined
+                    className="delete-btn__icon"
+                    style={{
+                      color: `${selectedIds.length > 0 ? "red" : "black"}`,
+                    }}
+                    onClick={() => handleDeleteVocabInSub(selectedIds)}
+                  />
+                </Tooltip>
+              </Space>
               <Pagination
-                defaultCurrent={page}
+                defaultCurrent={1}
                 total={filterVocab.length}
                 onChange={onChange}
                 size="small"
+                current={page}
               />
             </Space>
             <Space

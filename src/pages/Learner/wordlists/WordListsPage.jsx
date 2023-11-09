@@ -1,3 +1,4 @@
+import { PlusOutlined } from "@ant-design/icons";
 import {
   Button,
   Empty,
@@ -22,8 +23,7 @@ import {
   getSubcategory,
 } from "../../../stores/subcategory/subcategoryThunk";
 import "./WordListsPage.scss";
-import { PlusOutlined } from "@ant-design/icons";
-
+import { LuFileCheck2, LuFileEdit } from "react-icons/lu";
 function WordListsPage() {
   let { id } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
@@ -34,10 +34,14 @@ function WordListsPage() {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const [modal, contextHolderModal] = Modal.useModal();
+
+  //==========================================================================
 
   useEffect(() => {
     dispatch(getSubcategory(id));
   }, [dispatch, id]);
+  //==========================================================================
 
   const handleDeleteSub = (value) => {
     dispatch(
@@ -46,22 +50,10 @@ function WordListsPage() {
         SubId: value,
       })
     );
-    messageApi.success("success!");
+    messageApi.success("Deleted success!");
   };
-  const renderSub = subcategories.map((subcategory, index) => {
-    return {
-      key: subcategory.subcategoryId,
-      label: capitalizeFirstLetter(subcategory?.title),
-      children: (
-        <Subcategory
-          key={subcategory.subcategoryId}
-          subcategory={subcategory}
-          wlID={id}
-          onDel={handleDeleteSub}
-        />
-      ),
-    };
-  });
+  //==========================================================================
+
   const onChange = (key) => {
     const params = {
       wordListId: id,
@@ -82,6 +74,46 @@ function WordListsPage() {
   const handleCancel = () => {
     setIsOpen(false);
   };
+  //==========================================================================
+  // const onEdit = (targetKey, action) => {
+  //   if (action === "add") {
+  //     showAddMenu();
+  //   } else {
+  //     handleDeleteSub([targetKey]);
+  //   }
+  // };
+
+  //==========================================================================
+  const renderSub = subcategories.map((subcategory, index) => {
+    return {
+      key: subcategory.subcategoryId,
+      label: (
+        <Space
+          style={{
+            alignItems: "center",
+            minWidth: 120,
+            justifyContent: "center",
+          }}
+        >
+          {subcategory.subcategoryType === "CUSTOM" ? (
+            <LuFileEdit />
+          ) : (
+            <LuFileCheck2 />
+          )}
+          {capitalizeFirstLetter(subcategory?.title)}
+        </Space>
+      ),
+      children: (
+        <Subcategory
+          key={subcategory.subcategoryId}
+          subcategory={subcategory}
+          wlID={id}
+          onDel={handleDeleteSub}
+        />
+      ),
+    };
+  });
+  //==========================================================================
 
   return (
     <Space
@@ -89,6 +121,7 @@ function WordListsPage() {
       direction="vertical"
     >
       {contextHolder}
+      {contextHolderModal}
       <Modal
         open={isOpen}
         title="Add new subcategories"
@@ -174,6 +207,7 @@ function WordListsPage() {
           items={renderSub}
           tabPosition="top"
           onChange={onChange}
+          // onEdit={onEdit}
         />
       )}
       {!loading && subcategories.length === 0 && (
