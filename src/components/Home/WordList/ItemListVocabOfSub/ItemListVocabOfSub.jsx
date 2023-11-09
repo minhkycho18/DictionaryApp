@@ -3,23 +3,10 @@ import { FlatList, View } from "react-native";
 import { Styles } from "../ItemVocabOfSub/Styles";
 import ItemVocabOfSub from "../ItemVocabOfSub/ItemVocabOfSub";
 export default function ItemListVocabOfSub({
-  onSelect,
-  onDisplayButtonDel,
-  onDisplayCheckBox,
   listVocabOfSubCategory,
-  isDisplayDel,
+  subcategory,
+  onDeleteVocal,
 }) {
-  const [isDisplayCheck, setIsDisplayCheck] = useState(false);
-
-  const handleDisplayCheckBox = async () => {
-    setIsDisplayCheck(!isDisplayCheck);
-    onDisplayButtonDel();
-    onDisplayCheckBox();
-  };
-  const handleSelect = (data) => {
-    onSelect(data);
-  };
-
   return (
     <FlatList
       showsVerticalScrollIndicator={false}
@@ -29,11 +16,8 @@ export default function ItemListVocabOfSub({
       renderItem={(item) => (
         <ItemVocabOfSub
           Vocab={item}
-          words={listVocabOfSubCategory}
-          onDisplayCheckBox={handleDisplayCheckBox}
-          isDisplay={isDisplayCheck}
-          onSelect={handleSelect}
-          isDisplayDel={isDisplayDel}
+          subcategory={subcategory}
+          onDeleteVocal={(vocalId, defId) => onDeleteVocal(vocalId, defId)}
         />
       )}
     />

@@ -18,36 +18,39 @@ export const Styles = StyleSheet.create({
 
     },
     wrappered: {
-        paddingTop: 10,
+        // paddingTop: 10,
         paddingRight: 20,
         paddingBottom: 25,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         position: 'relative',
-        marginTop: 2
+        marginTop: 2,
+        // backgroundColor: 'red'
+
     },
     Text_content: {
-        marginLeft: 5,
+        marginLeft: 2,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        width: "95%",
+        width: '100%',
         height: "75%",
         justifyContent: 'flex-start',
+        // backgroundColor: 'green'
     },
     Title_Status: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 5,
+        marginBottom: 2,
         // borderStyle: 'solid',
         // borderBottomWidth: 1,
         // borderTopWidth: 1,
         alignItems: "center",
     },
     viewItem: {
-        width: "40%",
+        width: "35%",
         // backgroundColor: 'blue',
         display: 'flex',
         flexDirection: 'row',
@@ -55,14 +58,16 @@ export const Styles = StyleSheet.create({
         // position: 'absolute',
         // marginLeft: 20
         // top: -7,
-        right: -18
+        // right: -18
+        marginTop: 10
     },
-    item: {
-        paddingRight: 100
-    },
+    // item: {
+    //     paddingRight: 100,
+    //     backgroundColor: 'red'
+    // },
     circle: {
-        width: 30,
-        height: 30,
+        width: 25,
+        height: 25,
         borderWidth: 1,
         borderColor: '#ccc',
         display: 'flex',

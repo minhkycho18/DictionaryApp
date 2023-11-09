@@ -37,14 +37,10 @@ export default function YourWordlistDetail() {
   const wl = params.Wordlist;
 
   const [subCategories, setSubCategories] = useState([]);
-  const [isDisplayDel, setIsDisplayDel] = useState(false);
-  const [delSucess, setdelSucess] = useState(false);
   const [isOpenModaAdd, setIsOpenModaAdd] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
 
   const navigation = useNavigation();
 
-  const { deleteWord, setVocalSelect } = useContext(ListVocalContext);
   const getSubCategory = async (id) => {
     const data = await getAllSubCategory(id);
     setSubCategories(data);
@@ -53,19 +49,6 @@ export default function YourWordlistDetail() {
     navigation.navigate("StudySub", { wordlist: wl });
   };
 
-  const handleDelete = async (idWL, idSub) => {
-    try {
-      await deleteSubCategory(idWL, idSub);
-      const newSubCategoties = subCategories.filter(
-        (item) => item.subcategoryId !== idSub
-      );
-      setSubCategories(newSubCategoties);
-      showToast("Success", "Delete Sub Category success!");
-      console.log("Delete Sub Category success!");
-    } catch (error) {
-      console.log(error);
-    }
-  };
   //Toast
   const showToast = (text1, text2) => {
     Toast.show({
@@ -80,22 +63,9 @@ export default function YourWordlistDetail() {
       topOffset: 55,
     });
   };
-  const handleDeleteWord = async () => {
-    try {
-      deleteWord(wl.id);
-      setIsDisplayDel(false);
-      setdelSucess(!delSucess);
-    } catch (error) {
-      console.log(`Delete Error ::`, error);
-    }
-  };
-  const handleDisplayButtonDel = () => {
-    setIsDisplayDel(!isDisplayDel);
-  };
 
   useEffect(() => {
     getSubCategory(wl.id);
-    setVocalSelect([]);
   }, []);
 
   useFocusEffect(
@@ -117,21 +87,17 @@ export default function YourWordlistDetail() {
   const handleCloseModalAdd = () => {
     setIsOpenModaAdd(false);
     delay(1000);
-    
   };
 
-  const handleCreateCloseModalAdd= async () => {
+  const handleCreateCloseModalAdd = async () => {
     handleCloseModalAdd();
-    
+
     try {
       setSubCategories([]);
       getSubCategory(wl.id);
     } catch (error) {
       console.log(error);
     }
-
-
-    // setIsOpen(!isOpen);
   };
 
   return (
@@ -235,69 +201,40 @@ export default function YourWordlistDetail() {
             keyExtractor={(item) => item.subcategoryId}
             renderItem={({ item }) => (
               <GestureHandlerRootView>
-                <ItemSubCategory
-                  subcategory={item}
-                  onDelete={handleDelete}
-                  onDisplayButtonDel={handleDisplayButtonDel}
-                  delSucess={delSucess}
-                  isDisplayDel={isDisplayDel}
-                />
+                <ItemSubCategory subcategory={item} />
               </GestureHandlerRootView>
             )}
           />
         </View>
 
         {/* Add new Subcategory */}
-        {!isDisplayDel && (
-          <TouchableOpacity style={styles.ButtonAdd} onPress={handleModalAdd}>
-            <Ionicons
-              name="add"
-              size={27}
-              color={colors.textTitle}
-              // backgroundColor="#BBBBBB"
-            />
-            <Text
-              style={[
-                {
-                  color: colors.textTitle,
-                  fontFamily: "Quicksand-Bold",
-                  fontSize: 15,
-                },
-              ]}
-            >
-              Add
-            </Text>
-          </TouchableOpacity>
-        )}
 
-        {isDisplayDel && (
-          <TouchableOpacity
-            style={{ ...styles.ButtonDelete }}
-            onPress={handleDeleteWord}
+        <TouchableOpacity style={styles.ButtonAdd} onPress={handleModalAdd}>
+          <Ionicons
+            name="add"
+            size={27}
+            color={colors.textTitle}
+            // backgroundColor="#BBBBBB"
+          />
+          <Text
+            style={[
+              {
+                color: colors.textTitle,
+                fontFamily: "Quicksand-Bold",
+                fontSize: 15,
+              },
+            ]}
           >
-            <MaterialIcons name="delete-forever" size={27} color="white" />
-            <Text
-              style={[
-                {
-                  color: "#ffff",
-                  fontFamily: "Quicksand-Bold",
-                  fontSize: 15,
-                },
-              ]}
-            >
-              Delete
-            </Text>
-          </TouchableOpacity>
-        )}
+            Add
+          </Text>
+        </TouchableOpacity>
       </View>
       <Modal
         onBackdropPress={() => {
           setIsOpenModaAdd(false);
-          setIsOpen(true);
         }}
         onBackButtonPress={() => setIsOpenModaAdd(false)}
         isVisible={isOpenModaAdd}
-        // onSwipeComplete={handlePresentModalAdd}
         animationIn="bounceInUp"
         animationOut="bounceOutDown"
         animationInTiming={900}
@@ -392,7 +329,7 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     top: "90%",
     // bottom: 20,
-    right: "6.6%",
+    right: "3.6%",
   },
   ButtonDelete: {
     // display: "flex",
