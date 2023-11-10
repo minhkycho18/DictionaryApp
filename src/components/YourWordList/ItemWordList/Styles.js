@@ -13,7 +13,7 @@ export const Styles = StyleSheet.create({
     },
     wrappered: {
         padding: 20,
-        borderRadius: 20,
+        // borderRadius: 20,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -70,7 +70,7 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
     },
     trash: {
-        backgroundColor: "red",
+        backgroundColor: "#E51400",
         width: 50,
         height: "100%",
         borderBottomLeftRadius: 20,
@@ -83,16 +83,17 @@ export const Styles = StyleSheet.create({
     wrappered_open_swipe_left: {
         borderBottomLeftRadius: 0,
         borderTopLeftRadius: 0,
-        // width: "85%",
+        width: "85%",
         borderBottomRightRadius: 20,
         borderTopRightRadius: 20,
     },
     wrappered_close: {
-        borderBottomLeftRadius: 20,
-        borderTopLeftRadius: 20,
-        borderBottomRightRadius: 20,
-        borderTopRightRadius: 20,
-        width: "100%",
+        // borderBottomLeftRadius: 20,
+        // borderTopLeftRadius: 20,
+        // borderBottomRightRadius: 20,
+        // borderTopRightRadius: 20,
+        // width: "100%",
+        marginLeft: "0%"
 
 
     },
@@ -141,7 +142,7 @@ export const Styles = StyleSheet.create({
     },
 
     edit: {
-        backgroundColor: "blue",
+        backgroundColor: "#007ACC",
         width: 50,
         height: "100%",
         borderBottomRightRadius: 20,
@@ -154,7 +155,7 @@ export const Styles = StyleSheet.create({
     wrappered_open_swipe_right: {
         borderBottomLeftRadius: 20,
         borderTopLeftRadius: 20,
-        width: "85%",
+        // width: "85%",
         borderBottomRightRadius: 0,
         borderTopRightRadius: 0,
     },
@@ -175,4 +176,38 @@ export const Styles = StyleSheet.create({
         borderRadius:50
         // height: "50%",
     },
+    wrappered_right: {
+        padding: 20,
+        // borderRadius: 20,
+        display: 'flex',
+        flexDirection: 'row',
+        position: 'relative',
+        marginLeft: "15%"
+
+    },
+    item: {
+        borderRadius: 20,
+        display: 'flex',
+        // flexDirection: 'row',
+        // alignItems: 'center',
+        // position: 'relative',
+        // backgroundColor: 'red',
+        overflow: 'hidden',
+        // zIndex:100
+        
+    },
+    background: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        display: 'flex',
+        flexDirection: 'row',
+      }      
+      
+      
+      
+      
+      
 })

@@ -64,15 +64,16 @@ function VocalDetail() {
     }
   };
   const showToast = (text1, text2, type) => {
+    console.log("tes, ", "success")
     Toast.show({
-      position: "top",
+      position: "left",
       type: type,
       text1: text1,
       text2: text2,
       visibilityTime: 1300,
       autoHide: true,
-      topOffset: 40,
-      zIndex: 1000,
+      topOffset: 50,
+      // zIndex: 1000,
     });
   };
 
@@ -135,7 +136,15 @@ function VocalDetail() {
     setIsOpen(false);
     setIsOpenModaAdd(!isOpenModaAdd);
   };
-  const handleCloseModalAdd = async () => {
+  const create_success = async () => {
+    showToast("Success", "Create new subcategory successfully", "success");
+    handlePresentModalAdd();
+    
+    await delay(1500);
+  };
+
+
+    const handleCloseModalAdd = async () => {
     setIsOpenModaAdd(false);
     await delay(500);
     setIsOpen(!isOpen);
@@ -229,7 +238,7 @@ function VocalDetail() {
             <FormAdd
               isAddWordlist={isWordList}
               onCancel={handleCloseModalAdd}
-              onCreate={handleCloseModalAdd}
+              onCreate={create_success}
               wordlistId={wordlistId}
             />
           </View>

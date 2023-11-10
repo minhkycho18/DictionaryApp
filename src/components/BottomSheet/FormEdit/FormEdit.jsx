@@ -148,7 +148,7 @@ export default function FormEdit({
           <TextInput
             style={{ ...styles.input, fontFamily: "Quicksand-Medium" }}
             placeholder="Write your title"
-            autoFocus={true}
+            // autoFocus={true}
             ref={titleRef}
             value={title}
             onChangeText={(text) => {

@@ -26,7 +26,7 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
     },
     trash: {
-        backgroundColor: "red",
+        backgroundColor: "#E51400",
         width: 50,
         height: "100%",
         borderBottomLeftRadius: 15,

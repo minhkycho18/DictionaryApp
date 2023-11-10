@@ -29,14 +29,7 @@ export default function ItemSubCategory({ subcategory }) {
   ]);
   const wrapRef = useRef();
   const iconRef = useRef();
-  const [bgcolor, setBgcolor] = useState("#FAFAFA");
   const [isModalVisible, setModalVisible] = useState(false);
-  // useEffect(() => {
-  //   if(open)
-  //   {
-  //     setBgcolor('#FAFAFA');
-  //   }
-  // }, [open]);
   const handleDelete = (idWL, idSub) => {
     onDelete(idWL, idSub);
   };
@@ -111,8 +104,10 @@ export default function ItemSubCategory({ subcategory }) {
     <View
       style={{
         marginTop: 15,
-        backgroundColor: bgcolor,
+        backgroundColor: '#FAFAFA',
         borderRadius: 15,
+        display: 'flex',
+        overflow: 'hidden',
       }}
     >
       <View>
@@ -191,7 +186,7 @@ export default function ItemSubCategory({ subcategory }) {
               backgroundColor: "#FEFEFE",
               borderWidth: 0,
               height: 55,
-              borderRadius: 15,
+              // borderRadius: 15,
               // marginHorizontal: 5,
             }}
             textStyle={{
