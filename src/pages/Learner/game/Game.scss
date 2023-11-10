@@ -1,0 +1,10 @@
+@import "../../../assets/scss/font.scss";
+@import "../../../assets/scss/variable.scss";
+.game {
+  &-wrap {
+    position: relative;
+    width: 100% !important;
+    height: 100vh;
+    padding-top: 64px;
+  }
+}

@@ -1,5 +1,6 @@
 import axios from "axios";
 import getTokenFromStorage from "./getTokenFromStorage";
+// const apiUrl = process.env.REACT_APP_API_URL;
 class Http {
   constructor() {
     this.instance = axios.create({

@@ -14,16 +14,16 @@ import {
   setErrorAdd,
   setVocabDetails,
 } from "../../stores/search-word/searchSlice";
+import { getSearchResult } from "../../stores/search-word/searchThunk";
 import { addWordToSubcategory } from "../../stores/subcategory/subcategoryThunk";
 import { createNewWL } from "../../stores/word-lists/wordLists-thunk";
 import SubChoice from "../Category/SubChoice/SubChoice";
 import "./Meaning.scss";
-import { getSearchResult } from "../../stores/search-word/searchThunk";
 const Meaning = ({ detail }) => {
   const [isChoice, setIsChoice] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { wordLists } = useSelector((state) => state.wordLists);
-  const { errorAdd, loadingAdd } = useSelector((state) => state.search);
+  const { loadingAdd } = useSelector((state) => state.search);
   const [wlAdded, setWlAdded] = useState();
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
@@ -32,9 +32,7 @@ const Meaning = ({ detail }) => {
   const [wlTitle, setWlTitle] = useState("");
   const [wlDesc, setWlDesc] = useState("");
   const [wlType, setWlType] = useState("PUBLIC");
-  const { result, selectedMeaning, loading } = useSelector(
-    (state) => state.search
-  );
+
   useEffect(() => {
     // if (errorAdd) {
     //   // messageApi.error("This word has been added");
