@@ -9,6 +9,7 @@ import TopTabAddWordToSub from '~/navigations/TopTabAddWordToSub';
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import Index from '~/components/Study';
+import ReviewScreen from '~/screens/ReviewScreen';
 export default function App() {
   const Stack = createNativeStackNavigator();
   const [loaded] = useFonts(configFont);
@@ -54,7 +55,7 @@ export default function App() {
           />
           <Stack.Screen
             name="StudySub"
-            component={Index}
+            component={ReviewScreen}
             options={{ headerShown: false }}
           />
 

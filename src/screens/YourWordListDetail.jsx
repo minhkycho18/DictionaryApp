@@ -48,7 +48,19 @@ export default function YourWordlistDetail() {
   const handleStudy = () => {
     navigation.navigate("StudySub", { wordlist: wl });
   };
-
+  const handleDelete = async (idWL, idSub) => {
+    try {
+      await deleteSubCategory(idWL, idSub);
+      const newSubCategoties = subCategories.filter(
+        (item) => item.subcategoryId !== idSub
+      );
+      setSubCategories(newSubCategoties);
+      showToast("Success", "Delete Sub Category success!");
+      console.log("Delete Sub Category success!");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   //Toast
   const showToast = (text1, text2) => {
     Toast.show({
@@ -58,7 +70,7 @@ export default function YourWordlistDetail() {
       text2: text2,
       // text1: "Login Fail",
       // text2: "Invalid Email or Password, please try again!",
-      visibilityTime: 2000,
+      visibilityTime: 1000,
       autoHide: true,
       topOffset: 55,
     });
@@ -201,7 +213,7 @@ export default function YourWordlistDetail() {
             keyExtractor={(item) => item.subcategoryId}
             renderItem={({ item }) => (
               <GestureHandlerRootView>
-                <ItemSubCategory subcategory={item} />
+                <ItemSubCategory subcategory={item} onDelete={handleDelete} />
               </GestureHandlerRootView>
             )}
           />
