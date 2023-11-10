@@ -8,8 +8,8 @@ import { getSubcategory } from "../../../stores/subcategory/subcategoryThunk";
 import { getWLById } from "../../../stores/word-lists/wordLists-thunk";
 import "./WordListDetail.scss";
 const WordListDetail = (props) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [query, setQuery] = useState(searchParams.get("id"));
+  const [searchParams] = useSearchParams();
+  const [query] = useState(searchParams.get("id"));
   const { subcategories } = useSelector((state) => state.subcategory);
   const { selectedWordList } = useSelector((state) => state.wordLists);
   const dispatch = useDispatch();
@@ -39,7 +39,14 @@ const WordListDetail = (props) => {
             </Space>
             to leitner
           </Space>
-          <Space className="wldetail__card-iconLearn">Learn</Space>
+          <Space
+            className="wldetail__card-iconLearn"
+            onClick={() =>
+              navigate(`/vocabulary/detail/${subcategory.subcategoryId}/learn`)
+            }
+          >
+            Learn
+          </Space>
         </Space>
       </Space>
     </Col>

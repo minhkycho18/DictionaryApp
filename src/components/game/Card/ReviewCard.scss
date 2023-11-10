@@ -1,0 +1,27 @@
+@import "../../../assets/scss/font.scss";
+@import "../../../assets/scss/variable.scss";
+
+.review-card {
+  &__body {
+    padding: 0px 32px;
+  }
+  &__title {
+    color: $text-primary-color;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 800;
+  }
+  &__sound {
+    font-size: 32px;
+    cursor: pointer;
+  }
+  &__phonetic {
+    font-weight: 600;
+    color: #6c757d;
+  }
+  &__pos {
+    border: 1px solid #ccc;
+    padding: 4px 8px;
+    border-radius: 8px;
+  }
+}

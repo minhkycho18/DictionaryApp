@@ -15,6 +15,7 @@ import Leitner from "../pages/Learner/leitner/Leitner";
 import WordListsPage from "../pages/Learner/wordlists/WordListsPage";
 import WordListDetail from "../pages/Learner/wordlists/WordListDetail";
 import ExploredWordList from "../pages/Learner/wordlists/ExploredWordList/ExploredWordList";
+import Game from "../pages/Learner/game/Game";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -38,7 +39,12 @@ const routers = createBrowserRouter([
 
           {
             path: "detail",
-            element: <WordListDetail />,
+            children: [
+              {
+                path: "",
+                element: <WordListDetail />,
+              },
+            ],
           },
           {
             path: "public",
@@ -47,6 +53,7 @@ const routers = createBrowserRouter([
           {
             path: "default",
             element: <ExploredWordList type={"default"} />,
+           
           },
         ],
       },
@@ -78,6 +85,32 @@ const routers = createBrowserRouter([
         element: <Leitner />,
       },
     ],
+  },
+  {
+    path: "/vocabulary/detail/:id/learn",
+    children: [
+      {
+        index: true,
+        element: <Game />,
+      },
+    ],
+    // {
+    //   path: "game/new",
+    //   element: <NewGame />,
+    // },
+    // {
+    //   path: "game/:id",
+    //   element: <Game />,
+    // },
+    // {
+    //   path: "explore",
+    //   element: <ExploredWordList />,
+    // },
+    // {
+    //   path: "my-words",
+    //   element: <MyWords />,
+    // },
+    // {
   },
   {
     path: "/auth",
