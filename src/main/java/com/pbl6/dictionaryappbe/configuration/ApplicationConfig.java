@@ -27,6 +27,7 @@ public class ApplicationConfig implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(new StringToEnumConverter());
+        registry.addConverter(new StringToEnumConverter.EnumStatusLevelConverter());
+        registry.addConverter(new StringToEnumConverter.EnumGameTypeConverter());
     }
 }

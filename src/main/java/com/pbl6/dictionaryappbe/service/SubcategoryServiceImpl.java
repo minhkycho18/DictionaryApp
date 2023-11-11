@@ -1,7 +1,9 @@
 package com.pbl6.dictionaryappbe.service;
 
+import com.pbl6.dictionaryappbe.dto.subcategory.GameType;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryResponseDto;
+import com.pbl6.dictionaryappbe.dto.subcategory.VocabularyQuestion;
 import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
@@ -208,8 +210,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
                 addVocabToSubcategory(targetWordList.getWordListId(),
                         targetSubcategoryId,
                         vocab);
-            } catch (DuplicateDataException ignored) {
-            }
+            } catch (DuplicateDataException ignored) {}
         });
         //Group by custom vocab by vocabId
         Map<Long, List<SubcategoryDetail>> customVocabularies = subcategoryDetails.stream()
@@ -280,6 +281,17 @@ public class SubcategoryServiceImpl implements SubcategoryService {
             deleteVocabulariesOfSubcategory(wordlistId, subcategory.getSubcategoryId(), subcategoryDetails);
             subcategoryRepository.delete(subcategory);
         });
+    }
+
+    @Override
+    public VocabularyQuestion<?> createGame(GameType gameType, Long subcategoryId, Long wordListId) {
+        getOwnedSubcategory(wordListId, subcategoryId);
+        List<SubcategoryDetail> subcategoryDetails = new ArrayList<>();
+        if (gameType == GameType.REVIEW) {
+            // subcategoryDetails = sql query for game type review
+        }
+        // subcategoryDetails = sql query for others game
+        return null;
     }
 
     @Override
