@@ -1,0 +1,68 @@
+@import "../../../assets/scss/font.scss";
+@import "../../../assets/scss/variable.scss";
+.flash-card {
+  justify-content: space-between;
+  align-items: center;
+  height: 500px;
+  padding: 32px;
+  &__options {
+    &--item {
+      font-family: $font;
+      width: 100%;
+      padding: 16px 16px;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      margin-bottom: -32px;
+      position: relative;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    &--icon {
+      position: absolute;
+      margin: -16px auto 0px auto;
+      top: 0;
+      left: 0;
+      right: 0;
+      font-size: 30px;
+      background-color: #fff;
+    }
+    &--back {
+      color: #fff;
+      height: 32px;
+      width: 64px;
+      padding: 4px;
+      font-size: 20px;
+      position: absolute;
+      left: -32px;
+      bottom: 96px;
+      background-color: #13c2c2;
+      border-radius: 16px;
+      justify-content: flex-end;
+      align-items: center;
+      cursor: pointer;
+      transition: background-color 0.5s linear;
+      &:hover {
+        background-color: #0fa2a2;
+      }
+    }
+  }
+  &__know {
+    border-top: 2px solid #3f9243;
+    color: #3f9243;
+    border-left: 1px solid #eee;
+    &--icon {
+      color: #3f9243;
+    }
+  }
+  &__unknown {
+    border-top: 2px solid #dc2929;
+    border-right: 1px solid #eee;
+    color: #dc2929;
+
+    &--icon {
+      color: #dc2929;
+    }
+  }
+}

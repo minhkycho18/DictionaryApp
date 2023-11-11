@@ -110,14 +110,29 @@ const Meaning = ({ detail }) => {
   const posClass = () => {
     switch (detail.pos) {
       case "adverb":
-        return "border--lightblue";
+        return "border--adverb";
       case "verb":
-        return "border--orange";
+        return "border--verb";
       case "adjective":
-        return "border--pink";
-
+        return "border--adjective";
+      case "noun":
+        return "border--noun";
+      case "article":
+        return "border--article";
+      case "phrasal verb":
+        return "border--phrasal-verb";
+      case "phrasal":
+        return "border--phrasal";
+      case "interjection":
+        return "border--interjection";
+      case "preposition":
+        return "border--preposition";
+      case "pronoun":
+        return "border--pronoun";
+      case "determiner":
+        return "border--determiner";
       default:
-        return "border--lightblue";
+        return "border--default";
     }
   };
   const handleSelectWord = (result) => {
