@@ -4,11 +4,13 @@ import "./GameMenu.scss";
 import quiz from "../../../assets/images/quiz.svg";
 import flashcard from "../../../assets/images/flashcard.svg";
 import review from "../../../assets/images/review.svg";
+import spelling from "../../../assets/images/spelling.svg";
 import { ArrowLeftOutlined, CheckCircleFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 const REVIEW = "review";
 const FLASH_CARD = "flashCard";
 const QUIZ = "quiz";
+const SPELLING = "spelling";
 const GameMenu = (props) => {
   const navigate = useNavigate();
   const handleChangeLesson = (lesson) => {
@@ -57,6 +59,16 @@ const GameMenu = (props) => {
           <div>2. Flashcard</div>
         </Space>
         <Space
+          className={`game-menu__item ${
+            props.lesson === SPELLING ? "game-menu__item--active" : ""
+          }`}
+          onClick={() => handleChangeLesson(SPELLING)}
+        >
+          <CheckCircleFilled className="game-menu__item--checked" />
+          <Image src={spelling} preview={false} width={25} />
+          <div>3. Spelling</div>
+        </Space>
+        <Space
           className={` game-menu__item border-right ${
             props.lesson === QUIZ ? "game-menu__item--active" : ""
           } game-menu__item--success`}
@@ -65,7 +77,7 @@ const GameMenu = (props) => {
         >
           <CheckCircleFilled className="game-menu__item--checked" />
           <Image src={quiz} preview={false} width={25} />
-          <div>3. Quiz</div>
+          <div>4. Quiz</div>
         </Space>
       </Space.Compact>
     </Space>

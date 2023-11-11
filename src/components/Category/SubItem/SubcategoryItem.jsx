@@ -1,6 +1,9 @@
 import React from "react";
 import "./SubcategoryItem.scss";
-import { Checkbox, Space } from "antd";
+import { Checkbox, Space, Tag } from "antd";
+import { upperFirst } from "lodash";
+import colorPos from "../../../helpers/ColorPos";
+
 const SubcategoryItem = ({ vocab, setList, isChecked }) => {
   const onCheckbox = () => {
     setList(
@@ -31,7 +34,10 @@ const SubcategoryItem = ({ vocab, setList, isChecked }) => {
           </Space>
         </Space>
       </Space>
-      <span className="vocabulary__pos">[{vocab?.pos}]</span>
+      <Tag color={colorPos.get(vocab?.pos)} style={{ fontSize: "15px" }}>
+        {upperFirst(vocab?.pos)}
+      </Tag>
+      {/* <span className="vocabulary__pos">[{vocab?.pos}]</span> */}
     </Space>
   );
 };

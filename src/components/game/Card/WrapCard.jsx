@@ -4,7 +4,7 @@ import React from "react";
 import "./WrapCard.scss";
 const WrapCard = (props) => {
   return (
-    <Space
+    <div
       style={{
         display: `${props.type === "default" ? "none" : "flex"}`,
         opacity: `${props.onSelect ? "1" : "0.6"}`,
@@ -13,25 +13,20 @@ const WrapCard = (props) => {
       className="wrap-card"
     >
       <Image
-        src={props.imgTop}
+        src={props?.imgTop}
         preview={false}
-        className="wrap-card__wave"
+        className="wrap-card__wave wrap-card__wave--top"
         width={482}
       />
-      <Space
-        style={{ flex: 1, padding: " 0px 32px" }}
-        direction="vertical"
-        className="wrap-card__body"
-      >
-        {props.children}
-      </Space>
+
+      {props.children}
       <Image
-        src={props.imgBot}
+        src={props?.imgBot}
         preview={false}
-        className="review-card__wave"
+        className="review-card__wave wrap-card__wave--bottom"
         width={482}
       />
-    </Space>
+    </div>
   );
 };
 

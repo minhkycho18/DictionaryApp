@@ -5,5 +5,83 @@ $text-primary-color: #0d47a1;
 $text-secondary-color: #07285a;
 $text-third-color: #0b043d;
 $text-sub-color: #6248b1;
+$text-grey-color: #6b788b;
 $background-primary-color: #ffffff;
 $background-sub-color: #f6f9fdad;
+
+//=================================pos color tag
+$background-adverb: #efdbff; //
+$background-adjective: #ffd8bf; //
+$background-noun: #b5f5ec;
+$background-verb: #f5f5f5; //
+$background-article: #f5f5f5;
+$background-phrasal_verb: #d6e4ff;
+$background-phrase: #d6e4ff;
+$background-interjection: #c0c3cf;
+$background-preposition: #fff1b8;
+$background-pronoun: #d9f7be;
+$background-determiner: #c0c3cf;
+//=================================pos color border
+$border-text-adverb: #b37feb; //
+$border-text-adjective: #ff7875; //
+$border-text-noun: #5cdbd3;
+$border-text-verb: #69b1ff; //
+$border-text-article: #c0c3cf;
+$border-text-phrasal_verb: #4096ff;
+$border-text-phrase: #4096ff;
+$border-text-interjection: #c0c3cf;
+$border-text-preposition: #ffd666;
+$border-text-pronoun: #95de64;
+$border-text-determiner: #c0c3cf;
+.border {
+  border: 2px solid;
+  border-left: 8px solid;
+  &--adverb {
+    border-color: $border-text-adverb;
+    margin-top: 16px;
+  }
+  &--verb {
+    border-color: $border-text-verb;
+    margin-top: 16px;
+  }
+  &--adjective {
+    border-color: $border-text-adjective;
+    margin-top: 16px;
+  }
+  &--noun {
+    border-color: $border-text-noun;
+    margin-top: 16px;
+  }
+  &--article {
+    border-color: $border-text-article;
+    margin-top: 16px;
+  }
+  &--phrasal-verb {
+    border-color: $border-text-phrasal_verb;
+    margin-top: 16px;
+  }
+  &--phrasal {
+    border-color: $border-text-phrase;
+    margin-top: 16px;
+  }
+  &--interjection {
+    border-color: $border-text-interjection;
+    margin-top: 16px;
+  }
+  &--preposition {
+    border-color: $border-text-preposition;
+    margin-top: 16px;
+  }
+  &--pronoun {
+    border-color: $border-text-pronoun;
+    margin-top: 16px;
+  }
+  &--determiner {
+    border-color: $border-text-determiner;
+    margin-top: 16px;
+  }
+  &--default {
+    border-color: #1e40af;
+    margin-top: 16px;
+  }
+}

@@ -10,6 +10,7 @@ import "./CustomSider.scss";
 import getFullPath from "../../helpers/getPath";
 import { getUserProfile } from "../../stores/user/userThunk";
 import Authenticate from "../../guards/Auth/Authenticate";
+import getTokenFromStorage from "../../helpers/getTokenFromStorage";
 
 const CustomSider = (props) => {
   const navigate = useNavigate();
@@ -20,7 +21,11 @@ const CustomSider = (props) => {
 
   useEffect(() => {
     dispatch(getUserProfile());
-  }, [dispatch]);
+    const token = getTokenFromStorage();
+    if (!token && !profile) {
+      navigate("/auth/sign-in");
+    }
+  }, [dispatch, navigate, profile]);
 
   const handleSignOut = () => {
     dispatch(logOut());
