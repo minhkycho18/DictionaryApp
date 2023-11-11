@@ -9,10 +9,13 @@ import changeTitle from "../../../helpers/changeTitle";
 import "./Game.scss";
 import FlashCard from "../../../components/game/Card/FlashCard";
 import QuizCard from "../../../components/game/Card/QuizCard";
+import SpellingCard from "../../../components/game/Card/SpellingCard";
 
 const REVIEW = "review";
 const FLASH_CARD = "flashCard";
 const QUIZ = "quiz";
+const SPELLING = "spelling";
+
 const Game = (props) => {
   const { pathname } = useLocation();
   changeTitle(pathname);
@@ -111,6 +114,24 @@ const Game = (props) => {
           <ReviewCard type={"default"} />
           {newArr.map((item, index) => (
             <QuizCard key={index} onSelect={current === index} />
+          ))}
+          <ReviewCard type={"default"} />
+        </Carousel>
+      )}
+      {type === SPELLING && (
+        <Carousel
+          arrows={false}
+          showDots
+          responsive={responsive}
+          slidesToSlide={1}
+          ssr={false}
+          afterChange={(nextSlide, { currentSlide, onMove }) => {
+            setCurrent(currentSlide);
+          }}
+        >
+          <ReviewCard type={"default"} />
+          {newArr.map((item, index) => (
+            <SpellingCard key={index} onSelect={current === index} />
           ))}
           <ReviewCard type={"default"} />
         </Carousel>

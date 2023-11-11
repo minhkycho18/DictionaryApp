@@ -56,7 +56,7 @@ const Phonetic = () => {
       {contextHolder}
       <Row gutter={[32, 16]}>
         <Col xs={{ span: 24 }} lg={{ span: 16 }}>
-          <Space className="wrappered border border--blue">
+          <Space className="wrappered border border--default">
             <Space direction="vertical" wrap>
               <Space className="phonetic">
                 <Space className="phonetic__word">{defaultWord?.word}</Space>

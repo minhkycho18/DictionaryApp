@@ -1,11 +1,11 @@
 import React from "react";
 import "./FlashCard.scss";
 import WrapCard from "./WrapCard";
-import waveTop from "../../../assets/images/wave3-top.svg";
-import waveBottom from "../../../assets/images/wave3-bot.svg";
+import waveTop from "../../../assets/images/wave-quiz-top.svg";
+import waveBottom from "../../../assets/images/wave-quiz-bottom.svg";
 const QuizCard = (props) => {
   return (
-    <WrapCard {...props} imgTop={waveTop} imgBot={waveBottom}>
+    <WrapCard {...props} imgTop={waveTop}>
       Quiz
     </WrapCard>
   );
