@@ -1,17 +1,39 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native";
-import { View, StyleSheet, Text, Dimensions } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Dimensions,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
-import { TouchableOpacity } from "react-native";
 import * as Progress from "react-native-progress";
 import ItemCardReview from "~/components/Game/CardReview/ItemCardReview";
-
+import Carousel from "react-native-reanimated-carousel";
 export default function ReviewScreen() {
   const [screenWidth, setScreenWidth] = useState(
     Dimensions.get("window").width
   );
+  const data = [
+    {
+      title: "Aenean leo",
+      body: "Ut tincidunt tincidunt erat. Sed cursus turpis vitae tortor. Quisque malesuada placerat nisl. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.",
+      imgUrl: "https://picsum.photos/id/11/200/300",
+    },
+    {
+      title: "In turpis",
+      body: "Aenean ut eros et nisl sagittis vestibulum. Donec posuere vulputate arcu. Proin faucibus arcu quis ante. Curabitur at lacus ac velit ornare lobortis. ",
+      imgUrl: "https://picsum.photos/id/10/200/300",
+    },
+    {
+      title: "Lorem Ipsum",
+      body: "Phasellus ullamcorper ipsum rutrum nunc. Nullam quis ante. Etiam ultricies nisi vel augue. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc.",
+      imgUrl: "https://picsum.photos/id/12/200/300",
+    },
+  ];
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
@@ -39,11 +61,21 @@ export default function ReviewScreen() {
           <Text style={Styles.numberCount}>0</Text>
           <Text style={Styles.numberTotal}>20</Text>
         </View>
-
-        <View style={Styles.content}>
-          <ItemCardReview />
-        </View>
+        <Carousel
+          loop={false}
+          width={Math.floor(screenWidth) - 40}
+          height={690}
+          data={data}
+          scrollAnimationDuration={100}
+          renderItem={({ index }) => (
+            <View style={Styles.content}>
+              <ItemCardReview />
+            </View>
+          )}
+        />
       </View>
+
+      {/* </View> */}
     </SafeAreaView>
   );
 }
@@ -60,7 +92,6 @@ const Styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    // backgroundColor: "green",
   },
   header: {
     paddingVertical: 5,
@@ -97,5 +128,8 @@ const Styles = StyleSheet.create({
     width: "90%",
     height: "75%",
     marginTop: 50,
+    // alignItems: "center",
+    // flex: 1,
+    // backgroundColor: "red",
   },
 });

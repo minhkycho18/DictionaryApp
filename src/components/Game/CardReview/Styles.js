@@ -4,14 +4,13 @@ import { colorPos, colors } from "~/constants/theme";
 export const Styles = StyleSheet.create({
     top: {
         width: "100%",
-        backgroundColor: "#00BFA5",
-        height: 40,
         borderTopLeftRadius: 40,
         borderTopRightRadius: 40,
-        alignItems: "center",
+
     },
     card: {
-        width: "100%",
+        marginLeft: '5%',
+        width: '100%',
         height: '100%',
 
     },
@@ -32,6 +31,7 @@ export const Styles = StyleSheet.create({
 
     },
     cardBack: {
+        alignItems: 'center',
         backgroundColor: '#fff',
         height: '100%',
         borderRadius: 40,
@@ -42,35 +42,54 @@ export const Styles = StyleSheet.create({
         },
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
-
         elevation: 3,
     },
     content: {
         alignItems: 'center',
         width: '100%',
-        marginTop: '12%',
+        marginTop: '-6%',
     },
     word: {
         fontSize: 32,
         color: colors.textTitle
     },
+    viewExample: {
+        marginTop: 10,
+        width: '90%',
+        alignItems: 'center',
+    },
+    viewSyn: {
+        marginTop: 10,
+        width: '90%',
+        display: "flex",
+        flexDirection: "column",
+    },
     viewPos: {
         display: "flex",
         flexDirection: "column",
-        width: "40%",
-        marginTop: 10,
-        gap: 8
+        width: "80%",
+        marginTop: 6,
+        gap: 8,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     Pos: {
-        width: '100%',
+        width: '80%',
         display: 'flex',
         flexDirection: 'row',
+        gap: 5,
+        justifyContent: 'center',
+    },
+    example: {
+        width: '80%',
+        display: 'flex',
+        flexDirection: 'column',
         gap: 10,
-        alignItems: 'center',
-        justifyContent: 'space-around'
+        // alignItems: 'center',
+        // justifyContent: 'space-around',
     },
     type: {
-        marginTop: 14,
+        marginTop: 12,
         alignItems: 'center',
 
     },
@@ -82,7 +101,7 @@ export const Styles = StyleSheet.create({
         color: '#fff'
     },
     viewdef: {
-        marginTop: 15,
+        marginTop: 20,
         width: '90%',
     },
     textDef: {
@@ -93,8 +112,8 @@ export const Styles = StyleSheet.create({
     },
     bottom: {
         width: "100%",
-        backgroundColor: "#00BFA5",
-        height: 50,
+        // backgroundColor: "red",
+        // height: 50,
         borderBottomLeftRadius: 40,
         borderBottomRightRadius: 40,
         alignItems: "center",
@@ -103,7 +122,53 @@ export const Styles = StyleSheet.create({
     },
     textButton: {
         fontSize: 18,
-        color: '#fff'
+        color: '#fff',
+        position: "absolute",
+        bottom: 20,
+    },
+    synonym: {
+        width: "90%",
+        display: 'flex',
+        flexDirection: 'row',
+        marginTop: 10,
+        alignItems: 'center',
+        flexWrap: 'wrap'
+    },
+    synonym_main: {
+        fontSize: 16,
+        letterSpacing: 0.2,
+        color: '#5E7172',
+
+    },
+    synonym_Item: {
+        backgroundColor: "#CFE5DE",
+        width: 'auto',
+        height: 'auto',
+        paddingBottom: 3,
+        paddingTop: 3,
+        paddingLeft: 15,
+        paddingRight: 15,
+        borderRadius: 15,
+        marginLeft: 10,
+        marginBottom: 5,
+
+
+    },
+    synonym_Item__Text: {
+        color: "#467A4D",
+        textAlign: 'center'
+    },
+    viewSound: {
+        width: 45,
+        height: 45,
+        borderWidth: 4,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 30,
+        borderColor: '#00BFA5',
+        position: 'absolute',
+        backgroundColor: '#fff',
+        top: 25
     }
 
 
