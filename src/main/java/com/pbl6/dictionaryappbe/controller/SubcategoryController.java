@@ -1,6 +1,8 @@
 package com.pbl6.dictionaryappbe.controller;
 
+import com.pbl6.dictionaryappbe.dto.subcategory.GameType;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryResponseDto;
+import com.pbl6.dictionaryappbe.dto.subcategory.VocabularyQuestion;
 import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
@@ -125,6 +127,14 @@ public class SubcategoryController {
     public String deleteSubcategory(@RequestBody List<Long> subcategoryIds, @PathVariable Long wordListId) {
         subcategoryService.deleteSubcategories(wordListId, subcategoryIds);
         return "Delete successfully";
+    }
+
+    @GetMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}/{gameType}")
+    public VocabularyQuestion<?> createGame(@PathVariable GameType gameType,
+                                            @PathVariable Long subcategoryId,
+                                            @PathVariable Long wordListId
+    ) {
+        return subcategoryService.createGame(gameType, subcategoryId, wordListId);
     }
 
 
