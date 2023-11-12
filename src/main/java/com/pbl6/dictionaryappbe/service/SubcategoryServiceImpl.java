@@ -1,9 +1,8 @@
 package com.pbl6.dictionaryappbe.service;
 
+import com.pbl6.dictionaryappbe.dto.subcategory.GameType;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.dto.subcategory.VocabularyQuestion;
-import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
-import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
@@ -37,6 +36,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
