@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -17,6 +17,7 @@ import ItemWordList from "~/components/YourWordList/ItemWordList/ItemWordList";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
+import { useFocusEffect } from "@react-navigation/native";
 export default function YourWordList() {
   const [wordLists, setWordLists] = useState([]);
   const [isLogin, setIsLogin] = useState(false);
@@ -61,6 +62,12 @@ export default function YourWordList() {
       setWordLists([...wordLists, data.params]);
     }
   }, [data.params]);
+
+  useFocusEffect(
+    useCallback(() => {
+      getMyWordList();
+    }, [])
+  );
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
@@ -109,6 +116,7 @@ export default function YourWordList() {
           onPress={handleAddWordlist}
         />
       </TouchableOpacity>
+
       <View style={styles.flatlist}>
         <FlatList
           showsVerticalScrollIndicator={false}
@@ -117,7 +125,11 @@ export default function YourWordList() {
           data={wordLists}
           renderItem={(item) => (
             <GestureHandlerRootView>
-              <ItemWordList wordlist={item} onRefresh={refreshWordlist} onDelete={handleDelete} />
+              <ItemWordList
+                wordlist={item}
+                onRefresh={refreshWordlist}
+                onDelete={handleDelete}
+              />
             </GestureHandlerRootView>
           )}
         />
@@ -137,9 +149,9 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 130,
     borderBottomRightRadius: 60,
-    display: 'flex',
-    flexDirection:'row',
-    alignItems:'center'
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
   Button: {
     width: 40,

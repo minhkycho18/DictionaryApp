@@ -28,8 +28,7 @@ export default function ItemWordList({ wordlist, onRefresh, onDelete }) {
   const iconRef = useRef();
   const navigation = useNavigation();
   const handleDetailWordList = async () => {
-    if(!isSwiped)
-    {
+    if (!isSwiped) {
       navigation.push("YourWordlistDetail", {
         Wordlist: {
           id: wordlist.item.id,
@@ -37,7 +36,7 @@ export default function ItemWordList({ wordlist, onRefresh, onDelete }) {
           listDesc: wordlist.item.listDesc,
         },
       });
-    } 
+    }
   };
   const getAllSub = async (id) => {
     try {
@@ -118,11 +117,12 @@ export default function ItemWordList({ wordlist, onRefresh, onDelete }) {
     iconRef.current.setNativeProps({ style: { display: "none" } });
   };
   return (
-    <View style={Styles.container} >
+    <View style={Styles.container}>
       <TouchableOpacity
-         activeOpacity={1}
-        // activeOpacity={isSwiping ? 1 : 0.5}
-        style={Styles.item} onPress={handleDetailWordList}>
+        activeOpacity={1}
+        style={Styles.item}
+        onPress={handleDetailWordList}
+      >
         <View>
           <Modal
             animationType="slide"
@@ -133,14 +133,15 @@ export default function ItemWordList({ wordlist, onRefresh, onDelete }) {
               <View style={Styles.modal_content}>
                 <View
                   style={{
-                    paddingBottom: 5,
+                    paddingBottom: 20,
                     paddingTop: 5,
+                    alignItems: "center",
                   }}
                 >
                   <Text
                     style={[
-                      tw`ml-5 tracking-wider text-sm pt-3 pb-3`,
-                      { color: "#182B40" },
+                      tw` text-base pt-3 pb-3`,
+                      { color: "#182B40", fontFamily: "Quicksand-SemiBold" },
                     ]}
                   >
                     Are you sure you want to delete ?
@@ -151,7 +152,13 @@ export default function ItemWordList({ wordlist, onRefresh, onDelete }) {
                     style={Styles.modal_button_cancel}
                     onPress={() => setModalVisible(false)}
                   >
-                    <Text style={{ color: "white", textAlign: "center" }}>
+                    <Text
+                      style={{
+                        color: "blue",
+                        fontFamily: "Quicksand-SemiBold",
+                        fontSize: 15,
+                      }}
+                    >
                       Cancel
                     </Text>
                   </TouchableOpacity>
@@ -159,7 +166,14 @@ export default function ItemWordList({ wordlist, onRefresh, onDelete }) {
                     style={Styles.modal_button_delete}
                     onPress={() => handleDelete(wordlist.item.id)}
                   >
-                    <Text style={{ color: "white", textAlign: "center" }}>
+                    <Text
+                      style={{
+                        color: "red",
+                        textAlign: "center",
+                        fontFamily: "Quicksand-SemiBold",
+                        fontSize: 15,
+                      }}
+                    >
                       Delete
                     </Text>
                   </TouchableOpacity>
@@ -168,94 +182,98 @@ export default function ItemWordList({ wordlist, onRefresh, onDelete }) {
             </View>
           </Modal>
 
-        <Modal
-        // onBackdropPress={() => {
-        //   setIsOpenModaAdd(false);
-        //   setIsOpen(true);
-        // }}
-        // onBackButtonPress={() => setIsOpenModaAdd(false)}
-        isVisible={isOpenModaEdit}
-        // onSwipeComplete={handlePresentModalAdd}
-        animationIn="bounceIn"
-        animationOut="bounceOut"
-        animationInTiming={900}
-        animationOutTiming={500}
-        backdropTransitionInTiming={1000}
-        backdropTransitionOutTiming={500}
-        style={Styles.modal}
-      >
-        <View style={Styles.modalContent}>
-          <View style={Styles.viewBottomSheet}>
-            <FormEdit
-              isEditWordlist={true}
-              onCancel={() => setIsOpenModaEdit(false)}
-              onConfirm={handleCloseModalEdit}
-              wordlist={wordlist}
-            />
-          </View>
+          <Modal
+            // onBackdropPress={() => {
+            //   setIsOpenModaAdd(false);
+            //   setIsOpen(true);
+            // }}
+            // onBackButtonPress={() => setIsOpenModaAdd(false)}
+            isVisible={isOpenModaEdit}
+            // onSwipeComplete={handlePresentModalAdd}
+            animationIn="bounceIn"
+            animationOut="bounceOut"
+            animationInTiming={900}
+            animationOutTiming={500}
+            backdropTransitionInTiming={1000}
+            backdropTransitionOutTiming={500}
+            style={Styles.modal}
+          >
+            <View style={Styles.modalContent}>
+              <View style={Styles.viewBottomSheet}>
+                <FormEdit
+                  isEditWordlist={true}
+                  onCancel={() => setIsOpenModaEdit(false)}
+                  onConfirm={handleCloseModalEdit}
+                  wordlist={wordlist}
+                />
+              </View>
+            </View>
+          </Modal>
         </View>
-      </Modal>
-      </View>
-      <View style={Styles.background}>
+        <View style={Styles.background}>
           <View
             style={{
-              backgroundColor: '#E51400',
-              width: '50%',
-              height: '100%',
+              backgroundColor: "#E51400",
+              width: "50%",
+              height: "100%",
             }}
           />
           <View
             style={{
-              backgroundColor: '#007ACC',
-              width: '50%',
-              height: '100%',
+              backgroundColor: "#007ACC",
+              width: "50%",
+              height: "100%",
             }}
           />
         </View>
-      <Swipeable
+        <Swipeable
           friction={2.7}
           renderLeftActions={leftSwipe}
           renderRightActions={rightSwipe}
           onSwipeableLeftOpen={onSwipeableOpen}
           onSwipeableWillClose={onSwipeableClose}
           onSwipeableRightOpen={onSwipeableRightOpen}
-      >
-        <View style={[tw`bg-gray-100`, Styles.wrappered]} ref={wrapRef}>
-          <Image
-            source={require("~/assets/wordlist.png")}
-            style={[tw`bg-gray-100`, Styles.Image]}
-          ></Image>
-          <View style={Styles.Text_content}>
-          <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 5,
-              }}
-            >
-            <Text
-              numberOfLines={1}
-              style={[
-                tw`text-lg`,
-                {
-                  color: colors.textTitle,
-                  fontFamily: "Quicksand-SemiBold",
-                  letterSpacing: 0.2,
-                },
-              ]}
-            >
-              {title}
-            </Text>
-            {wordlist.item.listType === "PRIVATE" ? (
-                <MaterialIcons name="lock" size={20} color={colors.textTitle} />
-              ) : (
-                <MaterialIcons
-                  name="public"
-                  size={20}
-                  color={colors.textTitle}
-                />
-              )}
+        >
+          <View style={[tw`bg-gray-100`, Styles.wrappered]} ref={wrapRef}>
+            <Image
+              source={require("~/assets/wordlist.png")}
+              style={[tw`bg-gray-100`, Styles.Image]}
+            ></Image>
+            <View style={Styles.Text_content}>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 5,
+                }}
+              >
+                <Text
+                  numberOfLines={1}
+                  style={[
+                    tw`text-lg`,
+                    {
+                      color: colors.textTitle,
+                      fontFamily: "Quicksand-SemiBold",
+                      letterSpacing: 0.2,
+                    },
+                  ]}
+                >
+                  {title}
+                </Text>
+                {wordlist.item.listType === "PRIVATE" ? (
+                  <MaterialIcons
+                    name="lock"
+                    size={20}
+                    color={colors.textTitle}
+                  />
+                ) : (
+                  <MaterialIcons
+                    name="public"
+                    size={20}
+                    color={colors.textTitle}
+                  />
+                )}
               </View>
 
               <Text
@@ -280,6 +298,5 @@ export default function ItemWordList({ wordlist, onRefresh, onDelete }) {
         </Swipeable>
       </TouchableOpacity>
     </View>
-
   );
 }
