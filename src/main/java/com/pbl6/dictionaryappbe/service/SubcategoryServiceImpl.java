@@ -36,7 +36,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -208,7 +207,8 @@ public class SubcategoryServiceImpl implements SubcategoryService {
                 addVocabToSubcategory(targetWordList.getWordListId(),
                         targetSubcategoryId,
                         vocab);
-            } catch (DuplicateDataException ignored) {}
+            } catch (DuplicateDataException ignored) {
+            }
         });
         return targetSubcategory;
     }
