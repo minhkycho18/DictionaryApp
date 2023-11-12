@@ -1,11 +1,10 @@
 package com.pbl6.dictionaryappbe.service;
 
 import com.pbl6.dictionaryappbe.dto.subcategory.GameType;
-import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.dto.subcategory.VocabularyQuestion;
-import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
-import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyResponseDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionRequestDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
@@ -19,17 +18,15 @@ public interface SubcategoryService {
 
     List<SubcategoryDetail> getSubcategoryDetails(Long subcategories, List<VocabularySubcategoryRequestDto> vocabularies);
 
-    List<SubcategoryDetailResponseDto> getAllVocabularies(Long subcategoryId);
+    List<SubcategoryDetailResponseDto> getAllVocabularies(Long wordListId, Long subcategoryId);
 
     SubcategoryDetailResponseDto addVocabToSubcategory(Long wordlistId, Long subcategoryId, VocabularySubcategoryRequestDto vocabularySubcategoryRequestDto);
 
-    CustomVocabularyResponseDto createCustomVocabulary(Long wordListId, CustomVocabularyRequestDto customVocabularyRequestDto);
+    ContributionResponseDto contributeVocabulary(Long wordListId, ContributionRequestDto customVocabularyRequestDto);
 
-    SubcategoryResponseDto createSubcategory(Long wordListId, SubcategoryRequestDto subcategory);
+    SubcategoryResponseDto createSubcategory(Long wordListId, String title);
 
     Subcategory cloneSubcategory(Long oldSubcategoryId, Long newSubcategoryId);
-
-    SubcategoryResponseDto updateSubcategory(Long wordlistId, Long subcategoryId, SubcategoryRequestDto subcategory);
 
     void deleteVocabulariesOfSubcategory(Long wordListId, Long subcategoryId, List<SubcategoryDetail> vocabularies);
 

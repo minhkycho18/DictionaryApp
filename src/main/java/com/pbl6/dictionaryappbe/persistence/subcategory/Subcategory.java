@@ -26,10 +26,6 @@ public class Subcategory {
     @Column(nullable = false)
     private Integer amountOfWord = 0;
 
-    @Enumerated(EnumType.STRING)
-    @Column
-    private SubcategoryType subcategoryType;
-
     @OneToMany(mappedBy = "subcategory", fetch = FetchType.LAZY)
     private List<SubcategoryDetail> subcategoryDetails;
 

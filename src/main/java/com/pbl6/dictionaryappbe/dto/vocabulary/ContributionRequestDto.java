@@ -1,7 +1,7 @@
 package com.pbl6.dictionaryappbe.dto.vocabulary;
 
 import com.pbl6.dictionaryappbe.dto.definition.DefinitionRequestDto;
-import com.pbl6.dictionaryappbe.persistence.vocabulary.WordType;
+import com.pbl6.dictionaryappbe.persistence.vocabulary.VocabularyStatus;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -13,10 +13,10 @@ import java.util.List;
 @Data
 @Builder
 @AllArgsConstructor
-public class CustomVocabularyRequestDto {
+public class ContributionRequestDto {
     @NotEmpty(message = "Word can not be empty")
     private String word;
-    private WordType wordType;
+    private VocabularyStatus wordType;
     private String pos;
     private String phoneUs;
     private String phoneUk;
