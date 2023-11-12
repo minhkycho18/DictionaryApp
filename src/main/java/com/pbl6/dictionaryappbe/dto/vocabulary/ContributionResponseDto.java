@@ -13,11 +13,11 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
-public class CustomVocabularyResponseDto extends VocabularySubcategoryDto {
+public class ContributionResponseDto extends VocabularySubcategoryDto {
     private List<Definition> definitions;
 
     @Builder
-    public CustomVocabularyResponseDto(Long vocabId, String word, String pos, String phoneUs, String phoneUk, String audioUs, String audioUk, boolean isReview, boolean isFlashcard, boolean isQuiz, List<Definition> definitions, LocalDateTime lastLearning) {
+    public ContributionResponseDto(Long vocabId, String word, String pos, String phoneUs, String phoneUk, String audioUs, String audioUk, boolean isReview, boolean isFlashcard, boolean isQuiz, List<Definition> definitions, LocalDateTime lastLearning) {
         super(vocabId, word, pos, phoneUs, phoneUk, audioUs, audioUk, isReview, isFlashcard, isQuiz, lastLearning);
         this.definitions = definitions;
     }

@@ -9,6 +9,5 @@ public class SubcategoryResponseDto {
     private Long subcategoryId;
     private String title;
     private Integer amountOfWord;
-    private String subcategoryType;
     private Long wordListId;
 }

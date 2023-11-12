@@ -40,14 +40,14 @@ public class Vocabulary {
     private String audioUk;
 
     @Column
-    private LocalDateTime modifiedAt;
+    private LocalDateTime contributedAt;
 
     @Column
-    private String modifiedBy;
+    private String contributedBy;
 
     @Enumerated(EnumType.STRING)
     @Column
-    private WordType wordType;
+    private VocabularyStatus status;
 
     @OneToMany(mappedBy = "vocabulary")
     @JsonIgnore
