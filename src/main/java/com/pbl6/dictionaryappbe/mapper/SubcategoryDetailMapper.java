@@ -45,7 +45,7 @@ public interface SubcategoryDetailMapper {
                 .toList();
         return ContributionRequestDto.builder()
                 .word(vocabulary.getWord())
-                .wordType(vocabulary.getStatus())
+                .vocabularyStatus(vocabulary.getStatus())
                 .pos(vocabulary.getPos())
                 .phoneUk(vocabulary.getPhoneUk())
                 .phoneUs(vocabulary.getPhoneUs())

@@ -16,7 +16,7 @@ import java.util.List;
 public class ContributionRequestDto {
     @NotEmpty(message = "Word can not be empty")
     private String word;
-    private VocabularyStatus wordType;
+    private VocabularyStatus vocabularyStatus;
     private String pos;
     private String phoneUs;
     private String phoneUk;

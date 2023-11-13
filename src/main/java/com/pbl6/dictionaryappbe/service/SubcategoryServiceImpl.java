@@ -5,7 +5,6 @@ import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.dto.subcategory.VocabularyQuestion;
 import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionResponseDto;
-import com.pbl6.dictionaryappbe.dto.subcategory.VocabularyQuestion;
 import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.exception.DuplicateDataException;
@@ -79,16 +78,11 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
     @Override
     public List<SubcategoryDetailResponseDto> getAllVocabularies(Long wordListId, Long subcategoryId) {
-        boolean isOwnSubcategory = false;
         List<SubcategoryDetail> vocabularies;
         try {
             getOwnedSubcategory(wordListId, subcategoryId);
-            isOwnSubcategory = true;
-        } catch (AccessDeniedException e) {
-        }
-        if (isOwnSubcategory) {
             vocabularies = subcategoryDetailRepository.findAllBySubcategoryId(subcategoryId);
-        } else {
+        } catch (AccessDeniedException e) {
             vocabularies = subcategoryDetailRepository.findAllDefaultVocabBySubcategoryId(subcategoryId);
         }
         return MapperUtils.toTargetList(subcategoryDetailMapper::toSubcategoryDetailResponseDto, SubcategoryDetailUtils.filterDeletedVocabulary(vocabularies));
@@ -208,7 +202,8 @@ public class SubcategoryServiceImpl implements SubcategoryService {
                 addVocabToSubcategory(targetWordList.getWordListId(),
                         targetSubcategoryId,
                         vocab);
-            } catch (DuplicateDataException ignored) {}
+            } catch (DuplicateDataException ignored) {
+            }
         });
         return targetSubcategory;
     }
