@@ -27,6 +27,7 @@ export const Styles = StyleSheet.create({
         shadowRadius: 4.65,
         elevation: 7,
         borderRadius: 10,
+        backgroundColor: '#fff'
     }
 
 })

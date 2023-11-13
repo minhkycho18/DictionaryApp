@@ -31,11 +31,22 @@ function SearchResult({ vocal, onPressItem }) {
             >
               {vocal.item.word}
             </Text>
-            <Text
-              style={{ ...styles.content_top_Type, backgroundColor: colorPos }}
+            <View
+              style={{
+                ...styles.viewPos,
+                backgroundColor: colorPos,
+              }}
             >
-              {vocal.item.pos}
-            </Text>
+              <Text
+                style={{
+                  ...styles.content_top_Type,
+                  backgroundColor: colorPos,
+                  // borderRadius: 20,
+                }}
+              >
+                {vocal.item.pos}
+              </Text>
+            </View>
           </View>
           <View style={styles.content_bottom}>
             <Text

@@ -16,7 +16,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 import FormEdit from "~/components/BottomSheet/FormEdit/FormEdit";
 export default function ItemWordList({ wordlist, onRefresh, onDelete }) {
-  const [title, setTitle] = useState(wordlist.item.title);
   const [subs, setSubs] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isLeftSwipe, setIsLeftSwipe] = useState(false);
@@ -101,10 +100,10 @@ export default function ItemWordList({ wordlist, onRefresh, onDelete }) {
       </TouchableOpacity>
     );
   };
-  const handleCloseModalEdit = async () => {
+  const handleCloseModalEdit = async (res) => {
     setIsOpenModaEdit(false);
     delay(1000);
-    onRefresh();
+    onRefresh(res);
   };
   const onSwipeableRightOpen = () => {
     setIsSwiped(true);
@@ -259,7 +258,7 @@ export default function ItemWordList({ wordlist, onRefresh, onDelete }) {
                     },
                   ]}
                 >
-                  {title}
+                  {wordlist.item.title}
                 </Text>
                 {wordlist.item.listType === "PRIVATE" ? (
                   <MaterialIcons

@@ -179,7 +179,7 @@ export const Styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         position: 'relative',
-        marginLeft: "15%"
+        marginLeft: "10%"
 
     },
     item: {
@@ -191,7 +191,7 @@ export const Styles = StyleSheet.create({
         // backgroundColor: 'red',
         overflow: 'hidden',
         // zIndex:100
-        
+
     },
     background: {
         position: 'absolute',
@@ -201,10 +201,10 @@ export const Styles = StyleSheet.create({
         bottom: 0,
         display: 'flex',
         flexDirection: 'row',
-      }      
-      
-      
-      
-      
-      
+    }
+
+
+
+
+
 })

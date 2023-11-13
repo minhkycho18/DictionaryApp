@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { View, Text } from "react-native";
 import tw from "twrnc";
 import ItemWordList from "../ItemWordList/ItemWordList";
@@ -10,7 +10,7 @@ import ItemCreateWordList from "../ItemCreateWordList/ItemCreateWordList";
 import { checkLogin } from "~/helper/Auth";
 import { getWordListById } from "~/api/WordList";
 import Toast, { ErrorToast } from "react-native-toast-message";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { delay } from "~/helper";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "~/constants/theme";
@@ -39,6 +39,11 @@ export default function MyWordList() {
       getMyWordList();
     }
   }, [isLogin]);
+  useFocusEffect(
+    useCallback(() => {
+      getMyWordList();
+    }, [])
+  );
 
   const handlePressSeeAll = async () => {
     if (!isLogin) {

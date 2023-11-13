@@ -5,14 +5,14 @@ import FlipCard from "react-native-flip-card";
 import { Styles } from "./Styles";
 import { AntDesign } from "@expo/vector-icons";
 import { colors } from "~/constants/theme";
-export default function ItemCardReview({ width }) {
+export default function ItemCardReview() {
   const [isFlip, setIsFlip] = useState(false);
   return (
     <>
       <FlipCard
         style={Styles.card}
         friction={10}
-        perspective={2000}
+        perspective={3000}
         flipHorizontal={true}
         flipVertical={false}
         flip={isFlip}
@@ -143,7 +143,10 @@ export default function ItemCardReview({ width }) {
               borderTopRightRadius: 40,
             }}
           />
-          <View style={{ ...Styles.content, marginTop: "-10%" }}>
+          <TouchableOpacity style={Styles.viewSound}>
+            <AntDesign name="sound" size={24} color="#00BFA5" />
+          </TouchableOpacity>
+          <View style={{ ...Styles.content, marginTop: "1%" }}>
             <Text
               style={{
                 ...Styles.word,

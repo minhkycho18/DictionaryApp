@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
+  Platform,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -27,10 +28,9 @@ export default function YourWordList() {
     const data = await getWordListById();
     setWordLists(data);
   };
-  const refreshWordlist = async () => {
-    setWordLists([]);
-    const data = await getWordListById();
-    setWordLists(data);
+  const refreshWordlist = async (res) => {
+    const wordlist = wordLists.filter((item) => item.id !== res.id);
+    setWordLists([...wordlist, res]);
   };
   const handleDelete = async (id) => {
     try {
@@ -108,7 +108,12 @@ export default function YourWordList() {
           </Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.Button}>
+      <TouchableOpacity
+        style={{
+          ...styles.Button,
+          top: Platform.OS === "ios" ? "18%" : "14.5%",
+        }}
+      >
         <Ionicons
           name="add"
           size={25}
@@ -159,15 +164,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#3D3A4D",
     borderRadius: 10,
     position: "absolute",
-    right: 40,
-    top: 100,
+    right: "10%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     zIndex: 100,
   },
   flatlist: {
-    display: "flex",
+    flex: 1,
     elevation: 4,
     shadowOffset: {
       width: 0,

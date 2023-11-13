@@ -98,14 +98,21 @@ function ItemResult({ vocal, params, onAddSucess, onRemove }) {
                 gap: 10,
               }}
             >
-              <Text
+              <View
                 style={{
-                  ...styles.content_top_Type,
+                  ...styles.viewPos,
                   backgroundColor: colorPos,
                 }}
               >
-                {vocal.item.pos}
-              </Text>
+                <Text
+                  style={{
+                    ...styles.content_top_Type,
+                    backgroundColor: colorPos,
+                  }}
+                >
+                  {vocal.item.pos}
+                </Text>
+              </View>
 
               {isLoading ? (
                 <ActivityIndicator size="small" color="#2C94E6" />
