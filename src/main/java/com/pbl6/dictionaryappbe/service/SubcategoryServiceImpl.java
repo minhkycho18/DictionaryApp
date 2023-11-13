@@ -1,7 +1,11 @@
 package com.pbl6.dictionaryappbe.service;
 
+import com.pbl6.dictionaryappbe.dto.subcategory.game.*;
+import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.dto.subcategory.GameType;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryResponseDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyResponseDto;
 import com.pbl6.dictionaryappbe.dto.subcategory.VocabularyQuestion;
 import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionResponseDto;
@@ -25,7 +29,6 @@ import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import com.pbl6.dictionaryappbe.repository.*;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
 import com.pbl6.dictionaryappbe.utils.MapperUtils;
-import com.pbl6.dictionaryappbe.utils.SubcategoryDetailUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -33,14 +36,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class SubcategoryServiceImpl implements SubcategoryService {
+public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGameService {
 
     private final SubcategoryRepository subcategoryRepository;
     private final WordListRepository wordListRepository;
@@ -50,6 +51,9 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     private final SubcategoryDetailMapper subcategoryDetailMapper;
     private final VocabularyRepository vocabularyRepository;
     private final DefinitionRepository definitionRepository;
+
+    private static final int MAXIMUM_NUMBER_OF_QUESTION = 30;
+    private static final double PERCENTAGE_OF_LEARNING_QUESTION = 0.8;
 
     @Override
     public List<SubcategoryResponseDto> getAllSubcategories(Long wordListId) {
@@ -255,22 +259,101 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     }
 
     @Override
-    public VocabularyQuestion<?> createGame(GameType gameType, Long subcategoryId, Long wordListId) {
-        getOwnedSubcategory(wordListId, subcategoryId);
-        List<SubcategoryDetail> subcategoryDetails = new ArrayList<>();
-        if (gameType == GameType.REVIEW) {
-            // subcategoryDetails = sql query for game type review
-        }
-        // subcategoryDetails = sql query for others game
-        return null;
-    }
-
-    @Override
     public Subcategory getOwnedSubcategory(Long wordListId, Long subcategoryId) {
         User user = AuthenticationUtils.getUserFromSecurityContext();
         WordList wordList = wordListRepository.findByUserAndWordListId(user, wordListId)
                 .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"));
         return subcategoryRepository.findBySubcategoryIdAndWordList(subcategoryId, wordList)
                 .orElseThrow(() -> new EntityNotFoundException("Subcategory not found with ID:" + subcategoryId));
+    }
+
+    @Override
+    public List<SubcategoryDetail> getRandomSubDetailByGameType(GameType gameType, Long subcategoryId, Long wordListId) {
+        getOwnedSubcategory(wordListId, subcategoryId);
+        Map<GameType, String> gameTypeMap = new EnumMap<>(GameType.class);
+        gameTypeMap.put(GameType.FLASHCARD, "is_flashcard");
+        gameTypeMap.put(GameType.SPELLING, "is_spelling");
+        gameTypeMap.put(GameType.QUIZ, "is_quiz");
+
+        List<SubcategoryDetail> subcategoryDetails;
+        NumberOfQuestion numberOfQuestion = handleNumberOfQuestion(gameType, subcategoryId);
+        if (gameType == GameType.REVIEW) {
+            subcategoryDetails = subcategoryDetailRepository.getRandomByIsReview(subcategoryId,
+                    numberOfQuestion.getNumberOfLearningQuestions(),
+                    numberOfQuestion.getNumberOfLearnedQuestions());
+        } else {
+            subcategoryDetails = subcategoryDetailRepository.getRandomByGameType(subcategoryId,
+                    gameTypeMap.get(gameType),
+                    numberOfQuestion.getNumberOfLearningQuestions(),
+                    numberOfQuestion.getNumberOfLearnedQuestions());
+        }
+        return subcategoryDetails;
+    }
+
+    @Override
+    public NumberOfQuestion handleNumberOfQuestion(final GameType gameType, final Long subcategoryId) {
+        Map<GameType, String> gameTypeMap = new EnumMap<>(GameType.class);
+        gameTypeMap.put(GameType.FLASHCARD, "is_flashcard");
+        gameTypeMap.put(GameType.SPELLING, "is_spelling");
+        gameTypeMap.put(GameType.QUIZ, "is_quiz");
+
+        int numberOfVocabs = gameType == GameType.REVIEW
+                ? subcategoryDetailRepository.countBySubcategoryId(subcategoryId)
+                : subcategoryDetailRepository.countBySubcategoryIdAndAndIsReview(subcategoryId, true);
+
+        int numberOfQuestion = Math.min(numberOfVocabs, MAXIMUM_NUMBER_OF_QUESTION);
+        int numberOfLearningQuestions = gameType == GameType.REVIEW
+                ? subcategoryDetailRepository.countBySubcategoryIdAndAndIsReview(subcategoryId, false)
+                : subcategoryDetailRepository.countBySubIdAndStatusField(subcategoryId, gameTypeMap.get(gameType));
+
+        int numberOfLearnedQuestions = numberOfVocabs - numberOfLearningQuestions;
+
+
+        if (numberOfQuestion == MAXIMUM_NUMBER_OF_QUESTION) {
+            int minimumNumberOfLearningQuestion = (int) (numberOfQuestion * PERCENTAGE_OF_LEARNING_QUESTION);
+            if (numberOfLearningQuestions >= minimumNumberOfLearningQuestion) {
+                numberOfLearningQuestions = minimumNumberOfLearningQuestion;
+            }
+            numberOfLearnedQuestions = numberOfQuestion - numberOfLearningQuestions;
+        }
+        return new NumberOfQuestion(numberOfLearningQuestions, numberOfLearnedQuestions);
+    }
+
+    @Override
+    public List<FlashcardQuestionDto> createFlashcardGame(List<SubcategoryDetail> randomSubDetails) {
+        Set<String> randomDescription = randomSubDetails.stream()
+                .map(subcategoryDetail -> subcategoryDetail.getVocabDef().getDefinition().getWordDesc())
+                .collect(Collectors.toSet());
+
+        List<FlashcardQuestionDto> flashcardQuestionDtos =
+                MapperUtils.toTargetList(subcategoryDetailMapper::toVocabularyQuestion,randomSubDetails)
+                        .stream()
+                        .map(FlashcardQuestionDto::new)
+                        .toList();
+
+        Iterator<FlashcardQuestionDto> flashCardsIter = flashcardQuestionDtos.iterator();
+        Iterator<String> descIter = randomDescription.iterator();
+
+        while (flashCardsIter.hasNext() && descIter.hasNext()) {
+            FlashcardQuestionDto currentFlashcard = flashCardsIter.next();
+            String currentDesc = descIter.next();
+            currentFlashcard.setQuestion(currentDesc);
+            Definition definition =
+                    definitionRepository.findByVocabIdAndDefId(currentFlashcard.getVocabId(), currentFlashcard.getDefId())
+                            .orElseThrow(() -> new RecordNotFoundException("Definition not found"));
+
+            currentFlashcard.setResult(currentDesc.equals(definition.getWordDesc()));
+        }
+        return flashcardQuestionDtos;
+    }
+
+    @Override
+    public List<QuizQuestionDto> createQuizGame(List<SubcategoryDetail> subcategoryDetails) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<ReviewSpellingContentDto> createReviewSpellingGame(List<SubcategoryDetail> subcategoryDetails) {
+        return Collections.emptyList();
     }
 }

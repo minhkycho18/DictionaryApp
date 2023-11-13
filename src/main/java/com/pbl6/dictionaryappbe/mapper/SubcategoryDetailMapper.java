@@ -1,6 +1,9 @@
 package com.pbl6.dictionaryappbe.mapper;
 
 import com.pbl6.dictionaryappbe.dto.definition.DefinitionRequestDto;
+import com.pbl6.dictionaryappbe.dto.subcategory.game.VocabularyQuestionDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
@@ -65,5 +68,13 @@ public interface SubcategoryDetailMapper {
     @Mapping(source = "vocabDef.definition.wordDesc", target = "definition.wordDesc")
     @Mapping(source = "vocabDef.definition.examples", target = "definition.examples")
     SubcategoryDetailResponseDto toSubcategoryDetailResponseDto(SubcategoryDetail subcategoryDetail);
+
+    @Mapping(source = "vocabDef.vocabulary.word", target = "word")
+    @Mapping(source = "vocabDef.vocabulary.pos", target = "pos")
+    @Mapping(source = "vocabDef.vocabulary.phoneUs", target = "phoneUs")
+    @Mapping(source = "vocabDef.vocabulary.phoneUk", target = "phoneUk")
+    @Mapping(source = "vocabDef.vocabulary.audioUs", target = "audioUs")
+    @Mapping(source = "vocabDef.vocabulary.audioUk", target = "audioUk")
+    VocabularyQuestionDto toVocabularyQuestion(SubcategoryDetail subcategoryDetail);
 }
 
