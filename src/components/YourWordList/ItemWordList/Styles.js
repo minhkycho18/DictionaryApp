@@ -13,7 +13,7 @@ export const Styles = StyleSheet.create({
     },
     wrappered: {
         padding: 20,
-        borderRadius: 20,
+        // borderRadius: 20,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -70,7 +70,7 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
     },
     trash: {
-        backgroundColor: "red",
+        backgroundColor: "#E51400",
         width: 50,
         height: "100%",
         borderBottomLeftRadius: 20,
@@ -83,16 +83,17 @@ export const Styles = StyleSheet.create({
     wrappered_open_swipe_left: {
         borderBottomLeftRadius: 0,
         borderTopLeftRadius: 0,
-        // width: "85%",
+        width: "85%",
         borderBottomRightRadius: 20,
         borderTopRightRadius: 20,
     },
     wrappered_close: {
-        borderBottomLeftRadius: 20,
-        borderTopLeftRadius: 20,
-        borderBottomRightRadius: 20,
-        borderTopRightRadius: 20,
-        width: "100%",
+        // borderBottomLeftRadius: 20,
+        // borderTopLeftRadius: 20,
+        // borderBottomRightRadius: 20,
+        // borderTopRightRadius: 20,
+        // width: "100%",
+        marginLeft: "0%"
 
 
     },
@@ -104,7 +105,7 @@ export const Styles = StyleSheet.create({
     modal_content: {
         backgroundColor: "white",
         marginVertical: 60,
-        width: "100%",
+        width: "90%",
         borderWidth: 1,
         borderColor: "#fff",
         borderRadius: 7,
@@ -112,36 +113,33 @@ export const Styles = StyleSheet.create({
     },
     modal_view_button: {
         display: "flex",
-        justifyContent: "flex-end",
         flexDirection: "row",
-        marginRight: 10,
-        marginTop: 15,
-        marginBottom: 15,
+        justifyContent: 'space-between',
+        borderTopWidth: 2,
+        borderTopColor: '#ccc',
     },
     modal_button_cancel: {
-        width: 70,
-        height: 35,
-        backgroundColor: "green",
+        width: '50%',
+        height: '100%',
         textAlign: "center",
         padding: 5,
         display: "flex",
         alignItems: "center",
-        borderRadius: 10,
-        marginRight: 20,
+        borderRightWidth: 2,
+        borderRightColor: '#ccc',
+        paddingVertical: 10,
     },
     modal_button_delete: {
-        width: 70,
-        height: 35,
-        backgroundColor: "red",
+        width: '50%',
+        paddingVertical: 10,
         textAlign: "center",
         padding: 5,
         display: "flex",
         alignItems: "center",
-        borderRadius: 10,
     },
 
     edit: {
-        backgroundColor: "blue",
+        backgroundColor: "#007ACC",
         width: 50,
         height: "100%",
         borderBottomRightRadius: 20,
@@ -154,7 +152,7 @@ export const Styles = StyleSheet.create({
     wrappered_open_swipe_right: {
         borderBottomLeftRadius: 20,
         borderTopLeftRadius: 20,
-        width: "85%",
+        // width: "85%",
         borderBottomRightRadius: 0,
         borderTopRightRadius: 0,
     },
@@ -172,7 +170,41 @@ export const Styles = StyleSheet.create({
         paddingHorizontal: 12,
         // borderTopRightRadius: 50,
         // borderTopLeftRadius: 50,
-        borderRadius:50
+        borderRadius: 50
         // height: "50%",
     },
+    wrappered_right: {
+        padding: 20,
+        // borderRadius: 20,
+        display: 'flex',
+        flexDirection: 'row',
+        position: 'relative',
+        marginLeft: "10%"
+
+    },
+    item: {
+        borderRadius: 20,
+        display: 'flex',
+        // flexDirection: 'row',
+        // alignItems: 'center',
+        // position: 'relative',
+        // backgroundColor: 'red',
+        overflow: 'hidden',
+        // zIndex:100
+
+    },
+    background: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        display: 'flex',
+        flexDirection: 'row',
+    }
+
+
+
+
+
 })

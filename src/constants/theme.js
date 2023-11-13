@@ -27,16 +27,17 @@ export const svgStudy = {
   quiz: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 174.32 209.01"><title>Asset 12@4</title><g id="Layer_2" data-name="Layer 2"><g id="Layer_1-2" data-name="Layer 1"><path d="M58.13,75.28a4,4,0,0,0-4,4v2a6,6,0,0,1-12,0v-2A16.08,16.08,0,0,1,58.13,63.23H72.69A17.51,17.51,0,0,1,90.26,80.57a17.05,17.05,0,0,1-8.53,15.06l-11.55,7.15v.6a6,6,0,1,1-12,0v-4a6,6,0,0,1,2.94-5.17l14.46-8.68a6.1,6.1,0,0,0,2.69-4.94,5.46,5.46,0,0,0-5.52-5.3Z" fill="#3A91EF"/><circle cx="64.15" cy="123.47" r="8.03" fill="#3A91EF"/><path d="M160.54,28.41l-27.71-5.74A25,25,0,0,0,107.94,0H25A25,25,0,0,0,0,25V169.42a25,25,0,0,0,25,25H57.13a5,5,0,0,0,2.15,1l63.93,13.24a17.29,17.29,0,0,0,20.44-13.43L174,48.86A17.34,17.34,0,0,0,160.54,28.41ZM10,169.42V25A15,15,0,0,1,25,10h82.94a15,15,0,0,1,15,15V169.42a15,15,0,0,1-15,15H25A15,15,0,0,1,10,169.42Z" fill="#3A91EF"/></g></g></svg>`,
 }
 export const colorPos = [
-  { verb: '#79DE74' },
-  { noun: '#46C5F2' },
-  { adjective: '#E47E23' },
-  { interjection: "#B4B6E6" },
-  { phrase: "#06FBFF" },
-  { adverb: "#AED574" },
-  { preposition: "#2F9D8C" },
-  { determiner: "#C4A986" },
-  { pronoun: "#EAC56D" },
-  { "phrasal verb": "#79DE74" }
+  { verb: '#69b1ff' },
+  { noun: '#5cdbd3' },
+  { adjective: '#ff7875' },
+  { interjection: "#c0c3cf" },
+  { phrase: "#4096ff" },
+  { adverb: "#b37feb" },
+  { preposition: "#ffd666" },
+  { determiner: "#c0c3cf" },
+  { pronoun: "#95de64" },
+  { "phrasal verb": " #4096ff" },
+  { article: "#c0c3cf" }
 ]
 
 export const colorSynonym = [

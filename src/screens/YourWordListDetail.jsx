@@ -15,9 +15,7 @@ import {
 } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import tw from "twrnc";
-import Toast, { ErrorToast } from "react-native-toast-message";
-import { MaterialIcons } from "@expo/vector-icons";
+import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
 
 import ItemSubCategory from "~/components/Home/WordList/ItemSubCategory/ItemSubCategory";
 import { Image } from "react-native";
@@ -48,20 +46,54 @@ export default function YourWordlistDetail() {
   const handleStudy = () => {
     navigation.navigate("StudySub", { wordlist: wl });
   };
-
+  const handleDelete = async (idWL, idSub) => {
+    try {
+      await deleteSubCategory(idWL, idSub);
+      const newSubCategoties = subCategories.filter(
+        (item) => item.subcategoryId !== idSub
+      );
+      setSubCategories(newSubCategoties);
+      // showToast("Success", "Delete Sub Category success!");
+      console.log("Delete Sub Category success!");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   //Toast
-  const showToast = (text1, text2) => {
+  const showToast = (text1, text2, type) => {
     Toast.show({
       position: "top",
-      type: "error",
+      type: type,
       text1: text1,
       text2: text2,
-      // text1: "Login Fail",
-      // text2: "Invalid Email or Password, please try again!",
-      visibilityTime: 2000,
+      visibilityTime: 700,
       autoHide: true,
-      topOffset: 55,
+      topOffset: 40,
     });
+  };
+  const toastConfig = {
+    error: (props) => (
+      <ErrorToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
+    success: (props) => (
+      <SuccessToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
   };
 
   useEffect(() => {
@@ -89,12 +121,13 @@ export default function YourWordlistDetail() {
     delay(1000);
   };
 
-  const handleCreateCloseModalAdd = async () => {
+  const handleCreateCloseModalAdd = async (res, state) => {
+    showToast("Success", "Create new subcategory successfully!", "success");
+    await delay(1000);
     handleCloseModalAdd();
 
     try {
-      setSubCategories([]);
-      getSubCategory(wl.id);
+      setSubCategories([...subCategories, res]);
     } catch (error) {
       console.log(error);
     }
@@ -201,7 +234,7 @@ export default function YourWordlistDetail() {
             keyExtractor={(item) => item.subcategoryId}
             renderItem={({ item }) => (
               <GestureHandlerRootView>
-                <ItemSubCategory subcategory={item} />
+                <ItemSubCategory subcategory={item} onDelete={handleDelete} />
               </GestureHandlerRootView>
             )}
           />
@@ -250,9 +283,16 @@ export default function YourWordlistDetail() {
               onCancel={handleCloseModalAdd}
               onCreate={handleCreateCloseModalAdd}
               wordlistId={wl.id}
+              onError={(text1, text2) => showToast(text1, text2, "error")}
             />
           </View>
         </View>
+        <Toast
+          config={toastConfig}
+          refs={(ref) => {
+            Toast.setRef(ref);
+          }}
+        />
       </Modal>
     </SafeAreaView>
   );

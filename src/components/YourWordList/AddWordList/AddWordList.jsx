@@ -17,6 +17,7 @@ import RadioGroup from "react-native-radio-buttons-group";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
 import { delay, getIdValueInArr } from "~/helper";
+import AppLoader from "~/components/AppLoader";
 const data = [
   {
     id: "1",
@@ -41,7 +42,7 @@ const AddWordList = () => {
   const [type, setType] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
   const handleTitleFocus = () => {
@@ -102,15 +103,18 @@ const AddWordList = () => {
       const create = async () => {
         // const listType = type === "1" ? "PUBLIC" : "PRIVATE";
         try {
+          setIsLoading(true);
           const res = await createNewWordLists({
             title: title,
             listDesc: desc,
             listType: getIdValueInArr(data, type),
           });
+          setIsLoading(false);
           showToast("Success", "Create new wordlist successfully", "success");
           await delay(1500);
           navigation.navigate("YourWordlist", res);
         } catch (error) {
+          setIsLoading(false);
           showToast("Error", error, "error");
         }
       };
@@ -143,7 +147,7 @@ const AddWordList = () => {
   };
   const showToast = (text1, text2, type) => {
     Toast.show({
-      position: "left",
+      position: "top",
       type: type,
       text1: text1,
       text2: text2,
@@ -199,7 +203,7 @@ const AddWordList = () => {
             <TextInput
               style={{ ...Styles.input, fontFamily: "Quicksand-Medium" }}
               placeholder="Write your title"
-              autoFocus={true}
+              // autoFocus={true}
               ref={titleRef}
               value={title}
               onChangeText={(text) => {
@@ -257,6 +261,7 @@ const AddWordList = () => {
           Toast.setRef(ref);
         }}
       />
+      {isLoading ? <AppLoader /> : ""}
     </SafeAreaView>
   );
 };

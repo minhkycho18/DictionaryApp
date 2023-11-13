@@ -47,14 +47,19 @@ export const styles = StyleSheet.create({
    },
    content_top_Type: {
       fontSize: 14,
-
-      height: 20,
-      borderRadius: 10,
+      height: '100%',
       color: 'white',
-      paddingLeft: 10,
-      paddingRight: 10,
       letterSpacing: 0.5,
 
+   },
+   viewPos: {
+      borderRadius: 10,
+      borderTopEndRadius: 10,
+      borderBottomEndRadius: 10,
+      borderTopStartRadius: 10,
+      borderBottomStartRadius: 10,
+      height: 20,
+      paddingHorizontal: 10,
    },
    content_bottom: {
       width: '100%',

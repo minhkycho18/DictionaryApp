@@ -17,7 +17,9 @@ export default function FormEdit({
 }) {
   const [title, setTitle] = useState(wordlist.item.title);
   const [desc, setDesc] = useState(wordlist.item.listDesc);
-  const [type, setType] = useState((wordlist.item.listType=="PUBLIC")?"1":"2");
+  const [type, setType] = useState(
+    wordlist.item.listType == "PUBLIC" ? "1" : "2"
+  );
   const descRef = useRef();
   const titleRef = useRef();
   const data = [
@@ -32,22 +34,6 @@ export default function FormEdit({
       id: "2",
       label: "PRIVATE",
       value: "PRIVATE",
-      color: "#07074d",
-      selected: false,
-    },
-  ];
-  const dataSub = [
-    {
-      id: "1",
-      label: "CUSTOM",
-      value: "CUSTOM",
-      color: "#07074d",
-      selected: true,
-    },
-    {
-      id: "2",
-      label: "DEFAULT",
-      value: "DEFAULT",
       color: "#07074d",
       selected: false,
     },
@@ -82,9 +68,8 @@ export default function FormEdit({
   };
   const updateWordlist = async (id, data) => {
     try {
-      console.log("test data : ", data);
       const res = await updateWordLists(id, data);
-      onConfirm();
+      onConfirm(res);
     } catch (error) {
       showToast("Error", error);
       console.log(error);
@@ -111,20 +96,6 @@ export default function FormEdit({
           listType: getIdValueInArr(data, type),
         });
       }
-    } else {
-      if (title === "" || type === "") {
-        showToast("Warning", "Please fill in all field");
-        if (title === "") {
-          titleRef.current.setNativeProps({
-            style: styles.warning,
-          });
-        }
-      } else {
-        createSub(wordlistId, {
-          title: title,
-          subcategoryType: getIdValueInArr(dataSub, type),
-        });
-      }
     }
   };
 
@@ -148,7 +119,7 @@ export default function FormEdit({
           <TextInput
             style={{ ...styles.input, fontFamily: "Quicksand-Medium" }}
             placeholder="Write your title"
-            autoFocus={true}
+            // autoFocus={true}
             ref={titleRef}
             value={title}
             onChangeText={(text) => {
@@ -197,7 +168,6 @@ export default function FormEdit({
             onPress={setType}
             selectedId={type}
             containerStyle={styles.radioGroup}
-            
           />
         </View>
       </View>

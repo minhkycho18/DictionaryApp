@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
+  Platform,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -17,6 +18,7 @@ import ItemWordList from "~/components/YourWordList/ItemWordList/ItemWordList";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
+import { useFocusEffect } from "@react-navigation/native";
 export default function YourWordList() {
   const [wordLists, setWordLists] = useState([]);
   const [isLogin, setIsLogin] = useState(false);
@@ -26,10 +28,9 @@ export default function YourWordList() {
     const data = await getWordListById();
     setWordLists(data);
   };
-  const refreshWordlist = async () => {
-    setWordLists([]);
-    const data = await getWordListById();
-    setWordLists(data);
+  const refreshWordlist = async (res) => {
+    const wordlist = wordLists.filter((item) => item.id !== res.id);
+    setWordLists([...wordlist, res]);
   };
   const handleDelete = async (id) => {
     try {
@@ -61,6 +62,12 @@ export default function YourWordList() {
       setWordLists([...wordLists, data.params]);
     }
   }, [data.params]);
+
+  useFocusEffect(
+    useCallback(() => {
+      getMyWordList();
+    }, [])
+  );
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
@@ -78,7 +85,7 @@ export default function YourWordList() {
             }}
           />
         </TouchableOpacity>
-        <View style={{ marginLeft: 40 }}>
+        <View style={{ marginLeft: 10 }}>
           <Text
             style={[
               tw`pl-2`,
@@ -101,7 +108,12 @@ export default function YourWordList() {
           </Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.Button}>
+      <TouchableOpacity
+        style={{
+          ...styles.Button,
+          top: Platform.OS === "ios" ? "18%" : "14.5%",
+        }}
+      >
         <Ionicons
           name="add"
           size={25}
@@ -109,17 +121,24 @@ export default function YourWordList() {
           onPress={handleAddWordlist}
         />
       </TouchableOpacity>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        vertical
-        keyExtractor={(item) => item.id}
-        data={wordLists}
-        renderItem={(item) => (
-          <GestureHandlerRootView>
-            <ItemWordList wordlist={item} onRefresh ={refreshWordlist} onDelete={handleDelete} />
-          </GestureHandlerRootView>
-        )}
-      />
+
+      <View style={styles.flatlist}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          vertical
+          keyExtractor={(item) => item.id}
+          data={wordLists}
+          renderItem={(item) => (
+            <GestureHandlerRootView>
+              <ItemWordList
+                wordlist={item}
+                onRefresh={refreshWordlist}
+                onDelete={handleDelete}
+              />
+            </GestureHandlerRootView>
+          )}
+        />
+      </View>
     </SafeAreaView>
   );
 }
@@ -135,6 +154,9 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 130,
     borderBottomRightRadius: 60,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
   Button: {
     width: 40,
@@ -142,11 +164,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#3D3A4D",
     borderRadius: 10,
     position: "absolute",
-    right: 40,
-    top: 100,
+    right: "10%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     zIndex: 100,
+  },
+  flatlist: {
+    flex: 1,
+    elevation: 4,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
   },
 });

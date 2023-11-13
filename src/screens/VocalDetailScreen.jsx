@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
 import {
   View,
   ScrollView,
@@ -36,6 +36,7 @@ function VocalDetail() {
   const [dataUpdate, setDataUpdate] = useState({});
   const [isWordOfSub, setIsWordOfSub] = useState({});
   const [wordlistId, setWordlistId] = useState("");
+  const [newSub, setNewSub] = useState({});
   useEffect(() => {
     const checkToken = async () => {
       const check = await checkLogin();
@@ -71,8 +72,8 @@ function VocalDetail() {
       text2: text2,
       visibilityTime: 1300,
       autoHide: true,
-      topOffset: 40,
-      zIndex: 1000,
+      topOffset: 50,
+      // zIndex: 1000,
     });
   };
 
@@ -100,7 +101,6 @@ function VocalDetail() {
       />
     ),
   };
-
   let count = 0;
   const items = vocal.map((item) => {
     const colorPos = GetColor(item.pos);
@@ -131,27 +131,47 @@ function VocalDetail() {
     return null;
   }
   const handlePresentModalAdd = () => {
+    console.log("ok");
     setIsWordList(true);
-    setIsOpen(false);
-    setIsOpenModaAdd(!isOpenModaAdd);
+    // setIsOpen(false);
+    setIsOpenModaAdd(true);
   };
+  const create_success = async (res, type) => {
+    if (type) {
+      handleToastSucess("Success", "Create new wordlist successfully");
+      await delay(1000);
+    } else {
+      handleToastSucess("Success", "Create new subcategory successfully");
+      await delay(1000);
+      setNewSub(res);
+    }
+    setIsOpenModaAdd(false);
+    setIsOpen(false);
+    delay(400);
+    setIsOpen(true);
+  };
+
   const handleCloseModalAdd = async () => {
     setIsOpenModaAdd(false);
-    await delay(500);
-    setIsOpen(!isOpen);
+    await delay(200);
+    // setIsOpen(!isOpen);
   };
   const handleAddSub = (wordlistId) => {
     setWordlistId(wordlistId);
     setIsWordList(false);
     setIsOpenModaAdd(!isOpenModaAdd);
-    setIsOpen(false);
+    // setIsOpen(false);
   };
   const handleAddWordToSub = async (data) => {
-    showToast("Success", "Add word to vocabulary successfully", "success");
+    handleToastSucess("Success", "Add word to vocabulary successfully");
     await delay(1400);
     setIsOpen(false);
     setIsWordOfSub(data);
   };
+  const handleToastSucess = (text1, text2) => {
+    showToast(text1, text2, "success");
+  };
+
   const handleError = (text1, text2) => {
     showToast(text1, text2, "error");
   };
@@ -172,6 +192,7 @@ function VocalDetail() {
         animationOutTiming={500}
         backdropTransitionInTiming={1000}
         backdropTransitionOutTiming={500}
+        useNativeDriver={false}
         style={styles.modal}
       >
         <View style={styles.modalContent}>
@@ -192,6 +213,7 @@ function VocalDetail() {
                     data={dataUpdate}
                     onAddWordToSub={handleAddWordToSub}
                     onError={handleError}
+                    sub={newSub}
                   />
                 ))}
 
@@ -199,41 +221,54 @@ function VocalDetail() {
               </ScrollView>
             </View>
           </View>
+          {isOpenModaAdd && (
+            <View>
+              <Modal
+                onBackdropPress={() => {
+                  setIsOpenModaAdd(false);
+                  setIsOpen(true);
+                }}
+                onBackButtonPress={() => setIsOpenModaAdd(false)}
+                isVisible={isOpenModaAdd}
+                animationIn="bounceInUp"
+                animationOut="bounceOutDown"
+                animationInTiming={900}
+                animationOutTiming={500}
+                backdropTransitionInTiming={1000}
+                backdropTransitionOutTiming={500}
+                useNativeDriver={true}
+                style={{ ...styles.modal, zIndex: 1000 }}
+                onModalShow={() => {}}
+              >
+                <View style={styles.modalContent}>
+                  <View style={styles.viewBottomSheet}>
+                    <FormAdd
+                      isAddWordlist={isWordList}
+                      onCancel={handleCloseModalAdd}
+                      onCreate={create_success}
+                      wordlistId={wordlistId}
+                      onError={handleError}
+                    />
+                  </View>
+                </View>
+                <Toast
+                  config={toastConfig}
+                  refs={(ref) => {
+                    Toast.setRef(ref);
+                  }}
+                />
+              </Modal>
+            </View>
+          )}
         </View>
-        <Toast
-          config={toastConfig}
-          refs={(ref) => {
-            Toast.setRef(ref);
-          }}
-        />
-      </Modal>
-
-      <Modal
-        onBackdropPress={() => {
-          setIsOpenModaAdd(false);
-          setIsOpen(true);
-        }}
-        onBackButtonPress={() => setIsOpenModaAdd(false)}
-        isVisible={isOpenModaAdd}
-        onSwipeComplete={handlePresentModalAdd}
-        animationIn="bounceInUp"
-        animationOut="bounceOutDown"
-        animationInTiming={900}
-        animationOutTiming={500}
-        backdropTransitionInTiming={1000}
-        backdropTransitionOutTiming={500}
-        style={styles.modal}
-      >
-        <View style={styles.modalContent}>
-          <View style={styles.viewBottomSheet}>
-            <FormAdd
-              isAddWordlist={isWordList}
-              onCancel={handleCloseModalAdd}
-              onCreate={handleCloseModalAdd}
-              wordlistId={wordlistId}
-            />
-          </View>
-        </View>
+        {!isOpenModaAdd && (
+          <Toast
+            config={toastConfig}
+            refs={(ref) => {
+              Toast.setRef(ref);
+            }}
+          />
+        )}
       </Modal>
     </SafeAreaView>
   );

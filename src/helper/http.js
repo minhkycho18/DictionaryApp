@@ -6,7 +6,6 @@ class Http {
   constructor() {
     this.instance = axios.create({
       baseURL: "http://dictionary-app-server.online:8080",
-      // baseURL: "http://192.168.1.140:8080", //URL Quoc Thanh
       name: "Dictionary App",
       timeout: 10000,
       headers: {

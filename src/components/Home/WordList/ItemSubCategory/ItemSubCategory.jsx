@@ -18,7 +18,7 @@ import { useFonts } from "expo-font";
 import { getAllVocabOfSubCategory } from "~/api/Subcategory";
 import { ListVocalContext } from "~/context/ListVocal";
 import { delay } from "~/helper";
-export default function ItemSubCategory({ subcategory }) {
+export default function ItemSubCategory({ subcategory, onDelete }) {
   const [title, setTitle] = useState(subcategory.title);
   const [listVocabOfSubCategory, setListVocabOfSubCategory] = useState([]);
   const [open, setOpen] = useState(false);
@@ -29,14 +29,7 @@ export default function ItemSubCategory({ subcategory }) {
   ]);
   const wrapRef = useRef();
   const iconRef = useRef();
-  const [bgcolor, setBgcolor] = useState("#FAFAFA");
   const [isModalVisible, setModalVisible] = useState(false);
-  // useEffect(() => {
-  //   if(open)
-  //   {
-  //     setBgcolor('#FAFAFA');
-  //   }
-  // }, [open]);
   const handleDelete = (idWL, idSub) => {
     onDelete(idWL, idSub);
   };
@@ -111,8 +104,10 @@ export default function ItemSubCategory({ subcategory }) {
     <View
       style={{
         marginTop: 15,
-        backgroundColor: bgcolor,
+        backgroundColor: "#FAFAFA",
         borderRadius: 15,
+        display: "flex",
+        overflow: "hidden",
       }}
     >
       <View>
@@ -125,14 +120,15 @@ export default function ItemSubCategory({ subcategory }) {
             <View style={Styles.modal_content}>
               <View
                 style={{
-                  paddingBottom: 5,
+                  paddingBottom: 20,
                   paddingTop: 5,
+                  alignItems: "center",
                 }}
               >
                 <Text
                   style={[
-                    tw`ml-5 tracking-wider text-sm pt-3 pb-3`,
-                    { color: "#182B40" },
+                    tw` text-base pt-3 pb-3`,
+                    { color: "#182B40", fontFamily: "Quicksand-SemiBold" },
                   ]}
                 >
                   Are you sure you want to delete ?
@@ -143,7 +139,13 @@ export default function ItemSubCategory({ subcategory }) {
                   style={Styles.modal_button_cancel}
                   onPress={() => setModalVisible(false)}
                 >
-                  <Text style={{ color: "white", textAlign: "center" }}>
+                  <Text
+                    style={{
+                      color: "blue",
+                      fontFamily: "Quicksand-SemiBold",
+                      fontSize: 15,
+                    }}
+                  >
                     Cancel
                   </Text>
                 </TouchableOpacity>
@@ -156,7 +158,14 @@ export default function ItemSubCategory({ subcategory }) {
                     )
                   }
                 >
-                  <Text style={{ color: "white", textAlign: "center" }}>
+                  <Text
+                    style={{
+                      color: "red",
+                      textAlign: "center",
+                      fontFamily: "Quicksand-SemiBold",
+                      fontSize: 15,
+                    }}
+                  >
                     Delete
                   </Text>
                 </TouchableOpacity>
@@ -179,44 +188,72 @@ export default function ItemSubCategory({ subcategory }) {
           style={[Styles.wrappered]}
           ref={wrapRef}
         >
-          <DropDownPicker
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            showArrowIcon={true}
-            style={{
-              backgroundColor: "#FEFEFE",
-              borderWidth: 0,
-              height: 55,
-              borderRadius: 15,
-              // marginHorizontal: 5,
-            }}
-            textStyle={{
-              fontSize: 16,
-            }}
-            // placeholder="Sub Category"
-            placeholder={title}
-            placeholderStyle={{
-              color: colors.textTitle,
-              fontFamily: "Quicksand-Bold",
-              marginLeft: 5,
-              fontSize: 18,
-              letterSpacing: 0.2,
-            }}
-            showTickIcon={false}
-            dropDownContainerStyle={{
-              backgroundColor: "#1ead31",
-              height: 0,
-              borderWidth: 0,
-            }}
-            arrowIconStyle={{
-              width: 22,
-              height: 22,
-            }}
-          />
+          <View style={{ height: 55 }}>
+            <DropDownPicker
+              open={open}
+              value={value}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setItems}
+              showArrowIcon={true}
+              style={{
+                backgroundColor: "#FEFEFE",
+                borderWidth: 0,
+                height: "100%",
+                borderRadius: 15,
+                zIndex: -1,
+                // marginHorizontal: 5,
+              }}
+              textStyle={{
+                fontSize: 16,
+              }}
+              // placeholder="Sub Category"
+              placeholder={title}
+              placeholderStyle={{
+                color: colors.textTitle,
+                fontFamily: "Quicksand-Bold",
+                marginLeft: 5,
+                fontSize: 18,
+                letterSpacing: 0.2,
+              }}
+              showTickIcon={false}
+              dropDownContainerStyle={{
+                backgroundColor: "#1ead31",
+                height: 0,
+                borderWidth: 0,
+              }}
+              arrowIconStyle={{
+                width: 22,
+                height: 22,
+                tintColor: colors.textTitle,
+              }}
+            />
+            <View
+              style={{
+                ...Styles.subType,
+                borderColor:
+                  subcategory.subcategoryType === "DEFAULT"
+                    ? colors.primary
+                    : "#557C55",
+              }}
+            >
+              <Text
+                style={{
+                  color:
+                    subcategory.subcategoryType === "DEFAULT"
+                      ? colors.primary
+                      : "#557C55",
+                  fontFamily: "Quicksand-SemiBold",
+                  marginBottom: 2,
+                }}
+              >
+                {subcategory.subcategoryType === "DEFAULT"
+                  ? "Default"
+                  : "Custom"}
+              </Text>
+            </View>
+          </View>
 
           {/* View list word of subcategory */}
           <Animated.View>
