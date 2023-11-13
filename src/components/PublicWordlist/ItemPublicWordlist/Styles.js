@@ -20,7 +20,7 @@ export const Styles = StyleSheet.create({
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 1,
+            height: 3,
         },
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
@@ -29,6 +29,7 @@ export const Styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 15,
         paddingTop: 5,
+        backgroundColor: '#fff'
 
 
     },
@@ -52,7 +53,7 @@ export const Styles = StyleSheet.create({
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 1,
+            height: 3,
         },
         shadowOpacity: 0.22,
         shadowRadius: 2.22,

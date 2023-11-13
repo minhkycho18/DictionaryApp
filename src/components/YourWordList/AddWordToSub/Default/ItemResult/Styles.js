@@ -39,13 +39,19 @@ export const styles = StyleSheet.create({
 
 
    },
+   viewPos: {
+      borderRadius: 10,
+      borderTopEndRadius: 10,
+      borderBottomEndRadius: 10,
+      borderTopStartRadius: 10,
+      borderBottomStartRadius: 10,
+      height: 20,
+      paddingHorizontal: 10,
+   },
    content_top_Type: {
       fontSize: 14,
-      borderRadius: 10,
       color: 'white',
-      paddingHorizontal: 10,
       letterSpacing: 0.5,
-      paddingVertical: 2
 
    },
    content_bottom: {

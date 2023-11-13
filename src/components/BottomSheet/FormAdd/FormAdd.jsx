@@ -6,7 +6,6 @@ import { useFonts } from "expo-font";
 import { configFont, colors } from "~/constants/theme";
 import { createNewWordLists } from "~/api/WordList";
 import { TouchableOpacity } from "react-native";
-import Toast, { ErrorToast } from "react-native-toast-message";
 import { getIdValueInArr } from "~/helper";
 import { createNewSub } from "~/api/Subcategory";
 export default function FormAdd({
@@ -14,6 +13,7 @@ export default function FormAdd({
   onCancel,
   onCreate,
   wordlistId,
+  onError,
 }) {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
@@ -56,52 +56,28 @@ export default function FormAdd({
   if (!loaded) {
     return null;
   }
-  const toastConfig = {
-    error: (props) => (
-      <ErrorToast
-        {...props}
-        text1Style={{
-          fontSize: 14,
-        }}
-        text2Style={{
-          fontSize: 12,
-        }}
-      />
-    ),
-  };
-  const showToast = (text1, text2) => {
-    Toast.show({
-      position: "left",
-      type: "error",
-      text1: text1,
-      text2: text2,
-      visibilityTime: 2000,
-      autoHide: true,
-      topOffset: -100,
-    });
-  };
   const createNewwordlist = async (data) => {
     try {
       const res = await createNewWordLists(data);
-      onCreate();
+      onCreate(res, true);
     } catch (error) {
-      showToast("Error", error);
+      onError("Error", error);
     }
   };
   const createSub = async (wordlistId, data) => {
     try {
       console.log(`ID ::`, wordlistId);
       const res = await createNewSub(wordlistId, data);
-      onCreate();
-      console.log(res);
+      onCreate(res, false);
+      // console.log(res);
     } catch (error) {
-      showToast("Error", error);
+      onError("Error", error);
     }
   };
   const handleCreate = () => {
     if (isAddWordlist) {
       if (title === "" || type === "" || desc === "") {
-        showToast("Warning", "Please fill in all field");
+        onError("Warning", "Please fill in all field");
         if (title === "") {
           titleRef.current.setNativeProps({
             style: styles.warning,
@@ -121,7 +97,7 @@ export default function FormAdd({
       }
     } else {
       if (title === "" || type === "") {
-        showToast("Warning", "Please fill in all field");
+        onError("Warning", "Please fill in all field");
         if (title === "") {
           titleRef.current.setNativeProps({
             style: styles.warning,
@@ -236,12 +212,6 @@ export default function FormAdd({
           </Text>
         </TouchableOpacity>
       </View>
-      <Toast
-        config={toastConfig}
-        refs={(ref) => {
-          Toast.setRef(ref);
-        }}
-      />
     </View>
   );
 }

@@ -147,7 +147,7 @@ const AddWordList = () => {
   };
   const showToast = (text1, text2, type) => {
     Toast.show({
-      position: "left",
+      position: "top",
       type: type,
       text1: text1,
       text2: text2,

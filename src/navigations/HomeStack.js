@@ -44,6 +44,8 @@ export default function HomeStack() {
                                 fontFamily: 'Quicksand-Bold',
                             },
                             headerTitleAlign: 'center',
+                            headerTintColor: '#07285a'
+
                         }
                     }
                 />

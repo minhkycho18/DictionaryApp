@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Animated, TouchableOpacity, Text, Image } from "react-native";
 import { View } from "react-native";
 import tw from "twrnc";
@@ -12,12 +12,14 @@ import {
   getAllWordOfSub,
 } from "~/api/Subcategory";
 import { Styles } from "./Styles";
+import { useFocusEffect } from "@react-navigation/native";
 export default function ItemWordlist({
   onAddSub,
   wordlist,
   data,
   onAddWordToSub,
   onError,
+  sub,
 }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -26,18 +28,22 @@ export default function ItemWordlist({
     { label: "Apple", value: "apple" },
     { label: "Banana", value: "banana" },
   ]);
+  const getSubById = async (id) => {
+    try {
+      const result = await getAllSubCategory(id);
+      setSubs(result);
+    } catch (error) {
+      console.error("Error while fetching data:", error);
+      // Handle the error here
+    }
+  };
   useEffect(() => {
-    const getSubById = async (id) => {
-      try {
-        const result = await getAllSubCategory(id);
-        setSubs(result);
-      } catch (error) {
-        console.error("Error while fetching data:", error);
-        // Handle the error here
-      }
-    };
     getSubById(wordlist.id);
   }, []);
+  useEffect(() => {
+    setSubs([...subs, sub]);
+  }, [sub]);
+
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
@@ -115,7 +121,11 @@ export default function ItemWordlist({
               </TouchableOpacity>
             ))}
             <View>
-              <TouchableOpacity onPress={() => onAddSub(wordlist.id)}>
+              <TouchableOpacity
+                onPress={() => {
+                  onAddSub(wordlist.id), setOpen(!open);
+                }}
+              >
                 <View style={[tw`bg-stone-100`, Styles.viewAdd]}>
                   <Image
                     source={require("~/assets/btn_add.png")}

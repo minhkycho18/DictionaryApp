@@ -31,7 +31,7 @@ export default function PublicWordlist() {
             placeholder="Search for a word"
             value={search}
             onChangeText={setSearch}
-            autoFocus={true}
+            // autoFocus={true}
             // ref={clickClear}
           />
         </View>

@@ -6,6 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
   SafeAreaView,
+  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
@@ -46,7 +47,10 @@ export default function ReviewScreen() {
             name="arrow-back-outline"
             size={25}
             color={colors.textTitle}
-            style={{ marginTop: 4 }}
+            style={{
+              marginTop: 4,
+              marginLeft: Platform.OS === "ios" ? 20 : 0,
+            }}
           />
         </TouchableOpacity>
         <Text style={Styles.titleHeader}>Subcategory 1</Text>
@@ -84,7 +88,6 @@ const Styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 20,
-    backgroundColor: "#fff",
     paddingHorizontal: 20,
   },
   wrappered: {
@@ -94,7 +97,8 @@ const Styles = StyleSheet.create({
     alignItems: "center",
   },
   header: {
-    paddingVertical: 5,
+    width: "100%",
+    // paddingVertical: 10,
     display: "flex",
     flexDirection: "row",
     gap: 15,
