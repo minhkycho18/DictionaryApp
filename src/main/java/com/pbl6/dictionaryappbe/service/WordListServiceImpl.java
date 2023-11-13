@@ -100,13 +100,18 @@ public class WordListServiceImpl implements WordListService {
         WordList sourceWordList = wordListRepository.findById(wordListId).orElseThrow(
                 () -> new RecordNotFoundException("WordList not found with ID: " + wordListId)
         );
+        User user = AuthenticationUtils.getUserFromSecurityContext();
+        if (sourceWordList.getListType() == ListType.PRIVATE
+                && !sourceWordList.getUser().equals(user)) {
+            throw new AccessDeniedException("You do not have permission to access this WordList");
+        }
         String title = generateUniqueTitle(sourceWordList.getTitle());
         WordList targetWordList = wordListRepository.save(WordList.builder()
                 .title(title)
                 .listDesc(sourceWordList.getListDesc())
                 .listType(sourceWordList.getListType())
                 .createdAt(LocalDateTime.now())
-                .user(AuthenticationUtils.getUserFromSecurityContext())
+                .user(user)
                 .build());
         List<Subcategory> sourceSubcategories = subcategoryRepository.findAllByWordList(sourceWordList);
         List<Subcategory> targetSubcategories = new ArrayList<>();
@@ -114,7 +119,6 @@ public class WordListServiceImpl implements WordListService {
         for (Subcategory subcategory : sourceSubcategories) {
             Subcategory newSubcategory = subcategoryRepository.save(Subcategory.builder()
                     .title(subcategory.getTitle())
-                    .subcategoryType(subcategory.getSubcategoryType())
                     .wordList(targetWordList)
                     .amountOfWord(0)
                     .build());

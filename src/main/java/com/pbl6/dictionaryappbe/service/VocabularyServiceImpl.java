@@ -9,7 +9,7 @@ import com.pbl6.dictionaryappbe.persistence.Definition;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
-import com.pbl6.dictionaryappbe.persistence.vocabulary.WordType;
+import com.pbl6.dictionaryappbe.persistence.vocabulary.VocabularyStatus;
 import com.pbl6.dictionaryappbe.repository.DefinitionRepository;
 import com.pbl6.dictionaryappbe.repository.VocabularyRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
@@ -63,7 +63,7 @@ public class VocabularyServiceImpl implements VocabularyService {
             if (pos != null) {
                 predicates.add(cb.equal(root.get("pos"), pos.toLowerCase()));
             }
-            predicates.add(cb.equal(root.get("wordType"), WordType.DEFAULT));
+            predicates.add(cb.equal(root.get("wordType"), VocabularyStatus.DEFAULT));
             Join<Vocabulary, VocabDef> vocabDefs = root.join("vocabDefs");
 //             Don't select vocabulary if all definitions of the word have been deleted.
             predicates.add(cb.equal(vocabDefs.get("isDeleted"), false));
@@ -123,9 +123,9 @@ public class VocabularyServiceImpl implements VocabularyService {
         updateDefaultVocabRequest.getDefinitions().forEach(definitionShortDetail -> {
             Definition definition =
                     definitionRepository.findByVocabIdAndDefId(
-                            vocabId, definitionShortDetail.getDefId()
+                                    vocabId, definitionShortDetail.getDefId()
                             )
-                    .orElseThrow(() -> new RecordNotFoundException("Definition of vocabulary not found"));
+                            .orElseThrow(() -> new RecordNotFoundException("Definition of vocabulary not found"));
             definition.setWordDesc(definitionShortDetail.getWordDesc());
             definition.setExamples(definitionShortDetail.getExamples());
         });

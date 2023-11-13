@@ -1,8 +1,8 @@
 package com.pbl6.dictionaryappbe.mapper;
 
 import com.pbl6.dictionaryappbe.dto.definition.DefinitionRequestDto;
-import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
-import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyResponseDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionRequestDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
 import com.pbl6.dictionaryappbe.persistence.Definition;
 import com.pbl6.dictionaryappbe.persistence.subcategory_detail.SubcategoryDetail;
@@ -14,13 +14,13 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface SubcategoryDetailMapper {
-    default CustomVocabularyResponseDto toCustomVocabularyResponseDto(List<SubcategoryDetail> subcategoryDetails) {
+    default ContributionResponseDto toContributionResponseDto(List<SubcategoryDetail> subcategoryDetails) {
         SubcategoryDetail newSubcategoryDetail = subcategoryDetails.get(0);
         Vocabulary vocabulary = newSubcategoryDetail.getVocabDef().getVocabulary();
         List<Definition> definitions = subcategoryDetails.stream()
                 .map(subcategoryDetail -> subcategoryDetail.getVocabDef().getDefinition())
                 .toList();
-        return CustomVocabularyResponseDto.builder()
+        return ContributionResponseDto.builder()
                 .vocabId(newSubcategoryDetail.getVocabId())
                 .word(vocabulary.getWord())
                 .pos(vocabulary.getPos())
@@ -36,16 +36,16 @@ public interface SubcategoryDetailMapper {
                 .build();
     }
 
-    default CustomVocabularyRequestDto toCustomVocabularyRequestDto(Long newSubcategoryId, List<SubcategoryDetail> subcategoryDetails) {
+    default ContributionRequestDto toContributionRequestDto(Long newSubcategoryId, List<SubcategoryDetail> subcategoryDetails) {
         SubcategoryDetail newSubcategoryDetail = subcategoryDetails.get(0);
         Vocabulary vocabulary = newSubcategoryDetail.getVocabDef().getVocabulary();
         List<DefinitionRequestDto> definitions = subcategoryDetails.stream()
                 .map(subcategoryDetail -> new DefinitionRequestDto(subcategoryDetail.getVocabDef().getDefinition().getWordDesc(),
                         subcategoryDetail.getVocabDef().getDefinition().getExamples()))
                 .toList();
-        return CustomVocabularyRequestDto.builder()
+        return ContributionRequestDto.builder()
                 .word(vocabulary.getWord())
-                .wordType(vocabulary.getWordType())
+                .vocabularyStatus(vocabulary.getStatus())
                 .pos(vocabulary.getPos())
                 .phoneUk(vocabulary.getPhoneUk())
                 .phoneUs(vocabulary.getPhoneUs())
