@@ -52,7 +52,7 @@ public interface SubcategoryDetailRepository
             (
                 SELECT *
                 FROM subcategory_detail
-                WHERE subcategory_id = :subcategoryId AND is_review = false
+                WHERE subcategory_id = :subcategoryId AND is_review = true
                 ORDER BY RAND()
                 LIMIT :numberOfLearnedItem
             )
@@ -60,7 +60,7 @@ public interface SubcategoryDetailRepository
             (
                 SELECT *
                 FROM subcategory_detail
-                WHERE subcategory_id = :subcategoryId AND is_review = true
+                WHERE subcategory_id = :subcategoryId AND is_review = false
                 ORDER BY RAND()
                 LIMIT :numberOfLearningItem
             );

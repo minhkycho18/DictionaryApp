@@ -326,7 +326,7 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
                 .collect(Collectors.toSet());
 
         List<FlashcardQuestionDto> flashcardQuestionDtos =
-                MapperUtils.toTargetList(subcategoryDetailMapper::toVocabularyQuestion,randomSubDetails)
+                MapperUtils.toTargetList(subcategoryDetailMapper::toVocabularyQuestion, randomSubDetails)
                         .stream()
                         .map(FlashcardQuestionDto::new)
                         .toList();
@@ -353,7 +353,15 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
     }
 
     @Override
-    public List<ReviewSpellingContentDto> createReviewSpellingGame(List<SubcategoryDetail> subcategoryDetails) {
-        return Collections.emptyList();
+    public List<ReviewSpellingContentDto> createReviewSpellingGame(List<SubcategoryDetail> randomSubDetails) {
+        return MapperUtils.toTargetList(subcategoryDetailMapper::toVocabularyQuestion, randomSubDetails)
+                .stream()
+                .map(vocabularyQuestionDto -> {
+                    Definition definition =
+                            definitionRepository.findByVocabIdAndDefId(vocabularyQuestionDto.getVocabId(), vocabularyQuestionDto.getDefId())
+                                    .orElseThrow(() -> new RecordNotFoundException("Definition not found"));
+                    return new ReviewSpellingContentDto(vocabularyQuestionDto, definition.getWordDesc(), definition.getExamples());
+                })
+                .toList();
     }
 }

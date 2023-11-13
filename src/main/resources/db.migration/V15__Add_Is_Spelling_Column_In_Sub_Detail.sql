@@ -1,0 +1,1 @@
+ALTER TABLE `subcategory_detail` ADD COLUMN `is_spelling` TINYINT(1) DEFAULT 0;

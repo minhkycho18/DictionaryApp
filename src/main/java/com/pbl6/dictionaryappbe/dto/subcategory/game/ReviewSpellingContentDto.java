@@ -6,14 +6,19 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ReviewSpellingContentDto extends VocabularyQuestionDto{
+public class ReviewSpellingContentDto extends VocabularyQuestionDto {
     private String wordDesc;
     private String example;
 
-    public ReviewSpellingContentDto(Long vocabId, Long defId, String word,
-                                     String pos, String phoneUs, String phoneUk,
-                                    String audioUs, String audioUk, String wordDesc, String example) {
-        super(vocabId, defId, word, pos, phoneUs, phoneUk, audioUs, audioUk);
+    public ReviewSpellingContentDto(VocabularyQuestionDto vocabularyQuestionDto, String wordDesc, String example) {
+        super(vocabularyQuestionDto.getVocabId(),
+                vocabularyQuestionDto.getDefId(),
+                vocabularyQuestionDto.getWord(),
+                vocabularyQuestionDto.getPos(),
+                vocabularyQuestionDto.getPhoneUs(),
+                vocabularyQuestionDto.getPhoneUk(),
+                vocabularyQuestionDto.getAudioUs(),
+                vocabularyQuestionDto.getAudioUk());
         this.wordDesc = wordDesc;
         this.example = example;
     }
