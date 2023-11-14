@@ -8,8 +8,8 @@ export const Styles = StyleSheet.create({
         // marginBottom: 10,
         // backgroundColor: "red",
         justifyContent: 'center',
-        paddingTop: 30,
-        marginBottom: 20
+        paddingTop: 52,
+        // marginBottom: 5
 
 
     },
@@ -17,19 +17,18 @@ export const Styles = StyleSheet.create({
         padding: 15,
         borderRadius: 20,
         height: 135,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.22,
-        shadowRadius: 2.22,
-        elevation: 2,
+        // shadowColor: "#000",
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 1,
+        // },
+        // shadowOpacity: 0.22,
+        // shadowRadius: 2.22,
+        // elevation: 2,
         display: 'flex',
         flexDirection: 'row',
         gap: 15,
         paddingTop: 5,
-        backgroundColor: '#fff'
 
 
     },
@@ -38,18 +37,24 @@ export const Styles = StyleSheet.create({
         // backgroundColor: 'red',
         alignItems: 'center',
         position: 'relative',
+        marginLeft: 10
     },
     viewRight: {
-        width: "70%",
+        marginLeft: 10,
+        width: "65%",
+        marginTop: 1,
+        // backgroundColor:'red',
+        paddingRight: 15
+
     },
     viewImage: {
-        width: 90,
-        height: 120,
+        width: 97,
+        height: 130,
         backgroundColor: '#fff',
         borderLeftWidth: 5,
         borderLeftColor: "#BFD8C3",
         position: 'absolute',
-        top: -30,
+        top: -29,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

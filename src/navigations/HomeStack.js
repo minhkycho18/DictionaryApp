@@ -35,19 +35,7 @@ export default function HomeStack() {
                 <Stack.Screen
                     name="publicWordlist"
                     component={PublicWordlistStack}
-                    options={
-                        {
-                            title: "Public Wordlist",
-                            headerTitleStyle: {
-                                color: colors.textTitle,
-                                fontSize: 25,
-                                fontFamily: 'Quicksand-Bold',
-                            },
-                            headerTitleAlign: 'center',
-                            headerTintColor: '#07285a'
-
-                        }
-                    }
+                    options={{ headerShown: false }}
                 />
 
 

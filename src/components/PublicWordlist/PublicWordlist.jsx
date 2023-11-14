@@ -36,11 +36,16 @@ export default function PublicWordlist() {
           />
         </View>
       </View>
+      <View 
+      // style={{width :'100%', height:20}}
+      >
+
+      </View>
       <FlatList
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.id}
         data={arr}
-        renderItem={(item) => <ItemPublicWordlist />}
+        renderItem={(item) => <ItemPublicWordlist wordlist={item} />}
       />
     </SafeAreaView>
   );
@@ -48,7 +53,7 @@ export default function PublicWordlist() {
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#F4F4F4",
   },
   Seach: {
     width: "100%",
@@ -57,6 +62,7 @@ const Styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     borderBottomColor: "#ccc",
+    justifyContent: 'center'
   },
   field: {
     paddingLeft: spacing.xl + spacing.s,
@@ -73,7 +79,7 @@ const Styles = StyleSheet.create({
     zIndex: 1,
   },
   searchView: {
-    marginTop: 5,
+    // marginTop: 5,
     backgroundColor: "#fff",
     height: 45,
     width: "85%",
