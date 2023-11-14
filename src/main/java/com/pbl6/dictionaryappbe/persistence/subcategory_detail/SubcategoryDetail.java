@@ -38,6 +38,9 @@ public class SubcategoryDetail {
     @Column
     private Boolean isReview;
 
+    @Column
+    private Boolean isSpelling;
+
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime lastLearning;
 

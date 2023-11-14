@@ -1,4 +1,4 @@
-package com.pbl6.dictionaryappbe.dto.subcategory;
+package com.pbl6.dictionaryappbe.dto.subcategory.game;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

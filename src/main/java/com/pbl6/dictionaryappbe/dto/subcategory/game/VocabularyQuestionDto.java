@@ -1,11 +1,15 @@
-package com.pbl6.dictionaryappbe.dto.subcategory;
+package com.pbl6.dictionaryappbe.dto.subcategory.game;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
 @Data
-public class VocabularyQuestion<T> {
+@NoArgsConstructor
+@AllArgsConstructor
+public class VocabularyQuestionDto {
     private Long vocabId;
     private Long defId;
     private String word;
@@ -14,10 +18,4 @@ public class VocabularyQuestion<T> {
     private String phoneUk;
     private String audioUs;
     private String audioUk;
-    private String question;
-    private T result;
-    // review -> T = null
-    // flashcard -> T = boolean
-    // spelling -> T = string
-    // quiz -> T = Map<String,Boolean>
 }

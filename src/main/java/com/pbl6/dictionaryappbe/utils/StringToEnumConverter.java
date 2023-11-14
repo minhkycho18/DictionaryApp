@@ -1,7 +1,7 @@
 package com.pbl6.dictionaryappbe.utils;
 
 import com.pbl6.dictionaryappbe.dto.leitner.StatusLevelDto;
-import com.pbl6.dictionaryappbe.dto.subcategory.GameType;
+import com.pbl6.dictionaryappbe.dto.subcategory.game.GameType;
 import org.springframework.core.convert.converter.Converter;
 
 public class StringToEnumConverter  {

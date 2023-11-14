@@ -1,13 +1,15 @@
 package com.pbl6.dictionaryappbe.controller;
 
-import com.pbl6.dictionaryappbe.dto.subcategory.GameType;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryResponseDto;
-import com.pbl6.dictionaryappbe.dto.subcategory.VocabularyQuestion;
+import com.pbl6.dictionaryappbe.dto.subcategory.game.GameType;
+import com.pbl6.dictionaryappbe.dto.subcategory.game.VocabularyQuestionDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.mapper.SubcategoryMapper;
+import com.pbl6.dictionaryappbe.persistence.subcategory_detail.SubcategoryDetail;
+import com.pbl6.dictionaryappbe.service.SubcategoryGameService;
 import com.pbl6.dictionaryappbe.service.SubcategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,6 +33,7 @@ public class SubcategoryController {
 
     private final SubcategoryService subcategoryService;
     private final SubcategoryMapper subcategoryMapper;
+    private final SubcategoryGameService subcategoryGameService;
 
     @Operation(summary = "Get all subcategories of WordList by id")
     @ApiResponses(value = {
@@ -130,12 +133,17 @@ public class SubcategoryController {
     }
 
     @GetMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}/{gameType}")
-    public VocabularyQuestion<?> createGame(@PathVariable GameType gameType,
-                                            @PathVariable Long subcategoryId,
-                                            @PathVariable Long wordListId
+    @Operation(summary = "Get game from subcategories", security = {@SecurityRequirement(name = "bearer-key")})
+    public List<? extends VocabularyQuestionDto> createGame(@PathVariable GameType gameType,
+                                                      @PathVariable Long subcategoryId,
+                                                      @PathVariable Long wordListId
     ) {
-        return subcategoryService.createGame(gameType, subcategoryId, wordListId);
+        List<SubcategoryDetail> subcategoryDetails =
+                subcategoryGameService.getRandomSubDetailByGameType(gameType, subcategoryId, wordListId);
+        return switch (gameType){
+            case FLASHCARD -> subcategoryGameService.createFlashcardGame(subcategoryDetails);
+            case QUIZ -> subcategoryGameService.createQuizGame(subcategoryDetails);
+            default -> subcategoryGameService.createReviewSpellingGame(subcategoryDetails);
+        };
     }
-
-
 }
