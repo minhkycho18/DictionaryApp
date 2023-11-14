@@ -36,22 +36,6 @@ export default function FormAdd({
       selected: false,
     },
   ];
-  const dataSub = [
-    {
-      id: "1",
-      label: "CUSTOM",
-      value: "CUSTOM",
-      color: "#07074d",
-      selected: true,
-    },
-    {
-      id: "2",
-      label: "DEFAULT",
-      value: "DEFAULT",
-      color: "#07074d",
-      selected: false,
-    },
-  ];
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
@@ -96,7 +80,7 @@ export default function FormAdd({
         });
       }
     } else {
-      if (title === "" || type === "") {
+      if (title === "") {
         onError("Warning", "Please fill in all field");
         if (title === "") {
           titleRef.current.setNativeProps({
@@ -104,10 +88,7 @@ export default function FormAdd({
           });
         }
       } else {
-        createSub(wordlistId, {
-          title: title,
-          subcategoryType: getIdValueInArr(dataSub, type),
-        });
+        createSub(wordlistId, title.toString().trim());
       }
     }
   };
@@ -167,22 +148,24 @@ export default function FormAdd({
             />
           </View>
         )}
-        <View>
-          <Text
-            style={{
-              ...styles.formLabel,
-              fontFamily: "Quicksand-SemiBold",
-            }}
-          >
-            {isAddWordlist ? "Word List Type" : "Subcategory Type"}
-          </Text>
-          <RadioGroup
-            radioButtons={isAddWordlist ? data : dataSub}
-            onPress={setType}
-            selectedId={type}
-            containerStyle={styles.radioGroup}
-          />
-        </View>
+        {isAddWordlist && (
+          <View>
+            <Text
+              style={{
+                ...styles.formLabel,
+                fontFamily: "Quicksand-SemiBold",
+              }}
+            >
+              Word List Type
+            </Text>
+            <RadioGroup
+              radioButtons={data}
+              onPress={setType}
+              selectedId={type}
+              containerStyle={styles.radioGroup}
+            />
+          </View>
+        )}
       </View>
 
       <View style={styles.viewButton}>

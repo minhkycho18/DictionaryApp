@@ -229,30 +229,6 @@ export default function ItemSubCategory({ subcategory, onDelete }) {
                 tintColor: colors.textTitle,
               }}
             />
-            <View
-              style={{
-                ...Styles.subType,
-                borderColor:
-                  subcategory.subcategoryType === "DEFAULT"
-                    ? colors.primary
-                    : "#557C55",
-              }}
-            >
-              <Text
-                style={{
-                  color:
-                    subcategory.subcategoryType === "DEFAULT"
-                      ? colors.primary
-                      : "#557C55",
-                  fontFamily: "Quicksand-SemiBold",
-                  marginBottom: 2,
-                }}
-              >
-                {subcategory.subcategoryType === "DEFAULT"
-                  ? "Default"
-                  : "Custom"}
-              </Text>
-            </View>
           </View>
 
           {/* View list word of subcategory */}

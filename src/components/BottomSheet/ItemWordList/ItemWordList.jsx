@@ -41,7 +41,11 @@ export default function ItemWordlist({
     getSubById(wordlist.id);
   }, []);
   useEffect(() => {
-    setSubs([...subs, sub]);
+    if (Object.keys(sub).length !== 0) {
+      if (sub.wordListId === wordlist.id) {
+        setSubs([...subs, sub]);
+      }
+    }
   }, [sub]);
 
   const [loaded] = useFonts(configFont);
