@@ -63,7 +63,7 @@ public class VocabularyServiceImpl implements VocabularyService {
             if (pos != null) {
                 predicates.add(cb.equal(root.get("pos"), pos.toLowerCase()));
             }
-            predicates.add(cb.equal(root.get("wordType"), VocabularyStatus.DEFAULT));
+            predicates.add(cb.equal(root.get("status"), VocabularyStatus.DEFAULT));
             Join<Vocabulary, VocabDef> vocabDefs = root.join("vocabDefs");
 //             Don't select vocabulary if all definitions of the word have been deleted.
             predicates.add(cb.equal(vocabDefs.get("isDeleted"), false));
