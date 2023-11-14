@@ -87,7 +87,7 @@ const routers = createBrowserRouter([
     ],
   },
   {
-    path: "/vocabulary/detail/:id/learn",
+    path: "/vocabulary/:wlId/detail/:subId/learn",
     children: [
       {
         index: true,

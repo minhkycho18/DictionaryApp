@@ -4,6 +4,7 @@ import authSlice from "./authenticate/authSlice";
 import profileSlice from "./user/userSlice";
 import wordListsSlice from "./word-lists/wordLists-slice";
 import subcategorySlice from "./subcategory/subcategorySlice";
+import gameSlice from "./game/gameSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     profile: profileSlice,
     wordLists: wordListsSlice,
     subcategory: subcategorySlice,
+    game: gameSlice
   },
 });
 export default store;
