@@ -1,16 +1,15 @@
-import { Space } from "antd";
-import React from "react";
+import { Space, Tag } from "antd";
+import React, { useState } from "react";
 import "./ReviewCard.scss";
-import { BsArrowReturnLeft, BsArrowReturnLeft, BsVolumeUp } from "react-icons/bs";
+import { BsArrowReturnLeft, BsVolumeUp } from "react-icons/bs";
 import { RiArrowGoBackLine } from "react-icons/ri";
-
-
-
 import WrapCard from "./WrapCard";
 import waveBottom from "../../../assets/images/wave-bottom.svg";
 import waveTop from "../../../assets/images/wave-top.svg";
+import { upperFirst } from "lodash";
+import colorPos from "../../../helpers/ColorPos";
+import ReactCardFlip from "react-card-flip";
 const ReviewCard = (props) => {
-  const [isFlip, setIsFlip] = useState(false);
   const [isFlip, setIsFlip] = useState(false);
   return (
     <ReactCardFlip isFlipped={isFlip} flipDirection="horizontal">
