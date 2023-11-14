@@ -42,7 +42,7 @@ const WordListDetail = (props) => {
           <Space
             className="wldetail__card-iconLearn"
             onClick={() =>
-              navigate(`/vocabulary/detail/${subcategory.subcategoryId}/learn`)
+              navigate(`/vocabulary/${selectedWordList.id}/detail/${subcategory.subcategoryId}/learn`)
             }
           >
             Learn

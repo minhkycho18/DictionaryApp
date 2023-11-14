@@ -30,6 +30,10 @@
       font-size: 32px;
     }
   }
+  &__def {
+    font-size: 17px;
+    font-weight: 500;
+  }
   &__sound {
     font-size: 24px;
     cursor: pointer;
@@ -39,7 +43,8 @@
     background-color: #fff;
   }
   &__phonetic {
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 500;
     color: #6c757d;
   }
   &__pos {
