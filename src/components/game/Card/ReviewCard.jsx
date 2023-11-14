@@ -8,6 +8,7 @@ import waveTop from "../../../assets/images/wave-top.svg";
 import {upperFirst} from "lodash";
 import colorPos from "../../../helpers/ColorPos";
 import ReactCardFlip from "react-card-flip";
+import {BiSolidVolumeFull, BiSolidVolumeMute} from "react-icons/bi";
 
 const ReviewCard = (props) => {
     const [isFlip, setIsFlip] = useState(false);
@@ -16,7 +17,16 @@ const ReviewCard = (props) => {
             <WrapCard {...props} imgTop={waveTop} imgBot={waveBottom}>
                 <Space direction="vertical" className="review-card">
                     <Space className="review-card__icon">
-                        <BsVolumeUp className="review-card__sound"></BsVolumeUp>
+                        {props?.vocabInfo?.audioUk &&
+                            <BiSolidVolumeFull
+                            className="review-card__sound"
+                            onClick={() => new Audio(props?.vocabInfo?.audioUk).play()}
+                        />}
+                        {!props?.vocabInfo?.audioUk &&
+                            <BiSolidVolumeMute
+                                className="review-card__sound"
+                                style={{color:"#a9a8a8"}}
+                            />}
                     </Space>
                     <Space direction="vertical" className="review-card__body">
                         <Space>
