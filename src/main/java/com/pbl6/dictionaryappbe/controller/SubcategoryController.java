@@ -1,19 +1,13 @@
 package com.pbl6.dictionaryappbe.controller;
 
-import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryRequestDto;
-import com.pbl6.dictionaryappbe.dto.subcategory.GameType;
 import com.pbl6.dictionaryappbe.dto.subcategory.SubcategoryResponseDto;
 import com.pbl6.dictionaryappbe.dto.subcategory.game.GameType;
 import com.pbl6.dictionaryappbe.dto.subcategory.game.VocabularyQuestionDto;
-import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
-import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyResponseDto;
-import com.pbl6.dictionaryappbe.dto.subcategory.VocabularyQuestion;
 import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.mapper.SubcategoryMapper;
-import com.pbl6.dictionaryappbe.persistence.subcategory.SubcategoryType;
 import com.pbl6.dictionaryappbe.persistence.subcategory_detail.SubcategoryDetail;
 import com.pbl6.dictionaryappbe.service.SubcategoryGameService;
 import com.pbl6.dictionaryappbe.service.SubcategoryService;

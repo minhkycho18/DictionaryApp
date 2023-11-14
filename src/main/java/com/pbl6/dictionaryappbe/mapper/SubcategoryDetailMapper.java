@@ -2,8 +2,6 @@ package com.pbl6.dictionaryappbe.mapper;
 
 import com.pbl6.dictionaryappbe.dto.definition.DefinitionRequestDto;
 import com.pbl6.dictionaryappbe.dto.subcategory.game.VocabularyQuestionDto;
-import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyRequestDto;
-import com.pbl6.dictionaryappbe.dto.vocabulary.CustomVocabularyResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
