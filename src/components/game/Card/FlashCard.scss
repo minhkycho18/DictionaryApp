@@ -3,13 +3,15 @@
 .flash-card {
   justify-content: space-between;
   align-items: center;
-  height: 500px;
+  width: 482px;
+  height: 582px;
   padding: 32px;
   &__options {
     &--item {
       font-family: $font;
+      font-size: 16px;
       width: 100%;
-      padding: 16px 16px;
+      padding: 20px 16px;
       justify-content: center;
       align-items: center;
       flex-direction: column;
@@ -18,14 +20,17 @@
       position: relative;
       font-weight: 600;
       cursor: pointer;
+      &:hover {
+        background-color: #fafafa;
+      }
     }
     &--icon {
       position: absolute;
-      margin: -16px auto 0px auto;
+      margin: -20px auto 0px auto;
       top: 0;
       left: 0;
       right: 0;
-      font-size: 30px;
+      font-size: 40px;
       background-color: #fff;
     }
     &--back {
@@ -47,6 +52,13 @@
         background-color: #0fa2a2;
       }
     }
+  }
+  &__definition {
+    text-align: center;
+    font-weight: 500;
+    color: #495057;
+    font-size: 20px;
+    margin-top: 16px;
   }
   &__know {
     border-top: 2px solid #3f9243;
