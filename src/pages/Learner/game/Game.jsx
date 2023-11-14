@@ -16,6 +16,7 @@ const FLASH_CARD = "flashCard";
 const QUIZ = "quiz";
 const SPELLING = "spelling";
 
+
 const Game = (props) => {
   const { pathname } = useLocation();
   const slide = useRef();
