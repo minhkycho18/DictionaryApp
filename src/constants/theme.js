@@ -36,7 +36,7 @@ export const colorPos = [
   { preposition: "#ffd666" },
   { determiner: "#c0c3cf" },
   { pronoun: "#95de64" },
-  { "phrasal verb": " #4096ff" },
+  { "phrasal verb": "#4096ff" },
   { article: "#c0c3cf" }
 ]
 

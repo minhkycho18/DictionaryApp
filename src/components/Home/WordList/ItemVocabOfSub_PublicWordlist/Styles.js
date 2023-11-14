@@ -4,7 +4,7 @@ export const Styles = StyleSheet.create({
     container: {
         // flex: 1,
         // zIndex: -1,
-        marginBottom: 0,
+        marginBottom: 1,
         // borderBottomLeftRadius: 20,
 
         elevation: 0,
@@ -27,7 +27,7 @@ export const Styles = StyleSheet.create({
         position: 'relative',
         marginTop: 2,
 
-        backgroundColor: "#FAFAFA",
+        backgroundColor: "#fff",
     },
     Text_content: {
         marginLeft: 2,
@@ -39,13 +39,13 @@ export const Styles = StyleSheet.create({
         justifyContent: 'flex-start',
         // backgroundColor: 'green'
     },
-    word:{
+    word: {
         color: "#182B40",
         fontFamily: "Quicksand-SemiBold",
         fontSize: 18,
         letterSpacing: 0.2,
     },
-    definition:{
+    definition: {
         fontFamily: "Quicksand-Medium",
         fontSize: 15,
         letterSpacing: 0.2,

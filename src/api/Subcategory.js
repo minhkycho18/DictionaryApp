@@ -13,7 +13,11 @@ export const addWordCustomToSub = (wordlistId, subId, data) => {
     return http.post(`/wordlists/${wordlistId}/subcategories/${subId}/custom`, data);
 }
 export const createNewSub = (wordlistId, data) => {
-    return http.post(`/wordlists/${wordlistId}/subcategories`, data);
+    return http.post(`/wordlists/${wordlistId}/subcategories`, data, {
+        headers: {
+            'Content-Type': "text/plain"
+        }
+    });
 }
 export const deleteWordInSub = (wordlistId, subId, data) => {
     return http.delete(`/wordlists/${wordlistId}/subcategories/${subId}`, data);

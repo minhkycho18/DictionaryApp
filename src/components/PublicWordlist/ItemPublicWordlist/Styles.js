@@ -9,7 +9,7 @@ export const Styles = StyleSheet.create({
         // backgroundColor: "red",
         justifyContent: 'center',
         paddingTop: 52,
-        // marginBottom: 5
+        marginBottom: 5
 
 
     },
@@ -17,18 +17,19 @@ export const Styles = StyleSheet.create({
         padding: 15,
         borderRadius: 20,
         height: 135,
-        // shadowColor: "#000",
-        // shadowOffset: {
-        //     width: 0,
-        //     height: 1,
-        // },
-        // shadowOpacity: 0.22,
-        // shadowRadius: 2.22,
-        // elevation: 2,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+        elevation: 2,
         display: 'flex',
         flexDirection: 'row',
         gap: 15,
         paddingTop: 5,
+        backgroundColor: '#FEFEFE'
 
 
     },

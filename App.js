@@ -10,6 +10,7 @@ import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import Index from '~/components/Study';
 import ReviewScreen from '~/screens/ReviewScreen';
+import GameStack from '~/navigations/gameStack';
 export default function App() {
   const Stack = createNativeStackNavigator();
   const [loaded] = useFonts(configFont);
@@ -55,7 +56,7 @@ export default function App() {
           />
           <Stack.Screen
             name="StudySub"
-            component={ReviewScreen}
+            component={GameStack}
             options={{ headerShown: false }}
           />
 
