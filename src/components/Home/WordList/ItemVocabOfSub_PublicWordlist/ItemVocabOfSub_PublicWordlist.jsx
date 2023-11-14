@@ -1,14 +1,16 @@
-import React, {
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Styles } from "./Styles";
 import { colors, svgStudy } from "~/constants/theme";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
-export default function ItemVocabOfSub_PublicWordlist({ Vocab, onDeleteVocal, subcategory }) {
-
+export default function ItemVocabOfSub_PublicWordlist({
+  Vocab,
+  onDeleteVocal,
+  subcategory,
+}) {
+  const [word, setWord] = useState(Vocab.word);
+  const [definition, setDefinition] = useState(Vocab.definition.wordDesc);
   const wrapRef = useRef();
   const [loaded] = useFonts(configFont);
   if (!loaded) {
@@ -20,17 +22,13 @@ export default function ItemVocabOfSub_PublicWordlist({ Vocab, onDeleteVocal, su
         <View
           style={{
             ...Styles.wrappered,
-            
           }}
           ref={wrapRef}
         >
           <View style={Styles.Text_content}>
             <View style={Styles.Title_Status}>
               <View style={{ width: "90%" }}>
-                <Text
-                  numberOfLines={1}
-                  style={Styles.word}
-                >
+                <Text numberOfLines={1} style={Styles.word}>
                   {word}
                   {/* Word {item.id} */}
                 </Text>
@@ -41,17 +39,18 @@ export default function ItemVocabOfSub_PublicWordlist({ Vocab, onDeleteVocal, su
                   flexDirection: "row",
                   justifyContent: "flex-end",
                 }}
-              >
-              </View>
+              ></View>
             </View>
 
             <View>
               <Text
                 numberOfLines={2}
-                style={[Styles.definition,
+                style={[
+                  Styles.definition,
                   {
                     color: colors.textColor,
-                  }]}
+                  },
+                ]}
               >
                 {definition}
               </Text>

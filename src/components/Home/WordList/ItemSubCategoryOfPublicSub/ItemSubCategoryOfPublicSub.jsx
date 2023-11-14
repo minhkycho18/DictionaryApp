@@ -27,7 +27,6 @@ export default function ItemSubCategoryOfPublicSub({ subcategory }) {
   const getVocabOfSubCategory = async (idWL, idSub) => {
     const data = await getAllVocabOfSubCategory(idWL, idSub);
     setListVocabOfSubCategory(data);
-    console.log("\n\n\ntes: ", data);
   };
   const handleDeleteVocal = (vocalId, defId) => {
     const listWordFilter = listVocabOfSubCategory.filter(
@@ -59,7 +58,6 @@ export default function ItemSubCategoryOfPublicSub({ subcategory }) {
         borderRadius: 15,
       }}
     >
-
       {/* //item sub */}
       {/* <View> */}
       {/* View combobox */}
@@ -103,9 +101,9 @@ export default function ItemSubCategoryOfPublicSub({ subcategory }) {
           arrowIconStyle={{
             width: 22,
             height: 22,
-            marginRight:10,
-            
+            marginRight: 10,
           }}
+          listMode="SCROLLVIEW"
         />
 
         {/* View list word of subcategory */}

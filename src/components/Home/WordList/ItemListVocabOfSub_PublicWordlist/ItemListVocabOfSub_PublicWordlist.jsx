@@ -8,18 +8,28 @@ export default function ItemListVocabOfSub_PublicWordlist({
   onDeleteVocal,
 }) {
   return (
-    <FlatList
-      showsVerticalScrollIndicator={false}
-      vertical
-      keyExtractor={(item) => item.definition.defId}
-      data={listVocabOfSubCategory}
-      renderItem={(item) => (
+    // <FlatList
+    //   showsVerticalScrollIndicator={false}
+    //   vertical
+    //   keyExtractor={(item) => item.definition.defId}
+    //   data={listVocabOfSubCategory}
+    //   renderItem={(item) => (
+    //     <ItemVocabOfSub_PublicWordlist
+    //       Vocab={item}
+    //       subcategory={subcategory}
+    //       onDeleteVocal={(vocalId, defId) => onDeleteVocal(vocalId, defId)}
+    //     />
+    //   )}
+    // />
+    <>
+      {listVocabOfSubCategory.map((item, index) => (
         <ItemVocabOfSub_PublicWordlist
           Vocab={item}
           subcategory={subcategory}
           onDeleteVocal={(vocalId, defId) => onDeleteVocal(vocalId, defId)}
+          key={index}
         />
-      )}
-    />
+      ))}
+    </>
   );
 }

@@ -35,12 +35,10 @@ import { LinearGradient } from "expo-linear-gradient"; // Import LinearGradient
 import ItemSubCategoryOfPublicSub from "~/components/Home/WordList/ItemSubCategoryOfPublicSub/ItemSubCategoryOfPublicSub";
 import { ScrollView } from "react-native";
 
-
 export default function PublicWordlistDetail() {
   const { params } = useRoute();
 
   const wl = params.Wordlist;
-  console.log('test: ', wl);
   const [subCategories, setSubCategories] = useState([]);
   const [isOpenModaAdd, setIsOpenModaAdd] = useState(false);
 
@@ -67,43 +65,38 @@ export default function PublicWordlistDetail() {
   }
 
   const handleBack = async () => {
-    console.log("click",'11');
+    console.log("click", "11");
     // navigation.push("publicwordlist");
   };
   return (
     <LinearGradient
       colors={["#7F7F7F", "#FAFAFA"]}
       style={{ flex: 1 }}
-    // style={tw`pt-1.5 pr-2 pl-2 pb-2   bg-stone-50`}
+      // style={tw`pt-1.5 pr-2 pl-2 pb-2   bg-stone-50`}
     >
       <SafeAreaView style={styles.container}>
-        <TouchableOpacity
-          onPress={ handleBack}
-        >
+        <TouchableOpacity onPress={handleBack}>
           <Ionicons
             name="close-sharp"
             size={30}
             color={colors.textColor}
             style={{
-              position: 'absolute',
+              position: "absolute",
               top: 20,
               left: 10,
             }}
           />
         </TouchableOpacity>
-        <ScrollView
-        >
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View
             style={{
-
               // backgroundColor: "red",
-              display: 'flex',
+              display: "flex",
               flex: 1,
               justifyContent: "flex-end",
               // marginTop: 20,
-              width: '100%',
+              width: "100%",
               height: 350,
-
             }}
           >
             <View
@@ -117,7 +110,6 @@ export default function PublicWordlistDetail() {
                 height: "70%",
                 borderTopRightRadius: 40,
                 borderTopLeftRadius: 40,
-
               }}
             >
               <View style={styles.viewImage}>
@@ -129,7 +121,7 @@ export default function PublicWordlistDetail() {
                 </View>
               </View>
 
-              <View style={{ top: '-15%', }}>
+              <View style={{ top: "-15%" }}>
                 {/* Title */}
                 <Text
                   style={[
@@ -144,10 +136,9 @@ export default function PublicWordlistDetail() {
                 >
                   {wl.title}
                 </Text>
-
               </View>
 
-              <View style={{ top: '-13%', width: '90%' }}>
+              <View style={{ top: "-13%", width: "90%" }}>
                 {/* Description */}
                 <Text
                   numberOfLines={2}
@@ -157,35 +148,26 @@ export default function PublicWordlistDetail() {
                       fontFamily: "Quicksand-SemiBold",
                       fontSize: 16,
                       letterSpacing: 0.1,
-                      textAlign: 'center',
+                      textAlign: "center",
                     },
                   ]}
                 >
-                  when you want to say hello, you will say you want to set active: {wl.listDesc}
+                  when you want to say hello, you will say you want to set
+                  active: {wl.listDesc}
                 </Text>
               </View>
             </View>
-
-
-
-
-
           </View>
 
-          {
-            subCategories.map((item) => (
-              <ItemSubCategoryOfPublicSub
-                key={item.id}
-                subcategory={item} />
-
-            ))
-          }
+          {subCategories.map((item) => (
+            <ItemSubCategoryOfPublicSub
+              key={item.subcategoryId}
+              subcategory={item}
+            />
+          ))}
         </ScrollView>
-
-
       </SafeAreaView>
     </LinearGradient>
-
   );
 }
 
@@ -195,8 +177,6 @@ const styles = StyleSheet.create({
     // marginTop: 18,
     // backgroundColor: "#EDEDED",
     backgroundColor: "#EDEDED",
-
-
   },
   header: {
     backgroundColor: "#EDEDED",
@@ -232,18 +212,17 @@ const styles = StyleSheet.create({
     // backgroundColor:'red'
   },
 
-
   viewImage: {
     // width: "28%",
     // backgroundColor: 'red',
-    alignItems: 'center',
-    position: 'relative',
+    alignItems: "center",
+    position: "relative",
   },
   Image: {
-    top: '-30%',
+    top: "-30%",
     width: 135,
     height: 200,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderLeftWidth: 5,
     borderLeftColor: "#BFD8C3",
     shadowColor: "#000",
@@ -257,7 +236,7 @@ const styles = StyleSheet.create({
     elevation: 4,
     borderRadius: 10,
 
-    display: 'flex',
+    display: "flex",
     alignItems: "center",
     // marginTop: 20,
   },
