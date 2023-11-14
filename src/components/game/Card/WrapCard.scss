@@ -12,10 +12,12 @@
   border-radius: 16px;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   overflow: hidden;
   transition: scale 0.07s linear;
   position: relative;
   &__wave {
+    width: max-content;
     &--top {
       position: fixed;
       top: 0;

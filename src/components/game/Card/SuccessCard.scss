@@ -1,0 +1,64 @@
+@import "../../../assets/scss/font.scss";
+@import "../../../assets/scss/variable.scss";
+.success-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 600px;
+  padding: 32px 0px;
+  &__body {
+    display: flex;
+    flex-direction: column;
+    padding: 0px 32px;
+    flex: 1;
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+  }
+  &__icon {
+    font-size: 80px;
+    color: #95de64;
+  }
+  &__box {
+    justify-content: center;
+    align-items: center;
+    margin-top: 16px;
+  }
+  &__options {
+    padding: 8px 16px;
+    margin-top: 16px;
+    border: 2px solid #000;
+    width: 200px;
+    border-radius: 16px;
+    cursor: pointer;
+    &__icon {
+      font-size: 44px;
+      color: #00a64f;
+    }
+    &__title {
+      color: #00a64f;
+      font-size: 12px;
+      text-align: left;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    &__desc {
+      color: #00a64f;
+      font-size: 12px;
+      text-align: left;
+    }
+    &--leitner {
+      border: 3px solid #00a64f;
+      box-shadow: #00a650d8 0px 2px 8px 0px;
+    }
+    &--continue {
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      border: 3px solid #4f00ad;
+      color: #4f00ad;
+      box-shadow: #4e00ad9c 0px 2px 8px 0px;
+      padding: 16px;
+    }
+  }
+}

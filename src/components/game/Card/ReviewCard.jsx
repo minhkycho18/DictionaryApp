@@ -2,7 +2,7 @@ import { Space, Tag } from "antd";
 import React, { useState } from "react";
 import "./ReviewCard.scss";
 import { BsArrowReturnLeft, BsVolumeUp } from "react-icons/bs";
-import { RiArrowGoBackLine } from "react-icons/ri";
+
 
 import WrapCard from "./WrapCard";
 import waveBottom from "../../../assets/images/wave-bottom.svg";
