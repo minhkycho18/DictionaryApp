@@ -17,6 +17,7 @@ public class VocabularySubcategoryDto {
     private String audioUs;
     private String audioUk;
     private boolean isReview;
+    private boolean isSpelling;
     private boolean isFlashcard;
     private boolean isQuiz;
     @JsonFormat(pattern = "dd-MM-yyyy")

@@ -17,8 +17,8 @@ public class ContributionResponseDto extends VocabularySubcategoryDto {
     private List<Definition> definitions;
 
     @Builder
-    public ContributionResponseDto(Long vocabId, String word, String pos, String phoneUs, String phoneUk, String audioUs, String audioUk, boolean isReview, boolean isFlashcard, boolean isQuiz, List<Definition> definitions, LocalDateTime lastLearning) {
-        super(vocabId, word, pos, phoneUs, phoneUk, audioUs, audioUk, isReview, isFlashcard, isQuiz, lastLearning);
+    public ContributionResponseDto(Long vocabId, String word, String pos, String phoneUs, String phoneUk, String audioUs, String audioUk, boolean isReview, boolean isSpelling, boolean isFlashcard, boolean isQuiz, List<Definition> definitions, LocalDateTime lastLearning) {
+        super(vocabId, word, pos, phoneUs, phoneUk, audioUs, audioUk, isReview, isSpelling, isFlashcard, isQuiz, lastLearning);
         this.definitions = definitions;
     }
 }

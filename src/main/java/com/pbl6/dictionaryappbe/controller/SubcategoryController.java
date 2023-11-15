@@ -74,7 +74,7 @@ public class SubcategoryController {
     @Operation(summary = "Create a new subcategory", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Create successfully",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid data"),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @PostMapping("/wordlists/{wordListId}/subcategories")

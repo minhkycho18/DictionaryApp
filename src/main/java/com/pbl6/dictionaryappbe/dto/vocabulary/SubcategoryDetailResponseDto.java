@@ -13,8 +13,8 @@ public class SubcategoryDetailResponseDto extends VocabularySubcategoryDto {
     private Definition definition;
 
     @Builder
-    public SubcategoryDetailResponseDto(Long vocabId, String word, String pos, String phoneUs, String phoneUk, String audioUs, String audioUk, boolean isReview, boolean isFlashcard, boolean isQuiz, Definition definition, LocalDateTime lastLearning) {
-        super(vocabId, word, pos, phoneUs, phoneUk, audioUs, audioUk, isReview, isFlashcard, isQuiz, lastLearning);
+    public SubcategoryDetailResponseDto(Long vocabId, String word, String pos, String phoneUs, String phoneUk, String audioUs, String audioUk, boolean isReview, boolean isSpelling, boolean isFlashcard, boolean isQuiz, Definition definition, LocalDateTime lastLearning) {
+        super(vocabId, word, pos, phoneUs, phoneUk, audioUs, audioUk, isReview, isSpelling, isFlashcard, isQuiz, lastLearning);
         this.definition = definition;
     }
 }

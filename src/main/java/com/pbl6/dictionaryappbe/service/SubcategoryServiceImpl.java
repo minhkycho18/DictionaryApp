@@ -125,6 +125,7 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
                     .isQuiz(false)
                     .isReview(false)
                     .isFlashcard(false)
+                    .isSpelling(false)
                     .lastLearning(null)
                     .vocabDef(newVocabDef)
                     .build()));
@@ -157,6 +158,7 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
                 .isReview(false)
                 .isFlashcard(false)
                 .isQuiz(false)
+                .isSpelling(false)
                 .lastLearning(null)
                 .vocabDef(vocabDef)
                 .build());
