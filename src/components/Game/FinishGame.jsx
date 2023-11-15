@@ -119,7 +119,7 @@ export default function FinishGame(props) {
             }}
           />
         </TouchableOpacity>
-        <Text style={Styles.titleHeader}>Subcategory 1</Text>
+        <Text style={Styles.titleHeader}>{props.route.params.title}</Text>
       </View>
       <View style={Styles.wrappered}>
         <Image source={require("~/assets/success.png")} style={Styles.image} />
@@ -137,12 +137,12 @@ export default function FinishGame(props) {
           <View
             style={{
               ...Styles.viewButton,
-              marginRight: review === "success" ? 15 : 0,
+              // marginRight: review === "success" ? 15 : 0,
             }}
           >
-            {getProgess(review)}
+            <View style={Styles.viewCircle}>{getProgess(review)}</View>
             <TouchableOpacity style={[getStatusStyle(review)]}>
-              <Text style={[getTextStyle(review)]}>Review Practice</Text>
+              <Text style={[getTextStyle(review)]}>Review</Text>
             </TouchableOpacity>
             <View style={[getLineStyle(review)]}></View>
           </View>
@@ -151,11 +151,14 @@ export default function FinishGame(props) {
           <View
             style={{
               ...Styles.viewButton,
-              marginRight: flascard === "success" ? 15 : 0,
+              // marginRight: flascard === "success" ? 15 : 0,
             }}
           >
-            {getProgess(flascard)}
-            <TouchableOpacity style={[getStatusStyle(flascard)]}>
+            <View style={Styles.viewCircle}>{getProgess(flascard)}</View>
+            <TouchableOpacity
+              style={[getStatusStyle(flascard)]}
+              onPress={() => navigation.push("FlashCardScreen")}
+            >
               <Text style={[getTextStyle(flascard)]}>Flashcard Practice</Text>
             </TouchableOpacity>
             <View style={[getLineStyle(flascard)]}></View>
@@ -164,10 +167,10 @@ export default function FinishGame(props) {
           <View
             style={{
               ...Styles.viewButton,
-              marginRight: spelling === "success" ? 15 : 0,
+              // marginRight: spelling === "success" ? 15 : 0,
             }}
           >
-            {getProgess(spelling)}
+            <View style={Styles.viewCircle}>{getProgess(spelling)}</View>
             <TouchableOpacity
               style={[getStatusStyle(spelling)]}
               onPress={() => navigation.push("SpellingScreen")}
@@ -181,10 +184,10 @@ export default function FinishGame(props) {
           <View
             style={{
               ...Styles.viewButton,
-              marginRight: quiz === "success" ? 15 : 0,
+              // marginRight: quiz === "success" ? 15 : 0,
             }}
           >
-            {getProgess(quiz)}
+            <View style={Styles.viewCircle}>{getProgess(quiz)}</View>
             <TouchableOpacity style={[getStatusStyle(quiz)]}>
               <Text style={[getTextStyle(quiz)]}>Quiz</Text>
             </TouchableOpacity>
@@ -233,6 +236,11 @@ const Styles = StyleSheet.create({
     fontSize: 17,
     marginTop: "5%",
   },
+  viewCircle: {
+    width: "15%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   circle: {
     width: 40,
     height: 40,
@@ -247,7 +255,7 @@ const Styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     width: "90%",
-    gap: 30,
+    gap: 18,
   },
   peding: {
     width: 32,
@@ -304,20 +312,20 @@ const Styles = StyleSheet.create({
   },
   lineSuccess: {
     width: 4,
-    height: 35,
+    height: 38,
     backgroundColor: "#1CBD9E",
     position: "absolute",
-    bottom: -36,
+    bottom: -39,
     left: "6.5%",
     borderRadius: 5,
   },
   linePending: {
     width: 4,
-    height: 35,
+    height: 40,
     backgroundColor: "#E6E6E6",
     position: "absolute",
-    bottom: -36,
-    left: "4.5%",
+    bottom: -38,
+    left: "6.5%",
     borderRadius: 5,
   },
 });

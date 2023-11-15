@@ -40,6 +40,7 @@ export default function GameStack(props) {
                 name="FlashCardScreen"
                 component={FlashcardScreen}
                 options={{ headerShown: false }}
+                initialParams={sub}
             />
 
 
