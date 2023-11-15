@@ -29,6 +29,7 @@ public interface SubcategoryDetailMapper {
                 .phoneUs(vocabulary.getPhoneUs())
                 .audioUk(vocabulary.getAudioUk())
                 .audioUs(vocabulary.getAudioUs())
+                .isSpelling(newSubcategoryDetail.getIsSpelling())
                 .isReview(newSubcategoryDetail.getIsReview())
                 .isFlashcard(newSubcategoryDetail.getIsFlashcard())
                 .isQuiz(newSubcategoryDetail.getIsQuiz())
