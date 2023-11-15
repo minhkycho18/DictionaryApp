@@ -30,7 +30,8 @@ export const Styles = StyleSheet.create({
         fontSize: 16,
         letterSpacing: 0.15,
         color: '#fff',
-        lineHeight: 22
+        lineHeight: 22,
+        marginTop: 10
     },
     bottom: {
         width: "100%",
@@ -76,6 +77,7 @@ export const Styles = StyleSheet.create({
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
         elevation: 3,
+        marginTop: 10
     },
     buttonMain: {
         width: '100%',
@@ -156,18 +158,19 @@ export const Styles = StyleSheet.create({
     },
     yourAnswer: {
         position: 'absolute',
-        top: '40%'
+        top: '35%'
     },
     content: {
         display: "flex",
         flexDirection: "column",
         position: "absolute",
-        top: "50%",
+        top: "42%",
         width: "100%",
         justifyContent: "center",
         alignItems: "center",
         gap: 25,
-    }
+    },
+
 
 }
 )

@@ -7,13 +7,21 @@ import tw from "twrnc";
 import { Feather } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
-export default function ItemSub({ Sub, onPress }) {
+import { useNavigation } from "@react-navigation/native";
+export default function ItemSub({ Sub }) {
+  const navigation = useNavigation();
+  const handlePress = () => {
+    navigation.push("PlayGame", {
+      sub: Sub,
+    });
+  };
+
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
   }
   return (
-    <TouchableOpacity style={Styles.container} onPress={() => onPress()}>
+    <TouchableOpacity style={Styles.container} onPress={handlePress}>
       <View style={Styles.wrapper}>
         <View style={Styles.viewText}>
           <Text

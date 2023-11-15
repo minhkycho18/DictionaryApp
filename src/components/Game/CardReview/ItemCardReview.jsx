@@ -1,12 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, Image } from "react-native";
 import { View } from "react-native";
 import FlipCard from "react-native-flip-card";
 import { Styles } from "./Styles";
 import { AntDesign } from "@expo/vector-icons";
 import { colors } from "~/constants/theme";
-export default function ItemCardReview() {
+import { Audio } from "expo-av";
+import { Entypo } from "@expo/vector-icons";
+export default function ItemCardReview({ vocal }) {
   const [isFlip, setIsFlip] = useState(false);
+  const playSound = async (audio) => {
+    const sound = new Audio.Sound();
+    await sound.loadAsync({
+      uri: audio,
+    });
+    await sound.playAsync();
+  };
   return (
     <>
       <FlipCard
@@ -30,66 +39,83 @@ export default function ItemCardReview() {
               borderTopRightRadius: 40,
             }}
           />
-          <TouchableOpacity style={Styles.viewSound}>
-            <AntDesign name="sound" size={24} color="#00BFA5" />
+          <TouchableOpacity
+            style={Styles.viewSound}
+            onPress={() => playSound(vocal?.audioUk)}
+            disabled={vocal.audioUs === null}
+          >
+            {vocal.audioUs !== null ? (
+              <AntDesign name="sound" size={24} color="#00BFA5" />
+            ) : (
+              <Entypo name="sound-mute" size={24} color="#ccc" />
+            )}
           </TouchableOpacity>
           <View style={Styles.content}>
-            <Text style={{ ...Styles.word, fontFamily: "Quicksand-Bold" }}>
-              Beautiful
+            <Text
+              style={{
+                ...Styles.word,
+                fontFamily: "Quicksand-Bold",
+                textAlign: "center",
+              }}
+            >
+              {vocal.word}
             </Text>
-            <View style={Styles.viewPos}>
-              <View style={Styles.Pos}>
-                <Text
-                  style={{
-                    ...Styles.word,
-                    fontFamily: "Quicksand-SemiBold",
-                    fontSize: 16,
-                  }}
-                >
-                  /ˈbjuː.tɪ.fəl/
-                </Text>
-                <Text
-                  style={{
-                    ...Styles.word,
-                    fontFamily: "Quicksand-SemiBold",
-                    fontSize: 16,
-                  }}
-                >
-                  ,
-                </Text>
-                <Text
-                  style={{
-                    ...Styles.word,
-                    fontFamily: "Quicksand-SemiBold",
-                    fontSize: 16,
-                  }}
-                >
-                  /ˈbjuː.t̬ə.fəl/
-                </Text>
+            {vocal.phoneUs !== null && (
+              <View style={Styles.viewPos}>
+                <View style={Styles.Pos}>
+                  <Text
+                    style={{
+                      ...Styles.word,
+                      fontFamily: "Quicksand-SemiBold",
+                      fontSize: 16,
+                    }}
+                  >
+                    {vocal?.phoneUs}
+                  </Text>
+                  <Text
+                    style={{
+                      ...Styles.word,
+                      fontFamily: "Quicksand-SemiBold",
+                      fontSize: 16,
+                    }}
+                  >
+                    ,
+                  </Text>
+                  <Text
+                    style={{
+                      ...Styles.word,
+                      fontFamily: "Quicksand-SemiBold",
+                      fontSize: 16,
+                    }}
+                  >
+                    {vocal?.phoneUk}
+                  </Text>
+                </View>
+                <View style={Styles.type}>
+                  <Text
+                    style={{
+                      ...Styles.textType,
+                      fontFamily: "Quicksand-Bold",
+                    }}
+                  >
+                    {vocal?.pos}
+                  </Text>
+                </View>
               </View>
-              <View style={Styles.type}>
-                <Text
-                  style={{
-                    ...Styles.textType,
-                    fontFamily: "Quicksand-Bold",
-                  }}
-                >
-                  interjection
-                </Text>
-              </View>
-            </View>
+            )}
             <View style={Styles.viewdef}>
               <Text
                 numberOfLines={6}
-                style={{ ...Styles.textDef, fontFamily: "Quicksand-Medium" }}
+                style={{
+                  ...Styles.textDef,
+                  fontFamily: "Quicksand-Medium",
+                  textAlign: "center",
+                }}
               >
-                said to someone who has just said or done something stupid,
-                especially something that shows they are not noticing what is
-                happening something that shows they are not noticing what is
-                happening
+                {vocal?.wordDesc}
               </Text>
             </View>
-            <View style={Styles.synonym}>
+            {/* <View style={Styles.synonym}>
               <Text
                 style={{
                   ...Styles.synonym_main,
@@ -108,7 +134,7 @@ export default function ItemCardReview() {
               <View style={Styles.synonym_Item}>
                 <Text style={Styles.synonym_Item__Text}>pro forma</Text>
               </View>
-            </View>
+            </View> */}
           </View>
 
           <TouchableOpacity
@@ -143,8 +169,16 @@ export default function ItemCardReview() {
               borderTopRightRadius: 40,
             }}
           />
-          <TouchableOpacity style={Styles.viewSound}>
-            <AntDesign name="sound" size={24} color="#00BFA5" />
+          <TouchableOpacity
+            style={Styles.viewSound}
+            onPress={() => playSound(vocal?.audioUk)}
+            disabled={vocal.audioUs === null}
+          >
+            {vocal.audioUs !== null ? (
+              <AntDesign name="sound" size={24} color="#00BFA5" />
+            ) : (
+              <Entypo name="sound-mute" size={24} color="#ccc" />
+            )}
           </TouchableOpacity>
           <View style={{ ...Styles.content, marginTop: "1%" }}>
             <Text
@@ -158,26 +192,18 @@ export default function ItemCardReview() {
             </Text>
             <View style={Styles.viewExample}>
               <View style={Styles.example}>
-                <Text
-                  style={{
-                    ...Styles.word,
-                    fontFamily: "Quicksand-SemiBold",
-                    fontSize: 17,
-                    color: colors.textColor,
-                  }}
-                >
-                  1. They're big as houses.
-                </Text>
-                <Text
-                  style={{
-                    ...Styles.word,
-                    fontFamily: "Quicksand-SemiBold",
-                    fontSize: 17,
-                    color: colors.textColor,
-                  }}
-                >
-                  2. They're big as houses big as houses.
-                </Text>
+                {vocal.example !== null && (
+                  <Text
+                    style={{
+                      ...Styles.word,
+                      fontFamily: "Quicksand-SemiBold",
+                      fontSize: 17,
+                      color: colors.textColor,
+                    }}
+                  >
+                    1. {vocal?.example}
+                  </Text>
+                )}
               </View>
             </View>
             {/* //sys */}

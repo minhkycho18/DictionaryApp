@@ -19,9 +19,6 @@ import { configFont } from "~/constants/theme";
 export default function Index(props) {
   const navigation = useNavigation();
   const [subs, setSubs] = useState([]);
-  const handlePress = () => {
-    console.log("Play Game");
-  };
 
   useEffect(() => {
     console.log(props.route.params.wordlist);
@@ -78,11 +75,7 @@ export default function Index(props) {
           }}
         >
           {subs.map((item) => (
-            <ItemSub
-              key={item.subcategoryId}
-              Sub={item}
-              onPress={handlePress}
-            />
+            <ItemSub key={item.subcategoryId} Sub={item} />
           ))}
         </ScrollView>
       </View>

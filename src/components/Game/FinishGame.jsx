@@ -13,7 +13,32 @@ import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import { Feather } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-export default function FinishGame() {
+import { useNavigation } from "@react-navigation/native";
+import { getWordListByWordlistId } from "~/api/WordList";
+export default function FinishGame(props) {
+  const state = ["success", "pending", "waiting"];
+  const [review, setRiview] = useState("waiting");
+  const [flascard, setFlascard] = useState("waiting");
+  const [spelling, setSpelling] = useState("waiting");
+  const [quiz, setQuiz] = useState("waiting");
+  const navigation = useNavigation();
+  useEffect(() => {
+    if (props.route.params.type === "review") {
+      setRiview(state[0]);
+      setFlascard(state[1]);
+    }
+    if (props.route.params.type === "flashcard") {
+      setRiview(state[0]);
+      setFlascard(state[0]);
+      setSpelling(state[1]);
+    }
+    if (props.route.params.type === "spelling") {
+      setRiview(state[0]);
+      setFlascard(state[0]);
+      setSpelling(state[0]);
+      setQuiz(state[1]);
+    }
+  }, []);
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
@@ -33,10 +58,57 @@ export default function FinishGame() {
       <Entypo name="controller-record" size={20} color="#C7CFD1" />
     </View>
   );
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case "success":
+        return Styles.buttonSuccess;
+      case "pending":
+        return Styles.buttonPending;
+      case "waiting":
+      default:
+        return Styles.buttonWaiting;
+    }
+  };
+  const getProgess = (status) => {
+    switch (status) {
+      case "success":
+        return <Success />;
+      case "pending":
+        return <Pending />;
+      case "waiting":
+      default:
+        return <Waiting />;
+    }
+  };
+  const getTextStyle = (status) => {
+    switch (status) {
+      case "success":
+        return Styles.textButtonSuccess;
+      case "pending":
+        return Styles.textButtonPending;
+      case "waiting":
+      default:
+        return Styles.textButtonWaiting;
+    }
+  };
+  const getLineStyle = (status) => {
+    switch (status) {
+      case "success":
+        return Styles.lineSuccess;
+      default:
+        return Styles.linePending;
+    }
+  };
+  const handleRedirect = async () => {
+    try {
+      const res = await getWordListByWordlistId(props.route.params.wordListId);
+      navigation.navigate("StudySub", { wordlist: res });
+    } catch (error) {}
+  };
   return (
     <SafeAreaView style={Styles.container}>
       <View style={Styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleRedirect}>
           <Ionicons
             name="arrow-back-outline"
             size={25}
@@ -51,7 +123,9 @@ export default function FinishGame() {
       </View>
       <View style={Styles.wrappered}>
         <Image source={require("~/assets/success.png")} style={Styles.image} />
-        <Text style={Styles.toast}>You've finished flascard successfully</Text>
+        <Text style={Styles.toast}>
+          You've finished {props.route.params.type} successfully
+        </Text>
         <View
           style={{
             width: "100%",
@@ -60,36 +134,59 @@ export default function FinishGame() {
             gap: 40,
           }}
         >
-          <View style={Styles.viewButton}>
-            <Success />
-            <TouchableOpacity style={Styles.buttonSuccess}>
-              <Text style={Styles.textButtonSuccess}>Review Practice</Text>
+          <View
+            style={{
+              ...Styles.viewButton,
+              marginRight: review === "success" ? 15 : 0,
+            }}
+          >
+            {getProgess(review)}
+            <TouchableOpacity style={[getStatusStyle(review)]}>
+              <Text style={[getTextStyle(review)]}>Review Practice</Text>
             </TouchableOpacity>
-            <View style={Styles.lineSuccess}></View>
+            <View style={[getLineStyle(review)]}></View>
           </View>
           {/*  */}
 
-          <View style={Styles.viewButton}>
-            <Success />
-            <TouchableOpacity style={Styles.buttonPending}>
-              <Text style={Styles.textButtonPending}>Flashcard Practice</Text>
+          <View
+            style={{
+              ...Styles.viewButton,
+              marginRight: flascard === "success" ? 15 : 0,
+            }}
+          >
+            {getProgess(flascard)}
+            <TouchableOpacity style={[getStatusStyle(flascard)]}>
+              <Text style={[getTextStyle(flascard)]}>Flashcard Practice</Text>
             </TouchableOpacity>
-            <View style={Styles.lineSuccess}></View>
+            <View style={[getLineStyle(flascard)]}></View>
           </View>
           {/*  */}
-          <View style={Styles.viewButton}>
-            <Pending />
-            <TouchableOpacity style={Styles.buttonWaiting}>
-              <Text style={Styles.textButtonWaiting}>Spelling Practice</Text>
+          <View
+            style={{
+              ...Styles.viewButton,
+              marginRight: spelling === "success" ? 15 : 0,
+            }}
+          >
+            {getProgess(spelling)}
+            <TouchableOpacity
+              style={[getStatusStyle(spelling)]}
+              onPress={() => navigation.push("SpellingScreen")}
+            >
+              <Text style={[getTextStyle(spelling)]}>Spelling Practice</Text>
             </TouchableOpacity>
-            <View style={Styles.linePending}></View>
+            <View style={[getLineStyle(spelling)]}></View>
           </View>
           {/*  */}
 
-          <View style={Styles.viewButton}>
-            <Waiting />
-            <TouchableOpacity style={Styles.buttonWaiting}>
-              <Text style={Styles.textButtonWaiting}>Quiz</Text>
+          <View
+            style={{
+              ...Styles.viewButton,
+              marginRight: quiz === "success" ? 15 : 0,
+            }}
+          >
+            {getProgess(quiz)}
+            <TouchableOpacity style={[getStatusStyle(quiz)]}>
+              <Text style={[getTextStyle(quiz)]}>Quiz</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -211,7 +308,7 @@ const Styles = StyleSheet.create({
     backgroundColor: "#1CBD9E",
     position: "absolute",
     bottom: -36,
-    left: "5%",
+    left: "6.5%",
     borderRadius: 5,
   },
   linePending: {
@@ -220,7 +317,7 @@ const Styles = StyleSheet.create({
     backgroundColor: "#E6E6E6",
     position: "absolute",
     bottom: -36,
-    left: "4%",
+    left: "4.5%",
     borderRadius: 5,
   },
 });
