@@ -8,11 +8,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SubcategoryDetailRepository
         extends JpaRepository<SubcategoryDetail, SubcategoryDetailId> {
     List<SubcategoryDetail> findAllBySubcategoryId(Long subcategoryId);
+
+    Optional<SubcategoryDetail> findBySubcategoryIdAndVocabIdAndDefId(Long subcategoryId, Long vocabId, Long defId);
 
     @Query(value = """
                 SELECT COUNT(*)

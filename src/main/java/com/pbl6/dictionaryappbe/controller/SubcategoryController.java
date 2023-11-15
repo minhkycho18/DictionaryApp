@@ -9,6 +9,7 @@ import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.mapper.SubcategoryMapper;
 import com.pbl6.dictionaryappbe.persistence.subcategory_detail.SubcategoryDetail;
+import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDefId;
 import com.pbl6.dictionaryappbe.service.SubcategoryGameService;
 import com.pbl6.dictionaryappbe.service.SubcategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +22,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -135,15 +138,25 @@ public class SubcategoryController {
     @GetMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}/{gameType}")
     @Operation(summary = "Get game from subcategories", security = {@SecurityRequirement(name = "bearer-key")})
     public List<? extends VocabularyQuestionDto> createGame(@PathVariable GameType gameType,
-                                                      @PathVariable Long subcategoryId,
-                                                      @PathVariable Long wordListId
+                                                            @PathVariable Long subcategoryId,
+                                                            @PathVariable Long wordListId
     ) {
         List<SubcategoryDetail> subcategoryDetails =
                 subcategoryGameService.getRandomSubDetailByGameType(gameType, subcategoryId, wordListId);
-        return switch (gameType){
+        return switch (gameType) {
             case FLASHCARD -> subcategoryGameService.createFlashcardGame(subcategoryDetails);
             case QUIZ -> subcategoryGameService.createQuizGame(subcategoryDetails);
             default -> subcategoryGameService.createReviewSpellingGame(subcategoryDetails);
         };
+    }
+
+    @PatchMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}/{gameType}")
+    @Operation(summary = "Update status game", security = {@SecurityRequirement(name = "bearer-key")})
+    public ResponseEntity<String> updateStatusGame(@PathVariable Long subcategoryId,
+                                                   @PathVariable GameType gameType,
+                                                   @RequestBody List<VocabDefId> vocabDefs,
+                                                   @PathVariable Long wordListId) {
+        subcategoryGameService.updateStatusGame(wordListId, subcategoryId, gameType, vocabDefs);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Update status success");
     }
 }

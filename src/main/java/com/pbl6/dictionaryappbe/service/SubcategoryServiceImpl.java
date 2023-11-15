@@ -7,6 +7,7 @@ import com.pbl6.dictionaryappbe.dto.vocabulary.ContributionResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.exception.DuplicateDataException;
+import com.pbl6.dictionaryappbe.exception.InvalidRequestDataException;
 import com.pbl6.dictionaryappbe.exception.RecordNotFoundException;
 import com.pbl6.dictionaryappbe.mapper.SubcategoryDetailMapper;
 import com.pbl6.dictionaryappbe.mapper.SubcategoryMapper;
@@ -359,5 +360,27 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
                     return new ReviewSpellingContentDto(vocabularyQuestionDto, definition.getWordDesc(), definition.getExamples());
                 })
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public void updateStatusGame(Long wordListId, Long subcategoryId, GameType gameType, List<VocabDefId> vocabDefs) {
+        getOwnedSubcategory(wordListId, subcategoryId);
+        vocabDefs.forEach(vocabDefId -> {
+            SubcategoryDetail detail =
+                    subcategoryDetailRepository.findBySubcategoryIdAndVocabIdAndDefId(
+                                    subcategoryId, vocabDefId.getVocabId(), vocabDefId.getDefId())
+                            .orElseThrow(() -> new RecordNotFoundException("Subcategory Detail not found"));
+            if (gameType != GameType.REVIEW && !detail.getIsReview()) {
+                throw new InvalidRequestDataException("Not enough condition to update status");
+            }
+            switch (gameType) {
+                case REVIEW -> detail.setIsReview(true);
+                case FLASHCARD -> detail.setIsFlashcard(true);
+                case SPELLING -> detail.setIsSpelling(true);
+                default -> detail.setIsQuiz(true);
+            }
+            subcategoryDetailRepository.save(detail);
+        });
     }
 }

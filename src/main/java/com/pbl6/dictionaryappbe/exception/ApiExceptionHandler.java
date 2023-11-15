@@ -34,6 +34,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(403).body(ex.getMessage());
     }
 
+    @ExceptionHandler(value = {InvalidRequestDataException.class})
+    @ResponseBody
+    public ResponseEntity<Object> handleAccessDeniedException(InvalidRequestDataException ex) {
+        return ResponseEntity.status(400).body(ex.getMessage());
+    }
+
     @ExceptionHandler(value = {DuplicateDataException.class})
     @ResponseBody
     public ResponseEntity<Object> handleDuplicateDataException(DuplicateDataException ex) {
