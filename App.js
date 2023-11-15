@@ -11,6 +11,7 @@ import { colors, configFont } from "~/constants/theme";
 import Index from '~/components/Study';
 import ReviewScreen from '~/screens/ReviewScreen';
 import GameStack from '~/navigations/gameStack';
+import FlashcardScreen from '~/screens/FlashcardScreen';
 export default function App() {
   const Stack = createNativeStackNavigator();
   const [loaded] = useFonts(configFont);
