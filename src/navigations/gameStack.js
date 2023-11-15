@@ -2,6 +2,7 @@
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import FinishGame from '~/components/Game/FinishGame';
+import FlashcardScreen from '~/screens/FlashcardScreen';
 import ReviewScreen from '~/screens/ReviewScreen';
 import SpellingScreen from '~/screens/SpellingScreen';
 export default function GameStack() {
@@ -27,6 +28,11 @@ export default function GameStack() {
             <Stack.Screen
                 name="FinishGame"
                 component={FinishGame}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="FlashCardScreen"
+                component={FlashcardScreen}
                 options={{ headerShown: false }}
             />
 
