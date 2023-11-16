@@ -68,7 +68,7 @@ export const Styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         width: "80%",
-        marginTop: 6,
+        marginTop: 20,
         gap: 8,
         justifyContent: 'center',
         alignItems: 'center'
@@ -89,7 +89,7 @@ export const Styles = StyleSheet.create({
         // justifyContent: 'space-around',
     },
     type: {
-        marginTop: 12,
+        marginTop: 10,
         alignItems: 'center',
 
     },
@@ -98,7 +98,8 @@ export const Styles = StyleSheet.create({
         paddingBottom: 2,
         borderRadius: 20,
         backgroundColor: "#B4B6E6",
-        color: '#fff'
+        color: '#fff',
+
     },
     viewdef: {
         marginTop: 20,

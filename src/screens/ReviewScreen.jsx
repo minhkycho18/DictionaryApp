@@ -14,27 +14,39 @@ import { colors, configFont } from "~/constants/theme";
 import * as Progress from "react-native-progress";
 import ItemCardReview from "~/components/Game/CardReview/ItemCardReview";
 import Carousel from "react-native-reanimated-carousel";
-export default function ReviewScreen() {
+import { getGameFromSub } from "~/api/Game";
+import { useNavigation } from "@react-navigation/native";
+import { delay } from "~/helper";
+import FinishReview from "~/components/Game/FinishReview";
+
+export default function ReviewScreen(props) {
+  const [data, setData] = useState([]);
+  const [count, setCount] = useState(0);
   const [screenWidth, setScreenWidth] = useState(
     Dimensions.get("window").width
   );
-  const data = [
-    {
-      title: "Aenean leo",
-      body: "Ut tincidunt tincidunt erat. Sed cursus turpis vitae tortor. Quisque malesuada placerat nisl. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.",
-      imgUrl: "https://picsum.photos/id/11/200/300",
-    },
-    {
-      title: "In turpis",
-      body: "Aenean ut eros et nisl sagittis vestibulum. Donec posuere vulputate arcu. Proin faucibus arcu quis ante. Curabitur at lacus ac velit ornare lobortis. ",
-      imgUrl: "https://picsum.photos/id/10/200/300",
-    },
-    {
-      title: "Lorem Ipsum",
-      body: "Phasellus ullamcorper ipsum rutrum nunc. Nullam quis ante. Etiam ultricies nisi vel augue. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc.",
-      imgUrl: "https://picsum.photos/id/12/200/300",
-    },
-  ];
+  const navigation = useNavigation();
+  const [progress, setProgress] = useState(0);
+  const getGame = async (wordListId, subId, type) => {
+    const specialCardData = { special: true };
+    const res = await getGameFromSub(wordListId, subId, type);
+    setData([...res, specialCardData]);
+  };
+  useEffect(() => {
+    getGame(
+      props.route.params.wordListId,
+      props.route.params.subcategoryId,
+      "review"
+    );
+  }, []);
+  const handleScroll = (index) => {
+    if (index < data.length - 1) {
+      const prog = 1 / (data.length - 2);
+      setProgress(index * prog);
+      setCount(index);
+    }
+  };
+
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
@@ -42,7 +54,7 @@ export default function ReviewScreen() {
   return (
     <SafeAreaView style={Styles.container}>
       <View style={Styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-outline"
             size={25}
@@ -53,29 +65,34 @@ export default function ReviewScreen() {
             }}
           />
         </TouchableOpacity>
-        <Text style={Styles.titleHeader}>Subcategory 1</Text>
+        <Text style={Styles.titleHeader}>{props.route.params.title}</Text>
       </View>
       <View style={Styles.wrappered}>
         <View style={Styles.progress}>
           <Progress.Bar
-            progress={0.5}
+            progress={progress}
             width={Math.floor(screenWidth) - 40}
             height={8}
           />
-          <Text style={Styles.numberCount}>0</Text>
-          <Text style={Styles.numberTotal}>20</Text>
+          <Text style={Styles.numberCount}>{count}</Text>
+          <Text style={Styles.numberTotal}>{data.length - 1}</Text>
         </View>
         <Carousel
           loop={false}
           width={Math.floor(screenWidth) - 40}
           height={690}
           data={data}
-          scrollAnimationDuration={100}
-          renderItem={({ index }) => (
+          scrollAnimationDuration={1}
+          renderItem={({ item }) => (
             <View style={Styles.content}>
-              <ItemCardReview />
+              {item.special ? (
+                <FinishReview />
+              ) : (
+                <ItemCardReview vocal={item} />
+              )}
             </View>
           )}
+          onSnapToItem={(index) => handleScroll(index)}
         />
       </View>
 

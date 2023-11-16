@@ -9,7 +9,6 @@ import TopTabAddWordToSub from '~/navigations/TopTabAddWordToSub';
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import Index from '~/components/Study';
-import ReviewScreen from '~/screens/ReviewScreen';
 import GameStack from '~/navigations/gameStack';
 import FlashcardScreen from '~/screens/FlashcardScreen';
 export default function App() {
@@ -57,6 +56,11 @@ export default function App() {
           />
           <Stack.Screen
             name="StudySub"
+            component={Index}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PlayGame"
             component={GameStack}
             options={{ headerShown: false }}
           />

@@ -65,8 +65,7 @@ export default function PublicWordlistDetail() {
   }
 
   const handleBack = async () => {
-    console.log("click", "11");
-    // navigation.push("publicwordlist");
+    navigation.goBack();
   };
   return (
     <LinearGradient
@@ -75,7 +74,7 @@ export default function PublicWordlistDetail() {
       // style={tw`pt-1.5 pr-2 pl-2 pb-2   bg-stone-50`}
     >
       <SafeAreaView style={styles.container}>
-        <TouchableOpacity onPress={handleBack}>
+        <TouchableOpacity>
           <Ionicons
             name="close-sharp"
             size={30}
@@ -84,6 +83,7 @@ export default function PublicWordlistDetail() {
               position: "absolute",
               top: 20,
               left: 10,
+              zIndex: 1000,
             }}
           />
         </TouchableOpacity>

@@ -7,13 +7,17 @@ import { AntDesign } from "@expo/vector-icons";
 import { colors } from "~/constants/theme";
 import { TextInput } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { getWordListByWordlistId } from "~/api/WordList";
 
-export default function ItemCardSpelling({ onNextSlider }) {
+export default function ItemCardSpelling({ onNextSlider, vocal }, props) {
   const [input, setInput] = useState("");
-  const question = "apple one";
+  const [question, setQuestion] = useState(vocal.word);
+  const [answer, setAnswer] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
   const [userInput, setUserInput] = useState(Array(question.length).fill(""));
   const [isHint, setIsHint] = useState(false);
   const [isConfirm, setIsConfirm] = useState(false);
+  const [count, setCount] = useState(0);
   const inputRefs = useRef([]);
   const hintRef = useRef();
   const confirmRef = useRef();
@@ -51,18 +55,27 @@ export default function ItemCardSpelling({ onNextSlider }) {
       style: Styles.disable,
     });
     if (isHint) {
-      console.log("test", userInput);
+      const answer = userInput.join("").toLowerCase();
+      setAnswer(answer);
+      if (answer === question) {
+        setIsSuccess(true);
+      }
     } else {
-      console.log("test", input);
+      const answer = input.toLowerCase();
+      if (answer === question) {
+        setIsSuccess(true);
+      }
+      setAnswer(answer);
     }
   };
+
   return (
     <View style={Styles.cardFace}>
       <Image
         source={require("~/assets/wave.png")}
         style={{
           width: "100%",
-          height: "70%",
+          height: "60%",
           borderTopLeftRadius: 40,
           borderTopRightRadius: 40,
         }}
@@ -81,17 +94,31 @@ export default function ItemCardSpelling({ onNextSlider }) {
         </Text>
         <Text
           numberOfLines={6}
-          style={{ ...Styles.textDef, fontFamily: "Quicksand-SemiBold" }}
+          style={{
+            ...Styles.textDef,
+            fontFamily: "Quicksand-SemiBold",
+            textAlign: "center",
+          }}
         >
-          said to someone who has just said or done something stupid, especially
-          something that shows they are not noticing what is happening something
-          that shows they are not noticing what is happening is happening
+          {vocal?.wordDesc}
         </Text>
       </View>
       <View style={Styles.yourAnswer}>
-        <Text style={{ fontSize: 20, fontFamily: "Quicksand-SemiBold" }}>
-          Your answer
-        </Text>
+        {!isConfirm ? (
+          <Text style={{ fontSize: 20, fontFamily: "Quicksand-SemiBold" }}>
+            Your answer
+          </Text>
+        ) : (
+          <Text
+            style={{
+              fontSize: 20,
+              fontFamily: "Quicksand-SemiBold",
+              color: isSuccess ? "#0F870F" : "red",
+            }}
+          >
+            {answer}
+          </Text>
+        )}
       </View>
       <View style={Styles.content}>
         {isHint ? (
