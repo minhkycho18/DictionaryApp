@@ -5,7 +5,6 @@ import {
   Form,
   Input,
   Modal,
-  Radio,
   Space,
   Spin,
   Tabs,
@@ -23,7 +22,6 @@ import {
   getSubcategory,
 } from "../../../stores/subcategory/subcategoryThunk";
 import "./WordListsPage.scss";
-import { LuFileCheck2, LuFileEdit } from "react-icons/lu";
 function WordListsPage() {
   let { id } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
@@ -34,7 +32,8 @@ function WordListsPage() {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const [modal, contextHolderModal] = Modal.useModal();
+
+  const [titleInput, setTitleInput] = useState("");
 
   //==========================================================================
 
@@ -91,16 +90,10 @@ function WordListsPage() {
         <Space
           style={{
             alignItems: "center",
-            minWidth: 120,
             justifyContent: "center",
           }}
         >
-          {subcategory.subcategoryType === "CUSTOM" ? (
-            <LuFileEdit />
-          ) : (
-            <LuFileCheck2 />
-          )}
-          {capitalizeFirstLetter(subcategory?.title)}
+          {capitalizeFirstLetter(subcategory.title)}
         </Space>
       ),
       children: (
@@ -121,7 +114,6 @@ function WordListsPage() {
       direction="vertical"
     >
       {contextHolder}
-      {contextHolderModal}
       <Modal
         open={isOpen}
         title="Add new subcategories"
@@ -134,7 +126,9 @@ function WordListsPage() {
             .then((values) => {
               setConfirmLoading(true);
               setTimeout(() => {
-                dispatch(createSubcategory({ wordListId: +id, ...values }));
+                dispatch(
+                  createSubcategory({ wordListId: +id, title: titleInput })
+                );
                 messageApi.success("Success!");
                 form.resetFields();
                 setIsOpen(false);
@@ -147,14 +141,7 @@ function WordListsPage() {
         }}
         confirmLoading={confirmLoading}
       >
-        <Form
-          form={form}
-          layout="vertical"
-          name="formAddSub"
-          initialValues={{
-            modifier: "public",
-          }}
-        >
+        <Form form={form} layout="vertical" name="formAddSub">
           <Form.Item
             name="title"
             label="Title"
@@ -165,23 +152,7 @@ function WordListsPage() {
               },
             ]}
           >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            name="subcategoryType"
-            className="collection-create-form_last-form-item"
-            rules={[
-              {
-                required: true,
-                message: "Please select a type for your list!",
-              },
-            ]}
-          >
-            <Radio.Group>
-              <Radio value="CUSTOM">Custom</Radio>
-              <Radio value="DEFAULT">Default</Radio>
-            </Radio.Group>
+            <Input onChange={(e) => setTitleInput(e.target.value)} />
           </Form.Item>
         </Form>
       </Modal>

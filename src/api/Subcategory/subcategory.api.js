@@ -5,8 +5,11 @@ export const getSubByWlsId = (wordListId) => {
 };
 ///===========================================================================
 export const createSub = (params) => {
-  const { wordListId, ...data } = params;
-  return http.post(`/wordlists/${wordListId}/subcategories`, data);
+  const { wordListId, title } = params;
+  console.log("title", title);
+  return http.post(`/wordlists/${wordListId}/subcategories`, title, {
+    headers: { "Content-Type": "text/json" },
+  });
 };
 ///===========================================================================
 export const deleteSub = (params) => {

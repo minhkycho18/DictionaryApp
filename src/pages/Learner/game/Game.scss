@@ -1,10 +1,46 @@
 @import "../../../assets/scss/font.scss";
 @import "../../../assets/scss/variable.scss";
 .game {
+  overflow: hidden;
   &-wrap {
     position: relative;
     width: 100% !important;
     height: 100vh;
     padding-top: 64px;
+    overflow: hidden;
+  }
+}
+.modal {
+  &__content1 {
+    padding-bottom: 48px;
+    font-family: $font;
+    &__title {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    &__body {
+      font-weight: 500;
+    }
+  }
+  &__button1 {
+    font-family: $font;
+    font-weight: 700;
+    padding: 0px 16px;
+    border-radius: 16px;
+
+    &--ok {
+      background-color: #28a745;
+      &:hover {
+        background-color: #1e7e34 !important;
+      }
+    }
+    &--cancel {
+      background-color: #f9f9f9 !important;
+      border: none;
+      &:hover {
+        background-color: #f9f9f9 !important;
+        color: #000 !important;
+      }
+    }
   }
 }

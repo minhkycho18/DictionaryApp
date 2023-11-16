@@ -25,11 +25,7 @@ const SuccessCard = (props) => {
         );
       case "success-flash_card":
         return (
-          <Space
-            direction="vertical"
-            className="success-card "
-            style={{ height: 508 }}
-          >
+          <Space direction="vertical" className="success-card ">
             <Space direction="vertical" className="success-card__body">
               <Image src={logo} loading="lazy" preview={false}></Image>
               <Space direction="vertical">

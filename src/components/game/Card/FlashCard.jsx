@@ -14,9 +14,17 @@ const FlashCard = (props) => {
   const changeToNext = () => {
     props.onSelect && props.handleChangeSlide();
   };
+  const flipCard = () => {
+    setIsFlip(!isFlip);
+  };
   return (
     <ReactCardFlip isFlipped={isFlip} flipDirection="horizontal">
-      <WrapCard {...props} imgTop={waveTop} imgBot={waveBottom}>
+      <WrapCard
+        {...props}
+        imgTop={waveTop}
+        imgBot={waveBottom}
+        handleFlipCard={flipCard}
+      >
         <Space
           direction="vertical"
           className="flash-card"
@@ -36,7 +44,7 @@ const FlashCard = (props) => {
             <Space className="review-card__pos">Verb</Space>
           </Space>
           <Space
-            className="review-card__example"
+            className="flash-card__example"
             onClick={() => props.onSelect && setIsFlip(!isFlip)}
             style={{ cursor: `${props.onSelect ? "pointer" : "default"}` }}
           >

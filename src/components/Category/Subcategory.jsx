@@ -279,15 +279,7 @@ const Subcategory = (props) => {
                     ? ""
                     : " disable-custom"
                 }`}
-                onClick={() => {
-                  if (props.subcategory?.subcategoryType === "CUSTOM") {
-                    setIsCustom(true);
-                  } else {
-                    message.error(
-                      "Custom words can only be added to custom subcategories"
-                    );
-                  }
-                }}
+                onClick={() => setIsCustom(true)}
               >
                 Custom word
               </div>

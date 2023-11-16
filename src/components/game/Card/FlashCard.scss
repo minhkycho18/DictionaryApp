@@ -77,4 +77,16 @@
       color: #dc2929;
     }
   }
+  &__example {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+    width: 482px;
+    text-align: center;
+    justify-content: center;
+    cursor: pointer;
+    // background-color: #3f9243;
+    height: 128px;
+    margin-bottom: -48px;
+  }
 }

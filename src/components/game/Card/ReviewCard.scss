@@ -4,18 +4,16 @@
 .review-card {
   justify-content: space-between;
   align-items: center;
-  height: 600px;
+  height: 582px;
   padding: 32px 0px;
   &__body {
     display: flex;
     flex-direction: column;
     padding: 0px 32px;
-    // height: 600px;
     flex: 1;
     z-index: 100;
     justify-content: center;
     align-items: center;
-    // background-color: #ccc;
   }
   &__icon {
     margin-top: 32px;
@@ -60,12 +58,17 @@
     width: 400px;
     text-align: center;
     justify-content: center;
+    width: 482px;
+    height: 128px;
+    margin-bottom: -128px;
     cursor: pointer;
     &--item {
       font-family: $font;
       color: $text-grey-color !important;
       font-size: 18px;
       font-weight: 600;
+      padding: 0px 16px;
+      text-align: center;
     }
   }
 }
