@@ -77,7 +77,8 @@ export const Styles = StyleSheet.create({
         shadowOpacity: 0.22,
         shadowRadius: 2.22,
         elevation: 3,
-        marginTop: 10
+        marginTop: 10,
+
     },
     buttonMain: {
         width: '100%',
@@ -86,12 +87,13 @@ export const Styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     button: {
-        marginTop: 30,
+        position: 'absolute',
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
         gap: 10,
-        alignItems: 'center'
+        alignItems: 'center',
+        top: 200
     },
     hint: {
         width: 100,
@@ -104,19 +106,22 @@ export const Styles = StyleSheet.create({
         paddingHorizontal: 15,
         borderTopRightRadius: 20,
         borderBottomRightRadius: 20,
+        position: 'absolute',
+        left: 0
 
     },
     next: {
-        marginTop: 20,
+        marginTop: 5,
         width: 100,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#00BFA5',
-        paddingVertical: 6,
+        paddingVertical: 8,
         borderRadius: 20,
-        gap: 2
+        gap: 2,
+
 
     },
     confirm: {
@@ -126,7 +131,13 @@ export const Styles = StyleSheet.create({
         paddingHorizontal: 15,
         borderTopLeftRadius: 20,
         borderBottomLeftRadius: 20,
-
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 3,
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        right: 0
     },
     input: {
         margin: 5,
@@ -158,7 +169,7 @@ export const Styles = StyleSheet.create({
     },
     yourAnswer: {
         position: 'absolute',
-        top: '35%'
+        top: '38%'
     },
     content: {
         display: "flex",

@@ -69,49 +69,50 @@ export default function PublicWordlistDetail() {
   };
   return (
     <LinearGradient
-      colors={["#7F7F7F", "#FAFAFA"]}
+      colors={["#EDEDED", "#fff"]}
       style={{ flex: 1 }}
       // style={tw`pt-1.5 pr-2 pl-2 pb-2   bg-stone-50`}
     >
       <SafeAreaView style={styles.container}>
-        <TouchableOpacity>
-          <Ionicons
-            name="close-sharp"
-            size={30}
-            color={colors.textColor}
-            style={{
-              position: "absolute",
-              top: 20,
-              left: 10,
-              zIndex: 1000,
-            }}
-          />
-        </TouchableOpacity>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View
             style={{
-              // backgroundColor: "red",
               display: "flex",
               flex: 1,
               justifyContent: "flex-end",
-              // marginTop: 20,
               width: "100%",
               height: 350,
             }}
           >
             <View
               style={{
-                // flex: 1,
-
                 alignItems: "center",
                 backgroundColor: "#FFFFFF",
-                // backgroundColor: "#AAAAAA",
                 width: "100%",
                 height: "70%",
                 borderTopRightRadius: 40,
                 borderTopLeftRadius: 40,
               }}
             >
+              <TouchableOpacity
+                style={{
+                  position: "absolute",
+                  width: 40,
+                  height: 40,
+                  left: 10,
+                  top: "-32%",
+                  zIndex: 1000,
+                  padding: 5,
+                }}
+                onPress={() => navigation.goBack()}
+              >
+                <Ionicons
+                  name="close-sharp"
+                  size={30}
+                  color={colors.textColor}
+                />
+              </TouchableOpacity>
+
               <View style={styles.viewImage}>
                 <View style={styles.Image}>
                   <Image
@@ -120,7 +121,6 @@ export default function PublicWordlistDetail() {
                   />
                 </View>
               </View>
-
               <View style={{ top: "-15%" }}>
                 {/* Title */}
                 <Text
@@ -137,7 +137,6 @@ export default function PublicWordlistDetail() {
                   {wl.title}
                 </Text>
               </View>
-
               <View style={{ top: "-13%", width: "90%" }}>
                 {/* Description */}
                 <Text
@@ -174,23 +173,15 @@ export default function PublicWordlistDetail() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // marginTop: 18,
-    // backgroundColor: "#EDEDED",
-    backgroundColor: "#EDEDED",
   },
   header: {
     backgroundColor: "#EDEDED",
-    // width: "100%",
-    // height: "22%",
-    // borderBottomRightRadius: 60,
-    // backgroundColor: "red",
     marginBottom: 10,
   },
   body: {
     flex: 1,
     alignItems: "center",
     backgroundColor: "#FAFAFA",
-    // backgroundColor: "#AAAAAA",
     width: "100%",
     height: "100%",
     borderTopRightRadius: 40,
@@ -200,21 +191,15 @@ const styles = StyleSheet.create({
     display: "flex",
     width: "100%",
     marginTop: 50,
-    // marginBottom: 12,
     elevation: 4,
     shadowOffset: {
       width: 0,
       height: 1,
     },
     shadowOpacity: 0.08,
-    // shadowRadius: 4,
-    // marginBottom: 20,
-    // backgroundColor:'red'
   },
 
   viewImage: {
-    // width: "28%",
-    // backgroundColor: 'red',
     alignItems: "center",
     position: "relative",
   },
@@ -245,6 +230,5 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: "90%",
     height: "68%",
-    // paddingLeft: 20
   },
 });

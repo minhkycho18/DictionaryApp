@@ -13,7 +13,7 @@ export const Styles = StyleSheet.create({
         width: '98%',
         height: '100%',
         // backgroundColor:'red'
-        display:'flex'
+        display: 'flex'
     },
     cardFace: {
         // marginLeft:5,
@@ -51,7 +51,7 @@ export const Styles = StyleSheet.create({
         // justifyContent: 'center',
         width: '100%',
         // backgroundColor: 'red',
-        marginTop: '40%',
+        marginTop: '30%',
     },
     word: {
         fontSize: 32,
@@ -76,7 +76,7 @@ export const Styles = StyleSheet.create({
         gap: 8,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius:40
+        borderRadius: 40
     },
     Pos: {
         width: '80%',
@@ -96,7 +96,7 @@ export const Styles = StyleSheet.create({
     type: {
         marginTop: 12,
         alignItems: 'center',
-        borderRadius:40,
+        borderRadius: 40,
         backgroundColor: "#B4B6E6",
 
 
@@ -108,7 +108,7 @@ export const Styles = StyleSheet.create({
         borderRadius: 20,
         // backgroundColor: "#B4B6E6",
         color: '#fff',
-        
+
     },
     viewdef: {
         marginTop: 20,
@@ -240,7 +240,7 @@ export const Styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 40,
-        top:'-25%'
+        top: '-25%'
     },
     back: {
         width: '20%',
@@ -250,11 +250,11 @@ export const Styles = StyleSheet.create({
         bottom: '17%',
         borderTopRightRadius: 20,
         borderBottomRightRadius: 20,
-        
+
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems:'center',
+        alignItems: 'center',
         shadowColor: "#aaa",
         shadowOffset: {
             width: 0,

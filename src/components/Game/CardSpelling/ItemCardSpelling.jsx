@@ -7,7 +7,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { colors } from "~/constants/theme";
 import { TextInput } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { getWordListByWordlistId } from "~/api/WordList";
+import { Entypo } from "@expo/vector-icons";
 
 export default function ItemCardSpelling({ onNextSlider, vocal }, props) {
   const [input, setInput] = useState("");
@@ -116,7 +116,7 @@ export default function ItemCardSpelling({ onNextSlider, vocal }, props) {
               color: isSuccess ? "#0F870F" : "red",
             }}
           >
-            {answer}
+            {question}
           </Text>
         )}
       </View>
@@ -151,8 +151,9 @@ export default function ItemCardSpelling({ onNextSlider, vocal }, props) {
             />
           </View>
         )}
+
         <View style={Styles.button}>
-          <View style={Styles.buttonMain}>
+          {!isConfirm && (
             <TouchableOpacity
               ref={hintRef}
               style={Styles.hint}
@@ -175,43 +176,44 @@ export default function ItemCardSpelling({ onNextSlider, vocal }, props) {
               </Text>
               <FontAwesome5 name="lightbulb" size={24} color="#FFDD3E" />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={Styles.confirm}
-              disabled={isConfirm}
-              onPress={handleConfirm}
-              ref={confirmRef}
-            >
+          )}
+          {isConfirm && (
+            <TouchableOpacity style={Styles.confirm} onPress={onNextSlider}>
               <Text
                 style={{
                   fontFamily: "Quicksand-Bold",
                   fontSize: 18,
                   color: "#fff",
                   textAlign: "center",
+                  marginLeft: 10,
                 }}
               >
-                confirm
+                next
               </Text>
-            </TouchableOpacity>
-          </View>
-          {isConfirm && (
-            <TouchableOpacity style={Styles.next} onPress={onNextSlider}>
-              <Text
-                style={{
-                  fontFamily: "Quicksand-Bold",
-                  fontSize: 18,
-                  color: "#fff",
-                }}
-              >
-                Next
-              </Text>
-              <AntDesign
-                name="right"
-                size={20}
+              <Entypo
+                name="chevron-right"
+                size={22}
                 color="#fff"
                 style={{ marginTop: 5 }}
               />
             </TouchableOpacity>
           )}
+          <TouchableOpacity
+            style={Styles.next}
+            ref={confirmRef}
+            onPress={handleConfirm}
+            disabled={isConfirm}
+          >
+            <Text
+              style={{
+                fontFamily: "Quicksand-Bold",
+                fontSize: 18,
+                color: "#fff",
+              }}
+            >
+              confirm
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
