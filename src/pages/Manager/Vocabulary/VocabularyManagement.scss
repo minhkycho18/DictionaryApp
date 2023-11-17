@@ -20,8 +20,7 @@
       }
 
       .ant-col {
-
-        color: #05041B;
+        color: #05041b;
         font-weight: 500;
         font-size: 25px;
         padding: 0;
@@ -29,7 +28,7 @@
     }
 
     .box_data {
-      background-color: #FEFEFE;
+      background-color: #fefefe;
       border-radius: 30px;
       display: flex;
       flex-direction: column;
@@ -41,7 +40,7 @@
         width: 100%;
       }
 
-      .search_box{
+      .search_box {
         margin-top: 10px;
         .pos_filter-title {
           font-size: 16px;
@@ -60,13 +59,11 @@
           margin-top: 20px;
           &:hover {
             box-shadow: rgb(209, 202, 232) 0 1px 4px,
-            rgb(209, 202, 232) 0 0 4px 3px;
+              rgb(209, 202, 232) 0 0 4px 3px;
             border: 1px solid #6248b1 !important;
           }
         }
       }
-
-
 
       .table_box {
         table {

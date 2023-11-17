@@ -16,6 +16,7 @@ import WordListsPage from "../pages/Learner/wordlists/WordListsPage";
 import WordListDetail from "../pages/Learner/wordlists/WordListDetail";
 import ExploredWordList from "../pages/Learner/wordlists/ExploredWordList/ExploredWordList";
 import Game from "../pages/Learner/game/Game";
+import WordListManagement from "../pages/Manager/WordList/WordListManagement";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -53,7 +54,6 @@ const routers = createBrowserRouter([
           {
             path: "default",
             element: <ExploredWordList type={"default"} />,
-           
           },
         ],
       },
@@ -132,10 +132,10 @@ const routers = createBrowserRouter([
         path: "vocabulary",
         element: <VocabularyManagement />,
       },
-      // {
-      //   path: "wordlist",
-      //   element: <Leitner />,
-      // },
+      {
+        path: "wordlist",
+        element: <WordListManagement />,
+      },
       // {
       //   path: "video",
       //   element: <Leitner />,
