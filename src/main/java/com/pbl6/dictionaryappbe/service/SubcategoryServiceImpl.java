@@ -49,6 +49,7 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
     private final VocabularyRepository vocabularyRepository;
     private final DefinitionRepository definitionRepository;
 
+    private final Random rand = new Random();
     private static final int MAXIMUM_NUMBER_OF_QUESTION = 30;
     private static final double PERCENTAGE_OF_LEARNING_QUESTION = 0.8;
 
@@ -347,8 +348,34 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
     }
 
     @Override
-    public List<QuizQuestionDto> createQuizGame(List<SubcategoryDetail> subcategoryDetails) {
-        return Collections.emptyList();
+    public List<QuizQuestionDto> createQuizGame(List<SubcategoryDetail> randomSubDetails, Long subcategoryId) {
+        List<VocabDef> existedWords =
+                subcategoryDetailRepository.findRandomSubReviewed(subcategoryId, randomSubDetails.size() * 4)
+                        .stream()
+                        .map(SubcategoryDetail::getVocabDef)
+                        .toList();
+        if (existedWords.size() < 4) {
+            existedWords = vocabDefRepository.findRandomLimit(randomSubDetails.size() * 4);
+        }
+
+        final List<VocabDef> finalExistedWord = existedWords;
+        return MapperUtils.toTargetList(subcategoryDetailMapper::toVocabularyQuestion, randomSubDetails)
+                .stream()
+                .map(vocabularyQuestionDto -> {
+                    Map<String, Boolean> answers = new HashMap<>();
+                    answers.put(vocabularyQuestionDto.getWord(), true);
+                    Definition definition =
+                            definitionRepository.findByVocabIdAndDefId(vocabularyQuestionDto.getVocabId(), vocabularyQuestionDto.getDefId())
+                                    .orElseThrow(() -> new RecordNotFoundException("Definition not found"));
+                    while (answers.size() < 4) {
+                        int randomIndex = rand.nextInt(finalExistedWord.size());
+                        String descOfRandomWord = finalExistedWord.get(randomIndex).getDefinition().getWordDesc();
+                        if (definition.getWordDesc().equals(descOfRandomWord)) continue;
+                        answers.put(finalExistedWord.get(randomIndex).getVocabulary().getWord(), false);
+                    }
+                    return new QuizQuestionDto(vocabularyQuestionDto, definition.getWordDesc(), answers);
+                })
+                .toList();
     }
 
     @Override

@@ -79,4 +79,14 @@ public interface SubcategoryDetailRepository
             where v.status = "DEFAUlT" and sd.subcategory_id = :subcategoryId
             """, nativeQuery = true)
     List<SubcategoryDetail> findAllDefaultVocabBySubcategoryId(@Param("subcategoryId") Long subcategoryId);
+
+    @Query(value = """
+            SELECT *
+            FROM subcategory_detail
+            where subcategory_id = :subcategoryId and is_review = true
+            ORDER BY rand()
+            limit :limit
+            """, nativeQuery = true)
+    List<SubcategoryDetail> findRandomSubReviewed(@Param("subcategoryId") Long subcategoryId,
+                                                  @Param("limit") int limit);
 }
