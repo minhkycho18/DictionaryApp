@@ -18,7 +18,11 @@ public class QuizQuestionDto extends VocabularyQuestionDto {
                 vocabularyQuestionDto.getPhoneUs(),
                 vocabularyQuestionDto.getPhoneUk(),
                 vocabularyQuestionDto.getAudioUs(),
-                vocabularyQuestionDto.getAudioUk());
+                vocabularyQuestionDto.getAudioUk(),
+                vocabularyQuestionDto.getIsReview(),
+                vocabularyQuestionDto.getIsFlashcard(),
+                vocabularyQuestionDto.getIsSpelling(),
+                vocabularyQuestionDto.getIsQuiz());
         this.question = question;
         this.result = result;
     }

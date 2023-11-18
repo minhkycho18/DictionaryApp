@@ -18,4 +18,8 @@ public class VocabularyQuestionDto {
     private String phoneUk;
     private String audioUs;
     private String audioUk;
+    private Boolean isReview;
+    private Boolean isFlashcard;
+    private Boolean isSpelling;
+    private Boolean isQuiz;
 }
