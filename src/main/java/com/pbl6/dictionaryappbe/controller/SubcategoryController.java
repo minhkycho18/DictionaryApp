@@ -145,7 +145,7 @@ public class SubcategoryController {
                 subcategoryGameService.getRandomSubDetailByGameType(gameType, subcategoryId, wordListId);
         return switch (gameType) {
             case FLASHCARD -> subcategoryGameService.createFlashcardGame(subcategoryDetails);
-            case QUIZ -> subcategoryGameService.createQuizGame(subcategoryDetails);
+            case QUIZ -> subcategoryGameService.createQuizGame(subcategoryDetails, subcategoryId);
             default -> subcategoryGameService.createReviewSpellingGame(subcategoryDetails);
         };
     }

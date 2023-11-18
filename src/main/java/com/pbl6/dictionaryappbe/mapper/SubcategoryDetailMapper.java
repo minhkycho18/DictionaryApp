@@ -74,6 +74,10 @@ public interface SubcategoryDetailMapper {
     @Mapping(source = "vocabDef.vocabulary.phoneUk", target = "phoneUk")
     @Mapping(source = "vocabDef.vocabulary.audioUs", target = "audioUs")
     @Mapping(source = "vocabDef.vocabulary.audioUk", target = "audioUk")
+//    @Mapping(source = "isReview", target = "isReview")
+//    @Mapping(source = "isFlashcard", target = "isFlashcard")
+//    @Mapping(source = "isSpelling", target = "isSpelling")
+//    @Mapping(source = "isQuiz", target = "isQuiz")
     VocabularyQuestionDto toVocabularyQuestion(SubcategoryDetail subcategoryDetail);
 }
 

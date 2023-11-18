@@ -19,4 +19,14 @@ public interface VocabDefRepository extends JpaRepository<VocabDef, VocabDefId> 
     boolean isDeletable(@Param("vocabId") Long vocabId);
 
     List<VocabDef> findAllByVocabId(Long vocabId);
+
+    @Query(value = """
+            SELECT *
+            FROM vocab_def
+            WHERE is_deleted = false
+            GROUP BY vocab_id
+            ORDER BY RAND()
+            limit :limit
+            """,nativeQuery = true)
+    List<VocabDef> findRandomLimit(int limit);
 }

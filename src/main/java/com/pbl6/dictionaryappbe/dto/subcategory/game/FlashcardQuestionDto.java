@@ -16,7 +16,10 @@ public class FlashcardQuestionDto extends VocabularyQuestionDto{
                 vocabularyQuestionDto.getPhoneUs(),
                 vocabularyQuestionDto.getPhoneUk(),
                 vocabularyQuestionDto.getAudioUs(),
-                vocabularyQuestionDto.getAudioUk());
-
+                vocabularyQuestionDto.getAudioUk(),
+                vocabularyQuestionDto.getIsReview(),
+                vocabularyQuestionDto.getIsFlashcard(),
+                vocabularyQuestionDto.getIsSpelling(),
+                vocabularyQuestionDto.getIsQuiz());
     }
 }

@@ -13,7 +13,7 @@ public interface SubcategoryGameService {
 
     List<FlashcardQuestionDto> createFlashcardGame(List<SubcategoryDetail> vocabularyQuestionDtos);
 
-    List<QuizQuestionDto> createQuizGame(List<SubcategoryDetail> vocabularyQuestionDtos);
+    List<QuizQuestionDto> createQuizGame(List<SubcategoryDetail> vocabularyQuestionDtos, Long subcategoryId);
 
     List<ReviewSpellingContentDto> createReviewSpellingGame(List<SubcategoryDetail> vocabularyQuestionDtos);
 
