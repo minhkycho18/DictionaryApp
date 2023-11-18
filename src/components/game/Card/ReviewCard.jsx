@@ -1,5 +1,5 @@
 import { Space, Tag } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ReviewCard.scss";
 import { BsArrowReturnLeft, BsVolumeUp } from "react-icons/bs";
 import WrapCard from "./WrapCard";
@@ -9,9 +9,19 @@ import { upperFirst } from "lodash";
 import colorPos from "../../../helpers/ColorPos";
 import ReactCardFlip from "react-card-flip";
 import { BiSolidVolumeFull, BiSolidVolumeMute } from "react-icons/bi";
+import { useDispatch } from "react-redux";
+import { updateVocab } from "../../../stores/game/gameSlice";
 
 const ReviewCard = (props) => {
   const [isFlip, setIsFlip] = useState(false);
+  const dispatch = useDispatch();
+  // useEffect(() => {
+  //   if (props?.onSelect) {
+  //     dispatch(updateVocab(props.vocabInfo));
+  //   }
+  //   return () => {};
+  // }, [dispatch, props?.onSelect, props.vocabInfo]);
+
   return (
     <ReactCardFlip isFlipped={isFlip} flipDirection="horizontal">
       <WrapCard {...props} imgTop={waveTop} imgBot={waveBottom}>

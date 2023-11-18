@@ -31,16 +31,16 @@ const Game = (props) => {
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modal, modalCtx] = Modal.useModal();
-  const handleChangeLesson = (lessonType) => {
-    if (lessonType.toLowerCase() !== type.toLowerCase()) {
+  const handleChangeLesson = (lessonType, success) => {
+    const handleModalAction = (confirmed) => {
+      setIsModalOpen(false);
+      if (confirmed) {
+        setCurrent(0);
+        setType(lessonType);
+      }
+    };
+    if (lessonType.toLowerCase() !== type.toLowerCase() && !success) {
       setIsModalOpen(true);
-      const handleModalAction = (confirmed) => {
-        setIsModalOpen(false);
-        if (confirmed) {
-          setCurrent(0);
-          setType(lessonType);
-        }
-      };
 
       modal.confirm({
         content: (
@@ -65,6 +65,9 @@ const Game = (props) => {
           className: "modal__button1 modal__button1--cancel",
         },
       });
+    }
+    if (success) {
+      handleModalAction(success);
     }
   };
   const handleChangeSlide = () => {
@@ -137,6 +140,7 @@ const Game = (props) => {
             <SuccessCard
               type={"success-review"}
               onSelect={current === result.length}
+              handleChangeLesson={handleChangeLesson}
             />
             <ReviewCard type={"default"} />
           </Carousel>

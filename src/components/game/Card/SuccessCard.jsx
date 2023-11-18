@@ -1,9 +1,9 @@
+import { InboxOutlined } from "@ant-design/icons";
 import { Button, Image, Space } from "antd";
 import React from "react";
+import logo from "../../../assets/images/Animation.svg";
 import "./SuccessCard.scss";
 import WrapCard from "./WrapCard";
-import logo from "../../../assets/images/Animation.svg";
-import { FolderOutlined, InboxOutlined } from "@ant-design/icons";
 const SuccessCard = (props) => {
   const renderBody = () => {
     switch (props?.type) {
@@ -11,7 +11,12 @@ const SuccessCard = (props) => {
         return (
           <Space direction="vertical" className="success-card ">
             <Space direction="vertical" className="success-card__body">
-              <Image src={logo} loading="lazy" preview={false}></Image>
+              <Image
+                src={logo}
+                loading="lazy"
+                preview={false}
+                style={{ pointerEvents: "none" }}
+              ></Image>
               <Space>
                 <Space className="review-card__title">Success !</Space>
               </Space>
@@ -20,7 +25,12 @@ const SuccessCard = (props) => {
                 {props?.message} You've reviewed all the word in this lesson.
               </Space>
             </Space>
-            <Button type="primary">Practice</Button>
+            <Button
+              type="primary"
+              onClick={() => props.handleChangeLesson("flashCard", true)}
+            >
+              Practice
+            </Button>
           </Space>
         );
       case "success-flash_card":
@@ -62,19 +72,6 @@ const SuccessCard = (props) => {
       {...props}
       // imgTop={waveTop} imgBot={waveBottom}
     >
-      {/* <Space direction="vertical" className="success-card ">
-        <Space direction="vertical" className="success-card__body">
-          <Image src={logo} loading="lazy" preview={false}></Image>
-          <Space>
-            <Space className="review-card__title">Success !</Space>
-          </Space>
-
-          <Space className="review-card__def">
-            {props?.message} You've reviewed all the word in this lesson.
-          </Space>
-        </Space>
-        <Button type="primary">Practice</Button>
-      </Space> */}
       {renderBody()}
     </WrapCard>
   );
