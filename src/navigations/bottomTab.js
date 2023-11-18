@@ -8,6 +8,7 @@ import SplashScreen from "~/components/SplashScreen";
 import { useRef, useState, useEffect } from 'react'
 import { Dimensions, Animated, Keyboard, Platform } from "react-native";
 import index from "~/components/Study";
+import Leitner from "~/screens/Leitner";
 export default function BottomTab() {
   const tabOffsetValue = useRef(new Animated.Value(0)).current;
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -94,7 +95,7 @@ export default function BottomTab() {
               }).start();
             }
           })} />
-        <Tab.Screen name="Profile" component={Profile} options={{ ...styles.tabScreenStyle }}
+        <Tab.Screen name="Profile" component={Leitner} options={{ ...styles.tabScreenStyle }}
           listeners={({ navigation, route }) => ({
             tabPress: e => {
               Animated.spring(tabOffsetValue, {
