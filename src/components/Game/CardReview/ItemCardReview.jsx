@@ -47,7 +47,10 @@ export default function ItemCardReview({ vocal }) {
             {vocal.audioUs !== null ? (
               <AntDesign name="sound" size={24} color="#00BFA5" />
             ) : (
-              <Entypo name="sound-mute" size={24} color="#ccc" />
+              <Image
+                source={require("~/assets/mute.png")}
+                style={{ width: 28, height: 28, tintColor: colors.textColor }}
+              />
             )}
           </TouchableOpacity>
           <View style={Styles.content}>
@@ -56,12 +59,14 @@ export default function ItemCardReview({ vocal }) {
                 ...Styles.word,
                 fontFamily: "Quicksand-Bold",
                 textAlign: "center",
+                marginBottom: "6%",
               }}
             >
               {vocal.word}
             </Text>
-            {vocal.phoneUs !== null && (
-              <View style={Styles.viewPos}>
+
+            <View style={Styles.viewPos}>
+              {vocal.phoneUs !== null && (
                 <View style={Styles.Pos}>
                   <Text
                     style={{
@@ -91,18 +96,19 @@ export default function ItemCardReview({ vocal }) {
                     {vocal?.phoneUk}
                   </Text>
                 </View>
-                <View style={Styles.type}>
-                  <Text
-                    style={{
-                      ...Styles.textType,
-                      fontFamily: "Quicksand-Bold",
-                    }}
-                  >
-                    {vocal?.pos}
-                  </Text>
-                </View>
+              )}
+              <View style={Styles.type}>
+                <Text
+                  style={{
+                    ...Styles.textType,
+                    fontFamily: "Quicksand-Bold",
+                  }}
+                >
+                  {vocal?.pos}
+                </Text>
               </View>
-            )}
+            </View>
+
             <View style={Styles.viewdef}>
               <Text
                 numberOfLines={6}
@@ -115,31 +121,12 @@ export default function ItemCardReview({ vocal }) {
                 {vocal?.wordDesc}
               </Text>
             </View>
-            {/* <View style={Styles.synonym}>
-              <Text
-                style={{
-                  ...Styles.synonym_main,
-                  fontFamily: "Quicksand-SemiBold",
-                }}
-              >
-                Synonym:
-              </Text>
-
-              <View style={Styles.synonym_Item}>
-                <Text style={Styles.synonym_Item__Text}>perfunctorily</Text>
-              </View>
-              <View style={Styles.synonym_Item}>
-                <Text style={Styles.synonym_Item__Text}>pro forma</Text>
-              </View>
-              <View style={Styles.synonym_Item}>
-                <Text style={Styles.synonym_Item__Text}>pro forma</Text>
-              </View>
-            </View> */}
           </View>
 
           <TouchableOpacity
             style={Styles.bottom}
             onPress={() => setIsFlip(true)}
+            disabled={vocal?.example === null}
           >
             <Image
               source={require("~/assets/wave.png")}
@@ -151,11 +138,13 @@ export default function ItemCardReview({ vocal }) {
                 transform: [{ rotate: "180deg" }],
               }}
             />
-            <Text
-              style={{ ...Styles.textButton, fontFamily: "Quicksand-Bold" }}
-            >
-              Click to see example
-            </Text>
+            {vocal?.example !== null && (
+              <Text
+                style={{ ...Styles.textButton, fontFamily: "Quicksand-Bold" }}
+              >
+                Click to see example
+              </Text>
+            )}
           </TouchableOpacity>
         </View>
         {/* Back Side */}
@@ -177,7 +166,10 @@ export default function ItemCardReview({ vocal }) {
             {vocal.audioUs !== null ? (
               <AntDesign name="sound" size={24} color="#00BFA5" />
             ) : (
-              <Entypo name="sound-mute" size={24} color="#ccc" />
+              <Image
+                source={require("~/assets/mute.png")}
+                style={{ width: 28, height: 28, tintColor: colors.textColor }}
+              />
             )}
           </TouchableOpacity>
           <View style={{ ...Styles.content, marginTop: "1%" }}>

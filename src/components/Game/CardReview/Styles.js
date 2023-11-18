@@ -47,11 +47,14 @@ export const Styles = StyleSheet.create({
     content: {
         alignItems: 'center',
         width: '100%',
-        marginTop: '-6%',
+        position: 'absolute',
+        top: "35%",
+        transform: [{ translateY: -50 }],
     },
     word: {
         fontSize: 32,
-        color: colors.textTitle
+        color: colors.textTitle,
+
     },
     viewExample: {
         marginTop: 10,
@@ -68,7 +71,6 @@ export const Styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         width: "80%",
-        marginTop: 20,
         gap: 8,
         justifyContent: 'center',
         alignItems: 'center'
@@ -77,8 +79,9 @@ export const Styles = StyleSheet.create({
         width: '80%',
         display: 'flex',
         flexDirection: 'row',
-        gap: 5,
+        gap: 10,
         justifyContent: 'center',
+        marginBottom: '2%'
     },
     example: {
         width: '80%',
@@ -89,8 +92,8 @@ export const Styles = StyleSheet.create({
         // justifyContent: 'space-around',
     },
     type: {
-        marginTop: 10,
         alignItems: 'center',
+
 
     },
     textType: {
@@ -102,8 +105,8 @@ export const Styles = StyleSheet.create({
 
     },
     viewdef: {
-        marginTop: 20,
         width: '90%',
+        marginTop: '3%'
     },
     textDef: {
         fontSize: 16,

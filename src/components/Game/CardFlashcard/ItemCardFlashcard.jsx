@@ -88,7 +88,7 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
         </View>
         {/* Back Side */}
         <View style={Styles.cardBack}>
-          <View style={{ ...Styles.content, marginTop: "65%" }}>
+          <View style={{ ...Styles.content, marginTop: "50%" }}>
             <View style={Styles.viewExample}>
               <View style={Styles.example}>
                 <Text
