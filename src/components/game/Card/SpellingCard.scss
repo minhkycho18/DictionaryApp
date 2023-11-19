@@ -23,6 +23,9 @@
     line-height: 27px;
     font-weight: 500;
     margin: 0px 8px;
+    min-height: 120px;
+    text-wrap: wrap;
+    word-wrap: break-word;
   }
   &__answer {
     font-size: 22px;

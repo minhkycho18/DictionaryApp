@@ -3,7 +3,8 @@ import { upperFirst } from "lodash";
 import React, { useState } from "react";
 import ReactCardFlip from "react-card-flip";
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
-import { BsArrowReturnLeft, BsVolumeUp } from "react-icons/bs";
+import { BiSolidVolumeFull, BiSolidVolumeMute } from "react-icons/bi";
+import { BsArrowReturnLeft } from "react-icons/bs";
 import waveBottom from "../../../assets/images/wave-flash-bottom.svg";
 import waveTop from "../../../assets/images/wave-flash-top.svg";
 import colorPos from "../../../helpers/ColorPos";
@@ -11,12 +12,19 @@ import "./FlashCard.scss";
 import WrapCard from "./WrapCard";
 const FlashCard = (props) => {
   const [isFlip, setIsFlip] = useState(false);
+
   const changeToNext = () => {
     props.onSelect && props.handleChangeSlide();
+  };
+  const handleCheckCorrect = (answer) => {
+    if (answer === props.vocabInfo.result) {
+      props.handleCorrectFlashCard(props.vocabInfo);
+    }
   };
   const flipCard = () => {
     setIsFlip(!isFlip);
   };
+
   return (
     <ReactCardFlip isFlipped={isFlip} flipDirection="horizontal">
       <WrapCard
@@ -31,17 +39,31 @@ const FlashCard = (props) => {
           style={{ padding: 32 }}
         >
           <Space className="review-card__icon">
-            <BsVolumeUp className="review-card__sound"></BsVolumeUp>
+            {props?.vocabInfo?.audioUk && (
+              <BiSolidVolumeFull
+                className="review-card__sound"
+                onClick={() => new Audio(props?.vocabInfo?.audioUk).play()}
+              />
+            )}
+            {!props?.vocabInfo?.audioUk && (
+              <BiSolidVolumeMute
+                className="review-card__sound"
+                style={{ color: "#a9a8a8" }}
+              />
+            )}
           </Space>
           <Space direction="vertical" className="review-card__body">
-            <Space className="review-card__title">Hello</Space>
+            <Space className="review-card__title">
+              {props?.vocabInfo?.word}
+            </Space>
             <Tag
-              color={colorPos.get(props?.vocab?.pos)}
-              style={{ fontSize: "15px" }}
+              color={colorPos.get(props?.vocabInfo?.pos)}
+              style={{ fontSize: "18px", margin: "20px 0 20px 0" }}
             >
-              {upperFirst(props?.vocab?.pos)}
+              {upperFirst(props?.vocabInfo?.pos)}
             </Tag>
-            <Space className="review-card__pos">Verb</Space>
+
+            {/* <Space className="review-card__pos">Verb</Space> */}
           </Space>
           <Space
             className="flash-card__example"
@@ -56,15 +78,25 @@ const FlashCard = (props) => {
       <WrapCard {...props} imgTop={waveTop}>
         <Space direction="vertical" className="flash-card">
           <Space className="review-card__icon">
-            <BsVolumeUp className="review-card__sound"></BsVolumeUp>
+            {props?.vocabInfo?.audioUk && (
+              <BiSolidVolumeFull
+                className="review-card__sound"
+                onClick={() => new Audio(props?.vocabInfo?.audioUk).play()}
+              />
+            )}
+            {!props?.vocabInfo?.audioUk && (
+              <BiSolidVolumeMute
+                className="review-card__sound"
+                style={{ color: "#a9a8a8" }}
+              />
+            )}
           </Space>
           <Space direction="vertical" className="review-card__body">
             <Space className="review-card__title--example review-card__title">
               Definition
             </Space>
             <Space className="flash-card__definition">
-              to pursue wild animals in order to kill or catch them, for sport
-              or food
+              {props?.vocabInfo?.question}
             </Space>
           </Space>
           <Space
@@ -78,26 +110,31 @@ const FlashCard = (props) => {
             <Col className="col-css" span={12}>
               <Space
                 className="flash-card__options--item flash-card__unknown"
-                onClick={changeToNext}
+                onClick={() => {
+                  handleCheckCorrect(false);
+                  changeToNext();
+                }}
                 style={{ cursor: `${props.onSelect ? "pointer" : "default"}` }}
               >
                 <AiOutlineCloseCircle className="flash-card__options--icon flash-card__unknown--icon" />
-                <span>Didn't know it</span>
+                <span>False</span>
               </Space>
             </Col>
             <Col className="col-css" span={12}>
               <Space
                 className="flash-card__options--item flash-card__know"
-                onClick={changeToNext}
+                onClick={() => {
+                  handleCheckCorrect(true);
+                  changeToNext();
+                }}
                 style={{ cursor: `${props.onSelect ? "pointer" : "default"}` }}
               >
                 <AiOutlineCheckCircle className="flash-card__options--icon flash-card__know--icon" />
-                <span> Knew it</span>
+                <span>True</span>
               </Space>
             </Col>
           </Row>
         </Space>
-        {/* </Space> */}
       </WrapCard>
     </ReactCardFlip>
   );

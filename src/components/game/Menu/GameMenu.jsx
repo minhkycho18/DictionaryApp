@@ -1,25 +1,30 @@
+import { ArrowLeftOutlined, CheckCircleFilled } from "@ant-design/icons";
 import { Image, Space } from "antd";
 import React from "react";
-import "./GameMenu.scss";
-import quiz from "../../../assets/images/quiz.svg";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import flashcard from "../../../assets/images/flashcard.svg";
+import quiz from "../../../assets/images/quiz.svg";
 import review from "../../../assets/images/review.svg";
 import spelling from "../../../assets/images/spelling.svg";
-import { ArrowLeftOutlined, CheckCircleFilled } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import "./GameMenu.scss";
 const REVIEW = "review";
 const FLASH_CARD = "flashCard";
 const QUIZ = "quiz";
 const SPELLING = "spelling";
 const GameMenu = (props) => {
   const navigate = useNavigate();
+  const { isReview, isFlashcard, isQuiz, isSpelling } = useSelector(
+    (state) => state.game
+  );
   const handleChangeLesson = (lesson) => {
     props.onChangeLesson(lesson);
   };
+
   return (
     <Space className="game-menu__wrap">
       <Space
-        className="game-menu"
+        className="game-menu game-menu__item--mobile"
         style={{ marginTop: 13, marginRight: 8 }}
         onClick={() => navigate(-1)}
       >
@@ -32,7 +37,7 @@ const GameMenu = (props) => {
         <Space
           className={`game-menu__item border-left ${
             props.lesson === REVIEW ? "game-menu__item--active" : ""
-          }`}
+          } ${isReview ? "game-menu__item--success" : ""}`}
           onClick={() => handleChangeLesson(REVIEW)}
         >
           <CheckCircleFilled className="game-menu__item--checked" />
@@ -50,7 +55,7 @@ const GameMenu = (props) => {
         <Space
           className={`game-menu__item ${
             props.lesson === FLASH_CARD ? "game-menu__item--active" : ""
-          }`}
+          } ${isFlashcard ? "game-menu__item--success" : ""}`}
           onClick={() => handleChangeLesson(FLASH_CARD)}
         >
           <CheckCircleFilled className="game-menu__item--checked" />
@@ -61,7 +66,7 @@ const GameMenu = (props) => {
         <Space
           className={`game-menu__item ${
             props.lesson === SPELLING ? "game-menu__item--active" : ""
-          }`}
+          } ${isSpelling ? "game-menu__item--success" : ""}`}
           onClick={() => handleChangeLesson(SPELLING)}
         >
           <CheckCircleFilled className="game-menu__item--checked" />
@@ -71,7 +76,7 @@ const GameMenu = (props) => {
         <Space
           className={` game-menu__item border-right ${
             props.lesson === QUIZ ? "game-menu__item--active" : ""
-          } game-menu__item--success`}
+          } ${isQuiz ? "game-menu__item--success" : ""}`}
           // className="game-menu__item border-right game-menu__item--success"
           onClick={() => handleChangeLesson(QUIZ)}
         >

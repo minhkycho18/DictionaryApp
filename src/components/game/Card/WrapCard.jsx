@@ -16,12 +16,29 @@ const WrapCard = (props) => {
       {props.type === "spelling" && (
         <Space.Compact
           className="wrap-card__wave wrap-card__wave--top"
-          // style={{ paddingTop: 64 }}
           direction="vertical"
         >
           <div
             style={{
               backgroundColor: "#00bfa5",
+              height: 80,
+              display: "inline-block",
+              width: "100%",
+            }}
+          >
+            {" "}
+          </div>
+          <Image src={props?.imgTop} preview={false} width={482} />
+        </Space.Compact>
+      )}
+      {props.type === "quiz" && (
+        <Space.Compact
+          className="wrap-card__wave wrap-card__wave--top"
+          direction="vertical"
+        >
+          <div
+            style={{
+              backgroundColor: "#2979ff",
               height: 80,
               display: "inline-block",
               width: "100%",

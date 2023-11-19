@@ -14,6 +14,7 @@ import changeTitle from "../../../helpers/changeTitle";
 import { getVocabsByGame } from "../../../stores/game/gameThunk";
 import "./Game.scss";
 import { LoadingOutlined } from "@ant-design/icons";
+import { getGameStatus } from "../../../stores/game/gameSlice";
 
 const REVIEW = "review";
 const FLASH_CARD = "flashCard";
@@ -29,19 +30,42 @@ const Game = (props) => {
   const [type, setType] = useState(localStorage.getItem("gameType") || REVIEW);
   const [current, setCurrent] = useState(0);
   const dispatch = useDispatch();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [, setIsModalOpen] = useState(false);
   const [modal, modalCtx] = Modal.useModal();
+  const [correctAnswerFlashcard, setCorrectAnswerFlashcard] = useState([]);
+
+  const handleCorrectFlashCard = (item) => {
+    setCorrectAnswerFlashcard([...correctAnswerFlashcard, item]);
+  };
+  useEffect(() => {
+    localStorage.setItem("gameType", type);
+    dispatch(
+      getVocabsByGame({
+        wordlistId: wlId,
+        subcategoryId: subId,
+        gameType: type.toLowerCase(),
+      })
+    )
+      .unwrap()
+      .then((rs) => {
+        dispatch(getGameStatus(rs));
+      });
+    return () => {
+      localStorage.setItem("gameType", REVIEW);
+    };
+  }, [dispatch, subId, type, wlId]);
+
   const handleChangeLesson = (lessonType, success) => {
     const handleModalAction = (confirmed) => {
       setIsModalOpen(false);
       if (confirmed) {
         setCurrent(0);
+        setCorrectAnswerFlashcard([]);
         setType(lessonType);
       }
     };
     if (lessonType.toLowerCase() !== type.toLowerCase() && !success) {
       setIsModalOpen(true);
-
       modal.confirm({
         content: (
           <Space direction="vertical" className="modal__content1">
@@ -87,33 +111,22 @@ const Game = (props) => {
     },
     mobile: {
       breakpoint: {
-        max: 464,
+        max: 767,
         min: 0,
       },
       items: 1,
-      partialVisibilityGutter: 30,
     },
     tablet: {
       breakpoint: {
         max: 1024,
-        min: 464,
+        min: 767,
       },
       items: 1,
       partialVisibilityGutter: 30,
     },
   };
-  const newArr = [1, 2, 3, 4, 5];
+  // const newArr = [1, 2, 3, 4, 5];
 
-  useEffect(() => {
-    localStorage.setItem("gameType", type);
-    dispatch(
-      getVocabsByGame({
-        wordlistId: wlId,
-        subcategoryId: subId,
-        gameType: type.toLowerCase(),
-      })
-    );
-  }, [dispatch, subId, type, wlId]);
   const renderCard = () => {
     switch (type) {
       case REVIEW:
@@ -161,16 +174,21 @@ const Game = (props) => {
             transitionDuration={2}
           >
             <ReviewCard type={"default"} />
-            {newArr.map((item, index) => (
+            {result.map((item, index) => (
               <FlashCard
                 key={index}
                 onSelect={current === index}
                 handleChangeSlide={handleChangeSlide}
+                vocabInfo={item}
+                handleCorrectFlashCard={handleCorrectFlashCard}
               />
             ))}
             <SuccessCard
               type={"success-flash_card"}
-              onSelect={current === newArr.length}
+              onSelect={current === result.length}
+              correctAnswerFlashcard={correctAnswerFlashcard}
+              resultLength={result.length}
+              handleChangeLesson={handleChangeLesson}
             />
             <ReviewCard type={"default"} />
           </Carousel>
@@ -179,9 +197,11 @@ const Game = (props) => {
         return (
           <Carousel
             arrows={false}
-            showDots
+            showDots={false}
             responsive={responsive}
+            draggable={false}
             slidesToSlide={1}
+            swipeable={false}
             ssr={false}
             afterChange={(nextSlide, { currentSlide, onMove }) => {
               setCurrent(currentSlide);
@@ -189,17 +209,22 @@ const Game = (props) => {
             ref={slide}
           >
             <ReviewCard type={"default"} />
-            {newArr.map((item, index) => (
+            {result.slice(0, 3).map((item, index) => (
               <SpellingCard
                 indexKey={index}
                 key={index}
                 onSelect={current === index}
+                handleCorrectFlashCard={handleCorrectFlashCard}
                 handleChangeSlide={handleChangeSlide}
+                vocabInfo={item}
               />
             ))}
             <SuccessCard
-              type={"success-flash_card"}
-              onSelect={current === newArr.length}
+              type={"success-spelling"}
+              onSelect={current === result.slice(0, 3).length}
+              correctAnswerFlashcard={correctAnswerFlashcard}
+              resultLength={result.slice(0, 3).length}
+              handleChangeLesson={handleChangeLesson}
             />
             <ReviewCard type={"default"} />
           </Carousel>
@@ -207,10 +232,12 @@ const Game = (props) => {
       case QUIZ:
         return (
           <Carousel
-            arrows
-            showDots
+            arrows={false}
+            showDots={false}
             responsive={responsive}
+            draggable={false}
             slidesToSlide={1}
+            swipeable={false}
             ssr={false}
             ref={slide}
             afterChange={(nextSlide, { currentSlide, onMove }) => {
@@ -218,9 +245,20 @@ const Game = (props) => {
             }}
           >
             <ReviewCard type={"default"} />
-            {newArr.map((item, index) => (
-              <QuizCard key={index} onSelect={current === index} />
+            {result.map((item, index) => (
+              <QuizCard
+                key={index}
+                onSelect={current === index}
+                handleCorrectFlashCard={handleCorrectFlashCard}
+                handleChangeSlide={handleChangeSlide}
+                vocabInfo={item}
+              />
             ))}
+            <SuccessCard
+              type={"success-flash_card"}
+              onSelect={current === result.length}
+              handleChangeLesson={handleChangeLesson}
+            />
             <ReviewCard type={"default"} />
           </Carousel>
         );
@@ -228,7 +266,7 @@ const Game = (props) => {
         return (
           <Carousel
             arrows={true}
-            //   showDots
+            showDots={false}
             draggable={true}
             responsive={responsive}
             slidesToSlide={1}
@@ -242,12 +280,14 @@ const Game = (props) => {
               <ReviewCard
                 key={index}
                 onSelect={current === index}
+                handleChangeSlide={handleChangeSlide}
                 vocabInfo={item}
               />
             ))}
             <SuccessCard
               type={"success-review"}
               onSelect={current === result.length}
+              handleChangeLesson={handleChangeLesson}
             />
             <ReviewCard type={"default"} />
           </Carousel>
@@ -265,7 +305,6 @@ const Game = (props) => {
             alignItems: "center",
           }}
         >
-          {/* <Spin spinning={loading} size="large" /> */}
           <Spin
             indicator={
               <LoadingOutlined
@@ -280,18 +319,7 @@ const Game = (props) => {
       ) : (
         renderCard()
       )}
-      {/* <Modal
-        centered
-        open={isModalOpen}
-        destroyOnClose={true}
-        okText={<span>Ok</span>}
-        cancelText={<span>Cancel</span>}
-        onOk={handleOkChange}
-        onCancel={handleCancel}
-      >
-        <Space>Are you sure? </Space>
-        <Space>Your progress will be lost. </Space>
-      </Modal> */}
+
       {modalCtx}
       <GameMenu onChangeLesson={handleChangeLesson} lesson={type} />
     </Space>

@@ -15,13 +15,12 @@ import { updateVocab } from "../../../stores/game/gameSlice";
 const ReviewCard = (props) => {
   const [isFlip, setIsFlip] = useState(false);
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   if (props?.onSelect) {
-  //     dispatch(updateVocab(props.vocabInfo));
-  //   }
-  //   return () => {};
-  // }, [dispatch, props?.onSelect, props.vocabInfo]);
-
+  useEffect(() => {
+    if (props?.onSelect) {
+      dispatch(updateVocab(props.vocabInfo));
+      console.log(props.vocabInfo);
+    }
+  }, [dispatch, props?.onSelect, props.vocabInfo]);
   return (
     <ReactCardFlip isFlipped={isFlip} flipDirection="horizontal">
       <WrapCard {...props} imgTop={waveTop} imgBot={waveBottom}>

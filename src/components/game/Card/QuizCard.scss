@@ -1,0 +1,43 @@
+@import "../../../assets/scss/font.scss";
+@import "../../../assets/scss/variable.scss";
+.quiz-card {
+  display: flex;
+  align-items: center;
+  &__body {
+    font-family: $font;
+    justify-content: center;
+    align-items: center;
+  }
+  &__options {
+    &__item {
+      width: 280px;
+      border: 1px solid #ddd;
+      padding: 12px 16px;
+      font-size: 16px;
+      border-radius: 16px;
+      line-height: 24px;
+      cursor: pointer;
+      font-weight: 500;
+      //   &:hover {
+      //     color: #8300c4;
+      //     background-color: #f5f0fe;
+      //     border: 1px solid #8300c4;
+      //   }
+      &--selected {
+        color: #8300c4;
+        background-color: #f5f0fe;
+        border: 1px solid #8300c4;
+      }
+    }
+  }
+  &__btn {
+    font-family: $font !important;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    padding: 0px 16px;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+  }
+}

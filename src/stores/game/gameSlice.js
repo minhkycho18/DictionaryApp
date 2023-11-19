@@ -10,19 +10,39 @@ const gameSlice = createSlice({
     loading: false,
     error: null,
     messageUpdated: null,
+    isReview: false,
+    isFlashcard: false,
+    isQuiz: false,
+    isSpelling: false,
   },
   reducers: {
     updateVocab(state, action) {
-      const initResult = [...state.result];
-      const index = initResult.findIndex(
-        (item) =>
-          item.vocabId === action.payload.vocabId &&
-          item.defId === action.payload.defId
+      // const initResult = [...state.result];
+      // const index = initResult.findIndex(
+      //   (item) =>
+      //     item.vocabId === action.payload.vocabId &&
+      //     item.defId === action.payload.defId
+      // );
+      // if (index !== -1) {
+      //   initResult[index] = action.payload;
+      // }
+      // state.result = initResult;
+    },
+    getGameStatus(state, action) {
+      state.isReview = action.payload.every((item) => item?.isReview === true);
+      state.isFlashcard = action.payload.every(
+        (item) => item?.isFlashcard === true
       );
-      if (index !== -1) {
-        initResult[index] = action.payload;
-      }
-      state.result = initResult;
+      state.isQuiz = action.payload.every((item) => item?.isQuiz === true);
+      state.isSpelling = action.payload.every(
+        (item) => item?.isSpelling === true
+      );
+      console.log(
+        state.isReview,
+        state.isFlashcard,
+        state.isQuiz,
+        state.isSpelling
+      );
     },
   },
   extraReducers: (builder) => {
@@ -53,5 +73,5 @@ const gameSlice = createSlice({
       });
   },
 });
-export const { updateVocab } = gameSlice.actions;
+export const { updateVocab, getGameStatus } = gameSlice.actions;
 export default gameSlice.reducer;

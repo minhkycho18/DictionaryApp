@@ -66,3 +66,29 @@
   border-radius: 0px 16px 16px 0px;
   margin-left: 3px;
 }
+/* Styles for mobile devices (less than or equal to 767px width) */
+@media only screen and (max-width: 767px) {
+  /* Mobile-specific styles */
+  .game-menu {
+    &__wrap {
+      // width: 100vw !important;
+      margin-bottom: 0px;
+    }
+    &__item {
+      width: calc(100vw / 4);
+      &--mobile {
+        display: none;
+      }
+    }
+  }
+}
+
+/* Styles for tablets (768px to 1023px width) */
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet-specific styles */
+}
+
+/* Styles for desktops (greater than or equal to 1024px width) */
+@media only screen and (min-width: 1024px) {
+  /* Desktop-specific styles */
+}

@@ -5,6 +5,9 @@ import logo from "../../../assets/images/Animation.svg";
 import "./SuccessCard.scss";
 import WrapCard from "./WrapCard";
 const SuccessCard = (props) => {
+  const changeToNextLesson = (lesson) => {
+    props.handleChangeLesson(lesson, true);
+  };
   const renderBody = () => {
     switch (props?.type) {
       case "success-review":
@@ -27,7 +30,7 @@ const SuccessCard = (props) => {
             </Space>
             <Button
               type="primary"
-              onClick={() => props.handleChangeLesson("flashCard", true)}
+              onClick={() => changeToNextLesson("flashCard")}
             >
               Practice
             </Button>
@@ -39,8 +42,13 @@ const SuccessCard = (props) => {
             <Space direction="vertical" className="success-card__body">
               <Image src={logo} loading="lazy" preview={false}></Image>
               <Space direction="vertical">
-                <Space className="review-card__title">Great !</Space>
-                {/* <Space className="review-card__title">1 Difficult words </Space> */}
+                {/* <Space className="review-card__title">Great !</Space> */}
+                <Space className="review-card__title">
+                  {props.onSelect &&
+                    props?.resultLength -
+                      props?.correctAnswerFlashcard.length}{" "}
+                  Difficult words{" "}
+                </Space>
               </Space>
               <Space className="success-card__box" direction="vertical">
                 <Space className="success-card__options success-card__options--leitner">
@@ -55,7 +63,47 @@ const SuccessCard = (props) => {
                   </Space>
                 </Space>
 
-                <Space className="success-card__options success-card__options--continue">
+                <Space
+                  className="success-card__options success-card__options--continue"
+                  onClick={() => changeToNextLesson("spelling")}
+                >
+                  Continue
+                </Space>
+              </Space>
+            </Space>
+          </Space>
+        );
+      case "success-spelling":
+        return (
+          <Space direction="vertical" className="success-card ">
+            <Space direction="vertical" className="success-card__body">
+              <Image src={logo} loading="lazy" preview={false}></Image>
+              <Space direction="vertical">
+                {/* <Space className="review-card__title">Great !</Space> */}
+                <Space className="review-card__title">
+                  {props.onSelect &&
+                    props?.resultLength -
+                      props?.correctAnswerFlashcard.length}{" "}
+                  wrong answers{" "}
+                </Space>
+              </Space>
+              <Space className="success-card__box" direction="vertical">
+                <Space className="success-card__options success-card__options--leitner">
+                  <InboxOutlined className="success-card__options__icon" />
+                  <Space direction="vertical">
+                    <div className="success-card__options__title ">
+                      Add to Leitner
+                    </div>
+                    <div className="success-card__options__desc ">
+                      Review them everyday!
+                    </div>
+                  </Space>
+                </Space>
+
+                <Space
+                  className="success-card__options success-card__options--continue"
+                  onClick={() => changeToNextLesson("quiz")}
+                >
                   Continue
                 </Space>
               </Space>

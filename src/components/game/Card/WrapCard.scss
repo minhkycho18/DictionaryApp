@@ -30,3 +30,20 @@
     }
   }
 }
+@media only screen and (max-width: 767px) {
+  /* Mobile-specific styles */
+  .wrap-card {
+    width: 100%;
+    &__wave {
+      width: 100%;
+    }
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet-specific styles */
+}
+
+@media only screen and (min-width: 1024px) {
+  /* Desktop-specific styles */
+}

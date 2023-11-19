@@ -7,7 +7,7 @@ import "./SpellingCard.scss";
 import WrapCard from "./WrapCard";
 import shuffleArray from "../../../helpers/shuffleArray";
 const SpellingCard = (props) => {
-  const initWord = "hello";
+  const initWord = props?.vocabInfo?.word;
   const emptyArray = Array(initWord.length).fill("");
   const [confirmed, setConfirmed] = useState(false);
   const [input, setInputWord] = useState("");
@@ -169,13 +169,20 @@ const SpellingCard = (props) => {
   const handleConfirm = (e) => {
     if (hint) {
       const newValues = inputValues.join("").toString();
-      console.log(inputValues.join(""));
-      setIsAnswered(newValues === initWord);
+      const isCorrect = newValues === initWord;
+      setIsAnswered(isCorrect);
+      if (isCorrect) {
+        props.handleCorrectFlashCard(props.vocabInfo);
+      }
     }
     if (hint === 0) {
-      console.log(e.answer.toString());
-      setIsAnswered(e.answer.toString() === initWord);
+      const isCorrect = e.answer.toString() === initWord;
+      setIsAnswered(isCorrect);
+      if (isCorrect) {
+        props.handleCorrectFlashCard(props.vocabInfo);
+      }
     }
+
     setConfirmed(!confirmed);
   };
   //======================================================================
@@ -186,11 +193,8 @@ const SpellingCard = (props) => {
           <Space direction="vertical" className="spelling-card__title">
             Spell it!
           </Space>
-          <Space direction="vertical" className="spelling-card__definition">
-            "a word we say when we are leaving or someone is leaving, or at the
-            end of a phone call a word we say when we are leaving or someone is
-            leaving, or at the end of a phone call a word we say when we are
-            leaving or someone is leaving, "
+          <Space className="spelling-card__definition">
+            {'"' + props?.vocabInfo?.wordDesc + ' "'}
           </Space>
         </Space>
 
