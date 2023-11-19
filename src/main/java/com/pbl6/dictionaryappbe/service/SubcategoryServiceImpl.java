@@ -409,6 +409,7 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
                 case SPELLING -> detail.setIsSpelling(true);
                 default -> detail.setIsQuiz(true);
             }
+            detail.setLastLearning(LocalDateTime.now());
             subcategoryDetailRepository.save(detail);
         });
     }
