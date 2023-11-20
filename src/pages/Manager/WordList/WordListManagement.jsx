@@ -18,6 +18,7 @@ import {
   createSubcategory,
   getAllVocabInSubcategory,
   getSubcategory,
+  updateSubcategory,
 } from "../../../stores/subcategory/subcategoryThunk";
 import SubcategoryDataTable from "../../../components/data-table/WordList/SubcategoryDataTable";
 import VocabularyDataTable from "../../../components/data-table/VocabularyDataTable";
@@ -73,6 +74,11 @@ const WordListManagement = () => {
   const handleDeleteWordList = (param) => {
     dispatch(deleteExistWordList(param));
     message.success("Delete successfully!");
+  };
+
+  const handleUpdateSub = (param) => {
+    dispatch(updateSubcategory(param));
+    message.success("Edit successfully!");
   };
 
   const handleTableChange = () => {

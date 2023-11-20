@@ -1,4 +1,4 @@
-import { Space, Table, Tag } from "antd";
+import { Space, Table } from "antd";
 import React, { useState } from "react";
 import "./WordListDataTable.scss";
 import { DeleteTwoTone } from "@ant-design/icons";
@@ -13,7 +13,6 @@ const WordListDataTable = ({
   handleDeleteWordList,
 }) => {
   const [selectedWordlist, setSelectedWordlist] = useState(null);
-
   const onClickDelete = () => {
     handleDeleteWordList(selectedWordlist.id);
   };
@@ -90,26 +89,11 @@ const WordListDataTable = ({
     };
   };
 
-  const mergedColumns = columns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        inputType: "text",
-        dataIndex: col.dataIndex,
-        title: col.title,
-        // editing: isEditing(record),
-      }),
-    };
-  });
   return (
     <Table
       loading={loading}
       bordered
-      columns={mergedColumns}
+      columns={columns}
       //   pagination={pagination}
       size={"small"}
       dataSource={dataSource}
