@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,12 +50,15 @@ public class WordListServiceImpl implements WordListService {
     @Override
     public List<WordListResponseDto> getAllByUser() {
         User user = AuthenticationUtils.getUserFromSecurityContext();
-        return MapperUtils.toTargetList(wordListMapper::toWordListDto, wordListRepository.findByUser(user));
+        List<WordList> wordLists = wordListRepository.findByUser(user);
+        wordLists.sort(Comparator.comparing(WordList::getTitle));
+        return MapperUtils.toTargetList(wordListMapper::toWordListDto, wordLists);
     }
 
     @Override
     public List<WordListResponseDto> getAllSystemWordList(RoleName role) {
         List<WordList> wordLists = wordListRepository.findAllByUserRole(roleRepository.findByName(RoleName.CONTENT_MANAGER));
+        wordLists.sort(Comparator.comparing(WordList::getTitle));
         return MapperUtils.toTargetList(wordListMapper::toWordListDto, wordLists);
     }
 

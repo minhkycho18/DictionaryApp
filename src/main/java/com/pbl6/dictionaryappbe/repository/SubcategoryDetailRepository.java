@@ -2,6 +2,7 @@ package com.pbl6.dictionaryappbe.repository;
 
 import com.pbl6.dictionaryappbe.persistence.subcategory_detail.SubcategoryDetail;
 import com.pbl6.dictionaryappbe.persistence.subcategory_detail.SubcategoryDetailId;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,6 +15,8 @@ import java.util.Optional;
 public interface SubcategoryDetailRepository
         extends JpaRepository<SubcategoryDetail, SubcategoryDetailId> {
     List<SubcategoryDetail> findAllBySubcategoryId(Long subcategoryId);
+
+    List<SubcategoryDetail> findAllBySubcategoryId(Long subcategoryId, Pageable pageable);
 
     Optional<SubcategoryDetail> findBySubcategoryIdAndVocabIdAndDefId(Long subcategoryId, Long vocabId, Long defId);
 
@@ -74,11 +77,12 @@ public interface SubcategoryDetailRepository
 
     @Query(value = """
             SELECT sd.* FROM subcategory_detail sd
-            join vocabularies v
-            on sd.vocab_id = v.vocab_id
-            where v.status = "DEFAUlT" and sd.subcategory_id = :subcategoryId
+            JOIN vocabularies v
+            ON sd.vocab_id = v.vocab_id
+            WHERE v.status = "DEFAUlT" AND sd.subcategory_id = :subcategoryId
+            ORDER BY v.word
             """, nativeQuery = true)
-    List<SubcategoryDetail> findAllDefaultVocabBySubcategoryId(@Param("subcategoryId") Long subcategoryId);
+    List<SubcategoryDetail> findAllDefaultVocabBySubcategoryId(@Param("subcategoryId") Long subcategoryId, Pageable pageable);
 
     @Query(value = """
             SELECT *

@@ -16,7 +16,7 @@ public interface SubcategoryService {
 
     List<SubcategoryDetail> getSubcategoryDetails(Long subcategories, List<VocabularySubcategoryRequestDto> vocabularies);
 
-    List<SubcategoryDetailResponseDto> getAllVocabularies(Long wordListId, Long subcategoryId);
+    List<SubcategoryDetailResponseDto> getAllVocabularies(Long wordListId, Long subcategoryId, int offset, int limit);
 
     SubcategoryDetailResponseDto addVocabToSubcategory(Long wordlistId, Long subcategoryId, VocabularySubcategoryRequestDto vocabularySubcategoryRequestDto);
 
