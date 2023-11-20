@@ -111,6 +111,19 @@ public class SubcategoryController {
 
     }
 
+    @Operation(summary = "Update title subcategory", security = {@SecurityRequirement(name = "bearer-key")})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Update data successfully",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid data"),
+            @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
+    @PatchMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}")
+    public SubcategoryResponseDto updateTitleSubcategory(@PathVariable Long subcategoryId,
+                                                         @Valid @RequestBody String newTitle,
+                                                         @PathVariable Long wordListId) {
+        return subcategoryService.updateTitleSubcategory(wordListId, subcategoryId, newTitle);
+    }
+
     @Operation(summary = "Delete vocabularies in subcategory", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Delete successfully",
