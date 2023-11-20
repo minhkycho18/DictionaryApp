@@ -16,6 +16,19 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
     });
     await sound.playAsync();
   };
+  const hanleClickAnswer = (answer) => {
+    console.log(`Answer :: ${answer}   Result :: ${vocal.result}`);
+    if (answer === vocal.result) {
+      onNextSlider({
+        vocal: { vocabId: vocal.vocabId, defId: vocal.defId },
+        answer: true,
+      });
+    } else {
+      onNextSlider({
+        answer: false,
+      });
+    }
+  };
   return (
     <>
       <FlipCard
@@ -124,7 +137,7 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
             <TouchableOpacity
               style={Styles.Incorrect}
               // onPress={() => setIsFlip(false)}
-              onPress={onNextSlider}
+              onPress={() => hanleClickAnswer(false)}
             >
               <View
                 style={{
@@ -148,14 +161,14 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
                   fontFamily: "Quicksand-Bold",
                 }}
               >
-                Didn't know it
+                False
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={Styles.Correct}
               // onPress={() => setIsFlip(false)}
-              onPress={onNextSlider}
+              onPress={() => hanleClickAnswer(true)}
             >
               <View
                 style={{
@@ -179,7 +192,7 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
                   fontFamily: "Quicksand-Bold",
                 }}
               >
-                Knew it
+                True
               </Text>
             </TouchableOpacity>
           </View>

@@ -15,10 +15,11 @@ import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import * as Progress from "react-native-progress";
 import ItemCardSpelling from "~/components/Game/CardSpelling/ItemCardSpelling";
-import { getGameFromSub } from "~/api/Game";
+import { getGameFromSub, updateStatusGame } from "~/api/Game";
 import { useNavigation } from "@react-navigation/native";
 import { getWordListByWordlistId } from "~/api/WordList";
 export default function SpellingScreen(props) {
+  const [listAnswer, setListAnswer] = useState([]);
   const [data, setData] = useState([]);
   const [count, setCount] = useState(0);
   const [screenWidth, setScreenWidth] = useState(
@@ -39,7 +40,7 @@ export default function SpellingScreen(props) {
       "spelling"
     );
   }, []);
-  const handleNextSlide = () => {
+  const handleNextSlide = async () => {
     const nextSlide = currentSlide + 1;
     setCount(nextSlide);
     const progress = 1 / (data.length - 1);
@@ -53,12 +54,32 @@ export default function SpellingScreen(props) {
     }
     if (nextSlide === data.length) {
       // setProgress(progress * nextSlide);
+      await updateStatusGame(
+        props.route.params.wordListId,
+        props.route.params.subcategoryId,
+        "spelling",
+        listAnswer
+      );
       navigation.push("FinishGame", { type: "spelling" });
+    }
+  };
+  const handleUpdateResult = (obj) => {
+    if (obj.answer) {
+      setListAnswer((pre) => [...pre, obj.vocal]);
     }
   };
   const handleRedirect = async () => {
     try {
       const res = await getWordListByWordlistId(props.route.params.wordListId);
+      if (listAnswer.length > 0) {
+        const resUpdate = await updateStatusGame(
+          props.route.params.wordListId,
+          props.route.params.subcategoryId,
+          "spelling",
+          listAnswer
+        );
+        console.log(resUpdate);
+      }
       navigation.navigate("StudySub", { wordlist: res });
     } catch (error) {}
   };
@@ -115,7 +136,11 @@ export default function SpellingScreen(props) {
               }}
               key={index}
             >
-              <ItemCardSpelling onNextSlider={handleNextSlide} vocal={item} />
+              <ItemCardSpelling
+                onNextSlider={handleNextSlide}
+                vocal={item}
+                onUpdateResult={handleUpdateResult}
+              />
             </View>
           ))}
         </ScrollView>

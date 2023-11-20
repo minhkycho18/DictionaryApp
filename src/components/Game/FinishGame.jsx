@@ -60,9 +60,9 @@ export default function FinishGame(props) {
   );
   const getStatusStyle = (status) => {
     switch (status) {
-      case "success":
-        return Styles.buttonSuccess;
       case "pending":
+        return Styles.buttonSuccess;
+      case "success":
         return Styles.buttonPending;
       case "waiting":
       default:
@@ -82,9 +82,9 @@ export default function FinishGame(props) {
   };
   const getTextStyle = (status) => {
     switch (status) {
-      case "success":
-        return Styles.textButtonSuccess;
       case "pending":
+        return Styles.textButtonSuccess;
+      case "success":
         return Styles.textButtonPending;
       case "waiting":
       default:
@@ -287,7 +287,7 @@ const Styles = StyleSheet.create({
   },
 
   buttonSuccess: {
-    backgroundColor: "#F0F4F3",
+    backgroundColor: "#D2EBE7",
     width: 230,
     paddingVertical: 10,
     borderRadius: 20,

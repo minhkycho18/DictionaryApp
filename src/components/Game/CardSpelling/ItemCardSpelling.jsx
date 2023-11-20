@@ -9,7 +9,10 @@ import { TextInput } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 
-export default function ItemCardSpelling({ onNextSlider, vocal }, props) {
+export default function ItemCardSpelling(
+  { onNextSlider, vocal, onUpdateResult },
+  props
+) {
   const [input, setInput] = useState("");
   const [question, setQuestion] = useState(vocal.word);
   const [answer, setAnswer] = useState("");
@@ -59,11 +62,19 @@ export default function ItemCardSpelling({ onNextSlider, vocal }, props) {
       setAnswer(answer);
       if (answer === question) {
         setIsSuccess(true);
+        onUpdateResult({
+          vocal: { vocabId: vocal.vocabId, defId: vocal.defId },
+          answer: true,
+        });
       }
     } else {
       const answer = input.toLowerCase();
       if (answer === question) {
         setIsSuccess(true);
+        onUpdateResult({
+          vocal: { vocabId: vocal.vocabId, defId: vocal.defId },
+          answer: true,
+        });
       }
       setAnswer(answer);
     }

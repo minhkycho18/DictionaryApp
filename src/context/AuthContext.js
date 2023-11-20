@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { createContext, useEffect, useState } from "react";
 import { Register, getTokenLogin } from "~/api/Auth";
+import { checkData } from "~/helper";
 
 export const AuthContext = createContext();
 
@@ -8,7 +9,7 @@ export const AuthProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [userToken, setUserToken] = useState("");
     const [splashLoading, setSplashLoading] = useState(false);
-
+    const [listReview, setlistReview] = useState([]);
     const [isLogin, setIsLogin] = useState(false)
     const login = async ({ email, password }) => {
         setIsLoading(true);
@@ -78,6 +79,18 @@ export const AuthProvider = ({ children }) => {
             console.log(`is logged in error ${error}`)
         }
     }
+    const updateListReview = (data) => {
+        const checked = checkData(listReview, data);
+        if (!checked) {
+            setlistReview((pre) => [
+                ...pre,
+                {
+                    defId: data.defId,
+                    vocabId: data.vocabId,
+                },
+            ]);
+        }
+    }
 
     useEffect(() => {
         isLoggedIn();
@@ -92,7 +105,10 @@ export const AuthProvider = ({ children }) => {
                 logout,
                 register,
                 isLoggedIn,
-                isLogin
+                isLogin,
+                listReview,
+                setlistReview,
+                updateListReview
             }}>
             {children}
         </AuthContext.Provider>

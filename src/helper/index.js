@@ -43,3 +43,6 @@ export const getIdValueInArr = (arr, newId) => {
     }
   }
 }
+export const checkData = (arr, obj) => {
+  return arr.some(item => item.defId === obj.defId && item.vocabId === obj.vocabId)
+}

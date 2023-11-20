@@ -75,11 +75,11 @@ export default function MyWordList() {
     Toast.show({
       position: "top",
       type: "error",
-      text1: "See all Fail",
+      text1: "Error",
       text2: "Please login to see your wordlist",
       visibilityTime: 2000,
       autoHide: true,
-      topOffset: 0,
+      topOffset: 10,
     });
   };
 
