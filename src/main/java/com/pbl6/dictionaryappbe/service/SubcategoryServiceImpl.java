@@ -40,6 +40,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGameService {
 
+    private static final int MAXIMUM_NUMBER_OF_QUESTION = 30;
+    private static final double PERCENTAGE_OF_LEARNING_QUESTION = 0.8;
     private final SubcategoryRepository subcategoryRepository;
     private final WordListRepository wordListRepository;
     private final SubcategoryMapper subcategoryMapper;
@@ -48,10 +50,7 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
     private final SubcategoryDetailMapper subcategoryDetailMapper;
     private final VocabularyRepository vocabularyRepository;
     private final DefinitionRepository definitionRepository;
-
     private final Random rand = new Random();
-    private static final int MAXIMUM_NUMBER_OF_QUESTION = 30;
-    private static final double PERCENTAGE_OF_LEARNING_QUESTION = 0.8;
 
     @Override
     public List<SubcategoryResponseDto> getAllSubcategories(Long wordListId) {
@@ -210,6 +209,14 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
             }
         });
         return targetSubcategory;
+    }
+
+    @Override
+    public SubcategoryResponseDto updateTitleSubcategory(Long wordListId, Long subcategoryId, String newTitle) {
+        Subcategory subcategory = getOwnedSubcategory(wordListId, subcategoryId);
+        subcategory.setTitle(newTitle);
+        subcategoryRepository.save(subcategory);
+        return subcategoryMapper.toSubcategoryResponseDto(subcategory);
     }
 
     @Override

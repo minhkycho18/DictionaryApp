@@ -26,6 +26,8 @@ public interface SubcategoryService {
 
     Subcategory cloneSubcategory(Long oldSubcategoryId, Long newSubcategoryId);
 
+    SubcategoryResponseDto updateTitleSubcategory(Long wordListId, Long subcategoryId, String newTitle);
+
     void deleteVocabulariesOfSubcategory(Long wordListId, Long subcategoryId, List<SubcategoryDetail> vocabularies);
 
     void deleteSubcategories(Long wordlistId, List<Long> subcategoryId);
