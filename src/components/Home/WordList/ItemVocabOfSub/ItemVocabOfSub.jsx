@@ -1,18 +1,10 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useContext,
-  useLayoutEffect,
-} from "react";
+import React, { useRef, useState } from "react";
 import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import { Styles } from "./Styles";
 import { SvgXml } from "react-native-svg";
 import { colors, svgStudy } from "~/constants/theme";
-import Checkbox from "expo-checkbox";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
-import { ListVocalContext } from "~/context/ListVocal";
 import { Ionicons } from "@expo/vector-icons";
 import { deleteWordInSub } from "~/api/Subcategory";
 export default function ItemVocabOfSub({ Vocab, onDeleteVocal, subcategory }) {
@@ -47,7 +39,7 @@ export default function ItemVocabOfSub({ Vocab, onDeleteVocal, subcategory }) {
   }
   return (
     <>
-      <TouchableOpacity style={Styles.container}>
+      <View style={Styles.container}>
         <View
           style={{
             ...Styles.wrappered,
@@ -115,22 +107,59 @@ export default function ItemVocabOfSub({ Vocab, onDeleteVocal, subcategory }) {
                 style={{
                   ...Styles.circle,
                   backgroundColor: "#fff",
+                  borderWidth: Vocab.item.review ? 1.5 : 1,
+                  borderColor: Vocab.item.review ? "#9EB8D9" : "#ccc",
                 }}
               >
-                <SvgXml width="15" height="15" xml={svgStudy.review} />
+                <SvgXml
+                  width="15"
+                  height="15"
+                  xml={svgStudy(
+                    "review",
+                    Vocab.item.review ? "#9EB8D9" : "#ccc"
+                  )}
+                />
               </View>
 
-              <View style={Styles.circle}>
-                <SvgXml width="15" height="15" xml={svgStudy.flashcard} />
+              <View
+                style={{
+                  ...Styles.circle,
+                  backgroundColor: "#fff",
+                  borderWidth: Vocab.item.flashcard ? 1.5 : 1,
+                  borderColor: Vocab.item.flashcard ? "#37CABE" : "#ccc",
+                }}
+              >
+                <SvgXml
+                  width="15"
+                  height="15"
+                  xml={svgStudy(
+                    "flashcard",
+                    Vocab.item.flashcard ? "#37CABE" : "#ccc"
+                  )}
+                />
               </View>
 
-              <View style={Styles.circle}>
-                <SvgXml width="15" height="15" xml={svgStudy.spelling} />
+              <View
+                style={{
+                  ...Styles.circle,
+                  backgroundColor: "#fff",
+                  borderWidth: Vocab.item.spelling ? 1.5 : 1,
+                  borderColor: Vocab.item.spelling ? "#B7ADFF" : "#ccc",
+                }}
+              >
+                <SvgXml
+                  width="15"
+                  height="15"
+                  xml={svgStudy(
+                    "spelling",
+                    Vocab.item.spelling ? "#B7ADFF" : "#ccc"
+                  )}
+                />
               </View>
             </View>
           </View>
         </View>
-      </TouchableOpacity>
+      </View>
     </>
   );
 }

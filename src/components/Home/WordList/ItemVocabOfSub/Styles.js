@@ -68,8 +68,6 @@ export const Styles = StyleSheet.create({
     circle: {
         width: 25,
         height: 25,
-        borderWidth: 1,
-        borderColor: '#ccc',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

@@ -47,6 +47,9 @@ class Http {
   put(url, data, config = null) {
     return this.instance.put(url, data, config);
   }
+  patch(url, data, config = null) {
+    return this.instance.patch(url, data, config);
+  }
   delete(url, data, config = null) {
     return this.instance.delete(url, {
       data,

@@ -111,7 +111,7 @@ export const Styles = StyleSheet.create({
 
     },
     next: {
-        marginTop: 5,
+        // marginTop: -5,
         width: 100,
         display: 'flex',
         flexDirection: 'row',

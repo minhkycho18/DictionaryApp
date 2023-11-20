@@ -1,12 +1,25 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import { Text, TouchableOpacity, Image } from "react-native";
 import { View } from "react-native";
 import { StyleSheet } from "react-native";
 import { colors, configFont } from "~/constants/theme";
 import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
-export default function FinishReview() {
+import { AuthContext } from "~/context/AuthContext";
+import { updateStatusGame } from "~/api/Game";
+export default function FinishReview({ wordlist }) {
+  const { listReview } = useContext(AuthContext);
   const navigation = useNavigation();
+  const handleContinue = async () => {
+    const res = await updateStatusGame(
+      wordlist.wordListId,
+      wordlist.subId,
+      "review",
+      listReview
+    );
+    console.log(res);
+    navigation.push("FinishGame", { type: "review" });
+  };
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
@@ -40,7 +53,7 @@ export default function FinishReview() {
         </Text>
         <TouchableOpacity
           style={Styles.button}
-          onPress={() => navigation.push("FinishGame", { type: "review" })}
+          onPress={() => handleContinue()}
         >
           <Text
             style={{
