@@ -2,24 +2,13 @@ import { StyleSheet } from "react-native";
 import { colorPos, colors } from "~/constants/theme";
 
 export const Styles = StyleSheet.create({
-    top: {
-        width: "100%",
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
 
-    },
-    card: {
-        // marginLeft: '5%',
+    cardFace: {
         width: '98%',
         height: '100%',
-        // backgroundColor:'red'
-        display: 'flex'
-    },
-    cardFace: {
-        // marginLeft:5,
         alignItems: 'center',
         backgroundColor: '#fff',
-        height: '100%',
+
         borderRadius: 30,
         shadowColor: "#000",
         shadowOffset: {
@@ -31,6 +20,7 @@ export const Styles = StyleSheet.create({
 
         elevation: 3,
 
+        display: 'flex'
     },
     cardBack: {
         // alignItems: 'center',
@@ -47,14 +37,14 @@ export const Styles = StyleSheet.create({
         elevation: 3,
     },
     content: {
-        alignItems: 'center',
+        // alignItems: 'center',
         // justifyContent: 'center',
         width: '100%',
         // backgroundColor: 'yellow',
         marginTop: '28%',
     },
     word: {
-        fontSize: 32,
+        fontSize: 25,
         color: colors.textTitle
     },
     viewExample: {
@@ -127,7 +117,7 @@ export const Styles = StyleSheet.create({
         position: "absolute",
         bottom: 0,
     },
-    temp:{
+    temp: {
         width: "100%",
         height: "30%",
         // backgroundColor: "red",
@@ -268,7 +258,60 @@ export const Styles = StyleSheet.create({
         shadowRadius: 2.22,
 
         elevation: 4,
+    },
+
+    viewquestion: {
+        width: "100%",
+        height: "30%",
+        backgroundColor: '#2395F1',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        alignItems: 'center',
+        // flex:1
+    },
+    viewanswer: {
+        width: "100%",
+        height: "70%",
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 30,
+        // backgroundColor: 'red',
+    },
+    listanswer: {
+        width: "100%",
+        height: "50%",
+        marginTop: '12%',
+        alignItems: 'center',
+    },
+    answer: {
+        width: '83%',
+        height: '29%',
+        // backgroundColor: 'green',
+        marginBottom: 10,
+        borderRadius: 20,
+        borderWidth: 1.4,
+        borderColor:'#ccc',
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    textanswer: {
+        textAlign: "center",
+        fontFamily: "Quicksand-Bold",
+        fontSize: 17,
+        color: "#35454D",
+        width: "80%"
+    },
+    btnDone: {
+        width: 80,
+        height: 35,
+        borderRadius: 20,
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:'#2395F1',
+        position: 'absolute',
+        top: '85%',
+        right:'9%'
     }
+
 
 
 })

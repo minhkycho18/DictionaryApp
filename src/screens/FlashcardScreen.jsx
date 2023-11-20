@@ -179,7 +179,7 @@ const Styles = StyleSheet.create({
   content: {
     width: "100%",
     height: "80%",
-    marginTop: 35,
+    marginTop: "12%",
     // marginLeft:3,
     alignItems: "center",
     // flex: 1,

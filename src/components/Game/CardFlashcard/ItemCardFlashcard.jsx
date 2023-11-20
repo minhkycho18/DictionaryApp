@@ -26,7 +26,7 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
         flipVertical={false}
         flip={isFlip}
         clickable={false}
-        onFlipStart={() => {}}
+        onFlipStart={() => { }}
       >
         {/* Face Side */}
         <View style={Styles.cardFace}>
@@ -34,17 +34,19 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
             source={require("~/assets/wave.png")}
             style={{
               width: "100%",
-              height: 90,
+              height: "25%",
               borderTopLeftRadius: 30,
               borderTopRightRadius: 30,
               tintColor: "#4DB5AA",
+              // backgroundColor: 'red',
+
             }}
           />
           <TouchableOpacity
             style={Styles.viewSound}
             onPress={() => playSound(vocal?.audioUk)}
           >
-            <AntDesign name="sound" size={24} color="#00BFA5" />
+            <AntDesign name="sound" size={24} color="#4DB5AA" />
           </TouchableOpacity>
           <View style={Styles.content}>
             <Text style={{ ...Styles.word, fontFamily: "Quicksand-Bold" }}>
@@ -64,6 +66,10 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
             </View>
           </View>
 
+          <View
+            style={Styles.temp}
+          >
+          </View>
           <TouchableOpacity
             style={Styles.bottom}
             onPress={() => setIsFlip(true)}
@@ -72,7 +78,7 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
               source={require("~/assets/wave.png")}
               style={{
                 width: "100%",
-                height: 120,
+                height: "100%",
                 borderTopLeftRadius: 30,
                 borderTopRightRadius: 30,
                 transform: [{ rotate: "180deg" }],
@@ -88,7 +94,7 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
         </View>
         {/* Back Side */}
         <View style={Styles.cardBack}>
-          <View style={{ ...Styles.content, marginTop: "50%" }}>
+          <View style={{ ...Styles.content, marginTop: "63%" }}>
             <View style={Styles.viewExample}>
               <View style={Styles.example}>
                 <Text

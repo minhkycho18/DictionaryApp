@@ -8,17 +8,16 @@ import {
   SafeAreaView,
   Platform,
   ScrollView,
-  Button,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import * as Progress from "react-native-progress";
-import ItemCardSpelling from "~/components/Game/CardSpelling/ItemCardSpelling";
-import { getGameFromSub } from "~/api/Game";
-import { useNavigation } from "@react-navigation/native";
 import { getWordListByWordlistId } from "~/api/WordList";
-export default function SpellingScreen(props) {
+import { getGameFromSub } from "~/api/Game";
+import ItemCardQuiz from "~/components/Game/CardQuiz/ItemCardQuiz";
+export default function QuizScreen(props) {
   const [data, setData] = useState([]);
   const [count, setCount] = useState(0);
   const [screenWidth, setScreenWidth] = useState(
@@ -28,17 +27,6 @@ export default function SpellingScreen(props) {
   const [progress, setProgress] = useState(0);
   const scrollViewRef = useRef(null);
   const navigation = useNavigation();
-  const getGame = async (wordListId, subId, type) => {
-    const res = await getGameFromSub(wordListId, subId, type);
-    setData(res);
-  };
-  useEffect(() => {
-    getGame(
-      props.route.params.wordListId,
-      props.route.params.subcategoryId,
-      "spelling"
-    );
-  }, []);
   const handleNextSlide = () => {
     const nextSlide = currentSlide + 1;
     setCount(nextSlide);
@@ -52,15 +40,27 @@ export default function SpellingScreen(props) {
       setCurrentSlide(nextSlide);
     }
     if (nextSlide === data.length) {
-      // setProgress(progress * nextSlide);
-      navigation.push("FinishGame", { type: "spelling" });
+      navigation.push("FinishGame", { type: "quiz" });
     }
   };
+  const getGame = async (wordListId, subId, type) => {
+    const res = await getGameFromSub(wordListId, subId, type);
+    setData(res);
+  };
+
+  useEffect(() => {
+    getGame(
+      props.route.params.wordListId,
+      props.route.params.subcategoryId,
+      "flashcard"
+    );
+  }, []);
+
   const handleRedirect = async () => {
     try {
       const res = await getWordListByWordlistId(props.route.params.wordListId);
       navigation.navigate("StudySub", { wordlist: res });
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const [loaded] = useFonts(configFont);
@@ -101,9 +101,8 @@ export default function SpellingScreen(props) {
           pagingEnabled
           style={{
             // marginTop: 35,
-            marginTop: "10.5%",
-
             width: Math.floor(screenWidth - 40),
+            height: 690,
           }}
           scrollEnabled={false}
         >
@@ -114,15 +113,21 @@ export default function SpellingScreen(props) {
                 height: 690,
                 borderRadius: 40,
                 alignItems: "center",
-
               }}
               key={index}
             >
-              <ItemCardSpelling onNextSlider={handleNextSlide} vocal={item} />
+              <View style={Styles.content}>
+                <ItemCardQuiz
+                  onNextSlider={handleNextSlide}
+                  vocal={item}
+                />
+              </View>
             </View>
           ))}
         </ScrollView>
       </View>
+
+      {/* </View> */}
     </SafeAreaView>
   );
 }
@@ -173,9 +178,10 @@ const Styles = StyleSheet.create({
 
   content: {
     width: "100%",
-    height: 600,
-    marginTop: 50,
-    // alignItems: "center",
+    height: "80%",
+    marginTop: "12%",
+    // marginLeft:3,
+    alignItems: "center",
     // flex: 1,
     // backgroundColor: "red",
   },

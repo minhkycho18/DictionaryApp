@@ -7,7 +7,7 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#fff',
         height: '80%',
-        borderRadius: 40,
+        borderRadius: 30,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -20,7 +20,7 @@ export const Styles = StyleSheet.create({
 
     },
     viewdef: {
-        marginTop: 20,
+        marginTop: '10%',
         width: '90%',
         // backgroundColor: 'red',
         position: 'absolute',
@@ -35,8 +35,8 @@ export const Styles = StyleSheet.create({
     },
     bottom: {
         width: "100%",
-        borderBottomLeftRadius: 40,
-        borderBottomRightRadius: 40,
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 30,
         alignItems: "center",
         position: "absolute",
         bottom: 0,
@@ -117,7 +117,7 @@ export const Styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#00BFA5',
+        backgroundColor: '#4DB5AA',
         paddingVertical: 8,
         borderRadius: 20,
         gap: 2,
@@ -126,7 +126,7 @@ export const Styles = StyleSheet.create({
     },
     confirm: {
         width: 100,
-        backgroundColor: '#00BFA5',
+        backgroundColor: '#4DB5AA',
         paddingVertical: 6,
         paddingHorizontal: 15,
         borderTopLeftRadius: 20,

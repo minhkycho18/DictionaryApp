@@ -20,6 +20,7 @@ export default function FinishReview() {
         />
         <Text
           style={{
+            marginTop: 10,
             fontFamily: "Quicksand-Bold",
             fontSize: 28,
             color: colors.textTitle,
@@ -33,7 +34,8 @@ export default function FinishReview() {
             fontSize: 18,
             color: colors.textColor,
             textAlign: "center",
-            marginTop: -20,
+            marginTop: -15,
+            width: "90%"
           }}
         >
           You've reviewed all the words in this subcategory!
@@ -58,8 +60,8 @@ export default function FinishReview() {
 }
 const Styles = StyleSheet.create({
   cardFace: {
-    marginLeft: "5%",
-    width: "100%",
+    // marginLeft: "5%",
+    width: "98%",
     alignItems: "center",
     backgroundColor: "#fff",
     height: "100%",
@@ -84,10 +86,10 @@ const Styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 25,
-    marginTop: "10%",
+    marginTop: "20%",
   },
   button: {
-    marginTop: "10%",
+    marginTop: "5%",
     paddingHorizontal: 30,
     paddingVertical: 10,
     borderRadius: 15,

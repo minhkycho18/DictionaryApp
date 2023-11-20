@@ -26,7 +26,7 @@ export default function ItemCardReview({ vocal }) {
         flipVertical={false}
         flip={isFlip}
         clickable={false}
-        onFlipStart={() => {}}
+        onFlipStart={() => { }}
       >
         {/* Face Side */}
         <View style={Styles.cardFace}>
@@ -34,9 +34,11 @@ export default function ItemCardReview({ vocal }) {
             source={require("~/assets/wave.png")}
             style={{
               width: "100%",
-              height: 90,
-              borderTopLeftRadius: 40,
-              borderTopRightRadius: 40,
+              height: "25%",
+              borderTopLeftRadius: 30,
+              borderTopRightRadius: 30,
+              tintColor: "#4DB5AA",
+              // backgroundColor: 'red',
             }}
           />
           <TouchableOpacity
@@ -45,7 +47,7 @@ export default function ItemCardReview({ vocal }) {
             disabled={vocal.audioUs === null}
           >
             {vocal.audioUs !== null ? (
-              <AntDesign name="sound" size={24} color="#00BFA5" />
+              <AntDesign name="sound" size={24} color="#4DB5AA" />
             ) : (
               <Image
                 source={require("~/assets/mute.png")}
@@ -122,7 +124,10 @@ export default function ItemCardReview({ vocal }) {
               </Text>
             </View>
           </View>
-
+          <View
+            style={Styles.temp}
+          >
+          </View>
           <TouchableOpacity
             style={Styles.bottom}
             onPress={() => setIsFlip(true)}
@@ -132,10 +137,12 @@ export default function ItemCardReview({ vocal }) {
               source={require("~/assets/wave.png")}
               style={{
                 width: "100%",
-                height: 120,
-                borderTopLeftRadius: 40,
-                borderTopRightRadius: 40,
+                height: "100%",
+                borderTopLeftRadius: 30,
+                borderTopRightRadius: 30,
                 transform: [{ rotate: "180deg" }],
+                tintColor: "#4DB5AA",
+
               }}
             />
             {vocal?.example !== null && (
@@ -153,9 +160,11 @@ export default function ItemCardReview({ vocal }) {
             source={require("~/assets/wave.png")}
             style={{
               width: "100%",
-              height: 90,
-              borderTopLeftRadius: 40,
-              borderTopRightRadius: 40,
+              height: "25%",
+              borderTopLeftRadius: 30,
+              borderTopRightRadius: 30,
+              tintColor: "#4DB5AA",
+
             }}
           />
           <TouchableOpacity
@@ -172,7 +181,7 @@ export default function ItemCardReview({ vocal }) {
               />
             )}
           </TouchableOpacity>
-          <View style={{ ...Styles.content, marginTop: "1%" }}>
+          <View style={{ ...Styles.content, marginTop: "11%" }}>
             <Text
               style={{
                 ...Styles.word,
@@ -191,6 +200,8 @@ export default function ItemCardReview({ vocal }) {
                       fontFamily: "Quicksand-SemiBold",
                       fontSize: 17,
                       color: colors.textColor,
+                      textAlign: 'center'
+
                     }}
                   >
                     1. {vocal?.example}
@@ -209,10 +220,12 @@ export default function ItemCardReview({ vocal }) {
               source={require("~/assets/wave.png")}
               style={{
                 width: "100%",
-                height: 120,
-                borderTopLeftRadius: 40,
-                borderTopRightRadius: 40,
+                height: "100%",
+                borderTopLeftRadius: 30,
+                borderTopRightRadius: 30,
                 transform: [{ rotate: "180deg" }],
+                tintColor: "#4DB5AA",
+
               }}
             />
             <Text
