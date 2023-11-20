@@ -59,14 +59,19 @@ const subcategorySlice = createSlice({
         state.loading = false;
         state.error = action.payload.detail;
       })
-      //=====================================================
+      //=====================================================update subcategory patch title
       .addCase(updateSubcategory.pending, (state, action) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(updateSubcategory.fulfilled, (state, action) => {
         state.loading = false;
-        state.subcategories = action.payload;
+        let index = state.subcategories.findIndex(
+          (el) => el.subcategoryId === action.payload.subcategoryId
+        );
+        if (index !== -1) {
+          state.subcategories[index].title = action.payload.title;
+        }
       })
       .addCase(updateSubcategory.rejected, (state, action) => {
         state.loading = false;
