@@ -190,10 +190,11 @@ const Styles = StyleSheet.create({
   },
 
   content: {
-    width: "90%",
-    height: "75%",
-    marginTop: 50,
-    // alignItems: "center",
+    width: "100%",
+    height: "80%",
+    marginTop: "12%",
+
+    alignItems: "center",
     // flex: 1,
     // backgroundColor: "red",
   },

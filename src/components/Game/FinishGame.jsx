@@ -188,7 +188,10 @@ export default function FinishGame(props) {
             }}
           >
             <View style={Styles.viewCircle}>{getProgess(quiz)}</View>
-            <TouchableOpacity style={[getStatusStyle(quiz)]}>
+            <TouchableOpacity 
+            style={[getStatusStyle(quiz)]}
+            onPress={() => navigation.push("QuizScreen")}
+            >
               <Text style={[getTextStyle(quiz)]}>Quiz</Text>
             </TouchableOpacity>
           </View>

@@ -81,7 +81,7 @@ export default function SpellingScreen(props) {
         console.log(resUpdate);
       }
       navigation.navigate("StudySub", { wordlist: res });
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const [loaded] = useFonts(configFont);
@@ -121,7 +121,9 @@ export default function SpellingScreen(props) {
           horizontal
           pagingEnabled
           style={{
-            marginTop: 35,
+            // marginTop: 35,
+            marginTop: "10.5%",
+
             width: Math.floor(screenWidth - 40),
           }}
           scrollEnabled={false}
@@ -133,6 +135,7 @@ export default function SpellingScreen(props) {
                 height: 690,
                 borderRadius: 40,
                 alignItems: "center",
+
               }}
               key={index}
             >

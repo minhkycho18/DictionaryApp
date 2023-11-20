@@ -15,10 +15,9 @@ import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import * as Progress from "react-native-progress";
 import { getWordListByWordlistId } from "~/api/WordList";
-import ItemCardFlashcard from "~/components/Game/CardFlashcard/ItemCardFlashcard";
-import { getGameFromSub, updateStatusGame } from "~/api/Game";
-export default function FlashcardScreen(props) {
-  const [listAnswer, setListAnswer] = useState([]);
+import { getGameFromSub } from "~/api/Game";
+import ItemCardQuiz from "~/components/Game/CardQuiz/ItemCardQuiz";
+export default function QuizScreen(props) {
   const [data, setData] = useState([]);
   const [count, setCount] = useState(0);
   const [screenWidth, setScreenWidth] = useState(
@@ -28,15 +27,11 @@ export default function FlashcardScreen(props) {
   const [progress, setProgress] = useState(0);
   const scrollViewRef = useRef(null);
   const navigation = useNavigation();
-
-  const handleNextSlide = async (obj) => {
+  const handleNextSlide = () => {
     const nextSlide = currentSlide + 1;
     setCount(nextSlide);
     const progress = 1 / (data.length - 1);
     if (nextSlide < data.length) {
-      if (obj.answer) {
-        setListAnswer((pre) => [...pre, obj.vocal]);
-      }
       scrollViewRef.current.scrollTo({
         x: nextSlide * Math.floor(screenWidth - 40),
         animated: true,
@@ -45,18 +40,7 @@ export default function FlashcardScreen(props) {
       setCurrentSlide(nextSlide);
     }
     if (nextSlide === data.length) {
-      let updateResult = [...listAnswer];
-      if (obj.answer) {
-        updateResult.push(obj.vocal);
-      }
-      const res = await updateStatusGame(
-        props.route.params.wordListId,
-        props.route.params.subcategoryId,
-        "flashcard",
-        updateResult
-      );
-      console.log(res);
-      navigation.push("FinishGame", { type: "flashcard" });
+      navigation.push("FinishGame", { type: "quiz" });
     }
   };
   const getGame = async (wordListId, subId, type) => {
@@ -75,15 +59,6 @@ export default function FlashcardScreen(props) {
   const handleRedirect = async () => {
     try {
       const res = await getWordListByWordlistId(props.route.params.wordListId);
-      if (listAnswer.length > 0) {
-        const resResult = await updateStatusGame(
-          props.route.params.wordListId,
-          props.route.params.subcategoryId,
-          "flashcard",
-          listAnswer
-        );
-        console.log(resResult);
-      }
       navigation.navigate("StudySub", { wordlist: res });
     } catch (error) {}
   };
@@ -142,8 +117,8 @@ export default function FlashcardScreen(props) {
               key={index}
             >
               <View style={Styles.content}>
-                <ItemCardFlashcard
-                  onNextSlider={(vocal) => handleNextSlide(vocal)}
+                <ItemCardQuiz
+                  onNextSlider={handleNextSlide}
                   vocal={item}
                 />
               </View>

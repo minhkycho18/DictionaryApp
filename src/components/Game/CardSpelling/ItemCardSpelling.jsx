@@ -87,8 +87,9 @@ export default function ItemCardSpelling(
         style={{
           width: "100%",
           height: "60%",
-          borderTopLeftRadius: 40,
-          borderTopRightRadius: 40,
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30,
+          tintColor: "#4DB5AA",
         }}
       />
 

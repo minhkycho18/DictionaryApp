@@ -4,21 +4,23 @@ import { colorPos, colors } from "~/constants/theme";
 export const Styles = StyleSheet.create({
     top: {
         width: "100%",
-        borderTopLeftRadius: 40,
-        borderTopRightRadius: 40,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
 
     },
     card: {
-        marginLeft: '5%',
-        width: '100%',
+        // marginLeft: '5%',
+        width: '98%',
         height: '100%',
+        // backgroundColor:'red',
+        display: 'flex'
 
     },
     cardFace: {
         alignItems: 'center',
         backgroundColor: '#fff',
         height: '100%',
-        borderRadius: 40,
+        borderRadius: 30,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -34,7 +36,7 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#fff',
         height: '100%',
-        borderRadius: 40,
+        borderRadius: 30,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -47,9 +49,11 @@ export const Styles = StyleSheet.create({
     content: {
         alignItems: 'center',
         width: '100%',
-        position: 'absolute',
-        top: "35%",
-        transform: [{ translateY: -50 }],
+        // position: 'absolute',
+        // top: "35%",
+        // transform: [{ translateY: -50 }],
+        marginTop: '10%',
+
     },
     word: {
         fontSize: 32,
@@ -93,14 +97,14 @@ export const Styles = StyleSheet.create({
     },
     type: {
         alignItems: 'center',
-
-
+        borderRadius: 20,
+        backgroundColor: "#B4B6E6",
     },
     textType: {
         paddingHorizontal: 15,
         paddingBottom: 2,
         borderRadius: 20,
-        backgroundColor: "#B4B6E6",
+        // backgroundColor: "#B4B6E6",
         color: '#fff',
 
     },
@@ -116,19 +120,25 @@ export const Styles = StyleSheet.create({
     },
     bottom: {
         width: "100%",
-        // backgroundColor: "red",
-        // height: 50,
-        borderBottomLeftRadius: 40,
-        borderBottomRightRadius: 40,
+        // backgroundColor: "green",
+        height: "25%",
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 30,
         alignItems: "center",
         position: "absolute",
         bottom: 0,
+    },
+    temp:{
+        width: "100%",
+        height: "26%",
+        // backgroundColor: "red",
+        zIndex: 1000
     },
     textButton: {
         fontSize: 18,
         color: '#fff',
         position: "absolute",
-        bottom: 20,
+        bottom: 22,
     },
     synonym: {
         width: "90%",
@@ -163,16 +173,16 @@ export const Styles = StyleSheet.create({
         textAlign: 'center'
     },
     viewSound: {
-        width: 45,
-        height: 45,
-        borderWidth: 4,
+        width: 60,
+        height: 60,
+        borderWidth: 5.5,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 30,
-        borderColor: '#00BFA5',
+        borderColor: '#4DB5AA',
         position: 'absolute',
         backgroundColor: '#fff',
-        top: 25
+        top: "7.6%"
     }
 
 
