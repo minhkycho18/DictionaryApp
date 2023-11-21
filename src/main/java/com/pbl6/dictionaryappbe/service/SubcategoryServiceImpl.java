@@ -29,6 +29,8 @@ import com.pbl6.dictionaryappbe.utils.StreamUtils;
 import com.pbl6.dictionaryappbe.utils.SubcategoryDetailUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,6 +66,7 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
             throw new AccessDeniedException("You do not have permission to access this WordList");
         }
         List<Subcategory> subcategories = subcategoryRepository.findAllByWordList(wordList);
+        subcategories.sort(Comparator.comparing(Subcategory::getTitle));
         return MapperUtils.toTargetList(subcategoryMapper::toSubcategoryResponseDto, subcategories);
     }
 
@@ -79,13 +82,15 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
     }
 
     @Override
-    public List<SubcategoryDetailResponseDto> getAllVocabularies(Long wordListId, Long subcategoryId) {
+    public List<SubcategoryDetailResponseDto> getAllVocabularies(Long wordListId, Long subcategoryId, int offset, int limit) {
+        int pageNo = offset / limit;
+        Pageable pageable = PageRequest.of(pageNo, limit);
         List<SubcategoryDetail> vocabularies;
         try {
             getOwnedSubcategory(wordListId, subcategoryId);
-            vocabularies = subcategoryDetailRepository.findAllBySubcategoryId(subcategoryId);
+            vocabularies = subcategoryDetailRepository.findAllBySubcategoryId(subcategoryId, pageable);
         } catch (AccessDeniedException e) {
-            vocabularies = subcategoryDetailRepository.findAllDefaultVocabBySubcategoryId(subcategoryId);
+            vocabularies = subcategoryDetailRepository.findAllDefaultVocabBySubcategoryId(subcategoryId, pageable);
         }
         return MapperUtils.toTargetList(subcategoryDetailMapper::toSubcategoryDetailResponseDto, SubcategoryDetailUtils.filterDeletedVocabulary(vocabularies));
     }
