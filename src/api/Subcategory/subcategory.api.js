@@ -19,7 +19,7 @@ export const deleteSub = (params) => {
 ///===========================================================================
 export const updateSub = (params) => {
   const { wordListId, SubId, title } = params;
-  return http.patch(`/wordlists/${wordListId}/subcategories/${SubId}`, title);
+  return http.put(`/wordlists/${wordListId}/subcategories/${SubId}`, title);
 };
 ///===========================================================================
 export const addWordToSub = (params) => {
