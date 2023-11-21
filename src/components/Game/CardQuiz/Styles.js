@@ -10,7 +10,7 @@ export const Styles = StyleSheet.create({
         backgroundColor: '#fff',
 
         borderRadius: 30,
-        shadowColor: "#000",
+        shadowColor: "#2395F1",
         shadowOffset: {
             width: 0,
             height: 1,
@@ -289,9 +289,9 @@ export const Styles = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 20,
         borderWidth: 1.4,
-        borderColor:'#ccc',
-        justifyContent:'center',
-        alignItems:'center'
+        borderColor: '#ccc',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     textanswer: {
         textAlign: "center",
@@ -304,13 +304,34 @@ export const Styles = StyleSheet.create({
         width: 80,
         height: 35,
         borderRadius: 20,
-        justifyContent:'center',
-        alignItems:'center',
-        backgroundColor:'#2395F1',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#2395F1',
         position: 'absolute',
         top: '85%',
-        right:'9%'
-    }
+        right: '9%'
+    },
+    textQuestion: {
+        textAlign: "center",
+        fontFamily: "Quicksand-SemiBold",
+        fontSize: 16,
+        letterSpacing: 0.15,
+        lineHeight: 22,
+        color: "#fff",
+        marginTop: '5%',
+        width: '85%'
+    },
+    labelTitle: {
+        textAlign: "center",
+        fontFamily: "Quicksand-Bold",
+        fontSize: 18,
+        color: "#fff",
+        marginTop: '10%',
+    },
+    disable: {
+        backgroundColor: '#E4E6E8',
+        color: '#C8CDD2'
+    },
 
 
 

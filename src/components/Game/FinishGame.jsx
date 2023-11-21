@@ -38,6 +38,12 @@ export default function FinishGame(props) {
       setSpelling(state[0]);
       setQuiz(state[1]);
     }
+    if (props.route.params.type === "quiz") {
+      setRiview(state[0]);
+      setFlascard(state[0]);
+      setSpelling(state[0]);
+      setQuiz(state[0]);
+    }
   }, []);
   const [loaded] = useFonts(configFont);
   if (!loaded) {

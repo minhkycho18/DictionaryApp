@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Text, TouchableOpacity, Image } from "react-native";
 import { View } from "react-native";
 import FlipCard from "react-native-flip-card";
@@ -8,49 +8,89 @@ import { colors, incorrect_correct_back } from "~/constants/theme";
 import { SvgXml } from "react-native-svg";
 import { Audio } from "expo-av";
 import { FlatList } from "react-native";
-export default function ItemCardQuiz({ onNextSlider, vocal }) {
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
+export default function ItemCardQuiz({ onNextSlider, vocal, onUpdateResult }) {
+  const [selectedAnswer, setSelectedAnswer] = useState('');
+  const [checkChoice, setCheckChoice]= useState(false);
+  const resultEntries = Object.entries(vocal.result);
+  const confirmRef = useRef();
   const answers = [
-    { id: 1, text: 'Sorry' },
-    { id: 2, text: 'OK' },
-    { id: 3, text: 'Good morning' },
-    { id: 4, text: 'Good night' },
+    { id: 1, text: resultEntries[0][0], check: resultEntries[0][1] },
+    { id: 2, text: resultEntries[1][0], check: resultEntries[1][1] },
+    { id: 3, text: resultEntries[2][0], check: resultEntries[2][1] },
+    { id: 4, text: resultEntries[3][0], check: resultEntries[3][1] },
   ];
+  const Ans = answers.find(item => item.check === true);
 
-  const handleAnswerPress = (id) => {
-    setSelectedAnswer(id);
-    // console.log(selectedAnswer);
+  const test = () => {
+    answers.map((answer) => ({
+      ...answer,
+      text: result[answer.text]
+    }));
+  }
+  // const data 
+  const [data, setdData] = useState(vocal.result);
+
+  const handleAnswerPress = (text) => {
+    setSelectedAnswer(text);
+    setCheckChoice(true);
+    confirmRef.current.setNativeProps({
+      style: Styles.btnDone,
+          // disabled:false
+
+    });
+
   };
+  const Slider  = ()  => {
+    
+  } 
+  const hanleClickDone = () => {
+    // console.log('\n\nanswer : ',answers);
+    // console.log('\n\n 1 answer true  : ',Ans);
 
+    // console.log('\nYou have choiced answer : ',selectedAnswer);
+    console.log(`Answer :: ${selectedAnswer}   Result :: ${Ans.text}`);
+    if (selectedAnswer === Ans.text) {
+      onNextSlider({
+        vocal: { vocabId: vocal.vocabId, defId: vocal.defId },
+        answer: true,
+      });
+    } else {
+      onNextSlider({
+        answer: false,
+      });
+    }
+
+  }
+  const hanleClickAnswer = (answer) => {
+    console.log(`Answer :: ${answer}   Result :: ${vocal.result}`);
+    if (answer === vocal.result) {
+      onNextSlider({
+        vocal: { vocabId: vocal.vocabId, defId: vocal.defId },
+        answer: true,
+      });
+    } else {
+      onNextSlider({
+        answer: false,
+      });
+    }
+  };
   useEffect(() => {
-    // console.log('\n\n\ntest: ', vocal)
+    // console.log('T: \n\n',answers);
   }, []);
   return (
     <View style={Styles.cardFace}>
       <View style={Styles.viewquestion}>
         <Text
-          style={{
-            textAlign: "center",
-            fontFamily: "Quicksand-Bold",
-            fontSize: 18,
-            color: "#fff",
-            marginTop: '10%',
-          }}
+          style={Styles.labelTitle}
         >
           Choose the right answer
         </Text>
 
         <Text
-          style={{
-            textAlign: "center",
-            fontFamily: "Quicksand-Bold",
-            fontSize: 17,
-            color: "#fff",
-            marginTop: '5%',
-            width: '85%'
-          }}
+          style={Styles.textQuestion}
         >
-          "user when we want to politely ask for something or politely tell a person to do something"
+          {/* "user when we want to politely ask for something or politely tell a person to do something" */}
+          "{vocal.question}"
         </Text>
       </View>
 
@@ -61,10 +101,10 @@ export default function ItemCardQuiz({ onNextSlider, vocal }) {
           {answers.map((answer) => (
             <TouchableOpacity
               key={answer.id}
-              onPress={() => handleAnswerPress(answer.id)}
+              onPress={() => handleAnswerPress(answer.text)}
               style={[Styles.answer, {
-                borderColor: selectedAnswer === answer.id ? '#2395F1' : '#ccc',
-                backgroundColor: selectedAnswer === answer.id ? '#F1F7FC' : '#fff',
+                borderColor: selectedAnswer === answer.text ? '#2395F1' : '#ccc',
+                backgroundColor: selectedAnswer === answer.text ? '#F1F7FC' : '#fff',
               }]}
             >
               <Text style={Styles.textanswer} >{answer.text}</Text>
@@ -73,8 +113,11 @@ export default function ItemCardQuiz({ onNextSlider, vocal }) {
 
         </View>
         <TouchableOpacity
-          style={Styles.btnDone}
-          onPress={onNextSlider}
+          style={[Styles.btnDone,Styles.disable]}
+          ref={confirmRef}
+          onPress={() => hanleClickDone()}
+          disabled={!checkChoice}
+
         >
           <Text
             style={{
