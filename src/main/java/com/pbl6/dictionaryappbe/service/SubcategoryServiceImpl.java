@@ -25,6 +25,7 @@ import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import com.pbl6.dictionaryappbe.repository.*;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
 import com.pbl6.dictionaryappbe.utils.MapperUtils;
+import com.pbl6.dictionaryappbe.utils.StreamUtils;
 import com.pbl6.dictionaryappbe.utils.SubcategoryDetailUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -360,6 +361,7 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
                 subcategoryDetailRepository.findRandomSubReviewed(subcategoryId, randomSubDetails.size() * 4)
                         .stream()
                         .map(SubcategoryDetail::getVocabDef)
+                        .filter(StreamUtils.distinctBy(vocabDef -> vocabDef.getVocabulary().getWord()))
                         .toList();
         if (existedWords.size() < 4) {
             existedWords = vocabDefRepository.findRandomLimit(randomSubDetails.size() * 4);
@@ -377,8 +379,11 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
                     while (answers.size() < 4) {
                         int randomIndex = rand.nextInt(finalExistedWord.size());
                         String descOfRandomWord = finalExistedWord.get(randomIndex).getDefinition().getWordDesc();
-                        if (definition.getWordDesc().equals(descOfRandomWord)) continue;
-                        answers.put(finalExistedWord.get(randomIndex).getVocabulary().getWord(), false);
+                        String randomWord = finalExistedWord.get(randomIndex).getVocabulary().getWord();
+                        if (definition.getWordDesc().equals(descOfRandomWord)
+                                || vocabularyQuestionDto.getWord().equals(randomWord))
+                            continue;
+                        answers.put(randomWord, false);
                     }
                     return new QuizQuestionDto(vocabularyQuestionDto, definition.getWordDesc(), answers);
                 })
@@ -416,6 +421,7 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
                 case SPELLING -> detail.setIsSpelling(true);
                 default -> detail.setIsQuiz(true);
             }
+            detail.setLastLearning(LocalDateTime.now());
             subcategoryDetailRepository.save(detail);
         });
     }

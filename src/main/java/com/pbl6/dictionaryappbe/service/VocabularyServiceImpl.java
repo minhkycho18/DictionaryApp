@@ -11,6 +11,7 @@ import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
 import com.pbl6.dictionaryappbe.persistence.vocabulary.VocabularyStatus;
 import com.pbl6.dictionaryappbe.repository.DefinitionRepository;
+import com.pbl6.dictionaryappbe.repository.VocabDefRepository;
 import com.pbl6.dictionaryappbe.repository.VocabularyRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
 import jakarta.persistence.criteria.Join;
@@ -32,6 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VocabularyServiceImpl implements VocabularyService {
     private final VocabularyRepository vocabularyRepository;
+    private final VocabDefRepository vocabDefRepository;
     private final VocabularyMapper vocabularyMapper;
     private final DefinitionRepository definitionRepository;
 
@@ -130,5 +132,19 @@ public class VocabularyServiceImpl implements VocabularyService {
             definition.setExamples(definitionShortDetail.getExamples());
         });
         return vocabularyMapper.toVocabDetailDto(vocabularyRepository.save(vocabulary));
+    }
+
+    @Override
+    public void deleteDefaultVocab(Long vocabId) {
+        Vocabulary vocabulary = vocabularyRepository.findById(vocabId)
+                .orElseThrow(() -> new RecordNotFoundException("Vocabulary not found"));
+        List<Definition> definitions =
+                definitionRepository.findAllByVocabId(vocabId)
+                                    .stream()
+                                    .filter(definition -> definition.getVocabDefs().size() == 1)
+                                    .toList();
+        vocabDefRepository.deleteAll(vocabulary.getVocabDefs());
+        definitionRepository.deleteAll(definitions);
+        vocabularyRepository.delete(vocabulary);
     }
 }
