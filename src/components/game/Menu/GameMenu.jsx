@@ -12,6 +12,7 @@ const REVIEW = "review";
 const FLASH_CARD = "flashCard";
 const QUIZ = "quiz";
 const SPELLING = "spelling";
+
 const GameMenu = (props) => {
   const navigate = useNavigate();
   const { isReview, isFlashcard, isQuiz, isSpelling } = useSelector(

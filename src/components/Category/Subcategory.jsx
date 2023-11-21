@@ -51,13 +51,15 @@ const Subcategory = (props) => {
     const params = {
       wordListId: id,
       SubId: props.subcategory.subcategoryId,
+      limit: props?.subcategory?.amountOfWord,
+      offset: 0,
     };
     const getAllVocab = async () => {
       const result = await getAllVocabInSub(params);
       setVocabsInSub(result);
     };
     getAllVocab();
-  }, [id, props.subcategory.subcategoryId]);
+  }, [id, props.subcategory.amountOfWord, props.subcategory.subcategoryId]);
 
   const plainOptions = vocabsInSub;
   const checkAll =
@@ -114,7 +116,7 @@ const Subcategory = (props) => {
 
   //==============================================================================================================
   const filterVocab = vocabsInSub.filter((vocab) =>
-    vocab.word.startsWith(keyword)
+    vocab.word.toLowerCase().startsWith(keyword.toLowerCase())
   );
   const itemsPerPage = 10;
   const startIndex = (page - 1) * itemsPerPage;
@@ -274,11 +276,7 @@ const Subcategory = (props) => {
                 Default word
               </div>
               <div
-                className={`tab__options ${!isCustom ? "" : "active"} ${
-                  props.subcategory?.subcategoryType === "CUSTOM"
-                    ? ""
-                    : " disable-custom"
-                }`}
+                className={`tab__options ${!isCustom ? "" : "active"}`}
                 onClick={() => setIsCustom(true)}
               >
                 Custom word

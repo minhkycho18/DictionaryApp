@@ -110,7 +110,43 @@ const SuccessCard = (props) => {
             </Space>
           </Space>
         );
+      case "success-quiz":
+        return (
+          <Space direction="vertical" className="success-card ">
+            <Space direction="vertical" className="success-card__body">
+              <Image src={logo} loading="lazy" preview={false}></Image>
+              <Space direction="vertical">
+                {/* <Space className="review-card__title">Great !</Space> */}
+                <Space className="review-card__title">
+                  {props.onSelect &&
+                    props?.resultLength -
+                      props?.correctAnswerFlashcard.length}{" "}
+                  Difficult words{" "}
+                </Space>
+              </Space>
+              <Space className="success-card__box" direction="vertical">
+                <Space className="success-card__options success-card__options--leitner">
+                  <InboxOutlined className="success-card__options__icon" />
+                  <Space direction="vertical">
+                    <div className="success-card__options__title ">
+                      Add to Leitner
+                    </div>
+                    <div className="success-card__options__desc ">
+                      Review them everyday!
+                    </div>
+                  </Space>
+                </Space>
 
+                <Space
+                  className="success-card__options success-card__options--continue"
+                  onClick={() => changeToNextLesson("overview")}
+                >
+                  Continue
+                </Space>
+              </Space>
+            </Space>
+          </Space>
+        );
       default:
         break;
     }

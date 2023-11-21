@@ -4,7 +4,6 @@ import WrapCard from "./WrapCard";
 import waveTop from "../../../assets/images/wave-quiz-top.svg";
 import { Button, Space } from "antd";
 const QuizCard = (props) => {
-  // const [answer, setAnswer] = useState();
   const [selectedAnswer, setSelectedAnswer] = useState(null);
 
   const handleSelectAnswer = (answer) => {
@@ -19,7 +18,8 @@ const QuizCard = (props) => {
     }
     changeToNext();
   };
-  const arrResult = Object.entries(props?.vocabInfo?.result);
+  const arrResult =
+    (props.vocabInfo.result && Object.entries(props?.vocabInfo?.result)) || [];
   const renderResults = arrResult.map(([key, value], index) => (
     <Space
       key={index}
@@ -44,7 +44,7 @@ const QuizCard = (props) => {
         </Space>
 
         <Space direction="vertical" className="quiz-card__body">
-          <Space>Your Answer:</Space>
+          <Space style={{ margin: 32, fontWeight: 600 }}>Your Answer:</Space>
           <Space className="quiz-card__options" direction="vertical">
             {props?.vocabInfo?.result && renderResults}
           </Space>

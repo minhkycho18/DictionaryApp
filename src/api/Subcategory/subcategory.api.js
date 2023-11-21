@@ -40,8 +40,10 @@ export const getSubType = () => {
 };
 ///===========================================================================
 export const getAllVocabInSub = (params) => {
-  const { wordListId, SubId } = params;
-  return http.get(`/wordlists/${wordListId}/subcategories/${SubId}`);
+  const { wordListId, SubId, offset, limit } = params;
+  return http.get(
+    `/wordlists/${wordListId}/subcategories/${SubId}?offset=${offset}&limit=${limit}`
+  );
 };
 ///===========================================================================
 export const deleteVocabsInSub = (params) => {

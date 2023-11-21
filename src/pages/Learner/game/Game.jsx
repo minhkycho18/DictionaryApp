@@ -20,6 +20,7 @@ const REVIEW = "review";
 const FLASH_CARD = "flashCard";
 const QUIZ = "quiz";
 const SPELLING = "spelling";
+const OVERVIEW = "overview";
 
 const Game = (props) => {
   const { result, loading } = useSelector((state) => state.game);
@@ -39,17 +40,20 @@ const Game = (props) => {
   };
   useEffect(() => {
     localStorage.setItem("gameType", type);
-    dispatch(
-      getVocabsByGame({
-        wordlistId: wlId,
-        subcategoryId: subId,
-        gameType: type.toLowerCase(),
-      })
-    )
-      .unwrap()
-      .then((rs) => {
-        dispatch(getGameStatus(rs));
-      });
+    if (type!==OVERVIEW) {
+      dispatch(
+        getVocabsByGame({
+          wordlistId: wlId,
+          subcategoryId: subId,
+          gameType: type.toLowerCase(),
+        })
+      )
+        .unwrap()
+        .then((rs) => {
+          dispatch(getGameStatus(rs));
+        });
+    }
+    
     return () => {
       localStorage.setItem("gameType", REVIEW);
     };
@@ -125,7 +129,6 @@ const Game = (props) => {
       partialVisibilityGutter: 30,
     },
   };
-  // const newArr = [1, 2, 3, 4, 5];
 
   const renderCard = () => {
     switch (type) {
@@ -209,7 +212,7 @@ const Game = (props) => {
             ref={slide}
           >
             <ReviewCard type={"default"} />
-            {result.slice(0, 3).map((item, index) => (
+            {result.map((item, index) => (
               <SpellingCard
                 indexKey={index}
                 key={index}
@@ -221,9 +224,9 @@ const Game = (props) => {
             ))}
             <SuccessCard
               type={"success-spelling"}
-              onSelect={current === result.slice(0, 3).length}
+              onSelect={current === result.length}
               correctAnswerFlashcard={correctAnswerFlashcard}
-              resultLength={result.slice(0, 3).length}
+              resultLength={result.length}
               handleChangeLesson={handleChangeLesson}
             />
             <ReviewCard type={"default"} />
@@ -255,13 +258,17 @@ const Game = (props) => {
               />
             ))}
             <SuccessCard
-              type={"success-flash_card"}
+              type={"success-quiz"}
               onSelect={current === result.length}
+              correctAnswerFlashcard={correctAnswerFlashcard}
+              resultLength={result.length}
               handleChangeLesson={handleChangeLesson}
             />
             <ReviewCard type={"default"} />
           </Carousel>
         );
+      case OVERVIEW:
+        return <>OverView</>;
       default:
         return (
           <Carousel
@@ -288,6 +295,7 @@ const Game = (props) => {
               type={"success-review"}
               onSelect={current === result.length}
               handleChangeLesson={handleChangeLesson}
+              resultLength={result.length}
             />
             <ReviewCard type={"default"} />
           </Carousel>

@@ -18,7 +18,6 @@ const ReviewCard = (props) => {
   useEffect(() => {
     if (props?.onSelect) {
       dispatch(updateVocab(props.vocabInfo));
-      console.log(props.vocabInfo);
     }
   }, [dispatch, props?.onSelect, props.vocabInfo]);
   return (

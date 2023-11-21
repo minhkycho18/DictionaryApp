@@ -1,8 +1,6 @@
-// authSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 import { getVocabsByGame, updateVocabsByGame } from "./gameThunk";
 
-// Create the auth slice
 const gameSlice = createSlice({
   name: "game",
   initialState: {
@@ -36,12 +34,6 @@ const gameSlice = createSlice({
       state.isQuiz = action.payload.every((item) => item?.isQuiz === true);
       state.isSpelling = action.payload.every(
         (item) => item?.isSpelling === true
-      );
-      console.log(
-        state.isReview,
-        state.isFlashcard,
-        state.isQuiz,
-        state.isSpelling
       );
     },
   },
