@@ -23,6 +23,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,9 @@ public class SubcategoryController {
     private final SubcategoryService subcategoryService;
     private final SubcategoryMapper subcategoryMapper;
     private final SubcategoryGameService subcategoryGameService;
+
+    @Value("${dictionary-app.api.default-page-size}")
+    private int defaultPageSize;
 
     @Operation(summary = "Get all subcategories of WordList by id")
     @ApiResponses(value = {
@@ -61,6 +65,9 @@ public class SubcategoryController {
                                                                @RequestParam(name = "limit", required = false)
                                                                @Min(value = 1, message = "Limit must be greater than or equal to 1")
                                                                Integer limit) {
+        if (limit == null) {
+            limit = defaultPageSize;
+        }
         return subcategoryService.getAllVocabularies(wordListId, subcategoryId, offset, limit);
     }
 
