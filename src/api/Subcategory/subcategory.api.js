@@ -19,7 +19,9 @@ export const deleteSub = (params) => {
 ///===========================================================================
 export const updateSub = (params) => {
   const { wordListId, SubId, title } = params;
-  return http.put(`/wordlists/${wordListId}/subcategories/${SubId}`, title);
+  return http.put(`/wordlists/${wordListId}/subcategories/${SubId}`, title, {
+    headers: { "Content-Type": "text/json" },
+  });
 };
 ///===========================================================================
 export const addWordToSub = (params) => {

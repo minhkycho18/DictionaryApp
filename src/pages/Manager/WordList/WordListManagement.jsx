@@ -16,6 +16,7 @@ import {
 } from "../../../stores/word-lists/wordLists-thunk";
 import {
   createSubcategory,
+  deleteSubcategory,
   getAllVocabInSubcategory,
   getSubcategory,
   updateSubcategory,
@@ -24,6 +25,7 @@ import SubcategoryDataTable from "../../../components/data-table/WordList/Subcat
 import VocabularyDataTable from "../../../components/data-table/VocabularyDataTable";
 import { selectWl } from "../../../stores/subcategory/subcategorySlice";
 import AddModal from "./CustomModals/AddModal";
+import AddNewVocabularyModal from "./CustomModals/AddNewVocabularyModal";
 
 const WordListManagement = () => {
   const WORDLIST_DATA_TYPE = "wordlist";
@@ -66,19 +68,23 @@ const WordListManagement = () => {
     message.success("Create successfully!");
   };
 
-  const handleEditWordList = (param) => {
-    dispatch(updateWl(param));
+  const handleEdit = (param) => {
+    currentDataType === WORDLIST_DATA_TYPE
+      ? dispatch(updateWl(param))
+      : dispatch(
+          updateSubcategory({
+            ...param,
+            wordListId: selectedWL.id,
+          })
+        );
     message.success("Edit successfully!");
   };
 
-  const handleDeleteWordList = (param) => {
-    dispatch(deleteExistWordList(param));
+  const handleDelete = (param) => {
+    currentDataType === WORDLIST_DATA_TYPE
+      ? dispatch(deleteExistWordList(param))
+      : dispatch(deleteSubcategory({ ...param, wordListId: selectedWL.id }));
     message.success("Delete successfully!");
-  };
-
-  const handleUpdateSub = (param) => {
-    dispatch(updateSubcategory(param));
-    message.success("Edit successfully!");
   };
 
   const handleTableChange = () => {
@@ -135,11 +141,15 @@ const WordListManagement = () => {
         </Row>
         <Row className={"box_data_item add_box"}>
           <Col offset={1} span={8}>
-            <AddModal
-              type={currentDataType}
-              handleCreateNew={handleCreateNew}
-              selectedWordList={selectWl}
-            />
+            {currentDataType === VOCABULARY_DATA_TYPE ? (
+              <AddNewVocabularyModal />
+            ) : (
+              <AddModal
+                type={currentDataType}
+                handleCreateNew={handleCreateNew}
+                selectedWordList={selectWl}
+              />
+            )}
           </Col>
         </Row>
         {currentDataType !== WORDLIST_DATA_TYPE && (
@@ -157,8 +167,8 @@ const WordListManagement = () => {
               <WordListDataTable
                 loading={loading}
                 onCLickItem={onCLickItem}
-                handleEditWordList={handleEditWordList}
-                handleDeleteWordList={handleDeleteWordList}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
                 handleTableChange={handleTableChange}
                 dataSource={wordLists.map((item) => ({
                   ...item,
@@ -171,6 +181,8 @@ const WordListManagement = () => {
               <SubcategoryDataTable
                 loading={subLoading}
                 onCLickItem={onCLickItem}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
                 dataSource={subcategories.map((item) => ({
                   ...item,
                   key: item.id,

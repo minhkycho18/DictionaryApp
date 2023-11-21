@@ -9,12 +9,13 @@ const WordListDataTable = ({
   loading,
   handleTableChange,
   onCLickItem,
-  handleEditWordList,
-  handleDeleteWordList,
+  handleEdit,
+  handleDelete,
 }) => {
   const [selectedWordlist, setSelectedWordlist] = useState(null);
+
   const onClickDelete = () => {
-    handleDeleteWordList(selectedWordlist.id);
+    handleDelete(selectedWordlist.id);
   };
 
   const columns = [
@@ -23,7 +24,6 @@ const WordListDataTable = ({
       dataIndex: "title",
       key: "title",
       className: "word_cell",
-      align: "center",
       sorter: (a, b) => a.title.localeCompare(b.title),
       sortDirections: ["descend"],
       ellipsis: true,
@@ -66,7 +66,7 @@ const WordListDataTable = ({
         <Space size={"middle"}>
           <EditWordListModal
             editModalInfo={selectedWordlist}
-            handleEditWordList={handleEditWordList}
+            handleEditWordList={handleEdit}
           />
           <DeleteTwoTone
             twoToneColor="#EB1B36"
@@ -94,7 +94,6 @@ const WordListDataTable = ({
       loading={loading}
       bordered
       columns={columns}
-      //   pagination={pagination}
       size={"small"}
       dataSource={dataSource}
       onChange={handleTableChange}

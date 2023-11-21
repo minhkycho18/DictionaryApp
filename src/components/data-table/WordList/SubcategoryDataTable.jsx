@@ -2,11 +2,19 @@ import React, { useEffect, useState } from "react";
 import { Button, Form, Input, Space, Table } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
 import { DeleteTwoTone } from "@ant-design/icons";
-const SubcategoryDataTable = ({ dataSource, onCLickItem, loading }) => {
+import "./WordListDataTable.scss";
+const SubcategoryDataTable = ({
+  dataSource,
+  onCLickItem,
+  loading,
+  handleEdit,
+  handleDelete,
+}) => {
   const [form] = Form.useForm();
   const [data, setData] = useState(dataSource);
   const [editingRow, setEditingRow] = useState(null);
   const [edittingValues, setEditingValues] = useState("");
+
   useEffect(() => {
     const newData = dataSource.map((item) => {
       return {
@@ -18,11 +26,23 @@ const SubcategoryDataTable = ({ dataSource, onCLickItem, loading }) => {
   }, [dataSource]);
 
   const onSave = () => {
+    const params = {
+      SubId: editingRow,
+      title: edittingValues,
+    };
+    handleEdit(params);
     setEditingRow(null);
   };
 
+  const onDelete = (record) => {
+    const param = { SubId: [record.key] };
+    handleDelete(param);
+    setData(data.filter((sub) => sub.subcategoryId !== record.key));
+  };
+
   const cancel = () => {
-    setEditingRow("");
+    setEditingRow(null);
+    setEditingValues("");
   };
 
   const columns = [
@@ -31,7 +51,6 @@ const SubcategoryDataTable = ({ dataSource, onCLickItem, loading }) => {
       dataIndex: "title",
       key: "title",
       className: "word_cell",
-      align: "center",
       sorter: (a, b) => a.title.localeCompare(b.title),
       sortDirections: ["descend"],
       width: "50%",
@@ -78,6 +97,7 @@ const SubcategoryDataTable = ({ dataSource, onCLickItem, loading }) => {
       key: "function",
       dataIndex: "function",
       align: "center",
+      className: "function-box",
       onCell: () => {
         return {
           onClick: (e) => {
@@ -86,13 +106,14 @@ const SubcategoryDataTable = ({ dataSource, onCLickItem, loading }) => {
         };
       },
       render: (_, record) => (
-        <Space>
+        <>
           {editingRow !== record.key ? (
             <Space size={"middle"}>
               <EditTwoTone
                 className="function-box__edit"
                 onClick={() => {
                   setEditingRow(record.subcategoryId);
+                  setEditingValues(record.title.value);
                   form.setFieldsValue({
                     title: record.title,
                   });
@@ -101,6 +122,7 @@ const SubcategoryDataTable = ({ dataSource, onCLickItem, loading }) => {
               <DeleteTwoTone
                 twoToneColor="#EB1B36"
                 className="function-box__delete"
+                onClick={() => onDelete(record)}
               />
             </Space>
           ) : (
@@ -109,7 +131,7 @@ const SubcategoryDataTable = ({ dataSource, onCLickItem, loading }) => {
               <Button onClick={cancel}>Cancel</Button>
             </Space>
           )}
-        </Space>
+        </>
       ),
     },
   ];
@@ -133,6 +155,8 @@ const SubcategoryDataTable = ({ dataSource, onCLickItem, loading }) => {
 
   return (
     <Form form={form} onFinish={onFinish}>
+      {console.log("render>>>>>>>>>>>>>>")}
+      {dataSource.map((i) => console.log(i))}
       <Table
         bordered
         dataSource={data}

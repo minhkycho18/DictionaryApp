@@ -6,14 +6,18 @@
   margin: 0;
 }
 
-.subcategoryRow p {
-  margin: 0;
+.subcategoryRow {
+  .ant-table-cell {
+    padding: 8px !important;
+  }
+  p {
+    margin: 0;
+  }
 }
 
 .function-box {
   .ant-space-item {
     width: 35px;
-    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
