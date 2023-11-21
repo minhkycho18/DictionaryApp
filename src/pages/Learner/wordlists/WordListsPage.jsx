@@ -25,9 +25,7 @@ import "./WordListsPage.scss";
 function WordListsPage() {
   let { id } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
-  const { loading, error, subcategories } = useSelector(
-    (state) => state.subcategory
-  );
+  const { loading, subcategories } = useSelector((state) => state.subcategory);
   const [isOpen, setIsOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
@@ -60,12 +58,7 @@ function WordListsPage() {
     };
     dispatch(getAllVocabInSubcategory(params));
   };
-  const errorOpen = () => {
-    messageApi.open({
-      type: "error",
-      content: "This is an error message",
-    });
-  };
+
   const showAddMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -91,6 +84,7 @@ function WordListsPage() {
           style={{
             alignItems: "center",
             justifyContent: "center",
+            minWidth: "80px",
           }}
         >
           {capitalizeFirstLetter(subcategory.title)}
@@ -128,8 +122,10 @@ function WordListsPage() {
               setTimeout(() => {
                 dispatch(
                   createSubcategory({ wordListId: +id, title: titleInput })
-                );
-                messageApi.success("Success!");
+                )
+                  .unwrap()
+                  .then((rs) => messageApi.success("Success!"))
+                  .catch((e) => messageApi.error("The title is already exist"));
                 form.resetFields();
                 setIsOpen(false);
                 setConfirmLoading(false);
@@ -156,7 +152,6 @@ function WordListsPage() {
           </Form.Item>
         </Form>
       </Modal>
-      {error !== null && errorOpen()}
       {!loading && subcategories.length > 0 && (
         <Tabs
           tabBarExtraContent={{

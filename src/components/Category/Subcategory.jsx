@@ -9,6 +9,7 @@ import {
   Button,
   Checkbox,
   Dropdown,
+  Empty,
   Input,
   Menu,
   Modal,
@@ -135,6 +136,24 @@ const Subcategory = (props) => {
       )}
     />
   ));
+  const renderEmpty = (
+    <Empty
+      image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+      imageStyle={{
+        height: "120px",
+      }}
+      className=""
+      description={
+        <span className="empty__sub--content">
+          You don't have any vocab yet. Click the button above to add one.
+        </span>
+      }
+    >
+      <Button className="empty__sub--add" onClick={() => setIsOpen(!isOpen)}>
+        Add Now
+      </Button>
+    </Empty>
+  );
   //==============================================================================================================
   const handleAddAndRemoveVocab = (value) => {
     if (value.isAdded) {
@@ -302,7 +321,7 @@ const Subcategory = (props) => {
           </Space>
         </Modal>
 
-        {!VocabLoading && (
+        {!VocabLoading && vocabsInSub.length > 0 && (
           <Space direction="vertical">
             <Space
               style={{
@@ -346,11 +365,10 @@ const Subcategory = (props) => {
               <PlusOutlined className="subcategory_add__icon" />
               <span>Add more...</span>
             </Space>
-
             {renderVocabInSub}
           </Space>
         )}
-
+        {!VocabLoading && !vocabsInSub.length && renderEmpty}
         {VocabLoading && <Spin spinning={VocabLoading} />}
       </div>
     </Space>
