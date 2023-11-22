@@ -31,7 +31,11 @@ const WordListManagement = () => {
   const WORDLIST_DATA_TYPE = "wordlist";
   const SUBCATEGORY_DATA_TYPE = "subcategory";
   const VOCABULARY_DATA_TYPE = "vocabulary";
-  const [pagination, setPaginations] = useState({});
+  const [pagination, setPaginations] = useState({
+    currentPage: 1,
+    offset: 0,
+    limit: 30,
+  });
   const [currentDataType, setCurrentDataType] = useState(WORDLIST_DATA_TYPE);
   const { wordLists, loading } = useSelector((state) => state.wordLists);
   const {
@@ -56,10 +60,17 @@ const WordListManagement = () => {
       const params = {
         wordListId: selectedWL.id,
         SubId: record.subcategoryId,
-        offset: 0,
-        limit: 10,
       };
       dispatch(getAllVocabInSubcategory(params));
+      setPaginations({
+        current: 1,
+        total: record.amountOfWord,
+        showSizeChanger: false,
+        position: ["bottomCenter", "right"],
+        simple: true,
+        responsive: true,
+        subId: record.subcategoryId,
+      });
       setCurrentDataType(VOCABULARY_DATA_TYPE);
     }
   };
@@ -90,8 +101,19 @@ const WordListManagement = () => {
     message.success("Delete successfully!");
   };
 
-  const handleTableChange = () => {
-    // dispatch(getAllWL());
+  const handleTableChange = (currentPage) => {
+    dispatch(
+      getAllVocabInSubcategory({
+        wordListId: selectedWL.id,
+        SubId: pagination.subId,
+        offset: currentPage,
+        limit: 10,
+      })
+    );
+    setPaginations({
+      ...pagination,
+      current: pagination.current + 1,
+    });
   };
 
   const onBack = () => {
@@ -197,7 +219,9 @@ const WordListManagement = () => {
               <VocabularyDataTable
                 loading={VocabLoading}
                 isEditable={false}
+                pagination={pagination}
                 onCLickItem={onCLickItem}
+                onTableChange={handleTableChange}
                 dataSource={vocabInSub.map((item) => ({
                   ...item,
                   key: item.id,

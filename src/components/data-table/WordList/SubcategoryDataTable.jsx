@@ -155,8 +155,6 @@ const SubcategoryDataTable = ({
 
   return (
     <Form form={form} onFinish={onFinish}>
-      {console.log("render>>>>>>>>>>>>>>")}
-      {dataSource.map((i) => console.log(i))}
       <Table
         bordered
         dataSource={data}
