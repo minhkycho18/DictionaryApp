@@ -17,7 +17,7 @@ export default function ItemWordlist({
   onAddSub,
   wordlist,
   data,
-  onAddWordToSub,
+  onClone,
   onError,
   sub,
 }) {
@@ -53,27 +53,6 @@ export default function ItemWordlist({
     return null;
   }
 
-  const addWordToSub = async (wordlistId, subId, limit, data) => {
-    try {
-      const words = await getAllWordOfSub(wordlistId, subId, limit);
-      const check = words.find((item) => item.definition.defId === data.defId)
-        ? true
-        : false;
-      if (check) {
-        const sub = subs.find((item) => item.subcategoryId === subId);
-        onError("Error", `the vocabulary is exist in ${sub.title}`);
-      } else {
-        await addWordDefaultToSub(wordlistId, subId, data);
-        onAddWordToSub({ state: true, defId: data.defId });
-      }
-      // const result = await addWordDefaultToSub(wordlistId, subId, data);
-      // onAddWordToSub({ state: true, defId: data.defId });
-      // console.log(`Add word ::`, result);
-    } catch (error) {
-      console.log(`Add word to sub ::`, error);
-    }
-  };
-
   return (
     //item sub
 
@@ -107,14 +86,7 @@ export default function ItemWordlist({
               <TouchableOpacity
                 style={[tw`bg-stone-100`, Styles.wrappered]}
                 key={index}
-                onPress={() =>
-                  addWordToSub(
-                    wordlist.id,
-                    item.subcategoryId,
-                    item.amountOfWord === 0 ? 20 : item.amountOfWord,
-                    data
-                  )
-                }
+                onPress={() => onClone(wordlist.id, item.subcategoryId)}
               >
                 <View style={Styles.Text_content}>
                   <Text

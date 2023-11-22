@@ -102,7 +102,6 @@ export default function YourWordlistDetail() {
 
   useFocusEffect(
     React.useCallback(() => {
-      // console.log("huy");
       getSubCategory(wl.id);
     }, [])
   );
@@ -136,7 +135,7 @@ export default function YourWordlistDetail() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={{ marginTop: 10, marginLeft: 13 }}>
+        <TouchableOpacity style={{ marginTop: 10, marginLeft: 13, padding: 3 }}>
           <Entypo
             name="chevron-left"
             size={24}
@@ -152,6 +151,7 @@ export default function YourWordlistDetail() {
             marginLeft: 40,
             display: "flex",
             flexDirection: "row",
+            gap: 10,
             // alignItems: "center",
             // alignItems: 'center',
             // position: 'relative',

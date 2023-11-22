@@ -6,7 +6,7 @@ import { colors } from "~/constants/theme";
 import { useNavigation } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
-export default function ItemWordList({ src, wordlist }) {
+export default function ItemWordList({ src, wordlist, type }) {
   const navigation = useNavigation();
   const [loaded] = useFonts(configFont);
   if (!loaded) {
@@ -15,13 +15,28 @@ export default function ItemWordList({ src, wordlist }) {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.push("YourWordlistDetail", {
-          Wordlist: {
-            id: wordlist.id,
-            title: wordlist.title,
-            listDesc: wordlist.listDesc,
-          },
-        });
+        let href = "";
+        if (type.type === "public") {
+          navigation.navigate("publicWordlist", {
+            screen: "publicwordlistDetail",
+            params: {
+              Wordlist: {
+                id: wordlist.id,
+                title: wordlist.title,
+                listDesc: wordlist.listDesc,
+              },
+            },
+          });
+        }
+        if (type.type === "mywordlist") {
+          navigation.push("YourWordlistDetail", {
+            Wordlist: {
+              id: wordlist.id,
+              title: wordlist.title,
+              listDesc: wordlist.listDesc,
+            },
+          });
+        }
       }}
       style={Styles.container}
     >

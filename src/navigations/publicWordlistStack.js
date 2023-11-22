@@ -13,7 +13,7 @@ export default function PublicWordlistStack() {
 
     return (
 
-        <Stack.Navigator screenOptions={{ headerShadowVisible: false }}>
+        <Stack.Navigator screenOptions={{ headerShadowVisible: false }} initialRouteName="publicWordlist">
             <Stack.Screen
                 name="publicwordlist"
                 component={PublicWordlist}

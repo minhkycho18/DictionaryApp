@@ -18,7 +18,7 @@ export default function ItemVocabOfSub_PublicWordlist({
   }
   return (
     <>
-      <TouchableOpacity style={Styles.container}>
+      <View style={Styles.container}>
         <View
           style={{
             ...Styles.wrappered,
@@ -57,7 +57,7 @@ export default function ItemVocabOfSub_PublicWordlist({
             </View>
           </View>
         </View>
-      </TouchableOpacity>
+      </View>
     </>
   );
 }
