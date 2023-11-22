@@ -1,4 +1,4 @@
-import { Button, Input, Modal } from "antd";
+import { Button, Card, Input, Modal } from "antd";
 import React, { useState } from "react";
 
 const AddNewVocabularyModal = () => {
@@ -24,9 +24,17 @@ const AddNewVocabularyModal = () => {
         onCancel={handleCancel}
       >
         <Input placeholder="Search here ..." />
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <Card
+          title="Card title"
+          bordered={false}
+          style={{
+            width: 300,
+          }}
+        >
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+        </Card>
       </Modal>
     </>
   );

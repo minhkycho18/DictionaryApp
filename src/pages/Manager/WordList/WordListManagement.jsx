@@ -31,6 +31,7 @@ const WordListManagement = () => {
   const WORDLIST_DATA_TYPE = "wordlist";
   const SUBCATEGORY_DATA_TYPE = "subcategory";
   const VOCABULARY_DATA_TYPE = "vocabulary";
+  const [pagination, setPaginations] = useState({});
   const [currentDataType, setCurrentDataType] = useState(WORDLIST_DATA_TYPE);
   const { wordLists, loading } = useSelector((state) => state.wordLists);
   const {
@@ -55,6 +56,8 @@ const WordListManagement = () => {
       const params = {
         wordListId: selectedWL.id,
         SubId: record.subcategoryId,
+        offset: 0,
+        limit: 10,
       };
       dispatch(getAllVocabInSubcategory(params));
       setCurrentDataType(VOCABULARY_DATA_TYPE);
@@ -88,7 +91,7 @@ const WordListManagement = () => {
   };
 
   const handleTableChange = () => {
-    dispatch(getAllWL());
+    // dispatch(getAllWL());
   };
 
   const onBack = () => {
