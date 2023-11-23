@@ -120,7 +120,7 @@ public class VocabularyServiceImpl implements VocabularyService {
                 .orElseThrow(() -> new RecordNotFoundException("Vocabulary not found"));
         vocabulary.setAudioUs(updateDefaultVocabRequest.getAudioUs());
         vocabulary.setAudioUk(updateDefaultVocabRequest.getAudioUk());
-        vocabulary.setPhoneUs(updateDefaultVocabRequest.getAudioUs());
+        vocabulary.setPhoneUs(updateDefaultVocabRequest.getPhoneUs());
         vocabulary.setPhoneUk(updateDefaultVocabRequest.getPhoneUk());
         updateDefaultVocabRequest.getDefinitions().forEach(definitionShortDetail -> {
             if (definitionShortDetail.getDefId() != null) {
