@@ -1,7 +1,6 @@
 package com.pbl6.dictionaryappbe.controller;
 
 import com.pbl6.dictionaryappbe.dto.vocabulary.UpdateDefaultVocabRequest;
-import com.pbl6.dictionaryappbe.dto.vocabulary.VocabDetailDto;
 import com.pbl6.dictionaryappbe.service.VocabularyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -21,15 +20,16 @@ public class ManagerController {
 
     @Operation(summary = "Update default vocabulary", security = {@SecurityRequirement(name = "bearer-key")})
     @PutMapping("/vocabs/{vocabId}")
-    public VocabDetailDto updateVocabInfo(@PathVariable Long vocabId,
+    public ResponseEntity<String> updateVocabInfo(@PathVariable Long vocabId,
                                           @RequestBody @Valid UpdateDefaultVocabRequest updateDefaultVocabRequest){
-        return vocabularyService.updateDefaultVocab(vocabId, updateDefaultVocabRequest);
+        vocabularyService.updateDefaultVocab(vocabId, updateDefaultVocabRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Update vocab successfully");
     }
 
     @Operation(summary = "Delete default vocabulary", security = {@SecurityRequirement(name = "bearer-key")})
     @DeleteMapping("/vocabs/{vocabId}")
     public ResponseEntity<String> deleteVocab(@PathVariable Long vocabId){
         vocabularyService.deleteDefaultVocab(vocabId);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Delete vocab successfully");
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Delete vocab successfully");
     }
 }

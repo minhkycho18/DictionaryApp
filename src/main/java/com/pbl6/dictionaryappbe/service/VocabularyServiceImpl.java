@@ -115,7 +115,7 @@ public class VocabularyServiceImpl implements VocabularyService {
 
     @Override
     @Transactional
-    public VocabDetailDto updateDefaultVocab(Long vocabId, UpdateDefaultVocabRequest updateDefaultVocabRequest) {
+    public void updateDefaultVocab(Long vocabId, UpdateDefaultVocabRequest updateDefaultVocabRequest) {
         Vocabulary vocabulary = vocabularyRepository.findById(vocabId)
                 .orElseThrow(() -> new RecordNotFoundException("Vocabulary not found"));
         vocabulary.setAudioUs(updateDefaultVocabRequest.getAudioUs());
@@ -123,16 +123,38 @@ public class VocabularyServiceImpl implements VocabularyService {
         vocabulary.setPhoneUs(updateDefaultVocabRequest.getAudioUs());
         vocabulary.setPhoneUk(updateDefaultVocabRequest.getPhoneUk());
         updateDefaultVocabRequest.getDefinitions().forEach(definitionShortDetail -> {
-            Definition definition =
-                    definitionRepository.findByVocabIdAndDefId(
-                                    vocabId, definitionShortDetail.getDefId()
-                            )
-                            .orElseThrow(() -> new RecordNotFoundException("Definition of vocabulary not found"));
-            definition.setWordDesc(definitionShortDetail.getWordDesc());
-            definition.setExamples(definitionShortDetail.getExamples());
+            if (definitionShortDetail.getDefId() != null) {
+                // Case update existed def
+                Definition definition =
+                        definitionRepository.findByVocabIdAndDefId(vocabId, definitionShortDetail.getDefId())
+                                .orElseThrow(() -> new RecordNotFoundException("Definition of vocabulary not found"));
+                definition.setWordDesc(definitionShortDetail.getWordDesc());
+                definition.setExamples(definitionShortDetail.getExamples());
+            } else {
+                // Case create new def
+                Definition definition = Definition.builder()
+                        .wordDesc(definitionShortDetail.getWordDesc())
+                        .examples(definitionShortDetail.getExamples())
+                        .vocabDefs(new ArrayList<>())
+                        .build();
+                Definition savedDef = definitionRepository.save(definition);
+                VocabDef vocabDef = VocabDef.builder()
+                        .defId(savedDef.getDefId())
+                        .vocabId(vocabId)
+                        .definition(savedDef)
+                        .vocabulary(vocabulary)
+                        .build();
+                vocabDefRepository.save(vocabDef);
+            }
         });
-        return vocabularyMapper.toVocabDetailDto(vocabularyRepository.save(vocabulary));
+        // case delete def
+        List<String> currentVocabDefs = updateDefaultVocabRequest.getDefinitions().stream()
+                .filter(definitionShortDetail -> definitionShortDetail.getDefId() != null)
+                .map(vocabDef -> vocabId + "-" + vocabDef.getDefId())
+                .toList();
+        vocabDefRepository.updateStatusVocabs(currentVocabDefs, vocabId, true);
     }
+
 
     @Override
     public void deleteDefaultVocab(Long vocabId) {
@@ -140,9 +162,9 @@ public class VocabularyServiceImpl implements VocabularyService {
                 .orElseThrow(() -> new RecordNotFoundException("Vocabulary not found"));
         List<Definition> definitions =
                 definitionRepository.findAllByVocabId(vocabId)
-                                    .stream()
-                                    .filter(definition -> definition.getVocabDefs().size() == 1)
-                                    .toList();
+                        .stream()
+                        .filter(definition -> definition.getVocabDefs().size() == 1)
+                        .toList();
         vocabDefRepository.deleteAll(vocabulary.getVocabDefs());
         definitionRepository.deleteAll(definitions);
         vocabularyRepository.delete(vocabulary);
