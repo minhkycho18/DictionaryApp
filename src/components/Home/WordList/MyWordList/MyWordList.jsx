@@ -127,6 +127,7 @@ export default function MyWordList() {
               key={item.id}
               src={require("~/assets/wordlist.png")}
               wordlist={item}
+              type={{ type: "mywordlist" }}
             />
           ))}
       </ScrollView>

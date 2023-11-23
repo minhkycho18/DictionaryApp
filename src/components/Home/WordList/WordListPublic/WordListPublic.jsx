@@ -78,6 +78,7 @@ export default function WordListPublic() {
             key={item.id}
             src={require("~/assets/communication.png")}
             wordlist={item}
+            type={{ type: "public" }}
           />
         ))}
       </ScrollView>
