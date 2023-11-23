@@ -11,6 +11,8 @@ import {
 
 const initialState = {
   loading: false,
+  currentPage: 1,
+  totalElements: 0,
   VocabLoading: false,
   error: null,
   subcategories: [],
@@ -109,7 +111,9 @@ const subcategorySlice = createSlice({
       })
       .addCase(getAllVocabInSubcategory.fulfilled, (state, action) => {
         state.VocabLoading = false;
-        state.vocabInSub = action.payload;
+        state.vocabInSub = action.payload.content;
+        state.currentPage = action.payload.pageable.pageNumber + 1;
+        state.totalElements = action.payload.totalElements;
       })
       .addCase(getAllVocabInSubcategory.rejected, (state, action) => {
         state.VocabLoading = false;

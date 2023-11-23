@@ -127,7 +127,9 @@ const SubcategoryDataTable = ({
             </Space>
           ) : (
             <Space size={"middle"}>
-              <Button onClick={onSave}>Save</Button>
+              <Button onClick={onSave} style={{ marginRight: "40px" }}>
+                Save
+              </Button>
               <Button onClick={cancel}>Cancel</Button>
             </Space>
           )}

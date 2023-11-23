@@ -1,7 +1,8 @@
 import { Button, Card, Input, Modal } from "antd";
 import React, { useState } from "react";
+import DefaultWord from "../../../../components/Category/DefaultWord/DefaultWord";
 
-const AddNewVocabularyModal = () => {
+const AddNewVocabularyModal = ({ vocabInSub, onAddVocab }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -23,18 +24,7 @@ const AddNewVocabularyModal = () => {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Input placeholder="Search here ..." />
-        <Card
-          title="Card title"
-          bordered={false}
-          style={{
-            width: 300,
-          }}
-        >
-          <p>Card content</p>
-          <p>Card content</p>
-          <p>Card content</p>
-        </Card>
+        <DefaultWord vocabInSub={vocabInSub} onAddVocab={onAddVocab} />
       </Modal>
     </>
   );

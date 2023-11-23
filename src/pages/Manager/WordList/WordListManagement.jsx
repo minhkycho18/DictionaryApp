@@ -15,8 +15,10 @@ import {
   updateWl,
 } from "../../../stores/word-lists/wordLists-thunk";
 import {
+  addWordToSubcategory,
   createSubcategory,
   deleteSubcategory,
+  deleteVocabulariesInSubCategory,
   getAllVocabInSubcategory,
   getSubcategory,
   updateSubcategory,
@@ -26,16 +28,15 @@ import VocabularyDataTable from "../../../components/data-table/VocabularyDataTa
 import { selectWl } from "../../../stores/subcategory/subcategorySlice";
 import AddModal from "./CustomModals/AddModal";
 import AddNewVocabularyModal from "./CustomModals/AddNewVocabularyModal";
+import { set } from "lodash";
+import { getAllVocabInSub } from "../../../api/Subcategory/subcategory.api";
 
 const WordListManagement = () => {
   const WORDLIST_DATA_TYPE = "wordlist";
   const SUBCATEGORY_DATA_TYPE = "subcategory";
   const VOCABULARY_DATA_TYPE = "vocabulary";
-  const [pagination, setPaginations] = useState({
-    currentPage: 1,
-    offset: 0,
-    limit: 30,
-  });
+  const [pagination, setPaginations] = useState();
+  const [currentVocabInSub, setCurrentVocabInSub] = useState([]);
   const [currentDataType, setCurrentDataType] = useState(WORDLIST_DATA_TYPE);
   const { wordLists, loading } = useSelector((state) => state.wordLists);
   const {
@@ -44,14 +45,35 @@ const WordListManagement = () => {
     selectedWL,
     VocabLoading,
     loading: subLoading,
+    currentPage,
+    totalElements,
   } = useSelector((state) => state.subcategory);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllWL());
-  }, []);
+    setPaginations({
+      ...pagination,
+      current: currentPage,
+      total: totalElements,
+      showSizeChanger: false,
+      position: ["bottomCenter", "right"],
+      simple: true,
+      responsive: true,
+    });
+    const updateCurrentVocabInSub = () => {
+      const params = {
+        wordListId: selectedWL.id,
+        SubId: pagination.subId,
+        offset: 1,
+        limit: pagination.total,
+      };
+      const response = dispatch(getAllVocabInSubcategory(params));
+      console.log(response);
+    };
+  }, [currentPage, totalElements]);
 
-  const onCLickItem = (record) => {
+  const onCLickItem = async (record) => {
     if (currentDataType === WORDLIST_DATA_TYPE) {
       dispatch(getSubcategory(record.id));
       dispatch(selectWl(record));
@@ -60,7 +82,12 @@ const WordListManagement = () => {
       const params = {
         wordListId: selectedWL.id,
         SubId: record.subcategoryId,
+        offset: 1,
+        limit: record.amountOfWord,
       };
+      const response = await getAllVocabInSub(params);
+      console.log(response.content);
+      setCurrentVocabInSub(response.content);
       dispatch(getAllVocabInSubcategory(params));
       setPaginations({
         current: 1,
@@ -101,24 +128,57 @@ const WordListManagement = () => {
     message.success("Delete successfully!");
   };
 
-  const handleTableChange = (currentPage) => {
+  const handleAddNewVocab = async (param) => {
+    const params = {
+      wordListId: selectedWL.id,
+      SubId: pagination.subId,
+      vocabId: param.word.id,
+      defId: param.definition.defId,
+    };
+    try {
+      const response = await dispatch(addWordToSubcategory(params));
+      if (response.status === 200) {
+        setPaginations({
+          ...pagination,
+          total: pagination.total + 1,
+        });
+      }
+    } catch (error) {
+      console.log(JSON.stringify(error));
+      if (error.response && error.response.status === 400) {
+        console.log("API returned status 400:");
+      } else {
+        console.log("An error occurred:");
+      }
+    }
+  };
+
+  const handleDeleteVocab = (record) => {
+    console.log(record);
+    // dispatch(deleteVocabulariesInSubCategory())
+  };
+
+  const handleTableChange = (param) => {
     dispatch(
       getAllVocabInSubcategory({
         wordListId: selectedWL.id,
         SubId: pagination.subId,
-        offset: currentPage,
+        offset: param,
         limit: 10,
       })
     );
+
     setPaginations({
       ...pagination,
-      current: pagination.current + 1,
+      current: currentPage,
     });
   };
 
   const onBack = () => {
     if (currentDataType === VOCABULARY_DATA_TYPE) {
+      dispatch(getSubcategory(selectedWL.id));
       setCurrentDataType(SUBCATEGORY_DATA_TYPE);
+      setCurrentVocabInSub([]);
     } else if (currentDataType === SUBCATEGORY_DATA_TYPE) {
       setCurrentDataType(WORDLIST_DATA_TYPE);
     }
@@ -167,7 +227,10 @@ const WordListManagement = () => {
         <Row className={"box_data_item add_box"}>
           <Col offset={1} span={8}>
             {currentDataType === VOCABULARY_DATA_TYPE ? (
-              <AddNewVocabularyModal />
+              <AddNewVocabularyModal
+                vocabInSub={currentVocabInSub}
+                onAddVocab={handleAddNewVocab}
+              />
             ) : (
               <AddModal
                 type={currentDataType}

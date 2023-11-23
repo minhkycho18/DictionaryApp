@@ -56,8 +56,12 @@ const Subcategory = (props) => {
       offset: 0,
     };
     const getAllVocab = async () => {
-      const result = await getAllVocabInSub(params);
-      setVocabsInSub(result);
+      try {
+        const result = await getAllVocabInSub(params);
+        setVocabsInSub(result.content);
+      } catch (error) {
+        console.log(error);
+      }
     };
     getAllVocab();
   }, [id, props.subcategory.amountOfWord, props.subcategory.subcategoryId]);

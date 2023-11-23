@@ -127,6 +127,7 @@ const VocabularyDataTable = ({
   ];
 
   const handleTableChange = (paginationParam) => {
+    console.log(paginationParam);
     onTableChange((paginationParam.current - 1) * 10);
   };
 
