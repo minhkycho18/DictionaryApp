@@ -29,6 +29,8 @@ import com.pbl6.dictionaryappbe.utils.StreamUtils;
 import com.pbl6.dictionaryappbe.utils.SubcategoryDetailUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
@@ -82,17 +84,20 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
     }
 
     @Override
-    public List<SubcategoryDetailResponseDto> getAllVocabularies(Long wordListId, Long subcategoryId, int offset, int limit) {
+    public Page<SubcategoryDetailResponseDto> getAllVocabularies(Long wordListId, Long subcategoryId, int offset, int limit) {
         int pageNo = offset / limit;
         Pageable pageable = PageRequest.of(pageNo, limit);
-        List<SubcategoryDetail> vocabularies;
+        Page<SubcategoryDetail> vocabularyPage;
+
         try {
             getOwnedSubcategory(wordListId, subcategoryId);
-            vocabularies = subcategoryDetailRepository.findAllBySubcategoryId(subcategoryId, pageable);
+            vocabularyPage = subcategoryDetailRepository.findAllBySubcategoryId(subcategoryId, pageable);
         } catch (AccessDeniedException e) {
-            vocabularies = subcategoryDetailRepository.findAllDefaultVocabBySubcategoryId(subcategoryId, pageable);
+            vocabularyPage = subcategoryDetailRepository.findAllDefaultVocabBySubcategoryId(subcategoryId, pageable);
         }
-        return MapperUtils.toTargetList(subcategoryDetailMapper::toSubcategoryDetailResponseDto, SubcategoryDetailUtils.filterDeletedVocabulary(vocabularies));
+
+        List<SubcategoryDetailResponseDto> vocabularyDtos = MapperUtils.toTargetList(subcategoryDetailMapper::toSubcategoryDetailResponseDto, SubcategoryDetailUtils.filterDeletedVocabulary(vocabularyPage.getContent()));
+        return new PageImpl<>(vocabularyDtos, pageable, vocabularyPage.getTotalElements());
     }
 
     @Override

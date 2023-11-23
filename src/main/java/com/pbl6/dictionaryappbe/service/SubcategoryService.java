@@ -7,6 +7,7 @@ import com.pbl6.dictionaryappbe.dto.vocabulary.SubcategoryDetailResponseDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularySubcategoryRequestDto;
 import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
 import com.pbl6.dictionaryappbe.persistence.subcategory_detail.SubcategoryDetail;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface SubcategoryService {
 
     List<SubcategoryDetail> getSubcategoryDetails(Long subcategories, List<VocabularySubcategoryRequestDto> vocabularies);
 
-    List<SubcategoryDetailResponseDto> getAllVocabularies(Long wordListId, Long subcategoryId, int offset, int limit);
+    Page<SubcategoryDetailResponseDto> getAllVocabularies(Long wordListId, Long subcategoryId, int offset, int limit);
 
     SubcategoryDetailResponseDto addVocabToSubcategory(Long wordlistId, Long subcategoryId, VocabularySubcategoryRequestDto vocabularySubcategoryRequestDto);
 

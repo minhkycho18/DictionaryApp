@@ -24,6 +24,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +60,7 @@ public class SubcategoryController {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryDetailResponseDto.class))}),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @GetMapping("/wordlists/{wordListId}/subcategories/{subcategoryId}")
-    public List<SubcategoryDetailResponseDto> getAllVocabulary(@PathVariable Long wordListId, @PathVariable Long subcategoryId,
+    public Page<SubcategoryDetailResponseDto> getAllVocabulary(@PathVariable Long wordListId, @PathVariable Long subcategoryId,
                                                                @RequestParam(name = "offset", defaultValue = "0")
                                                                @Min(value = 0, message = "Offset must be greater than or equal to 0") int offset,
                                                                @RequestParam(name = "limit", required = false)
