@@ -16,7 +16,7 @@ public interface VocabularyService {
 
     void setInfoVocabOfUser(Page<VocabDetailDto> vocabDetailDtos, Page<Vocabulary> vocabularies, User user);
 
-    VocabDetailDto updateDefaultVocab(Long vocabId, UpdateDefaultVocabRequest updateDefaultVocabRequest);
+    void updateDefaultVocab(Long vocabId, UpdateDefaultVocabRequest updateDefaultVocabRequest);
 
     void deleteDefaultVocab(Long vocabId);
 }
