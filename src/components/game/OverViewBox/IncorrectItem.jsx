@@ -22,7 +22,7 @@ const IncorrectItem = ({ item, num, type }) => {
         {type === "flashcard" && (
           <span className="incorrectItem__def--flashcard">{item?.word}:</span>
         )}
-        {item?.question + ""}
+        {type === "spelling" ? item?.wordDesc : item?.question + ""}
       </Space>
     </Space>
   );

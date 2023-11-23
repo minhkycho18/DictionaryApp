@@ -27,7 +27,7 @@ const Overview = (props) => {
       setIncorrectAnswer(correctQuiz?.incorrect);
     }
     if (type === "spelling") {
-      // console.log(correctSpelling?.incorrect);
+      console.log(correctSpelling?.incorrect);
       setIncorrectAnswer(correctSpelling?.incorrect);
     }
   };
