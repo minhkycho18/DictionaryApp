@@ -9,7 +9,7 @@ const AddModal = ({ type, handleCreateNew }) => {
 
   const layout = {
     labelCol: {
-      span: 6,
+      span: 4,
     },
     wrapperCol: {
       span: 16,
@@ -60,6 +60,7 @@ const AddModal = ({ type, handleCreateNew }) => {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        style={{ textAlign: "center" }}
         footer={[
           <Button key="reset" onClick={onReset}>
             Reset
@@ -88,7 +89,7 @@ const AddModal = ({ type, handleCreateNew }) => {
               },
             ]}
             style={{
-              marginTop: "40px",
+              marginTop: "20px",
             }}
           >
             <Input />
@@ -103,6 +104,7 @@ const AddModal = ({ type, handleCreateNew }) => {
                   message: "Please input the description!",
                 },
               ]}
+              style={{ marginTop: "20px" }}
             >
               <Input />
             </Form.Item>

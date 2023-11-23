@@ -18,10 +18,10 @@ const EditWordListModal = ({ type, editModalInfo, handleEditWordList }) => {
 
   const layout = {
     labelCol: {
-      span: 8,
+      span: 4,
     },
     wrapperCol: {
-      span: 16,
+      span: 32,
     },
   };
   const showModal = () => {
