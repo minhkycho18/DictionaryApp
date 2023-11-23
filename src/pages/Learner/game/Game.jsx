@@ -15,6 +15,8 @@ import { getVocabsByGame } from "../../../stores/game/gameThunk";
 import "./Game.scss";
 import { LoadingOutlined } from "@ant-design/icons";
 import { getGameStatus } from "../../../stores/game/gameSlice";
+import Overview from "../../../components/game/OverViewBox/Overview";
+import store from "../../../stores";
 
 const REVIEW = "review";
 const FLASH_CARD = "flashCard";
@@ -34,13 +36,27 @@ const Game = (props) => {
   const [, setIsModalOpen] = useState(false);
   const [modal, modalCtx] = Modal.useModal();
   const [correctAnswerFlashcard, setCorrectAnswerFlashcard] = useState([]);
+  const [incorrectAnswer, setIncorrectAnswer] = useState([]);
 
   const handleCorrectFlashCard = (item) => {
     setCorrectAnswerFlashcard([...correctAnswerFlashcard, item]);
   };
+  const handleIncorrectAnswer = (item) => {
+    setIncorrectAnswer([...incorrectAnswer, item]);
+  };
+  useEffect(() => {
+    const gameTypeFromLocalStorage = localStorage.getItem("gameType");
+    if (!gameTypeFromLocalStorage) {
+      setType(REVIEW);
+      localStorage.setItem("gameType", REVIEW);
+    }
+    return () => {
+      localStorage.removeItem("gameType");
+    };
+  }, []);
   useEffect(() => {
     localStorage.setItem("gameType", type);
-    if (type!==OVERVIEW) {
+    if (type !== OVERVIEW) {
       dispatch(
         getVocabsByGame({
           wordlistId: wlId,
@@ -53,7 +69,7 @@ const Game = (props) => {
           dispatch(getGameStatus(rs));
         });
     }
-    
+
     return () => {
       localStorage.setItem("gameType", REVIEW);
     };
@@ -184,6 +200,7 @@ const Game = (props) => {
                 handleChangeSlide={handleChangeSlide}
                 vocabInfo={item}
                 handleCorrectFlashCard={handleCorrectFlashCard}
+                handleIncorrectAnswer={handleIncorrectAnswer}
               />
             ))}
             <SuccessCard
@@ -192,6 +209,7 @@ const Game = (props) => {
               correctAnswerFlashcard={correctAnswerFlashcard}
               resultLength={result.length}
               handleChangeLesson={handleChangeLesson}
+              incorrectAnswer={incorrectAnswer}
             />
             <ReviewCard type={"default"} />
           </Carousel>
@@ -218,6 +236,7 @@ const Game = (props) => {
                 key={index}
                 onSelect={current === index}
                 handleCorrectFlashCard={handleCorrectFlashCard}
+                handleIncorrectAnswer={handleIncorrectAnswer}
                 handleChangeSlide={handleChangeSlide}
                 vocabInfo={item}
               />
@@ -228,6 +247,7 @@ const Game = (props) => {
               correctAnswerFlashcard={correctAnswerFlashcard}
               resultLength={result.length}
               handleChangeLesson={handleChangeLesson}
+              incorrectAnswer={incorrectAnswer}
             />
             <ReviewCard type={"default"} />
           </Carousel>
@@ -254,6 +274,7 @@ const Game = (props) => {
                 onSelect={current === index}
                 handleCorrectFlashCard={handleCorrectFlashCard}
                 handleChangeSlide={handleChangeSlide}
+                handleIncorrectAnswer={handleIncorrectAnswer}
                 vocabInfo={item}
               />
             ))}
@@ -263,12 +284,13 @@ const Game = (props) => {
               correctAnswerFlashcard={correctAnswerFlashcard}
               resultLength={result.length}
               handleChangeLesson={handleChangeLesson}
+              incorrectAnswer={incorrectAnswer}
             />
             <ReviewCard type={"default"} />
           </Carousel>
         );
       case OVERVIEW:
-        return <>OverView</>;
+        return <Overview />;
       default:
         return (
           <Carousel

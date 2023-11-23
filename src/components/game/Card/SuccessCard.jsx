@@ -4,7 +4,11 @@ import React from "react";
 import logo from "../../../assets/images/Animation.svg";
 import "./SuccessCard.scss";
 import WrapCard from "./WrapCard";
+import { useDispatch } from "react-redux";
+import { setCorrectAnswer } from "../../../stores/game/gameSlice";
 const SuccessCard = (props) => {
+  const dispatch = useDispatch();
+
   const changeToNextLesson = (lesson) => {
     props.handleChangeLesson(lesson, true);
   };
@@ -65,7 +69,17 @@ const SuccessCard = (props) => {
 
                 <Space
                   className="success-card__options success-card__options--continue"
-                  onClick={() => changeToNextLesson("spelling")}
+                  onClick={() => {
+                    dispatch(
+                      setCorrectAnswer({
+                        type: "flashcard",
+                        correctCount: props?.correctAnswerFlashcard,
+                        total: props?.resultLength,
+                        incorrect: props?.incorrectAnswer,
+                      })
+                    );
+                    changeToNextLesson("spelling");
+                  }}
                 >
                   Continue
                 </Space>
@@ -102,7 +116,17 @@ const SuccessCard = (props) => {
 
                 <Space
                   className="success-card__options success-card__options--continue"
-                  onClick={() => changeToNextLesson("quiz")}
+                  onClick={() => {
+                    dispatch(
+                      setCorrectAnswer({
+                        type: "spelling",
+                        correctCount: props?.correctAnswerFlashcard,
+                        total: props?.resultLength,
+                        incorrect: props?.incorrectAnswer,
+                      })
+                    );
+                    changeToNextLesson("quiz");
+                  }}
                 >
                   Continue
                 </Space>
@@ -139,9 +163,19 @@ const SuccessCard = (props) => {
 
                 <Space
                   className="success-card__options success-card__options--continue"
-                  onClick={() => changeToNextLesson("overview")}
+                  onClick={() => {
+                    dispatch(
+                      setCorrectAnswer({
+                        type: "quiz",
+                        correctCount: props?.correctAnswerFlashcard,
+                        total: props?.resultLength,
+                        incorrect: props?.incorrectAnswer,
+                      })
+                    );
+                    changeToNextLesson("overview");
+                  }}
                 >
-                  Continue
+                  Finished
                 </Space>
               </Space>
             </Space>

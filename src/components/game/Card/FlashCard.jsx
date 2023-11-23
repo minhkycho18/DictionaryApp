@@ -19,7 +19,13 @@ const FlashCard = (props) => {
   const handleCheckCorrect = (answer) => {
     if (answer === props.vocabInfo.result) {
       props.handleCorrectFlashCard(props.vocabInfo);
-    }
+    } else {
+      const item = {
+        myAnswer: answer,
+        ...props.vocabInfo,
+      };
+      props.handleIncorrectAnswer(item);
+    } 
   };
   const flipCard = () => {
     setIsFlip(!isFlip);

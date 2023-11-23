@@ -15,6 +15,12 @@ const QuizCard = (props) => {
   const handleConfirmAnswer = () => {
     if (props.vocabInfo.result[`${selectedAnswer}`]) {
       props.handleCorrectFlashCard(props.vocabInfo);
+    } else {
+      const item = {
+        myAnswer: selectedAnswer,
+        ...props.vocabInfo,
+      };
+      props.handleIncorrectAnswer(item);
     }
     changeToNext();
   };

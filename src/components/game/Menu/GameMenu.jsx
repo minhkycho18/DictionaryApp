@@ -42,15 +42,7 @@ const GameMenu = (props) => {
           onClick={() => handleChangeLesson(REVIEW)}
         >
           <CheckCircleFilled className="game-menu__item--checked" />
-          <Image
-            src={review}
-            preview={false}
-            width={25}
-            style={{
-              filter:
-                "invert(16%) sepia(20%) saturate(367%) hue-rotate(197deg) brightness(90%) contrast(88%)",
-            }}
-          />
+          <Image src={review} preview={false} width={25} />
           <div>1. Review</div>
         </Space>
         <Space

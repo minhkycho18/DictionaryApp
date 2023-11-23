@@ -173,6 +173,12 @@ const SpellingCard = (props) => {
       setIsAnswered(isCorrect);
       if (isCorrect) {
         props.handleCorrectFlashCard(props.vocabInfo);
+      } else {
+        const item = {
+          myAnswer: newValues,
+          ...props.vocabInfo,
+        };
+        props.handleIncorrectAnswer(item);
       }
     }
     if (hint === 0) {
@@ -180,6 +186,12 @@ const SpellingCard = (props) => {
       setIsAnswered(isCorrect);
       if (isCorrect) {
         props.handleCorrectFlashCard(props.vocabInfo);
+      } else {
+        const item = {
+          myAnswer: e.answer.toString(),
+          ...props.vocabInfo,
+        };
+        props.handleIncorrectAnswer(item);
       }
     }
 

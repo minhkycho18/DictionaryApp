@@ -12,6 +12,9 @@ const gameSlice = createSlice({
     isFlashcard: false,
     isQuiz: false,
     isSpelling: false,
+    correctFlashcard: { correct: [], total: 0, incorrect: [] },
+    correctQuiz: { correct: [], total: 0, incorrect: [] },
+    correctSpelling: { correct: [], total: 0, incorrect: [] },
   },
   reducers: {
     updateVocab(state, action) {
@@ -35,6 +38,30 @@ const gameSlice = createSlice({
       state.isSpelling = action.payload.every(
         (item) => item?.isSpelling === true
       );
+    },
+    setCorrectAnswer(state, action) {
+      switch (action.payload.type) {
+        case "quiz":
+          state.correctQuiz.correct = action.payload.correctCount;
+          state.correctQuiz.total = action.payload.total;
+          state.correctQuiz.incorrect = action.payload.incorrect;
+
+          break;
+        case "flashcard":
+          state.correctFlashcard.correct = action.payload.correctCount;
+          state.correctFlashcard.total = action.payload.total;
+          state.correctFlashcard.incorrect = action.payload.incorrect;
+
+          break;
+        case "spelling":
+          state.correctSpelling.correct = action.payload.correctCount;
+          state.correctSpelling.total = action.payload.total;
+          state.correctSpelling.incorrect = action.payload.incorrect;
+
+          break;
+        default:
+          break;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -65,5 +92,6 @@ const gameSlice = createSlice({
       });
   },
 });
-export const { updateVocab, getGameStatus } = gameSlice.actions;
+export const { updateVocab, getGameStatus, setCorrectAnswer } =
+  gameSlice.actions;
 export default gameSlice.reducer;

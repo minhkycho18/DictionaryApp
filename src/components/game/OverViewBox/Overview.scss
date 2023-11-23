@@ -1,0 +1,91 @@
+@import "../../../assets/scss/font.scss";
+@import "../../../assets/scss/variable.scss";
+.overview {
+  width: 100%;
+  height: 100vh;
+  background: #fff;
+  // justify-content: center;
+  align-items: center;
+  font-family: $font;
+  overflow-y: scroll;
+
+  &__box {
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+      rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    border-radius: 16px;
+    padding: 32px;
+    width: 50vw;
+  }
+  &__title {
+    font-size: 32px;
+    font-weight: 800;
+    color: $text-primary-color;
+  }
+  &__description {
+    font-size: 18px;
+    color: #858585;
+    font-weight: 500;
+  }
+  &__results {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    &__image {
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+      padding: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    &__count {
+      font-size: 24px;
+      font-weight: 800;
+      color: $text-primary-color;
+    }
+    &__label {
+      font-weight: 400;
+      color: #858585;
+    }
+  }
+  &__finish {
+    padding: 12px 32px;
+    color: #fff;
+    background-color: $text-primary-color;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  &__link {
+    font-weight: 600;
+    color: $border-text-phrase;
+    cursor: pointer;
+    &:hover {
+      color: $text-primary-color;
+    }
+  }
+  &__incorrect {
+    width: 50vw;
+    padding: 16px;
+    flex-direction: column;
+    margin-top: -8px;
+    margin-bottom: 120px;
+  }
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  /* Track (phần nền của thanh cuộn) */
+  &::-webkit-scrollbar-track {
+    background: #fff !important;
+  }
+
+  /* Thumb (thanh cuộn chính) */
+  &::-webkit-scrollbar-thumb {
+    background: #eee;
+    border-radius: 100px;
+  }
+
+  /* Thumb khi hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #ccc;
+  }
+}

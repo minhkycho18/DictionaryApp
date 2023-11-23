@@ -1,0 +1,41 @@
+@import "../../../assets/scss/font.scss";
+@import "../../../assets/scss/variable.scss";
+.incorrectItem {
+  padding: 32px;
+  border: 1px solid #f1f1f1;
+  font-family: $font;
+  width: 50vw;
+  border-radius: 8px;
+  &__result {
+    width: 100%;
+    justify-content: space-between;
+    &__index {
+      font-size: 18px;
+      font-weight: 800;
+      color: #383838;
+    }
+    &__init--true {
+      font-weight: 600;
+      color: #01c17b;
+    }
+    &__init {
+      font-weight: 600;
+      color: #007047;
+    }
+    &__answer {
+      font-weight: 600;
+      color: #a90300;
+    }
+    &__answer--false {
+      font-weight: 600;
+      color: #ff7875;
+      text-decoration: line-through;
+    }
+  }
+  &__def {
+    &--flashcard {
+      font-weight: 800;
+      color: #383838;
+    }
+  }
+}
