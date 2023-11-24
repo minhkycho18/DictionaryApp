@@ -146,7 +146,7 @@ const VocabularyDataTable = ({loading, currentPage, pagination, dataSource, onTa
 
     const handleDeleteVocab = async () => {
         try {
-            await deleteDefaultVocab(currentVocab.word);
+            await deleteDefaultVocab(currentVocab.id);
             onTableChange((currentPage - 1) * 10);
             openNotificationWithIcon('success', 'delete')
         } catch (e) {
