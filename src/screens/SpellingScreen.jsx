@@ -8,7 +8,6 @@ import {
   SafeAreaView,
   Platform,
   ScrollView,
-  Button,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
@@ -18,8 +17,10 @@ import ItemCardSpelling from "~/components/Game/CardSpelling/ItemCardSpelling";
 import { getGameFromSub, updateStatusGame } from "~/api/Game";
 import { useNavigation } from "@react-navigation/native";
 import { getWordListByWordlistId } from "~/api/WordList";
+import ResultGame from "~/components/Game/ResultGame";
 export default function SpellingScreen(props) {
   const [listAnswer, setListAnswer] = useState([]);
+  const [countFail, setCountFail] = useState(0);
   const [data, setData] = useState([]);
   const [count, setCount] = useState(0);
   const [screenWidth, setScreenWidth] = useState(
@@ -30,8 +31,9 @@ export default function SpellingScreen(props) {
   const scrollViewRef = useRef(null);
   const navigation = useNavigation();
   const getGame = async (wordListId, subId, type) => {
+    const specialCardData = { special: true };
     const res = await getGameFromSub(wordListId, subId, type);
-    setData(res);
+    setData([...res, specialCardData]);
   };
   useEffect(() => {
     getGame(
@@ -42,8 +44,10 @@ export default function SpellingScreen(props) {
   }, []);
   const handleNextSlide = async () => {
     const nextSlide = currentSlide + 1;
-    setCount(nextSlide);
-    const progress = 1 / (data.length - 1);
+    if (nextSlide < data.length - 1) {
+      setCount(nextSlide);
+    }
+    const progress = 1 / (data.length - 2);
     if (nextSlide < data.length) {
       scrollViewRef.current.scrollTo({
         x: nextSlide * Math.floor(screenWidth - 40),
@@ -52,20 +56,25 @@ export default function SpellingScreen(props) {
       setProgress(progress * nextSlide);
       setCurrentSlide(nextSlide);
     }
-    if (nextSlide === data.length) {
-      // setProgress(progress * nextSlide);
-      await updateStatusGame(
-        props.route.params.wordListId,
-        props.route.params.subcategoryId,
-        "spelling",
-        listAnswer
-      );
-      navigation.push("FinishGame", { type: "spelling" });
-    }
   };
+
+  const handleContinue = async () => {
+    console.log(`check ::`, listAnswer);
+    const res = await updateStatusGame(
+      props.route.params.wordListId,
+      props.route.params.subcategoryId,
+      "spelling",
+      listAnswer
+    );
+    console.log(res);
+    navigation.push("FinishGame", { type: "spelling" });
+  };
+
   const handleUpdateResult = (obj) => {
     if (obj.answer) {
       setListAnswer((pre) => [...pre, obj.vocal]);
+    } else {
+      setCountFail((pre) => pre + 1);
     }
   };
   const handleRedirect = async () => {
@@ -81,7 +90,7 @@ export default function SpellingScreen(props) {
         console.log(resUpdate);
       }
       navigation.navigate("StudySub", { wordlist: res });
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const [loaded] = useFonts(configFont);
@@ -112,7 +121,7 @@ export default function SpellingScreen(props) {
             height={8}
           />
           <Text style={Styles.numberCount}>{count}</Text>
-          <Text style={Styles.numberTotal}>{data?.length}</Text>
+          <Text style={Styles.numberTotal}>{data?.length - 1}</Text>
         </View>
 
         <ScrollView
@@ -135,15 +144,21 @@ export default function SpellingScreen(props) {
                 height: 690,
                 borderRadius: 40,
                 alignItems: "center",
-
               }}
               key={index}
             >
-              <ItemCardSpelling
-                onNextSlider={handleNextSlide}
-                vocal={item}
-                onUpdateResult={handleUpdateResult}
-              />
+              {item.special ? (
+                <ResultGame
+                  result={{ correct: listAnswer.length, incorrect: countFail }}
+                  onContinue={handleContinue}
+                />
+              ) : (
+                <ItemCardSpelling
+                  onNextSlider={handleNextSlide}
+                  vocal={item}
+                  onUpdateResult={handleUpdateResult}
+                />
+              )}
             </View>
           ))}
         </ScrollView>

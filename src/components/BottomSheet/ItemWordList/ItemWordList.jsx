@@ -56,7 +56,9 @@ export default function ItemWordlist({
   const addWordToSub = async (wordlistId, subId, limit, data) => {
     try {
       const words = await getAllWordOfSub(wordlistId, subId, limit);
-      const check = words.find((item) => item.definition.defId === data.defId)
+      const check = words.content.find(
+        (item) => item.definition.defId === data.defId
+      )
         ? true
         : false;
       if (check) {

@@ -66,6 +66,11 @@ export default function ItemCardSpelling(
           vocal: { vocabId: vocal.vocabId, defId: vocal.defId },
           answer: true,
         });
+      } else {
+        onUpdateResult({
+          vocal: { vocabId: vocal.vocabId, defId: vocal.defId },
+          answer: false,
+        });
       }
     } else {
       const answer = input.toLowerCase();
@@ -74,6 +79,11 @@ export default function ItemCardSpelling(
         onUpdateResult({
           vocal: { vocabId: vocal.vocabId, defId: vocal.defId },
           answer: true,
+        });
+      } else {
+        onUpdateResult({
+          vocal: { vocabId: vocal.vocabId, defId: vocal.defId },
+          answer: false,
         });
       }
       setAnswer(answer);

@@ -17,9 +17,11 @@ import * as Progress from "react-native-progress";
 import { getWordListByWordlistId } from "~/api/WordList";
 import ItemCardFlashcard from "~/components/Game/CardFlashcard/ItemCardFlashcard";
 import { getGameFromSub, updateStatusGame } from "~/api/Game";
+import ResultGame from "~/components/Game/ResultGame";
 export default function FlashcardScreen(props) {
   const [listAnswer, setListAnswer] = useState([]);
   const [data, setData] = useState([]);
+  const [countFail, setCountFail] = useState(0);
   const [count, setCount] = useState(0);
   const [screenWidth, setScreenWidth] = useState(
     Dimensions.get("window").width
@@ -31,11 +33,15 @@ export default function FlashcardScreen(props) {
 
   const handleNextSlide = async (obj) => {
     const nextSlide = currentSlide + 1;
-    setCount(nextSlide);
-    const progress = 1 / (data.length - 1);
+    if (nextSlide < data.length - 1) {
+      setCount(nextSlide);
+    }
+    const progress = 1 / (data.length - 2);
     if (nextSlide < data.length) {
       if (obj.answer) {
         setListAnswer((pre) => [...pre, obj.vocal]);
+      } else {
+        setCountFail((pre) => pre + 1);
       }
       scrollViewRef.current.scrollTo({
         x: nextSlide * Math.floor(screenWidth - 40),
@@ -44,24 +50,11 @@ export default function FlashcardScreen(props) {
       setProgress(progress * nextSlide);
       setCurrentSlide(nextSlide);
     }
-    if (nextSlide === data.length) {
-      let updateResult = [...listAnswer];
-      if (obj.answer) {
-        updateResult.push(obj.vocal);
-      }
-      const res = await updateStatusGame(
-        props.route.params.wordListId,
-        props.route.params.subcategoryId,
-        "flashcard",
-        updateResult
-      );
-      console.log(res);
-      navigation.push("FinishGame", { type: "flashcard" });
-    }
   };
   const getGame = async (wordListId, subId, type) => {
+    const specialCardData = { special: true };
     const res = await getGameFromSub(wordListId, subId, type);
-    setData(res);
+    setData([...res, specialCardData]);
   };
 
   useEffect(() => {
@@ -86,6 +79,18 @@ export default function FlashcardScreen(props) {
       }
       navigation.navigate("StudySub", { wordlist: res });
     } catch (error) {}
+  };
+
+  const handleContinue = async () => {
+    console.log(`check ::`, listAnswer);
+    const res = await updateStatusGame(
+      props.route.params.wordListId,
+      props.route.params.subcategoryId,
+      "flashcard",
+      listAnswer
+    );
+    console.log(res);
+    navigation.push("FinishGame", { type: "flashcard" });
   };
 
   const [loaded] = useFonts(configFont);
@@ -116,7 +121,7 @@ export default function FlashcardScreen(props) {
             height={8}
           />
           <Text style={Styles.numberCount}>{count}</Text>
-          <Text style={Styles.numberTotal}>{data?.length}</Text>
+          <Text style={Styles.numberTotal}>{data?.length - 1}</Text>
         </View>
 
         <ScrollView
@@ -141,12 +146,31 @@ export default function FlashcardScreen(props) {
               }}
               key={index}
             >
-              <View style={Styles.content}>
-                <ItemCardFlashcard
-                  onNextSlider={(vocal) => handleNextSlide(vocal)}
-                  vocal={item}
-                />
-              </View>
+              {item.special ? (
+                <View
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    marginTop: 50,
+                    alignItems: "center",
+                  }}
+                >
+                  <ResultGame
+                    result={{
+                      correct: listAnswer.length,
+                      incorrect: countFail,
+                    }}
+                    onContinue={handleContinue}
+                  />
+                </View>
+              ) : (
+                <View style={Styles.content}>
+                  <ItemCardFlashcard
+                    onNextSlider={(vocal) => handleNextSlide(vocal)}
+                    vocal={item}
+                  />
+                </View>
+              )}
             </View>
           ))}
         </ScrollView>
