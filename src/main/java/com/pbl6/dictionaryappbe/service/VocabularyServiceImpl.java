@@ -118,9 +118,16 @@ public class VocabularyServiceImpl implements VocabularyService {
     public void updateDefaultVocab(Long vocabId, UpdateDefaultVocabRequest updateDefaultVocabRequest) {
         Vocabulary vocabulary = vocabularyRepository.findById(vocabId)
                 .orElseThrow(() -> new RecordNotFoundException("Vocabulary not found"));
+        // case delete def
+        List<String> currentVocabDefs = updateDefaultVocabRequest.getDefinitions().stream()
+                .filter(definitionShortDetail -> definitionShortDetail.getDefId() != null)
+                .map(vocabDef -> vocabId + "-" + vocabDef.getDefId())
+                .toList();
+        vocabDefRepository.updateStatusVocabs(currentVocabDefs, vocabId, true);
+
         vocabulary.setAudioUs(updateDefaultVocabRequest.getAudioUs());
         vocabulary.setAudioUk(updateDefaultVocabRequest.getAudioUk());
-        vocabulary.setPhoneUs(updateDefaultVocabRequest.getAudioUs());
+        vocabulary.setPhoneUs(updateDefaultVocabRequest.getPhoneUs());
         vocabulary.setPhoneUk(updateDefaultVocabRequest.getPhoneUk());
         updateDefaultVocabRequest.getDefinitions().forEach(definitionShortDetail -> {
             if (definitionShortDetail.getDefId() != null) {
@@ -147,12 +154,6 @@ public class VocabularyServiceImpl implements VocabularyService {
                 vocabDefRepository.save(vocabDef);
             }
         });
-        // case delete def
-        List<String> currentVocabDefs = updateDefaultVocabRequest.getDefinitions().stream()
-                .filter(definitionShortDetail -> definitionShortDetail.getDefId() != null)
-                .map(vocabDef -> vocabId + "-" + vocabDef.getDefId())
-                .toList();
-        vocabDefRepository.updateStatusVocabs(currentVocabDefs, vocabId, true);
     }
 
 
