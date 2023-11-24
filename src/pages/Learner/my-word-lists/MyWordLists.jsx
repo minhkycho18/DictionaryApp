@@ -126,8 +126,8 @@ const MyWordLists = () => {
           </Col>
 
           {wordLists &&
-            wordLists.map((wordlist) => (
-              <Col key={wordlist.id}>
+            wordLists.map((wordlist, index) => (
+              <Col key={wordlist.id + index}>
                 <ListItem
                   key={wordlist.id}
                   wordlist={wordlist}

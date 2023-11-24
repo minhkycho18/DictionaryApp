@@ -141,8 +141,8 @@ const ListItem = (props) => {
             onChange={(e) => setNewListType(e.target.value)}
           >
             {typeWL &&
-              typeWL.map((type) => (
-                <Select.Option value={type}>
+              typeWL.map((type, index) => (
+                <Select.Option value={type} key={index + type}>
                   {upperFirst(type.toLowerCase())}
                 </Select.Option>
               ))}
