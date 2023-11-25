@@ -10,26 +10,31 @@ import WordListDataTable from "../../../components/data-table/WordList/WordListD
 import { useDispatch, useSelector } from "react-redux";
 import {
   createNewWL,
-  deleteExistWordList,
   getAllWL,
   updateWl,
+  searchWordList,
 } from "../../../stores/word-lists/wordLists-thunk";
 import {
   addWordToSubcategory,
   createSubcategory,
-  deleteSubcategory,
-  deleteVocabulariesInSubCategory,
   getAllVocabInSubcategory,
   getSubcategory,
   updateSubcategory,
 } from "../../../stores/subcategory/subcategoryThunk";
 import SubcategoryDataTable from "../../../components/data-table/WordList/SubcategoryDataTable";
 import VocabularyDataTable from "../../../components/data-table/VocabularyDataTable";
-import { selectWl } from "../../../stores/subcategory/subcategorySlice";
+import {
+  selectSub,
+  selectWl,
+} from "../../../stores/subcategory/subcategorySlice";
 import AddModal from "./CustomModals/AddModal";
 import AddNewVocabularyModal from "./CustomModals/AddNewVocabularyModal";
-import { set } from "lodash";
-import { getAllVocabInSub } from "../../../api/Subcategory/subcategory.api";
+import {
+  getAllVocabInSub,
+  deleteVocabsInSub,
+  deleteSub,
+} from "../../../api/Subcategory/subcategory.api";
+import { deleteWordLists } from "../../../api/WordLists/word-lists.api";
 
 const WordListManagement = () => {
   const WORDLIST_DATA_TYPE = "wordlist";
@@ -43,6 +48,7 @@ const WordListManagement = () => {
     subcategories,
     vocabInSub,
     selectedWL,
+    selectedSub,
     VocabLoading,
     loading: subLoading,
     currentPage,
@@ -61,16 +67,6 @@ const WordListManagement = () => {
       simple: true,
       responsive: true,
     });
-    const updateCurrentVocabInSub = () => {
-      const params = {
-        wordListId: selectedWL.id,
-        SubId: pagination.subId,
-        offset: 1,
-        limit: pagination.total,
-      };
-      const response = dispatch(getAllVocabInSubcategory(params));
-      console.log(response);
-    };
   }, [currentPage, totalElements]);
 
   const onCLickItem = async (record) => {
@@ -86,9 +82,9 @@ const WordListManagement = () => {
         limit: record.amountOfWord,
       };
       const response = await getAllVocabInSub(params);
-      console.log(response.content);
       setCurrentVocabInSub(response.content);
       dispatch(getAllVocabInSubcategory(params));
+      dispatch(selectSub(record));
       setPaginations({
         current: 1,
         total: record.amountOfWord,
@@ -121,10 +117,14 @@ const WordListManagement = () => {
     message.success("Edit successfully!");
   };
 
-  const handleDelete = (param) => {
-    currentDataType === WORDLIST_DATA_TYPE
-      ? dispatch(deleteExistWordList(param))
-      : dispatch(deleteSubcategory({ ...param, wordListId: selectedWL.id }));
+  const handleDelete = async (param) => {
+    if (currentDataType === WORDLIST_DATA_TYPE) {
+      await deleteWordLists(param);
+      dispatch(getAllWL());
+    } else {
+      await deleteSub({ ...param, wordListId: selectedWL.id });
+      dispatch(getSubcategory(selectedWL.id));
+    }
     message.success("Delete successfully!");
   };
 
@@ -153,9 +153,24 @@ const WordListManagement = () => {
     }
   };
 
-  const handleDeleteVocab = (record) => {
-    console.log(record);
-    // dispatch(deleteVocabulariesInSubCategory())
+  const handleDeleteVocab = async (items) => {
+    const param = {
+      wordListId: selectedWL.id,
+      SubId: pagination.subId,
+      data: items.data,
+    };
+    await deleteVocabsInSub(param);
+    const params = {
+      wordListId: selectedWL.id,
+      SubId: pagination.subId,
+      offset: items.currentPage,
+      limit: 10,
+    };
+    dispatch(getAllVocabInSubcategory(params));
+  };
+
+  const handleSearch = async (value) => {
+    dispatch(searchWordList(value));
   };
 
   const handleTableChange = (param) => {
@@ -167,7 +182,6 @@ const WordListManagement = () => {
         limit: 10,
       })
     );
-
     setPaginations({
       ...pagination,
       current: currentPage,
@@ -217,15 +231,35 @@ const WordListManagement = () => {
           >
             <Input
               className="search_vocab"
-              placeholder="Search 'WordList'"
+              placeholder={`Search ${
+                currentDataType === WORDLIST_DATA_TYPE ? "WordList" : ""
+              }${
+                currentDataType === SUBCATEGORY_DATA_TYPE ? "Subcategory" : ""
+              }${currentDataType === VOCABULARY_DATA_TYPE ? "Vocabulary" : ""}`}
               prefix={
                 <SearchOutlined style={{ color: "#bbb", padding: "0px 4px" }} />
               }
+              onChange={(e) => handleSearch(e.target.value)}
             ></Input>
           </Col>
         </Row>
-        <Row className={"box_data_item add_box"}>
-          <Col offset={1} span={8}>
+        <Row offset={1} className={"box_data_item"}>
+          <Col offset={1} span={4}>
+            {currentDataType !== WORDLIST_DATA_TYPE && (
+              <Button type="text" onClick={onBack}>
+                <LeftOutlined /> Back
+              </Button>
+            )}
+          </Col>
+          <Col offset={4} span={4} style={{ textAlign: "center" }}>
+            {currentDataType === SUBCATEGORY_DATA_TYPE && (
+              <h2 style={{ margin: "0" }}>{selectedWL.title}</h2>
+            )}
+            {currentDataType === VOCABULARY_DATA_TYPE && (
+              <h2 style={{ margin: "0" }}>{selectedSub.title}</h2>
+            )}
+          </Col>
+          <Col offset={6} span={4}>
             {currentDataType === VOCABULARY_DATA_TYPE ? (
               <AddNewVocabularyModal
                 vocabInSub={currentVocabInSub}
@@ -240,15 +274,7 @@ const WordListManagement = () => {
             )}
           </Col>
         </Row>
-        {currentDataType !== WORDLIST_DATA_TYPE && (
-          <Row className={"box_data_item"}>
-            <Col offset={1} span={8}>
-              <Button type="text" onClick={onBack}>
-                <LeftOutlined /> Back
-              </Button>
-            </Col>
-          </Row>
-        )}
+
         <Row justify={"center"} className={"box_data_item table_box"}>
           <Col span={22}>
             {currentDataType === WORDLIST_DATA_TYPE && (
@@ -285,6 +311,7 @@ const WordListManagement = () => {
                 pagination={pagination}
                 onCLickItem={onCLickItem}
                 onTableChange={handleTableChange}
+                onDeleteVocabInSub={handleDeleteVocab}
                 dataSource={vocabInSub.map((item) => ({
                   ...item,
                   key: item.id,

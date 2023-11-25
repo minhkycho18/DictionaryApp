@@ -15,6 +15,9 @@ export const getWordListTypes = () => {
 export const getDefault = () => {
   return http.get("/wordlists/default");
 };
+export const searchWordListByKeyword = (keyword) => {
+  return http.get(`/wordlists/search?keyword=${keyword}`);
+};
 export const createNewWordLists = (data) => {
   return http.post("/wordlists", data);
 };

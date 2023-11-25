@@ -17,6 +17,7 @@ const initialState = {
   error: null,
   subcategories: [],
   selectedWL: {},
+  selectedSub: {},
   messageDel: "",
   vocabInSub: [],
   messageDelVocab: "",
@@ -31,6 +32,9 @@ const subcategorySlice = createSlice({
     },
     selectWl: (state, action) => {
       state.selectedWL = action.payload;
+    },
+    selectSub: (state, action) => {
+      state.selectedSub = action.payload;
     },
   },
   extraReducers: (builder) =>
@@ -135,6 +139,7 @@ const subcategorySlice = createSlice({
       }),
 });
 
-export const { selectWl, deleteASub, deleteVocabs } = subcategorySlice.actions;
+export const { selectWl, selectSub, deleteASub, deleteVocabs } =
+  subcategorySlice.actions;
 
 export default subcategorySlice.reducer;

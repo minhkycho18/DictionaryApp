@@ -37,7 +37,6 @@ const SubcategoryDataTable = ({
   const onDelete = (record) => {
     const param = { SubId: [record.key] };
     handleDelete(param);
-    setData(data.filter((sub) => sub.subcategoryId !== record.key));
   };
 
   const cancel = () => {

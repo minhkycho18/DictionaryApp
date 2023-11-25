@@ -2,19 +2,9 @@ import React, { useState } from "react";
 import { Button, Form, Input, Modal } from "antd";
 const WORDLIST_DATA_TYPE = "wordlist";
 const SUBCATEGORY_DATA_TYPE = "subcategory";
-const VOCABULARY_DATA_TYPE = "vocabulary";
 const AddModal = ({ type, handleCreateNew }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
-
-  const layout = {
-    labelCol: {
-      span: 4,
-    },
-    wrapperCol: {
-      span: 16,
-    },
-  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -71,13 +61,10 @@ const AddModal = ({ type, handleCreateNew }) => {
         ]}
       >
         <Form
-          {...layout}
           form={form}
+          layout="vertical"
           name="add-wordlist-form"
           onFinish={onFinish}
-          style={{
-            maxWidth: 600,
-          }}
         >
           <Form.Item
             name="title"
@@ -104,7 +91,9 @@ const AddModal = ({ type, handleCreateNew }) => {
                   message: "Please input the description!",
                 },
               ]}
-              style={{ marginTop: "20px" }}
+              style={{
+                marginTop: "20px",
+              }}
             >
               <Input />
             </Form.Item>
