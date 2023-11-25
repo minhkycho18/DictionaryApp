@@ -14,7 +14,7 @@ import {
 import { configFont } from "~/constants/theme";
 import { useFonts } from "expo-font";
 import { ScrollView } from "react-native";
-import ItemVocabOfQuizResult from "~/components/PublicWordlist/ItemVocabOfQuizResult/ItemVocabOfQuizResult";
+import ItemVocabOfQuizResult from "~/components/Game/ItemVocabOfQuizResult/ItemVocabOfQuizResult";
 import { colors, svgStudy } from "~/constants/theme";
 import { SvgXml } from "react-native-svg";
 import { getWordListByWordlistId } from "~/api/WordList";
