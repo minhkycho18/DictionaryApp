@@ -15,6 +15,7 @@ const Category = ({ wl, bgImage, onSelect }) => {
         // height={135}
         src={bgImage}
         preview={false}
+        loading="lazy"
       ></Image>
       <Space className="category__name">{wl?.title}</Space>
     </Space>

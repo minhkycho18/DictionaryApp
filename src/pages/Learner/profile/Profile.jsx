@@ -5,7 +5,8 @@ import "./Profile.scss";
 // import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserProfile } from "../../../stores/user/userThunk";
-
+import { RiGenderlessLine } from "react-icons/ri";
+import { capitalizeFirstLetter } from "../../../helpers/changeTitle";
 const Profile = () => {
   // const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const Profile = () => {
     setOpen(false);
   };
   return (
-    <Space className="wrap">
+    <Space className="profile-wrap">
       <Modal
         title="Title"
         open={open}
@@ -51,14 +52,14 @@ const Profile = () => {
                 backgroundColor: "#fff",
                 color: "#f56a00",
               }}
-              className="infor__ava ava--infor"
+              className="ava--infor"
             >
               {profile?.name[0]}
             </Avatar>
             <div className="infor__name name">{profile?.name}</div>
           </Space>
         </Space>
-        <Space className="profileCard--bottom" direction="vertical">
+        <div className="profileCard--bottom" direction="vertical">
           <Space className="button--wrap" onClick={showModal}>
             <Button className="button--edit">
               Edit Profile
@@ -76,7 +77,18 @@ const Profile = () => {
               </span>
             </Space>
           </Space>
-        </Space>
+          <Space className="email-group">
+            <Space className="email-group__icon">
+              <RiGenderlessLine style={{ fontSize: "20px", color: "#000" }} />
+            </Space>
+            <Space className="email-group__content" direction="vertical">
+              <span className="email-group__content--title">Gender</span>
+              <span className="email-group__content--mail">
+                {capitalizeFirstLetter(profile?.gender.toLocaleLowerCase())}
+              </span>
+            </Space>
+          </Space>
+        </div>
       </Space>
     </Space>
   );

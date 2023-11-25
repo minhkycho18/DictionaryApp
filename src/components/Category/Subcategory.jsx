@@ -23,7 +23,7 @@ import { debounce } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { FaGraduationCap } from "react-icons/fa6";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   addCustomVocabInSub,
   addWordToSub,
@@ -47,7 +47,7 @@ const Subcategory = (props) => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [page, setPage] = useState(1);
   const [, ctxHolder] = message.useMessage();
-
+  const navigate = useNavigate();
   useEffect(() => {
     const params = {
       wordListId: id,
@@ -270,7 +270,14 @@ const Subcategory = (props) => {
             onChange={onChangeInput}
           ></Input>
         </Space>
-        <Button className="subcategory__study">
+        <Button
+          className="subcategory__study"
+          onClick={() =>
+            navigate(
+              `/vocabulary/${id}/detail/${props.subcategory.subcategoryId}/learn`
+            )
+          }
+        >
           <span style={{ marginRight: 8 }}>Study</span>
           <FaGraduationCap size={22} />
         </Button>

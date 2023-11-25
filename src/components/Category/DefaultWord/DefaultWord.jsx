@@ -1,7 +1,7 @@
 import { CheckCircleFilled, SearchOutlined } from "@ant-design/icons";
-import { Input, Space } from "antd";
+import { Empty, Input, Space } from "antd";
 import { debounce } from "lodash";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchResult } from "../../../stores/search-word/searchThunk";
 import "./DefaultWord.scss";
@@ -9,6 +9,11 @@ const DefaultWord = ({ vocabInSub, onAddVocab }) => {
   const { result } = useSelector((state) => state.search);
   const [inputWord, setInputWord] = useState("");
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getSearchResult({ keyword: "", offset: 0 }));
+
+    return () => {};
+  }, [dispatch]);
 
   const onChangeInput = (event) => {
     const newValue = event.target.value;
@@ -70,7 +75,8 @@ const DefaultWord = ({ vocabInSub, onAddVocab }) => {
         onChange={onChangeInput}
       ></Input>
       <Space direction="vertical" className="sub_content">
-        {renderSearchResult}
+        {renderSearchResult && renderSearchResult}
+        {!inputWord && <Empty description={false} />}
       </Space>
     </Space>
   );

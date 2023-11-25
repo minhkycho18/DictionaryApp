@@ -18,6 +18,9 @@ export const getDefault = () => {
 export const createNewWordLists = (data) => {
   return http.post("/wordlists", data);
 };
+export const cloneWordLists = (data) => {
+  return http.post(`/wordlists/${data}`);
+};
 export const deleteWordLists = (id) => {
   return http.delete(`/wordlists/${id}`);
 };

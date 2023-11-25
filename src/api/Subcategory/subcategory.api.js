@@ -37,6 +37,13 @@ export const createCustomWordInWL = (params) => {
   );
 };
 ///===========================================================================
+export const cloneSubcategory = (params) => {
+  const { wordListId, SubId, sourceSubcategoryId } = params;
+  return http.post(
+    `/wordlists/${wordListId}/subcategories/${sourceSubcategoryId}/clone/${SubId}`
+  );
+};
+///===========================================================================
 export const getSubType = () => {
   return http.get(`/subcategories/types`);
 };

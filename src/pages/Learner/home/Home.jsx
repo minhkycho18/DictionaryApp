@@ -37,7 +37,7 @@ const Home = () => {
         </Space>
         <Image className="image" src={backGround} preview={false}></Image>
       </Space>
-      <Space className="content bg-second" direction="vertical">
+      <Space className="bg-second content " direction="vertical">
         <Space direction="vertical" className="feature">
           <p className="introduce__title feature__title">Main Features</p>
           <p className="introduce__paragraph feature__paragraph">
@@ -52,7 +52,7 @@ const Home = () => {
                 <Image src={dynamic} preview={false}></Image>
                 <p className="banner__title">Learn with a Dynamic Platform</p>
                 <p className="banner__paragraph">
-                  FlashQuiz is smart, curious, and alive. It monitors your
+                  DictionaryApp is smart, curious, and alive. It monitors your
                   learning progress and will change your learning path
                   accordingly. For every learner, LanGeek offers a unique
                   platform.
@@ -64,10 +64,10 @@ const Home = () => {
                 <Image src={AiImage} preview={false}></Image>
                 <p className="banner__title">AI Based Real-World Examples</p>
                 <p className="banner__paragraph">
-                  LanGeek uses real examples from written and spoken sources.
-                  These examples are categorized by difficulty and will be shown
-                  to you, according to your level, to maximize your learning
-                  efficiency.
+                  DictionaryApp uses real examples from written and spoken
+                  sources. These examples are categorized by difficulty and will
+                  be shown to you, according to your level, to maximize your
+                  learning efficiency.
                 </p>
               </Card>
             </Col>
@@ -76,18 +76,15 @@ const Home = () => {
                 <Image src={funImage} preview={false}></Image>
                 <p className="banner__title">Fun Learning Tools</p>
                 <p className="banner__paragraph">
-                  LanGeek will help you use what you have learned, in everyday
-                  life. It will provide you with entertaining content (including
-                  music, movies, books, etc.) suitable to your proficiency
-                  level.
+                  DictionaryApp will help you use what you have learned, in
+                  everyday life. It will provide you with entertaining content
+                  (including music, movies, books, etc.) suitable to your
+                  proficiency level.
                 </p>
               </Card>
             </Col>
           </Row>
         </Space>
-      </Space>
-      <Space className="content">
-        <Space></Space>
       </Space>
     </Content>
   );

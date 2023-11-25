@@ -19,7 +19,7 @@ const SubcategoryItem = ({ sub, onHandleAdd, wordListId, selectedVocab }) => {
     _getAllVocab();
 
     if (vocabs) {
-      return vocabs.some(
+      return vocabs?.content.some(
         (vocab) =>
           vocab.vocabId === selectedVocab.vocabId &&
           vocab.definition.defId === selectedVocab.defId

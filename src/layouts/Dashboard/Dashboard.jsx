@@ -72,7 +72,6 @@ const Dashboard = () => {
             style={{
               minHeight: 280,
               background: colorBgContainer,
-              width: "100%",
             }}
           >
             <Outlet />

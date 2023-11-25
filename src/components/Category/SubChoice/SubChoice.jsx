@@ -59,6 +59,7 @@ const SubChoice = (props) => {
             key={sub.subcategoryId}
             onHandleAdd={props.onAdd}
             selectedVocab={{ vocabId: props.vocabId, defId: props.defId }}
+            type={props?.type}
           />
         ))}
 

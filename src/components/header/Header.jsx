@@ -76,7 +76,7 @@ const Header = () => {
   return (
     <Space className={`menu ${isScroll ? "menu__scrolled" : ""}`}>
       <Space className="nav">
-        <Image src={logo} preview={false} width={48}></Image>
+        <Image src={logo} preview={false} width={48} loading="lazy"></Image>
         {navItems}
       </Space>
       {isLogin ? <Avt /> : <SignInBtn />}
