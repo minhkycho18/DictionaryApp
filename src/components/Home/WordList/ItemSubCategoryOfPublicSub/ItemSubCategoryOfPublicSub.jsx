@@ -28,7 +28,7 @@ export default function ItemSubCategoryOfPublicSub({
 
   const getVocabOfSubCategory = async (idWL, idSub, limit) => {
     const data = await getAllVocabOfSubCategory(idWL, idSub, limit);
-    setListVocabOfSubCategory(data);
+    setListVocabOfSubCategory(data.content);
   };
 
   useEffect(() => {

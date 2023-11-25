@@ -40,6 +40,7 @@ export const incorrect_correct_back = {
   correct: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="1.7rem" height="1.7rem" fill="#2E7D32" class="tw-mt-1" ><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" fill="#2E7D32"/></svg>`,
   back: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="1.5rem" height="1.5rem" fill="#ffffff" class=" !tw-text-center !tw-self-center tw-mr-2" font-weight="900"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z" fill="#ffffff"/></svg>`,
 }
+export const IconLike = `<svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium !tw-text-[4rem] tw-mb-3 css-vubbuv" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ThumbUpAltOutlinedIcon"><path d="M21 8h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2c0-1.1-.9-2-2-2zm0 4-3 7H9V9l4.34-4.34L12.23 10H21v2zM1 9h4v12H1z" fill="#3B5999"></path></svg>`
 
 export const colorPos = [
   { verb: '#69b1ff' },

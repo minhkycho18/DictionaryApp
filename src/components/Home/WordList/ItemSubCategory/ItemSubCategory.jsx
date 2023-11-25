@@ -77,7 +77,7 @@ export default function ItemSubCategory({ subcategory, onDelete }) {
   const getVocabOfSubCategory = async (idWL, idSub, limit) => {
     try {
       const data = await getAllVocabOfSubCategory(idWL, idSub, limit);
-      setListVocabOfSubCategory(data);
+      setListVocabOfSubCategory(data.content);
     } catch (error) {
       console.log(`get vocal error ::`, error);
     }

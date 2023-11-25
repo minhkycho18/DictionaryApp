@@ -6,11 +6,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
 import { GetColor, delay } from "~/helper";
-import {
-  addWordDefaultToSub,
-  deleteWordInSub,
-  getAllWordOfSub,
-} from "~/api/Subcategory";
+import { addWordDefaultToSub, deleteWordInSub } from "~/api/Subcategory";
 function ItemResult({ vocal, params, onAddSucess, onRemove }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isAdd, setIsAdd] = useState(false);

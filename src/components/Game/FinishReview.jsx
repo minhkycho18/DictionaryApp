@@ -39,7 +39,7 @@ export default function FinishReview({ wordlist }) {
             color: colors.textTitle,
           }}
         >
-          Great
+          Great !
         </Text>
         <Text
           style={{
@@ -48,7 +48,7 @@ export default function FinishReview({ wordlist }) {
             color: colors.textColor,
             textAlign: "center",
             marginTop: -15,
-            width: "90%"
+            width: "90%",
           }}
         >
           You've reviewed all the words in this subcategory!

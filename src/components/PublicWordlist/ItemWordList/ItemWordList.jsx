@@ -3,24 +3,11 @@ import { Animated, TouchableOpacity, Text, Image } from "react-native";
 import { View } from "react-native";
 import tw from "twrnc";
 import DropDownPicker from "react-native-dropdown-picker";
-import Toast, { ErrorToast } from "react-native-toast-message";
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
-import {
-  addWordDefaultToSub,
-  getAllSubCategory,
-  getAllWordOfSub,
-} from "~/api/Subcategory";
+import { getAllSubCategory } from "~/api/Subcategory";
 import { Styles } from "./Styles";
-import { useFocusEffect } from "@react-navigation/native";
-export default function ItemWordlist({
-  onAddSub,
-  wordlist,
-  data,
-  onClone,
-  onError,
-  sub,
-}) {
+export default function ItemWordlist({ onAddSub, wordlist, onClone, sub }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [subs, setSubs] = useState([]);
