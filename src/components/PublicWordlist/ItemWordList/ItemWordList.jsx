@@ -3,24 +3,11 @@ import { Animated, TouchableOpacity, Text, Image } from "react-native";
 import { View } from "react-native";
 import tw from "twrnc";
 import DropDownPicker from "react-native-dropdown-picker";
-import Toast, { ErrorToast } from "react-native-toast-message";
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
-import {
-  addWordDefaultToSub,
-  getAllSubCategory,
-  getAllWordOfSub,
-} from "~/api/Subcategory";
+import { getAllSubCategory } from "~/api/Subcategory";
 import { Styles } from "./Styles";
-import { useFocusEffect } from "@react-navigation/native";
-export default function ItemWordlist({
-  onAddSub,
-  wordlist,
-  data,
-  onAddWordToSub,
-  onError,
-  sub,
-}) {
+export default function ItemWordlist({ onAddSub, wordlist, onClone, sub }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [subs, setSubs] = useState([]);
@@ -52,29 +39,6 @@ export default function ItemWordlist({
   if (!loaded) {
     return null;
   }
-
-  const addWordToSub = async (wordlistId, subId, limit, data) => {
-    try {
-      const words = await getAllWordOfSub(wordlistId, subId, limit);
-      const check = words.content.find(
-        (item) => item.definition.defId === data.defId
-      )
-        ? true
-        : false;
-      if (check) {
-        const sub = subs.find((item) => item.subcategoryId === subId);
-        onError("Error", `the vocabulary is exist in ${sub.title}`);
-      } else {
-        await addWordDefaultToSub(wordlistId, subId, data);
-        onAddWordToSub({ state: true, defId: data.defId });
-      }
-      // const result = await addWordDefaultToSub(wordlistId, subId, data);
-      // onAddWordToSub({ state: true, defId: data.defId });
-      // console.log(`Add word ::`, result);
-    } catch (error) {
-      console.log(`Add word to sub ::`, error);
-    }
-  };
 
   return (
     //item sub
@@ -109,14 +73,7 @@ export default function ItemWordlist({
               <TouchableOpacity
                 style={[tw`bg-stone-100`, Styles.wrappered]}
                 key={index}
-                onPress={() =>
-                  addWordToSub(
-                    wordlist.id,
-                    item.subcategoryId,
-                    item.amountOfWord === 0 ? 20 : item.amountOfWord,
-                    data
-                  )
-                }
+                onPress={() => onClone(wordlist.id, item.subcategoryId)}
               >
                 <View style={Styles.Text_content}>
                   <Text

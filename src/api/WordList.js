@@ -21,3 +21,6 @@ export const updateWordLists = (id, data) => {
 export const getWordListByWordlistId = (id) => {
     return http.get(`/wordlists/${id}`);
 };
+export const cloneWordlist = (wordlistId) => {
+    return http.post(`/wordlists/${wordlistId}`);
+};

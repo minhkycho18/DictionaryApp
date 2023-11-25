@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { EvilIcons } from "@expo/vector-icons";
 import {
   View,
@@ -9,18 +9,75 @@ import {
 } from "react-native";
 import { colors, spacing, sizes, shadow } from "~/constants/theme";
 import ItemPublicWordlist from "./ItemPublicWordlist/ItemPublicWordlist";
+import { getPublic } from "~/api/WordList";
+import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
+import { cloneWordlist } from "~/api/WordList";
 export default function PublicWordlist() {
   const [search, setSearch] = useState("");
-  const arr = [
-    { id: 1 },
-    { id: 2 },
-    { id: 3 },
-    { id: 4 },
-    { id: 5 },
-    { id: 6 },
-  ];
+  const [wordlists, setWordlists] = useState([]);
+  const getWordlistPublic = async () => {
+    const list = await getPublic();
+    setWordlists(list);
+  };
+  const handleClone = async (id) => {
+    try {
+      const res = await cloneWordlist(id);
+      console.log(res);
+      showToast("Success", "Clone wordlist successfully", "success");
+    } catch (error) {
+      showToast("Error", "Clone wordlist fail", "error");
+    }
+  };
+  useEffect(() => {
+    getWordlistPublic();
+  }, []);
+
+  const toastConfig = {
+    error: (props) => (
+      <ErrorToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
+    success: (props) => (
+      <SuccessToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
+  };
+  const showToast = (text1, text2, type) => {
+    Toast.show({
+      position: "top",
+      type: type,
+      text1: text1,
+      text2: text2,
+      visibilityTime: 2000,
+      autoHide: true,
+      topOffset: 20,
+    });
+  };
+
   return (
     <SafeAreaView style={Styles.container}>
+      <View style={{ zIndex: 2000 }}>
+        <Toast
+          config={toastConfig}
+          refs={(ref) => {
+            Toast.setRef(ref);
+          }}
+        />
+      </View>
       <View style={Styles.Seach}>
         <View style={Styles.searchView}>
           <View style={Styles.searchIcon} pointerEvents="none">
@@ -36,16 +93,16 @@ export default function PublicWordlist() {
           />
         </View>
       </View>
-      <View 
+      <View
       // style={{width :'100%', height:20}}
-      >
-
-      </View>
+      ></View>
       <FlatList
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.id}
-        data={arr}
-        renderItem={(item) => <ItemPublicWordlist wordlist={item} />}
+        data={wordlists}
+        renderItem={(item) => (
+          <ItemPublicWordlist wordlist={item} onClone={handleClone} />
+        )}
       />
     </SafeAreaView>
   );
@@ -62,7 +119,7 @@ const Styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     borderBottomColor: "#ccc",
-    justifyContent: 'center'
+    justifyContent: "center",
   },
   field: {
     paddingLeft: spacing.xl + spacing.s,

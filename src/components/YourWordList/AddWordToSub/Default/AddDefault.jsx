@@ -21,6 +21,7 @@ import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CardLoader from "~/components/CardLoader";
 import Toast, { ErrorToast } from "react-native-toast-message";
+import SplashScreen from "~/components/SplashScreen";
 export default function AddDefault(props) {
   const [words, setWords] = useState([]);
   const [isFound, setIsFound] = useState(true);
@@ -30,6 +31,8 @@ export default function AddDefault(props) {
   const [search, setSearch] = useState("");
   const [clear, setClear] = useState(false);
   const [countWord, setcountWord] = useState(0);
+  const [showLoader, setShowLoader] = useState(false);
+  const [offset, setOffset] = useState(20);
   const clickClear = useRef();
   const navigation = useNavigation();
   const params = props.route.params;
@@ -97,6 +100,24 @@ export default function AddDefault(props) {
   const handleError = (text1, text2) => {
     showToast(text1, text2);
   };
+  const handleEndReach = async () => {
+    try {
+      setShowLoader(true);
+      const data = await getVocalByKeyWord(search, offset);
+      if (data.content.length > 0) {
+        const newVocal = convertData(data.content).map((item) => ({
+          ...item,
+          isAdded: checkValid(item.wordid, item.defId),
+        }));
+        setWords([...words, ...newVocal]);
+        setOffset(offset + 20);
+        setShowLoader(false);
+      }
+    } catch (error) {
+      console.log(`error ::`, error);
+    }
+  };
+
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
@@ -125,6 +146,7 @@ export default function AddDefault(props) {
       topOffset: 10,
     });
   };
+
   return (
     <SafeAreaView style={Styles.container}>
       <View style={Styles.Seach}>
@@ -187,7 +209,10 @@ export default function AddDefault(props) {
                   onRemove={handleRemove}
                 />
               )}
-              keyExtractor={(item) => item.key}
+              keyExtractor={(item, index) => index}
+              onEndReached={handleEndReach}
+              ListFooterComponent={showLoader && <SplashScreen />}
+              useNativeDriver={true}
             />
           ) : (
             <View

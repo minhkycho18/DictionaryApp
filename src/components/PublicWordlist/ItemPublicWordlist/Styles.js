@@ -73,6 +73,20 @@ export const Styles = StyleSheet.create({
         width: "100%",
         height: "75%",
         paddingLeft: 10
+    },
+    viewTitle: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    cloneButton: {
+        backgroundColor: '#F4F4F4',
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 
 })

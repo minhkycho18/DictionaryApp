@@ -1,5 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { FlatList, SafeAreaView, View, StyleSheet } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  FlatList,
+  SafeAreaView,
+  View,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { Animated, Text } from "react-native";
 import SearchInput from "~/components/Search/SearchInput/SearchInput";
 import SearchContent from "~/components/Search/SearchContent/SearchContent";
@@ -9,14 +15,18 @@ import { getVocalByKeyWord } from "~/api/Dictionary";
 import { getSearchHistory, removeHistory } from "~/helper/asyncStorage";
 import { useNavigation } from "@react-navigation/native";
 import CardLoader from "~/components/CardLoader";
+import SplashScreen from "~/components/SplashScreen";
+
 const Dictionary = () => {
   const scrollY = new Animated.Value(0);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [offset, setOffset] = useState(20);
   const [isFound, setIsFound] = useState(true);
   const [isSearch, setIsSearch] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [vocals, setVocals] = useState();
   const [history, setHistory] = useState([]);
+  const [showLoader, setShowLoader] = useState(false);
   const opacity = new Animated.Value(1);
   const { navigate } = useNavigation();
   const getData = async () => {
@@ -78,6 +88,23 @@ const Dictionary = () => {
       };
     }
   }, [searchText]);
+  const handleEndReach = async () => {
+    // console.log(`huy`);
+    if (vocals.length > 19) {
+      try {
+        setShowLoader(true);
+        const data = await getVocalByKeyWord(searchText, offset);
+        setVocals([...vocals, ...data.content]);
+        setOffset(offset + 20);
+        setShowLoader(false);
+      } catch (error) {
+        console.log(`error ::`, error);
+      }
+    }
+  };
+  // const ListFooterComponent = useCallback(() => {
+  //   <SplashScreen />;
+  // }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -128,6 +155,8 @@ const Dictionary = () => {
             renderItem={(item) => (
               <SearchResult vocal={item} onPressItem={handlePressItem} />
             )}
+            onEndReached={handleEndReach}
+            ListFooterComponent={showLoader && <SplashScreen />}
           />
         ) : (
           <Text

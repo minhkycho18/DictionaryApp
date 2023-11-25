@@ -74,9 +74,13 @@ export default function ItemSubCategory({ subcategory, onDelete }) {
       typeSub: subcategory.subcategoryType,
     });
   };
-  const getVocabOfSubCategory = async (idWL, idSub) => {
-    const data = await getAllVocabOfSubCategory(idWL, idSub);
-    setListVocabOfSubCategory(data);
+  const getVocabOfSubCategory = async (idWL, idSub, limit) => {
+    try {
+      const data = await getAllVocabOfSubCategory(idWL, idSub, limit);
+      setListVocabOfSubCategory(data.content);
+    } catch (error) {
+      console.log(`get vocal error ::`, error);
+    }
   };
   const handleDeleteVocal = (vocalId, defId) => {
     const listWordFilter = listVocabOfSubCategory.filter(
@@ -87,13 +91,21 @@ export default function ItemSubCategory({ subcategory, onDelete }) {
   };
 
   useEffect(() => {
-    getVocabOfSubCategory(subcategory.wordListId, subcategory.subcategoryId);
+    getVocabOfSubCategory(
+      subcategory.wordListId,
+      subcategory.subcategoryId,
+      subcategory.amountOfWord === 0 ? 20 : subcategory.amountOfWord
+    );
   }, []);
 
   useFocusEffect(
     React.useCallback(() => {
-      getVocabOfSubCategory(subcategory.wordListId, subcategory.subcategoryId);
-    }, [])
+      getVocabOfSubCategory(
+        subcategory.wordListId,
+        subcategory.subcategoryId,
+        subcategory.amountOfWord === 0 ? 20 : subcategory.amountOfWord
+      );
+    }, [subcategory])
   );
 
   const [loaded] = useFonts(configFont);
