@@ -2,6 +2,7 @@
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import FinishGame from '~/components/Game/FinishGame';
+import FinishQuiz from '~/components/Game/FinishQuiz';
 import FlashcardScreen from '~/screens/FlashcardScreen';
 import QuizScreen from '~/screens/QuizScreen';
 import ReviewScreen from '~/screens/ReviewScreen';
@@ -49,7 +50,12 @@ export default function GameStack(props) {
                 options={{ headerShown: false }}
                 initialParams={sub}
             />
-
+            <Stack.Screen
+                name="FinishQuiz"
+                component={FinishQuiz}
+                options={{ headerShown: false }}
+                initialParams={sub}
+            />
 
 
         </Stack.Navigator>

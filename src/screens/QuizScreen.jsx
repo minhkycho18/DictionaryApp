@@ -59,7 +59,7 @@ export default function QuizScreen(props) {
         "quiz",
         updateResult
       );
-      navigation.push("FinishGame", { type: "quiz" });
+      navigation.push("FinishQuiz");
     }
   };
   const getGame = async (wordListId, subId, type) => {
