@@ -50,6 +50,20 @@ const WordListDataTable = ({
       sortDirections: ["descend"],
     },
     {
+      title: "Modified by",
+      dataIndex: "createdBy",
+      key: "createdBy",
+      align: "center",
+    },
+    {
+      title: "Modified at",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      align: "center",
+      sorter: (a, b) => a.createdAt - b.createdAt,
+      sortDirections: ["descend"],
+    },
+    {
       title: "Action",
       key: "function",
       dataIndex: "function",

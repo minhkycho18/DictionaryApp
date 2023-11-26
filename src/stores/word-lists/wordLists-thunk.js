@@ -34,9 +34,9 @@ export const getWLById = createAsyncThunk(
 );
 export const getWordListsDefault = createAsyncThunk(
   "wordLists/getWordListsDefault",
-  async (userData, thunkApi) => {
+  async (keyword, thunkApi) => {
     try {
-      const response = await getDefault();
+      const response = await getDefault(keyword);
       return response;
     } catch (error) {
       throw thunkApi.rejectWithValue(error);

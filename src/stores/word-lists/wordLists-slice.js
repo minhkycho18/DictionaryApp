@@ -99,6 +99,9 @@ const wordListsSlice = createSlice({
       .addCase(createNewWL.fulfilled, (state, action) => {
         state.loading = false;
         state.wordLists.push(action.payload);
+        console.log(action.payload);
+
+        state.wordListsDefault.push(action.payload);
       })
       .addCase(createNewWL.rejected, (state, action) => {
         state.loading = false;
@@ -110,16 +113,25 @@ const wordListsSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteExistWordList.fulfilled, (state, action) => {
-        const index = state.wordLists.findIndex(
-          (item) => item.id === action.payload
+        const updateWordList = (array, payload, logMessage) => {
+          const index = array.findIndex((wl) => wl.id === payload.id);
+
+          if (index !== -1) {
+            array[index] = payload;
+          } else {
+            console.log(`No wordlist found in ${logMessage}`);
+          }
+        };
+
+        updateWordList(state.wordLists, action.payload, "wordLists");
+        updateWordList(
+          state.wordListsDefault,
+          action.payload,
+          "wordListsDefault"
         );
 
-        if (index === -1) {
-          state.wordLists.splice(index, 1);
-          state.messageDel = action.payload;
-        } else state.messageDel = null;
-
         state.loading = false;
+        state.messageDel = null;
       })
       .addCase(deleteExistWordList.rejected, (state, action) => {
         state.loading = false;
@@ -131,14 +143,21 @@ const wordListsSlice = createSlice({
         state.error = null;
       })
       .addCase(updateWl.fulfilled, (state, action) => {
-        const index = state.wordLists.findIndex(
-          (wl) => wl.id === action.payload.id
+        const updateWordList = (array, payload, logMessage) => {
+          const index = array.findIndex((wl) => wl.id === payload.id);
+
+          if (index !== -1) {
+            array[index] = payload;
+          } else {
+            console.log(`No wordlist found in ${logMessage}`);
+          }
+        };
+        updateWordList(state.wordLists, action.payload, "wordLists");
+        updateWordList(
+          state.wordListsDefault,
+          action.payload,
+          "wordListsDefault"
         );
-        if (index !== -1) {
-          state.wordLists[index] = action.payload;
-        } else {
-          console.log("no wordlist found");
-        }
         state.loading = false;
       })
       .addCase(updateWl.rejected, (state, action) => {

@@ -13,9 +13,9 @@ import {
 
 export const getSubcategory = createAsyncThunk(
   "subcategory/getSubcategory",
-  async (wordlistId, thunkAPi) => {
+  async (params, thunkAPi) => {
     try {
-      const response = await getSubByWlsId(wordlistId);
+      const response = await getSubByWlsId(params.wordlistId, params.keyword);
       return response;
     } catch (error) {
       throw thunkAPi.rejectWithValue(error);

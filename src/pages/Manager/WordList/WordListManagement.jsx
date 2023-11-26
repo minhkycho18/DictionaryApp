@@ -10,9 +10,9 @@ import WordListDataTable from "../../../components/data-table/WordList/WordListD
 import { useDispatch, useSelector } from "react-redux";
 import {
   createNewWL,
-  getAllWL,
   updateWl,
   searchWordList,
+  getWordListsDefault,
 } from "../../../stores/word-lists/wordLists-thunk";
 import {
   addWordToSubcategory,
@@ -35,6 +35,7 @@ import {
   deleteSub,
 } from "../../../api/Subcategory/subcategory.api";
 import { deleteWordLists } from "../../../api/WordLists/word-lists.api";
+import VocabularyDetailModal from "../../../components/Modal/VocabularyDetailModal";
 
 const WordListManagement = () => {
   const WORDLIST_DATA_TYPE = "wordlist";
@@ -43,7 +44,9 @@ const WordListManagement = () => {
   const [pagination, setPaginations] = useState();
   const [currentVocabInSub, setCurrentVocabInSub] = useState([]);
   const [currentDataType, setCurrentDataType] = useState(WORDLIST_DATA_TYPE);
-  const { wordLists, loading } = useSelector((state) => state.wordLists);
+  const [selectedVocabulary, setSelectedVocabulary] = useState({});
+  const [isOpenDetailModal, setIsOpenDetailModal] = useState(false);
+  const { wordListsDefault, loading } = useSelector((state) => state.wordLists);
   const {
     subcategories,
     vocabInSub,
@@ -57,7 +60,7 @@ const WordListManagement = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllWL());
+    dispatch(getWordListsDefault());
     setPaginations({
       ...pagination,
       current: currentPage,
@@ -71,7 +74,11 @@ const WordListManagement = () => {
 
   const onCLickItem = async (record) => {
     if (currentDataType === WORDLIST_DATA_TYPE) {
-      dispatch(getSubcategory(record.id));
+      const param = {
+        wordlistId: record.id,
+        keyword: "",
+      };
+      dispatch(getSubcategory(param));
       dispatch(selectWl(record));
       setCurrentDataType(SUBCATEGORY_DATA_TYPE);
     } else if (currentDataType === SUBCATEGORY_DATA_TYPE) {
@@ -118,14 +125,20 @@ const WordListManagement = () => {
   };
 
   const handleDelete = async (param) => {
-    if (currentDataType === WORDLIST_DATA_TYPE) {
-      await deleteWordLists(param);
-      dispatch(getAllWL());
-    } else {
-      await deleteSub({ ...param, wordListId: selectedWL.id });
-      dispatch(getSubcategory(selectedWL.id));
+    try {
+      if (currentDataType === WORDLIST_DATA_TYPE) {
+        await deleteWordLists(param);
+        dispatch(getWordListsDefault());
+      } else {
+        const updatedParam = { ...param, wordListId: selectedWL.id };
+        await deleteSub(updatedParam);
+        console.log(selectedWL.id);
+        dispatch(getSubcategory({ wordlistId: selectedWL.id }));
+      }
+      message.success("Delete successfully!");
+    } catch (error) {
+      message.error("Failed to delete");
     }
-    message.success("Delete successfully!");
   };
 
   const handleAddNewVocab = async (param) => {
@@ -144,7 +157,6 @@ const WordListManagement = () => {
         });
       }
     } catch (error) {
-      console.log(JSON.stringify(error));
       if (error.response && error.response.status === 400) {
         console.log("API returned status 400:");
       } else {
@@ -170,7 +182,15 @@ const WordListManagement = () => {
   };
 
   const handleSearch = async (value) => {
-    dispatch(searchWordList(value));
+    if (currentDataType === WORDLIST_DATA_TYPE) {
+      dispatch(getWordListsDefault(value));
+    } else if (currentDataType === SUBCATEGORY_DATA_TYPE) {
+      const param = {
+        wordlistId: selectedWL.id,
+        keyword: value,
+      };
+      dispatch(getSubcategory(param));
+    }
   };
 
   const handleTableChange = (param) => {
@@ -196,6 +216,21 @@ const WordListManagement = () => {
     } else if (currentDataType === SUBCATEGORY_DATA_TYPE) {
       setCurrentDataType(WORDLIST_DATA_TYPE);
     }
+  };
+
+  const handleShow = () => {
+    setIsOpenDetailModal(!isOpenDetailModal);
+  };
+
+  const onClickVocab = (record) => {
+    const { vocabId, definition, ...rest } = record;
+    const updatedRecord = {
+      id: vocabId,
+      ...rest,
+      definitions: definition ? [{ ...definition, synonyms: [] }] : [],
+    };
+    handleShow();
+    setSelectedVocabulary(updatedRecord);
   };
 
   return (
@@ -284,7 +319,7 @@ const WordListManagement = () => {
                 handleEdit={handleEdit}
                 handleDelete={handleDelete}
                 handleTableChange={handleTableChange}
-                dataSource={wordLists.map((item) => ({
+                dataSource={wordListsDefault.map((item) => ({
                   ...item,
                   key: item.id,
                 }))}
@@ -309,7 +344,7 @@ const WordListManagement = () => {
                 loading={VocabLoading}
                 isEditable={false}
                 pagination={pagination}
-                onCLickItem={onCLickItem}
+                onClickItem={onClickVocab}
                 onTableChange={handleTableChange}
                 onDeleteVocabInSub={handleDeleteVocab}
                 dataSource={vocabInSub.map((item) => ({
@@ -321,6 +356,13 @@ const WordListManagement = () => {
           </Col>
         </Row>
       </div>
+      {isOpenDetailModal && (
+        <VocabularyDetailModal
+          vocabDetail={selectedVocabulary}
+          isOpen={isOpenDetailModal}
+          handleShow={handleShow}
+        />
+      )}
     </Space>
   );
 };

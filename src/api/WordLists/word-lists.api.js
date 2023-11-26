@@ -12,8 +12,12 @@ export const getPublic = () => {
 export const getWordListTypes = () => {
   return http.get("/wordlists/types");
 };
-export const getDefault = () => {
-  return http.get("/wordlists/default");
+export const getDefault = (keyword) => {
+  if (keyword == null) {
+    return http.get("/wordlists/default");
+  } else {
+    return http.get(`/wordlists/default?keyword=${keyword}`);
+  }
 };
 export const searchWordListByKeyword = (keyword) => {
   return http.get(`/wordlists/search?keyword=${keyword}`);

@@ -1,7 +1,13 @@
 import http from "../../helpers/http";
 
-export const getSubByWlsId = (wordListId) => {
-  return http.get(`/wordlists/${wordListId}/subcategories`);
+export const getSubByWlsId = (wordListId, keyword) => {
+  if (keyword == null) {
+    return http.get(`/wordlists/${wordListId}/subcategories`);
+  } else {
+    return http.get(
+      `/wordlists/${wordListId}/subcategories?keyword=${keyword}`
+    );
+  }
 };
 ///===========================================================================
 export const createSub = (params) => {
