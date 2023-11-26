@@ -1,22 +1,22 @@
+import { LoadingOutlined } from "@ant-design/icons";
 import { Modal, Space, Spin } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
+import { updateVocabsByGameType } from "../../../api/Subcategory/game.api";
 import FlashCard from "../../../components/game/Card/FlashCard";
 import QuizCard from "../../../components/game/Card/QuizCard";
 import ReviewCard from "../../../components/game/Card/ReviewCard";
 import SpellingCard from "../../../components/game/Card/SpellingCard";
 import SuccessCard from "../../../components/game/Card/SuccessCard";
 import GameMenu from "../../../components/game/Menu/GameMenu";
+import Overview from "../../../components/game/OverViewBox/Overview";
 import changeTitle from "../../../helpers/changeTitle";
+import { getGameStatus } from "../../../stores/game/gameSlice";
 import { getVocabsByGame } from "../../../stores/game/gameThunk";
 import "./Game.scss";
-import { LoadingOutlined } from "@ant-design/icons";
-import { getGameStatus } from "../../../stores/game/gameSlice";
-import Overview from "../../../components/game/OverViewBox/Overview";
-import store from "../../../stores";
 
 const REVIEW = "review";
 const FLASH_CARD = "flashCard";
@@ -37,13 +37,6 @@ const Game = (props) => {
   const [modal, modalCtx] = Modal.useModal();
   const [correctAnswerFlashcard, setCorrectAnswerFlashcard] = useState([]);
   const [incorrectAnswer, setIncorrectAnswer] = useState([]);
-
-  const handleCorrectFlashCard = (item) => {
-    setCorrectAnswerFlashcard([...correctAnswerFlashcard, item]);
-  };
-  const handleIncorrectAnswer = (item) => {
-    setIncorrectAnswer([...incorrectAnswer, item]);
-  };
   useEffect(() => {
     const gameTypeFromLocalStorage = localStorage.getItem("gameType");
     if (!gameTypeFromLocalStorage) {
@@ -75,12 +68,13 @@ const Game = (props) => {
     };
   }, [dispatch, subId, type, wlId]);
 
-  const handleChangeLesson = (lessonType, success) => {
+  const handleChangeLesson = async (lessonType, success) => {
     const handleModalAction = (confirmed) => {
       setIsModalOpen(false);
       if (confirmed) {
         setCurrent(0);
         setCorrectAnswerFlashcard([]);
+        setIncorrectAnswer([]);
         setType(lessonType);
       }
     };
@@ -110,6 +104,23 @@ const Game = (props) => {
         },
       });
     }
+    if (lessonType.toLowerCase() !== type.toLowerCase() && success) {
+      const params = {
+        wordListId: wlId,
+        subcategoryId: subId,
+        gameType: type.toLowerCase(),
+        values: correctAnswerFlashcard.map((item) => ({
+          vocabId: item.vocabId,
+          defId: item.defId,
+        })),
+      };
+      try {
+        const rs = await updateVocabsByGameType(params);
+        console.log(rs);
+      } catch (error) {
+        console.log(error);
+      }
+    }
     if (success) {
       handleModalAction(success);
     }
@@ -118,6 +129,12 @@ const Game = (props) => {
     if (slide && slide.current) {
       slide.current.next();
     }
+  };
+  const handleCorrectFlashCard = (item) => {
+    setCorrectAnswerFlashcard([...correctAnswerFlashcard, item]);
+  };
+  const handleIncorrectAnswer = (item) => {
+    setIncorrectAnswer([...incorrectAnswer, item]);
   };
 
   const responsive = {

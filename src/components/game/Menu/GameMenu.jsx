@@ -19,7 +19,7 @@ const GameMenu = (props) => {
     (state) => state.game
   );
   const handleChangeLesson = (lesson) => {
-    props.onChangeLesson(lesson);
+    props.onChangeLesson(lesson, false);
   };
 
   return (

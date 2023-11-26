@@ -49,10 +49,10 @@ const Overview = (props) => {
         <Space className="overview__results">
           <Space className="overview__results__item">
             <Space
-              className="overview__results__image"
+              className="overview__results__image rotate-scale-up-diag-2"
               onClick={() => handleOpenIncorrect("flashcard")}
             >
-              <Image src={flashcard} preview={false} width={25} />
+              <Image src={flashcard} preview={false} width={32} />
             </Space>
 
             <Space direction="vertical">
@@ -65,12 +65,12 @@ const Overview = (props) => {
             </Space>
           </Space>
 
-          <Space className="overview__results__item">
+          <Space className="overview__results__item ">
             <Space
-              className="overview__results__image"
+              className="overview__results__image rotate-scale-up-diag-2"
               onClick={() => handleOpenIncorrect("spelling")}
             >
-              <Image src={spelling} preview={false} width={25} />
+              <Image src={spelling} preview={false} width={32} />
             </Space>
 
             <Space direction="vertical">
@@ -84,10 +84,10 @@ const Overview = (props) => {
           </Space>
           <Space className="overview__results__item">
             <Space
-              className="overview__results__image"
+              className="overview__results__image rotate-scale-up-diag-2"
               onClick={() => handleOpenIncorrect("quiz")}
             >
-              <Image src={quiz} preview={false} width={25} />
+              <Image src={quiz} preview={false} width={32} />
             </Space>
 
             <Space direction="vertical">
@@ -102,8 +102,8 @@ const Overview = (props) => {
         </Space>
         <Space className="overview__results">
           <Space className="overview__link">
-            See your result
-            <RightOutlined />
+            Click tag to see your result.
+            {/* <RightOutlined /> */}
           </Space>
           <Space
             className="overview__finish"

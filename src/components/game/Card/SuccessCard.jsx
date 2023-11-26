@@ -12,6 +12,7 @@ const SuccessCard = (props) => {
   const changeToNextLesson = (lesson) => {
     props.handleChangeLesson(lesson, true);
   };
+
   const renderBody = () => {
     switch (props?.type) {
       case "success-review":
@@ -34,7 +35,10 @@ const SuccessCard = (props) => {
             </Space>
             <Button
               type="primary"
-              onClick={() => changeToNextLesson("flashCard")}
+              onClick={() => {
+                // props?.handleUpdateGame();
+                changeToNextLesson("flashCard");
+              }}
             >
               Practice
             </Button>
@@ -70,6 +74,7 @@ const SuccessCard = (props) => {
                 <Space
                   className="success-card__options success-card__options--continue"
                   onClick={() => {
+                    // props.handleUpdateGame();
                     dispatch(
                       setCorrectAnswer({
                         type: "flashcard",
@@ -125,6 +130,8 @@ const SuccessCard = (props) => {
                         incorrect: props?.incorrectAnswer,
                       })
                     );
+                    // props?.handleUpdateGame();
+
                     changeToNextLesson("quiz");
                   }}
                 >
@@ -172,6 +179,7 @@ const SuccessCard = (props) => {
                         incorrect: props?.incorrectAnswer,
                       })
                     );
+                    // props.handleUpdateGame();
                     changeToNextLesson("overview");
                   }}
                 >

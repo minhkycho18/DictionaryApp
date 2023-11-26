@@ -8,6 +8,7 @@ class Http {
       name: "Dictionary App",
       timeout: 10000,
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
       },
     });
@@ -16,7 +17,8 @@ class Http {
         return response.data;
       },
       ({ response }) => {
-        if (response.status === 401) {
+        if (response.status === 400) {
+          return Promise.reject(response.data);
         }
         const result = { ...response.data, status: response.status };
         return Promise.reject(result);

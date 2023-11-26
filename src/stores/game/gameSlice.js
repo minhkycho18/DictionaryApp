@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getVocabsByGame, updateVocabsByGame } from "./gameThunk";
+import { getVocabsByGame } from "./gameThunk";
 
 const gameSlice = createSlice({
   name: "game",
@@ -77,19 +77,19 @@ const gameSlice = createSlice({
       .addCase(getVocabsByGame.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.detail;
-      })
-      .addCase(updateVocabsByGame.pending, (state, action) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateVocabsByGame.fulfilled, (state, action) => {
-        state.loading = false;
-        state.messageUpdated = action.payload;
-      })
-      .addCase(updateVocabsByGame.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.detail;
       });
+    // .addCase(updateVocabsByGame.pending, (state, action) => {
+    //   state.loading = true;
+    //   state.error = null;
+    // })
+    // .addCase(updateVocabsByGame.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.messageUpdated = action.payload;
+    // })
+    // .addCase(updateVocabsByGame.rejected, (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.payload.detail;
+    // });
   },
 });
 export const { updateVocab, getGameStatus, setCorrectAnswer } =
