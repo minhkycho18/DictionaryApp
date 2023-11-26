@@ -1,6 +1,5 @@
-<<<<<<< HEAD
 # DictionaryApp
-=======
+
 # Flash-Quiz
 
 ## Overview:
@@ -10,8 +9,10 @@ Flash-Quiz is an online learning app that helps you create and review vocabulary
 ## Features:
 
 - Sign In/ Sign Up
-- Search
-  ( Updating...)
+- Search vocabulary
+- Add vocabulary to subcategory, word list.
+- Manage account.
+- Learning with Leitner system.
 
 ## Technology used
 
@@ -53,4 +54,3 @@ Coming soon
     <td align="center"><img src="https://avatars.githubusercontent.com/u/93358196" width="100px;" alt=""/><br /><sub><b>Huynh Le Dac Tai</b></sub></a><br /><a href="" title="Code">💻</a> <a title="BE">🔗</a> <a href="">
   
 </table>
->>>>>>> 57b3cab (feat/FE: init)
