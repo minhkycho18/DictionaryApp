@@ -4,6 +4,7 @@ import { EvilIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { styles } from "./Style";
+import { LinearGradient } from "expo-linear-gradient";
 const SearchInput = ({ onChange, onBackPress }) => {
   const [search, setSearch] = useState("");
   const [clear, setClear] = useState(false);
@@ -19,7 +20,12 @@ const SearchInput = ({ onChange, onBackPress }) => {
     setClear(true);
   };
   return (
-    <View style={styles.headerSearch}>
+    <LinearGradient
+      colors={["#5671CC", "#9D97F9"]}
+      start={{ x: 0, y: 0.5 }}
+      end={{ x: 1, y: 0.5 }}
+      style={styles.headerSearch}
+    >
       <View style={{ marginRight: 10 }}>
         <Ionicons
           name="arrow-back"
@@ -51,7 +57,7 @@ const SearchInput = ({ onChange, onBackPress }) => {
           </View>
         )}
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 export default SearchInput;

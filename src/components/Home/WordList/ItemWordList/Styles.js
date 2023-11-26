@@ -7,27 +7,29 @@ export const Styles = StyleSheet.create({
         borderRadius: 10,
         display: 'flex',
         flexDirection: 'column',
+        padding: 10
     },
     image:
     {
         width: "100%",
-        height: 135,
+        height: 136,
         borderRadius: 10,
         resizeMode: "center",
     },
     viewImage: {
         width: 121,
-        height: 136,
+        height: 135,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 3,
+            height: 2,
         },
-        shadowOpacity: 0.29,
-        shadowRadius: 4.65,
-        elevation: 7,
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
         borderRadius: 10,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
     }
 
 })

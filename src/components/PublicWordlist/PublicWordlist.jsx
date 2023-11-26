@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { EvilIcons } from "@expo/vector-icons";
 import {
+  Text,
   View,
   TextInput,
   SafeAreaView,
   StyleSheet,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 import { colors, spacing, sizes, shadow } from "~/constants/theme";
 import ItemPublicWordlist from "./ItemPublicWordlist/ItemPublicWordlist";
 import { getPublic } from "~/api/WordList";
@@ -14,10 +17,13 @@ import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
 import { cloneWordlist } from "~/api/WordList";
 export default function PublicWordlist() {
   const [search, setSearch] = useState("");
+  const [tempWordlist, setTempWordlist] = useState([]);
   const [wordlists, setWordlists] = useState([]);
+  const [isClear, setIsClear] = useState(false);
   const getWordlistPublic = async () => {
     const list = await getPublic();
     setWordlists(list);
+    setTempWordlist(list);
   };
   const handleClone = async (id) => {
     try {
@@ -31,6 +37,29 @@ export default function PublicWordlist() {
   useEffect(() => {
     getWordlistPublic();
   }, []);
+
+  const handleTextChange = (text) => {
+    setIsClear(true);
+    setSearch(text);
+  };
+
+  useEffect(() => {
+    if (search !== "") {
+      const debounceTimeout = setTimeout(() => {
+        const result = tempWordlist.filter((item) =>
+          item.title.toLowerCase().includes(search.toLowerCase())
+        );
+        setWordlists(result);
+      }, 600);
+
+      return () => {
+        clearTimeout(debounceTimeout);
+      };
+    } else {
+      setIsClear(false);
+      setWordlists(tempWordlist);
+    }
+  }, [search]);
 
   const toastConfig = {
     error: (props) => (
@@ -87,23 +116,51 @@ export default function PublicWordlist() {
             style={Styles.field}
             placeholder="Search for a word"
             value={search}
-            onChangeText={setSearch}
+            onChangeText={(text) => handleTextChange(text)}
             // autoFocus={true}
             // ref={clickClear}
           />
+          {isClear && (
+            <TouchableOpacity
+              style={Styles.iconClear}
+              onPress={() => {
+                setSearch("");
+                setIsClear(false);
+              }}
+            >
+              <AntDesign name="closecircleo" size={24} color="#6b7280" />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
-      <View
-      // style={{width :'100%', height:20}}
-      ></View>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item) => item.id}
-        data={wordlists}
-        renderItem={(item) => (
-          <ItemPublicWordlist wordlist={item} onClone={handleClone} />
-        )}
-      />
+      {wordlists.length > 0 ? (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.id}
+          data={wordlists}
+          renderItem={(item) => (
+            <ItemPublicWordlist wordlist={item} onClone={handleClone} />
+          )}
+        />
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 25,
+              fontFamily: "Quicksand-Bold",
+              color: colors.textTitle,
+            }}
+          >
+            No have wordlist
+          </Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 }

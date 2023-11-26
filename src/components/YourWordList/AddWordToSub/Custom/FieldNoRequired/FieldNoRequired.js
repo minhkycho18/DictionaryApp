@@ -179,7 +179,7 @@ export default function FieldNoRequired({ onSetFileResponseUS, onSetFileResponse
                     </Text>
                     <View style={Styles.inputFile}>
                         <TouchableOpacity style={Styles.buttonFile} onPress={() => pickDocument(true)}>
-                            <Text style={{ fontFamily: "Quicksand-Medium", ...Styles.textFile }}>file</Text>
+                            <Text style={{ fontFamily: "Quicksand-Medium", ...Styles.textFile }}>File</Text>
                         </TouchableOpacity>
                         <View style={Styles.fileName}>
                             {!isLoadingUs ? <Text style={Styles.textFileName}>{fileResponseUS}</Text> : <ActivityIndicator size="small" color="#2C94E6" />}
@@ -229,7 +229,7 @@ export default function FieldNoRequired({ onSetFileResponseUS, onSetFileResponse
                     </Text>
                     <View style={Styles.inputFile}>
                         <TouchableOpacity style={Styles.buttonFile} onPress={() => pickDocument(false)}>
-                            <Text style={{ fontFamily: "Quicksand-Medium", ...Styles.textFile }}>file</Text>
+                            <Text style={{ fontFamily: "Quicksand-Medium", ...Styles.textFile }}>File</Text>
                         </TouchableOpacity>
                         <View style={Styles.fileName}>
                             {!isLoadingUk ? <Text style={Styles.textFileName}>{fileResponseUK}</Text> : <ActivityIndicator size="small" color="#2C94E6" />}

@@ -4,6 +4,7 @@ import { EvilIcons } from "@expo/vector-icons";
 import { Animated, View, Text, TouchableOpacity, Image } from "react-native";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
+import { LinearGradient } from "expo-linear-gradient";
 function SearchAnimated({ scrollY, handleSearchPress, opacity }) {
   const [loaded] = useFonts(configFont);
   if (!loaded) {
@@ -27,7 +28,12 @@ function SearchAnimated({ scrollY, handleSearchPress, opacity }) {
         },
       ]}
     >
-      <View style={styles.borderStyle}>
+      <LinearGradient
+        start={{ x: 0, y: 0.5 }}
+        end={{ x: 1, y: 0.5 }}
+        colors={["#5671CC", "#9D97F9"]}
+        style={styles.borderStyle}
+      >
         <View style={{ backgroundColor: "transparents" }}>
           <Image
             style={styles.img}
@@ -43,7 +49,7 @@ function SearchAnimated({ scrollY, handleSearchPress, opacity }) {
             Search for a word
           </Text>
         </TouchableOpacity>
-      </View>
+      </LinearGradient>
     </Animated.View>
   );
 }

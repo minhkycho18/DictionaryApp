@@ -97,7 +97,7 @@ export const Styles = StyleSheet.create({
         marginTop: 12,
         alignItems: 'center',
         borderRadius: 20,
-        backgroundColor: "#B4B6E6",
+        // backgroundColor: "#B4B6E6",
     },
     textType: {
         paddingHorizontal: 15,
@@ -127,7 +127,7 @@ export const Styles = StyleSheet.create({
         position: "absolute",
         bottom: 0,
     },
-    temp:{
+    temp: {
         width: "100%",
         height: "30%",
         // backgroundColor: "red",

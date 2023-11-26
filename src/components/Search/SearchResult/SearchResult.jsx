@@ -40,8 +40,6 @@ function SearchResult({ vocal, onPressItem }) {
               <Text
                 style={{
                   ...styles.content_top_Type,
-                  backgroundColor: colorPos,
-                  // borderRadius: 20,
                 }}
               >
                 {vocal.item.pos}

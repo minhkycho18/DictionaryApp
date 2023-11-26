@@ -40,7 +40,7 @@ export default function WordListPublic() {
         style={{
           ...Styles.header,
           justifyContent: "space-between",
-          marginBottom: 15,
+          marginBottom: 5,
         }}
       >
         <Text

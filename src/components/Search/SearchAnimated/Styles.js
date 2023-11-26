@@ -5,13 +5,13 @@ export const styles = StyleSheet.create({
 
     borderStyle: {
 
-        backgroundColor: colors.primary,
+        // backgroundColor: colors.primary,
         height: '100%',
         borderBottomLeftRadius: 45,
         borderBottomRightRadius: 45,
         borderTopWidth: 0.5,
         alignItems: 'center',
-        position: 'relative'
+        position: 'relative',
 
     },
     searchView: {

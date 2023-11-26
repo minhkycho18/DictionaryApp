@@ -1,14 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStack from "./HomeStack";
 import DictionaryStack from "./dictionaryStack";
-import Profile from "../screens/ProfileScreen";
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from "../styles/Style";
-import SplashScreen from "~/components/SplashScreen";
 import { useRef, useState, useEffect } from 'react'
 import { Dimensions, Animated, Keyboard, Platform } from "react-native";
-import index from "~/components/Study";
 import Leitner from "~/screens/Leitner";
+import ProfileStack from "./ProfileStack";
 export default function BottomTab() {
   const tabOffsetValue = useRef(new Animated.Value(0)).current;
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -57,7 +55,7 @@ export default function BottomTab() {
             else if (route.name === "DictionaryStack") {
               iconName = "book-outline"
             }
-            else if (route.name === "Profile") {
+            else if (route.name === "ProfileStack") {
               iconName = "md-person-outline"
             }
 
@@ -95,7 +93,7 @@ export default function BottomTab() {
               }).start();
             }
           })} />
-        <Tab.Screen name="Profile" component={Profile} options={{ ...styles.tabScreenStyle }}
+        <Tab.Screen name="ProfileStack" component={ProfileStack} options={{ ...styles.tabScreenStyle, tabBarLabel: 'Profile' }}
           listeners={({ navigation, route }) => ({
             tabPress: e => {
               Animated.spring(tabOffsetValue, {
