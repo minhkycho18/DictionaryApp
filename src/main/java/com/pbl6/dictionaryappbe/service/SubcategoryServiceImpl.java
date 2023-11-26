@@ -355,12 +355,16 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
         while (flashCardsIter.hasNext() && descIter.hasNext()) {
             FlashcardQuestionDto currentFlashcard = flashCardsIter.next();
             String currentDesc = descIter.next();
-            currentFlashcard.setQuestion(currentDesc);
             Definition definition =
                     definitionRepository.findByVocabIdAndDefId(currentFlashcard.getVocabId(), currentFlashcard.getDefId())
                             .orElseThrow(() -> new RecordNotFoundException("Definition not found"));
-
-            currentFlashcard.setResult(currentDesc.equals(definition.getWordDesc()));
+            if (rand.nextBoolean()) {
+                currentFlashcard.setQuestion(currentDesc);
+                currentFlashcard.setResult(currentDesc.equals(definition.getWordDesc()));
+            } else {
+                currentFlashcard.setQuestion(definition.getWordDesc());
+                currentFlashcard.setResult(true);
+            }
         }
         return flashcardQuestionDtos;
     }
