@@ -5,13 +5,15 @@ import { colors, svgStudy } from "~/constants/theme";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
 export default function ItemVocabOfQuizResult({
+  indexx,
   Vocab
 }) {
-  const [id, setId] = useState(Vocab.id);
+  const [id, setId] = useState(indexx);
   const [answer, setAnswer] = useState(Vocab.answer);
   const [question, setQuestion] = useState(Vocab.question);
   const [choose, setChoose] = useState(Vocab.choose);
 
+  // console.log("test ABC:",  indexx);
 
   const [loaded] = useFonts(configFont);
   if (!loaded) {
@@ -36,7 +38,7 @@ export default function ItemVocabOfQuizResult({
               }}>
                 <Text numberOfLines={1} style={{
                   fontFamily: "Quicksand-Bold",
-                  fontSize: 18,
+                  fontSize: 17,
                   letterSpacing: 0.2,
                 }}>
                   {id}) <Text numberOfLines={1} style={Styles.word}>{answer}</Text>
@@ -45,7 +47,7 @@ export default function ItemVocabOfQuizResult({
                 <Text numberOfLines={1} style={{
                   color: "#F84D4B",
                   fontFamily: "Quicksand-Bold",
-                  fontSize: 18,
+                  fontSize: 17,
                   letterSpacing: 0.2,
                   textDecorationLine: 'line-through',
                 }}>

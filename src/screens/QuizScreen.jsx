@@ -19,6 +19,8 @@ import { getGameFromSub, updateStatusGame } from "~/api/Game";
 import ItemCardQuiz from "~/components/Game/CardQuiz/ItemCardQuiz";
 export default function QuizScreen(props) {
   const [listAnswer, setListAnswer] = useState([]);
+  const [listIncorrectAnswer, setListIncorrectAnswer] = useState([]);
+  const [numberQuestion, setNumberQuestion] = useState(0);
   const [data, setData] = useState([]);
   const [count, setCount] = useState(0);
   const [screenWidth, setScreenWidth] = useState(
@@ -35,9 +37,14 @@ export default function QuizScreen(props) {
     if (nextSlide < data.length) {
       if (obj.answer) {
         setListAnswer((pre) => [...pre, obj.vocal]);
-        console.log('Da them tu \n');
+        // console.log('Da them tu \n');
+
+      } else {
+        setListIncorrectAnswer((pre) => [...pre, obj.vocal]);
+        // console.log('Da them tu sai \n');
 
       }
+
       scrollViewRef.current.scrollTo({
         x: nextSlide * Math.floor(screenWidth - 40),
         animated: true,
@@ -47,9 +54,16 @@ export default function QuizScreen(props) {
     }
     if (nextSlide === data.length) {
       let updateResult = [...listAnswer];
+      let updateIncorrectResult = [...listIncorrectAnswer];
+
       if (obj.answer) {
         updateResult.push(obj.vocal);
-        console.log('Da them tu \n');
+        // console.log('Da them tu \n');
+      }
+      else
+      {
+        updateIncorrectResult.push(obj.vocal);
+        // console.log('Da them tu sai \n');
 
       }
       console.log(updateResult);
@@ -59,12 +73,14 @@ export default function QuizScreen(props) {
         "quiz",
         updateResult
       );
-      navigation.push("FinishQuiz");
+      navigation.push("FinishQuiz", { quiz_number_question: numberQuestion, quiz_result: updateIncorrectResult});
+
     }
   };
   const getGame = async (wordListId, subId, type) => {
     const res = await getGameFromSub(wordListId, subId, type);
     setData(res);
+    setNumberQuestion(res.length);
   };
 
   useEffect(() => {

@@ -24,7 +24,10 @@ export default function FinishQuiz(props) {
   const { params } = useRoute();
   const [selectedBtn, setSelectedBtn] = useState('quiz');
   const [checkChoice, setCheckChoice] = useState(true);
+  const [quizResult, setQuizResult] = useState(props.route.params.quiz_result);
+  const [numberQuestion, setNumberQuestion] = useState(props.route.params.quiz_number_question);
 
+  // console.log("test list receive: \n\n", quizResult)
   const navigation = useNavigation();
   const data_test = [
     {
@@ -72,9 +75,9 @@ export default function FinishQuiz(props) {
 
   ];
 
-  useEffect(() => {
-    // getSubCategory(wl.id);
-  }, [selectedBtn]);
+  // useEffect(() => {
+  //   // getSubCategory(wl.id);
+  // }, [selectedBtn]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -326,7 +329,7 @@ export default function FinishQuiz(props) {
                         styles.number
                       ]}
                     >
-                      2 / 6
+                      {numberQuestion-quizResult.length} / {numberQuestion}
                     </Text>
                     <Text
                       numberOfLines={2}
@@ -389,16 +392,10 @@ export default function FinishQuiz(props) {
 
 
           </View>
-
-          {/* {subCategories.map((item) => (
-          <ItemSubCategoryOfPublicSub
-            key={item.subcategoryId}
-            subcategory={item}
-          />
-        ))} */}
-          {data_test.map((item) => (
+          {quizResult.map((item,index) => (
             <ItemVocabOfQuizResult
-              // key={item.subcategoryId}
+              // key={item.id}
+              indexx = {index+1}
               Vocab={item}
             />
           ))}

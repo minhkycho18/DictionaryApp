@@ -35,7 +35,7 @@ export const Styles = StyleSheet.create({
 
     },
     Text_content: {
-        marginLeft: 2,
+        // marginLeft: 2,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
