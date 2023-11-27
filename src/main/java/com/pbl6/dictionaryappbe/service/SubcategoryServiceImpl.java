@@ -59,11 +59,6 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
     private final Random rand = new Random();
 
     @Override
-    public List<SubcategoryResponseDto> findByKeyWord(Long wordListId, String keyword) {
-        return null;
-    }
-
-    @Override
     public List<SubcategoryResponseDto> getAllSubcategories(Long wordListId, String keyword) {
         User user = AuthenticationUtils.getUserFromSecurityContext();
         WordList wordList = wordListRepository.findById(wordListId)

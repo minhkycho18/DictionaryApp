@@ -155,10 +155,7 @@ public class WordListServiceImpl implements WordListService {
     @Override
     @Transactional
     public void deleteWordList(Long wordListId) {
-        User user = AuthenticationUtils.getUserFromSecurityContext();
-        WordList wordList = (user != null && user.getRole().getName().equals(RoleName.LEARNER))
-                ? getOwnedWordList(wordListId)
-                : wordListRepository.findById(wordListId).orElse(null);
+        WordList wordList = getOwnedWordList(wordListId);
         List<Long> subcategories = subcategoryRepository.findAllByWordList(wordList).stream()
                 .map(Subcategory::getSubcategoryId)
                 .toList();
