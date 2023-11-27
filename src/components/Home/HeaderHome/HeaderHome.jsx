@@ -4,13 +4,19 @@ import tw from "twrnc";
 import { Styles } from "./Styles";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
+import { LinearGradient } from "expo-linear-gradient";
 function HeaderHome() {
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
   }
   return (
-    <View style={Styles.container}>
+    <LinearGradient
+      colors={["#5671CC", "#9D97F9"]}
+      start={{ x: 0, y: 0.5 }}
+      end={{ x: 1, y: 0.5 }}
+      style={Styles.container}
+    >
       <View>
         <Image
           style={Styles.image}
@@ -24,7 +30,7 @@ function HeaderHome() {
           English Vocabulary
         </Text>
       </View>
-    </View>
+    </LinearGradient>
   );
 }
 

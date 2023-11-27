@@ -53,7 +53,7 @@ export default function ItemSub({ Sub }) {
             name="play-circle"
             size={35}
             color={colors.primary}
-            onPress={() => onPress()}
+            onPress={handlePress}
           />
         </TouchableOpacity>
       </View>

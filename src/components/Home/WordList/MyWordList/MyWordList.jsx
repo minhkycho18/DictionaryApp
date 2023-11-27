@@ -26,12 +26,11 @@ export default function MyWordList() {
     const data = await getWordListById();
     setWordLists(data);
   };
+  const checkToken = async () => {
+    const check = await checkLogin();
+    setIsLogin(check);
+  };
   useEffect(() => {
-    const checkToken = async () => {
-      const check = await checkLogin();
-      setIsLogin(check);
-    };
-
     checkToken();
   }, []);
   useEffect(() => {
@@ -42,6 +41,7 @@ export default function MyWordList() {
   useFocusEffect(
     useCallback(() => {
       getMyWordList();
+      checkToken();
     }, [])
   );
 
@@ -88,7 +88,13 @@ export default function MyWordList() {
       colors={["#fff", "rgb(241 245 249)"]}
       style={tw`pt-1.5 pr-2 pl-2 pb-2   bg-stone-50`}
     >
-      <View style={{ ...Styles.header, justifyContent: "space-between" }}>
+      <View
+        style={{
+          ...Styles.header,
+          justifyContent: "space-between",
+          marginBottom: 2,
+        }}
+      >
         <Text
           style={{
             fontFamily: "Quicksand-SemiBold",
@@ -115,11 +121,7 @@ export default function MyWordList() {
           />
         </TouchableOpacity>
       </View>
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        horizontal
-        style={{ marginTop: 15 }}
-      >
+      <ScrollView showsHorizontalScrollIndicator={false} horizontal>
         <ItemCreateWordList onPress={handlePressSeeAll} />
         {isLogin &&
           wordLists.map((item) => (

@@ -57,6 +57,7 @@ function VocalDetail() {
   }, [isOpen]);
   const handlePresentModal = (data) => {
     if (!isLogin) {
+      console.log("error");
       showToast("Error", "Please login to add", "error");
     } else {
       setDataUpdate(data);
@@ -270,6 +271,14 @@ function VocalDetail() {
           />
         )}
       </Modal>
+      {!isLogin && (
+        <Toast
+          config={toastConfig}
+          refs={(ref) => {
+            Toast.setRef(ref);
+          }}
+        />
+      )}
     </SafeAreaView>
   );
 }

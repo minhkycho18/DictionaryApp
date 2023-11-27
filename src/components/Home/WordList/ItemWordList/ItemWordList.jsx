@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TouchableOpacity, Image, Text } from "react-native";
+import { View, Image, Text, Pressable } from "react-native";
 import tw from "twrnc";
 import { Styles } from "./Styles";
 import { colors } from "~/constants/theme";
@@ -13,7 +13,7 @@ export default function ItemWordList({ src, wordlist, type }) {
     return null;
   }
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={() => {
         let href = "";
         if (type.type === "public") {
@@ -58,6 +58,6 @@ export default function ItemWordList({ src, wordlist, type }) {
       >
         {wordlist?.title}
       </Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 }

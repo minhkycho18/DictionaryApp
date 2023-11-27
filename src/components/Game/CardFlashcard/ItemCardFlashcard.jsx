@@ -7,6 +7,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { colors, incorrect_correct_back } from "~/constants/theme";
 import { SvgXml } from "react-native-svg";
 import { Audio } from "expo-av";
+import { GetColor } from "~/helper";
 export default function ItemCardFlashcard({ onNextSlider, vocal }) {
   const [isFlip, setIsFlip] = useState(false);
   const playSound = async (audio) => {
@@ -39,7 +40,7 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
         flipVertical={false}
         flip={isFlip}
         clickable={false}
-        onFlipStart={() => { }}
+        onFlipStart={() => {}}
       >
         {/* Face Side */}
         <View style={Styles.cardFace}>
@@ -52,14 +53,21 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
               borderTopRightRadius: 30,
               tintColor: "#4DB5AA",
               // backgroundColor: 'red',
-
             }}
           />
           <TouchableOpacity
             style={Styles.viewSound}
             onPress={() => playSound(vocal?.audioUk)}
+            disabled={vocal.audioUs === null}
           >
-            <AntDesign name="sound" size={24} color="#4DB5AA" />
+            {vocal.audioUs !== null ? (
+              <AntDesign name="sound" size={24} color="#4DB5AA" />
+            ) : (
+              <Image
+                source={require("~/assets/mute.png")}
+                style={{ width: 28, height: 28, tintColor: colors.textColor }}
+              />
+            )}
           </TouchableOpacity>
           <View style={Styles.content}>
             <Text style={{ ...Styles.word, fontFamily: "Quicksand-Bold" }}>
@@ -71,6 +79,7 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
                   style={{
                     ...Styles.textType,
                     fontFamily: "Quicksand-Bold",
+                    backgroundColor: GetColor(vocal?.pos),
                   }}
                 >
                   {vocal?.pos}
@@ -79,10 +88,7 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
             </View>
           </View>
 
-          <View
-            style={Styles.temp}
-          >
-          </View>
+          <View style={Styles.temp}></View>
           <TouchableOpacity
             style={Styles.bottom}
             onPress={() => setIsFlip(true)}

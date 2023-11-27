@@ -7,6 +7,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { colors } from "~/constants/theme";
 import { Audio } from "expo-av";
 import { Entypo } from "@expo/vector-icons";
+import { GetColor } from "~/helper";
 export default function ItemCardReview({ vocal }) {
   const [isFlip, setIsFlip] = useState(false);
   const playSound = async (audio) => {
@@ -26,7 +27,7 @@ export default function ItemCardReview({ vocal }) {
         flipVertical={false}
         flip={isFlip}
         clickable={false}
-        onFlipStart={() => { }}
+        onFlipStart={() => {}}
       >
         {/* Face Side */}
         <View style={Styles.cardFace}>
@@ -99,7 +100,12 @@ export default function ItemCardReview({ vocal }) {
                   </Text>
                 </View>
               )}
-              <View style={Styles.type}>
+              <View
+                style={{
+                  ...Styles.type,
+                  backgroundColor: GetColor(vocal?.pos),
+                }}
+              >
                 <Text
                   style={{
                     ...Styles.textType,
@@ -124,10 +130,7 @@ export default function ItemCardReview({ vocal }) {
               </Text>
             </View>
           </View>
-          <View
-            style={Styles.temp}
-          >
-          </View>
+          <View style={Styles.temp}></View>
           <TouchableOpacity
             style={Styles.bottom}
             onPress={() => setIsFlip(true)}
@@ -142,7 +145,6 @@ export default function ItemCardReview({ vocal }) {
                 borderTopRightRadius: 30,
                 transform: [{ rotate: "180deg" }],
                 tintColor: "#4DB5AA",
-
               }}
             />
             {vocal?.example !== null && (
@@ -164,7 +166,6 @@ export default function ItemCardReview({ vocal }) {
               borderTopLeftRadius: 30,
               borderTopRightRadius: 30,
               tintColor: "#4DB5AA",
-
             }}
           />
           <TouchableOpacity
@@ -200,8 +201,7 @@ export default function ItemCardReview({ vocal }) {
                       fontFamily: "Quicksand-SemiBold",
                       fontSize: 17,
                       color: colors.textColor,
-                      textAlign: 'center'
-
+                      textAlign: "center",
                     }}
                   >
                     1. {vocal?.example}
@@ -225,7 +225,6 @@ export default function ItemCardReview({ vocal }) {
                 borderTopRightRadius: 30,
                 transform: [{ rotate: "180deg" }],
                 tintColor: "#4DB5AA",
-
               }}
             />
             <Text
