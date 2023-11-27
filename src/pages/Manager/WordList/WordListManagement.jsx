@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   createNewWL,
   updateWl,
-  searchWordList,
   getWordListsDefault,
 } from "../../../stores/word-lists/wordLists-thunk";
 import {
@@ -132,7 +131,6 @@ const WordListManagement = () => {
       } else {
         const updatedParam = { ...param, wordListId: selectedWL.id };
         await deleteSub(updatedParam);
-        console.log(selectedWL.id);
         dispatch(getSubcategory({ wordlistId: selectedWL.id }));
       }
       message.success("Delete successfully!");
@@ -149,13 +147,19 @@ const WordListManagement = () => {
       defId: param.definition.defId,
     };
     try {
-      const response = await dispatch(addWordToSubcategory(params));
-      if (response.status === 200) {
-        setPaginations({
-          ...pagination,
-          total: pagination.total + 1,
-        });
-      }
+      dispatch(addWordToSubcategory(params));
+      setPaginations({
+        ...pagination,
+        total: pagination.total + 1,
+      });
+      const refresh = {
+        wordListId: selectedWL.id,
+        SubId: pagination.subId,
+        offset: 1,
+        limit: pagination.total,
+      };
+      const response = await getAllVocabInSub(refresh);
+      setCurrentVocabInSub(response.content);
     } catch (error) {
       if (error.response && error.response.status === 400) {
         console.log("API returned status 400:");
@@ -210,11 +214,12 @@ const WordListManagement = () => {
 
   const onBack = () => {
     if (currentDataType === VOCABULARY_DATA_TYPE) {
-      dispatch(getSubcategory(selectedWL.id));
+      dispatch(getSubcategory({ wordlistId: selectedWL.id }));
       setCurrentDataType(SUBCATEGORY_DATA_TYPE);
       setCurrentVocabInSub([]);
     } else if (currentDataType === SUBCATEGORY_DATA_TYPE) {
       setCurrentDataType(WORDLIST_DATA_TYPE);
+      console.log(currentVocabInSub);
     }
   };
 
