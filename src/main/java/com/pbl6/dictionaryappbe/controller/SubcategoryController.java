@@ -44,14 +44,19 @@ public class SubcategoryController {
     @Value("${dictionary-app.api.default-page-size}")
     private int defaultPageSize;
 
-    @Operation(summary = "Get all subcategories of WordList by id")
+    @Operation(summary = "Get all subcategories of WordList by id OR Search by keyword")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Get data successfully",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SubcategoryResponseDto.class))}),
             @ApiResponse(responseCode = "403", description = "No permission to access this resource")})
     @GetMapping("/wordlists/{wordListId}/subcategories")
-    public List<SubcategoryResponseDto> getAllSubcategories(@PathVariable Long wordListId) {
-        return subcategoryService.getAllSubcategories(wordListId);
+    public List<SubcategoryResponseDto> getAllSubcategories(@PathVariable Long wordListId,
+                                                            @RequestParam(name = "keyword", required = false)
+                                                            String keyword) {
+        if (keyword == null) {
+            keyword = "";
+        }
+        return subcategoryService.getAllSubcategories(wordListId, keyword);
     }
 
     @Operation(summary = "Get all vocabulary of subcategory")

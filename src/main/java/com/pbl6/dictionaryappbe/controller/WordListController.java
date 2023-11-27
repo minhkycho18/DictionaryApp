@@ -47,13 +47,17 @@ public class WordListController {
         return wordListService.getAllByUser();
     }
 
-    @Operation(summary = "Get all system's WordLists which is created by Content Manager")
+    @Operation(summary = "Get all system's WordLists which is created by Content Manager OR Search by keyword")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Get data successfully",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = WordListResponseDto.class))})})
     @GetMapping("/default")
-    public List<WordListResponseDto> getAllSystemWordlists() {
-        return wordListService.getAllSystemWordList(RoleName.CONTENT_MANAGER);
+    public List<WordListResponseDto> getAllSystemWordlists(@RequestParam(name = "keyword", required = false)
+                                                           String keyword) {
+        if (keyword == null) {
+            keyword = "";
+        }
+        return wordListService.getAllSystemWordList(RoleName.CONTENT_MANAGER, keyword);
     }
 
     @Operation(summary = "Get all public WordLists except system's WordLists and current user's WordLists")

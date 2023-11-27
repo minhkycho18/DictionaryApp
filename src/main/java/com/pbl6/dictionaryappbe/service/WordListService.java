@@ -13,7 +13,7 @@ public interface WordListService {
 
     List<WordListResponseDto> getAllByUser();
 
-    List<WordListResponseDto> getAllSystemWordList(RoleName role);
+    List<WordListResponseDto> getAllSystemWordList(RoleName role, String keyword);
 
     List<WordListResponseDto> getAllPublicWordList();
 

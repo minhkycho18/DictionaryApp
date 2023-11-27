@@ -12,8 +12,9 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface SubcategoryService {
+    List<SubcategoryResponseDto> findByKeyWord(Long wordListId, String keyword);
 
-    List<SubcategoryResponseDto> getAllSubcategories(Long wordListId);
+    List<SubcategoryResponseDto> getAllSubcategories(Long wordListId, String keyword);
 
     List<SubcategoryDetail> getSubcategoryDetails(Long subcategories, List<VocabularySubcategoryRequestDto> vocabularies);
 

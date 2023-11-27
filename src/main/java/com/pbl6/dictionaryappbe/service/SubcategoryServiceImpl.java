@@ -12,6 +12,7 @@ import com.pbl6.dictionaryappbe.exception.RecordNotFoundException;
 import com.pbl6.dictionaryappbe.mapper.SubcategoryDetailMapper;
 import com.pbl6.dictionaryappbe.mapper.SubcategoryMapper;
 import com.pbl6.dictionaryappbe.persistence.Definition;
+import com.pbl6.dictionaryappbe.persistence.role.RoleName;
 import com.pbl6.dictionaryappbe.persistence.subcategory.Subcategory;
 import com.pbl6.dictionaryappbe.persistence.subcategory_detail.SubcategoryDetail;
 import com.pbl6.dictionaryappbe.persistence.subcategory_detail.SubcategoryDetailId;
@@ -58,7 +59,12 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
     private final Random rand = new Random();
 
     @Override
-    public List<SubcategoryResponseDto> getAllSubcategories(Long wordListId) {
+    public List<SubcategoryResponseDto> findByKeyWord(Long wordListId, String keyword) {
+        return null;
+    }
+
+    @Override
+    public List<SubcategoryResponseDto> getAllSubcategories(Long wordListId, String keyword) {
         User user = AuthenticationUtils.getUserFromSecurityContext();
         WordList wordList = wordListRepository.findById(wordListId)
                 .orElseThrow(() -> new RecordNotFoundException("WordList not found with ID: " + wordListId));
@@ -68,7 +74,10 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
             throw new AccessDeniedException("You do not have permission to access this WordList");
         }
         List<Subcategory> subcategories = subcategoryRepository.findAllByWordList(wordList);
-        subcategories.sort(Comparator.comparing(Subcategory::getTitle));
+        subcategories = subcategories.stream()
+                .filter(subcategory -> subcategory.getTitle().toLowerCase().startsWith(keyword.toLowerCase()))
+                .sorted(Comparator.comparing(Subcategory::getTitle, String.CASE_INSENSITIVE_ORDER))
+                .toList();
         return MapperUtils.toTargetList(subcategoryMapper::toSubcategoryResponseDto, subcategories);
     }
 
@@ -279,8 +288,11 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
     @Override
     public Subcategory getOwnedSubcategory(Long wordListId, Long subcategoryId) {
         User user = AuthenticationUtils.getUserFromSecurityContext();
-        WordList wordList = wordListRepository.findByUserAndWordListId(user, wordListId)
-                .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"));
+        WordList wordList = (user.getRole().getName().equals(RoleName.LEARNER))
+                ? wordListRepository.findByUserAndWordListId(user, wordListId)
+                .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"))
+                : wordListRepository.findById(wordListId)
+                .orElseThrow(() -> new EntityNotFoundException("You do not have permission to access this WordList"));
         return subcategoryRepository.findBySubcategoryIdAndWordList(subcategoryId, wordList)
                 .orElseThrow(() -> new EntityNotFoundException("Subcategory not found with ID:" + subcategoryId));
     }

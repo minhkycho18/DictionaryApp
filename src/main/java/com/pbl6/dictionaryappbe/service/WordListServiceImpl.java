@@ -16,6 +16,7 @@ import com.pbl6.dictionaryappbe.repository.SubcategoryRepository;
 import com.pbl6.dictionaryappbe.repository.WordListRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
 import com.pbl6.dictionaryappbe.utils.MapperUtils;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -56,9 +57,12 @@ public class WordListServiceImpl implements WordListService {
     }
 
     @Override
-    public List<WordListResponseDto> getAllSystemWordList(RoleName role) {
+    public List<WordListResponseDto> getAllSystemWordList(RoleName role, String keyword) {
         List<WordList> wordLists = wordListRepository.findAllByUserRole(roleRepository.findByName(RoleName.CONTENT_MANAGER));
-        wordLists.sort(Comparator.comparing(WordList::getTitle));
+        wordLists = wordLists.stream()
+                .filter(wordList -> wordList.getTitle().toLowerCase().startsWith(keyword.toLowerCase()))
+                .sorted(Comparator.comparing(WordList::getTitle, String.CASE_INSENSITIVE_ORDER))
+                .toList();
         return MapperUtils.toTargetList(wordListMapper::toWordListDto, wordLists);
     }
 
@@ -150,20 +154,26 @@ public class WordListServiceImpl implements WordListService {
 
     @Override
     @Transactional
-    public void deleteWordList(Long id) {
-        WordList wordList = getOwnedWordList(id);
+    public void deleteWordList(Long wordListId) {
+        User user = AuthenticationUtils.getUserFromSecurityContext();
+        WordList wordList = (user != null && user.getRole().getName().equals(RoleName.LEARNER))
+                ? getOwnedWordList(wordListId)
+                : wordListRepository.findById(wordListId).orElse(null);
         List<Long> subcategories = subcategoryRepository.findAllByWordList(wordList).stream()
                 .map(Subcategory::getSubcategoryId)
                 .toList();
-        subcategoryService.deleteSubcategories(id, subcategories);
+        subcategoryService.deleteSubcategories(wordListId, subcategories);
         wordListRepository.delete(wordList);
     }
 
     @Override
-    public WordList getOwnedWordList(Long id) {
+    public WordList getOwnedWordList(Long wordListId) {
         User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
-        return wordListRepository.findByUserAndWordListId(user, id)
-                .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"));
+        return (user.getRole().getName().equals(RoleName.LEARNER))
+                ? wordListRepository.findByUserAndWordListId(user, wordListId)
+                .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"))
+                : wordListRepository.findById(wordListId)
+                .orElseThrow(() -> new EntityNotFoundException("You do not have permission to access this WordList"));
     }
 
     @Override
