@@ -365,6 +365,7 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
                 currentFlashcard.setQuestion(definition.getWordDesc());
                 currentFlashcard.setResult(true);
             }
+            currentFlashcard.setAnswer(definition.getWordDesc());
         }
         return flashcardQuestionDtos;
     }

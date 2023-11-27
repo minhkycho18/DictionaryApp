@@ -6,6 +6,7 @@ import lombok.*;
 @Data
 public class FlashcardQuestionDto extends VocabularyQuestionDto{
     private String question;
+    private String answer;
     private Boolean result;
 
     public FlashcardQuestionDto(VocabularyQuestionDto vocabularyQuestionDto) {
