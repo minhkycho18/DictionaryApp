@@ -1,17 +1,20 @@
 import { Breadcrumb, FloatButton, Image, Layout, Space, theme } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import categoryBack from "../../assets/images/category-back.png";
 import CustomSider from "../../components/sider/CustomSider";
+import Authenticate from "../../guards/Auth/Authenticate";
 import changeTitle from "../../helpers/changeTitle";
 import getFullPath from "../../helpers/getPath";
+import { getUserProfile } from "../../stores/user/userThunk";
 import "./dashboard.scss";
-import Authenticate from "../../guards/Auth/Authenticate";
-import categoryBack from "../../assets/images/category-back.png";
 const { Header, Content } = Layout;
 const Dashboard = () => {
   const { pathname } = useLocation();
   changeTitle(pathname);
   const path = getFullPath(pathname);
+  const dispatch = useDispatch();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -36,6 +39,9 @@ const Dashboard = () => {
       };
     }
   });
+  useEffect(() => {
+    dispatch(getUserProfile());
+  }, [dispatch]);
   return (
     <Authenticate>
       <Layout style={{ position: "relative" }}>

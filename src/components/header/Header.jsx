@@ -79,7 +79,7 @@ const Header = () => {
         <Image src={logo} preview={false} width={48} loading="lazy"></Image>
         {navItems}
       </Space>
-      {isLogin ? <Avt /> : <SignInBtn />}
+      {isLogin ? <Avt profile={profile} /> : <SignInBtn />}
     </Space>
   );
 };
