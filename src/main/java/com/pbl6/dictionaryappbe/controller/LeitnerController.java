@@ -1,10 +1,6 @@
 package com.pbl6.dictionaryappbe.controller;
 
-import com.pbl6.dictionaryappbe.dto.leitner.LeitnerBoxDto;
-import com.pbl6.dictionaryappbe.dto.leitner.LevelLeitnerModificationRequestDto;
-import com.pbl6.dictionaryappbe.dto.leitner.StatusLevelDto;
-import com.pbl6.dictionaryappbe.dto.leitner.VocabLeitnerDetailDto;
-import com.pbl6.dictionaryappbe.dto.leitner.VocabLeitnerRequestDto;
+import com.pbl6.dictionaryappbe.dto.leitner.*;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularyLeitnerDetailDto;
 import com.pbl6.dictionaryappbe.service.LeitnerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -90,5 +86,17 @@ public class LeitnerController {
     ) {
         leitnerService.modifyStatusLevelVocabLetiner(leitnerRequestDtos, statusLevel);
         return new ResponseEntity<>(statusLevel.toString() + " level vocabulary successfully", HttpStatus.ACCEPTED);
+    }
+
+
+    @GetMapping("/levels/{level}/game")
+    @Operation(summary = "Get leitner game", security = {@SecurityRequirement(name = "bearer-key")})
+    public List<LeitnerVocabCardGame> getLeitnerGame(
+            @PathVariable("level")
+            @Min(value = 1, message = "Minimum game level is 1")
+            @Max(value = 7, message = "Maximum game level is 7")
+            int level
+    ) {
+        return leitnerService.getLeitnerGameByLevel(level);
     }
 }

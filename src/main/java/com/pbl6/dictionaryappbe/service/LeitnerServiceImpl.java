@@ -1,10 +1,6 @@
 package com.pbl6.dictionaryappbe.service;
 
-import com.pbl6.dictionaryappbe.dto.leitner.LeitnerBoxDto;
-import com.pbl6.dictionaryappbe.dto.leitner.LevelLeitnerModificationRequestDto;
-import com.pbl6.dictionaryappbe.dto.leitner.StatusLevelDto;
-import com.pbl6.dictionaryappbe.dto.leitner.VocabLeitnerDetailDto;
-import com.pbl6.dictionaryappbe.dto.leitner.VocabLeitnerRequestDto;
+import com.pbl6.dictionaryappbe.dto.leitner.*;
 import com.pbl6.dictionaryappbe.dto.definition.DefinitionLeitnerDetailDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularyLeitnerDetailDto;
 import com.pbl6.dictionaryappbe.exception.DuplicateDataException;
@@ -34,6 +30,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -47,6 +44,8 @@ public class LeitnerServiceImpl implements LeitnerService {
     private final LevelLeitnerRepository levelLeitnerRepository;
     private final VocabularyRepository vocabularyRepository;
     private final LeitnerMapper leitnerMapper;
+
+    private final Random rand = new Random();
 
     @Override
     public VocabLeitnerDetailDto getInfoVocabLeitner(VocabLeitnerRequestDto leitnerRequestDto) {
@@ -175,5 +174,22 @@ public class LeitnerServiceImpl implements LeitnerService {
             );
         });
         return MapperUtils.toTargetList(leitnerMapper::levelLeitnerToLeitnerBoxDto, levelLeitners);
+    }
+
+    @Override
+    public List<LeitnerVocabCardGame> getLeitnerGameByLevel(Integer level) {
+        User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
+        List<LeitnerVocabCardGame> cardGameList = leitnerRepository.findVocabLeitnerGameByLevel(level, user.getUserId());
+
+        cardGameList.forEach(leitnerVocabCardGame -> {
+            // set random percentage result
+            if(rand.nextBoolean()) {
+                leitnerVocabCardGame.setQuestion(leitnerVocabCardGame.getAnswer());
+            }
+            String currentQuestion = leitnerVocabCardGame.getQuestion();
+            String currentAnswer = leitnerVocabCardGame.getAnswer();
+            leitnerVocabCardGame.setResult(currentQuestion.equals(currentAnswer));
+        });
+        return cardGameList;
     }
 }
