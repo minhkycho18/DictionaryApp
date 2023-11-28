@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -18,6 +18,7 @@ import { getWordListByWordlistId } from "~/api/WordList";
 import ItemCardFlashcard from "~/components/Game/CardFlashcard/ItemCardFlashcard";
 import { getGameFromSub, updateStatusGame } from "~/api/Game";
 import ResultGame from "~/components/Game/ResultGame";
+
 export default function FlashcardScreen(props) {
   const [listAnswer, setListAnswer] = useState([]);
   const [data, setData] = useState([]);
@@ -168,6 +169,7 @@ export default function FlashcardScreen(props) {
                   <ItemCardFlashcard
                     onNextSlider={(vocal) => handleNextSlide(vocal)}
                     vocal={item}
+                    totalQuestion={data.length}
                   />
                 </View>
               )}

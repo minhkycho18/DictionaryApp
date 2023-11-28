@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext, useEffect } from "react";
 import { Text, TouchableOpacity, Image } from "react-native";
 import { View } from "react-native";
 import FlipCard from "react-native-flip-card";
@@ -8,13 +8,14 @@ import { colors } from "~/constants/theme";
 import { TextInput } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-
+import { AuthContext } from "~/context/AuthContext";
 export default function ItemCardSpelling(
-  { onNextSlider, vocal, onUpdateResult },
+  { onNextSlider, vocal, onUpdateResult, numberTotal },
   props
 ) {
+  const { setlistSpellingError } = useContext(AuthContext);
   const [input, setInput] = useState("");
-  const [question, setQuestion] = useState(vocal.word);
+  const [question, setQuestion] = useState(vocal.word.toLowerCase());
   const [answer, setAnswer] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [userInput, setUserInput] = useState(Array(question.length).fill(""));
@@ -52,7 +53,7 @@ export default function ItemCardSpelling(
       inputRefs.current[index - 1].focus();
     }
   };
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setIsConfirm(!isConfirm);
     confirmRef.current.setNativeProps({
       style: Styles.disable,
@@ -67,6 +68,14 @@ export default function ItemCardSpelling(
           answer: true,
         });
       } else {
+        await setlistSpellingError((pre) => [
+          ...pre,
+          {
+            answer: question,
+            question: vocal.wordDesc,
+            choose: answer,
+          },
+        ]);
         onUpdateResult({
           vocal: { vocabId: vocal.vocabId, defId: vocal.defId },
           answer: false,
@@ -81,6 +90,14 @@ export default function ItemCardSpelling(
           answer: true,
         });
       } else {
+        await setlistSpellingError((pre) => [
+          ...pre,
+          {
+            answer: question,
+            question: vocal.wordDesc,
+            choose: answer,
+          },
+        ]);
         onUpdateResult({
           vocal: { vocabId: vocal.vocabId, defId: vocal.defId },
           answer: false,

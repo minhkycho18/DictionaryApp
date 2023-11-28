@@ -51,7 +51,7 @@ export const Styles = StyleSheet.create({
         // justifyContent: 'center',
         width: '100%',
         // backgroundColor: 'yellow',
-        marginTop: '28%',
+        marginTop: '22%',
     },
     word: {
         fontSize: 32,

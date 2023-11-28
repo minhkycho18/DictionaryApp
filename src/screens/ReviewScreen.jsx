@@ -20,8 +20,13 @@ import FinishReview from "~/components/Game/FinishReview";
 import { AuthContext } from "~/context/AuthContext";
 
 export default function ReviewScreen(props) {
-  const { listReview, setlistReview, updateListReview } =
-    useContext(AuthContext);
+  const {
+    listReview,
+    setlistReview,
+    updateListReview,
+    setlistSpellingError,
+    setlistFlashCardError,
+  } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [count, setCount] = useState(0);
   const [screenWidth, setScreenWidth] = useState(
@@ -45,6 +50,8 @@ export default function ReviewScreen(props) {
   };
   useEffect(() => {
     setlistReview([]);
+    setlistFlashCardError([]);
+    setlistSpellingError([]);
     getGame(
       props.route.params.wordListId,
       props.route.params.subcategoryId,
@@ -54,6 +61,8 @@ export default function ReviewScreen(props) {
   useFocusEffect(
     React.useCallback(() => {
       setlistReview([]);
+      setlistFlashCardError([]);
+      setlistSpellingError([]);
     }, [])
   );
   const handleScroll = (index) => {
