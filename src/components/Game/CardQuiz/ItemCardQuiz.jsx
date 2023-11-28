@@ -48,7 +48,7 @@ export default function ItemCardQuiz({ onNextSlider, vocal, onUpdateResult }) {
     // console.log('\n\n 1 answer true  : ',Ans);
 
     // console.log('\nYou have choiced answer : ',selectedAnswer);
-    console.log(`Answer :: ${selectedAnswer}   Result :: ${Ans.text}`);
+    // console.log(`Answer :: ${selectedAnswer}   Result :: ${Ans.text}`);
     if (selectedAnswer === Ans.text) {
       onNextSlider({
         vocal: { vocabId: vocal.vocabId, defId: vocal.defId },
@@ -56,24 +56,12 @@ export default function ItemCardQuiz({ onNextSlider, vocal, onUpdateResult }) {
       });
     } else {
       onNextSlider({
+        vocal: { answer:Ans.text, question: vocal.question, choose: selectedAnswer  },
         answer: false,
       });
     }
 
   }
-  const hanleClickAnswer = (answer) => {
-    console.log(`Answer :: ${answer}   Result :: ${vocal.result}`);
-    if (answer === vocal.result) {
-      onNextSlider({
-        vocal: { vocabId: vocal.vocabId, defId: vocal.defId },
-        answer: true,
-      });
-    } else {
-      onNextSlider({
-        answer: false,
-      });
-    }
-  };
   useEffect(() => {
     // console.log('T: \n\n',answers);
   }, []);
