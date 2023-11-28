@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class LeitnerVocabCardGame {
     private Long vocabId;
     private Long defId;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime lastLearning;
     private Integer level;
     private String question;
