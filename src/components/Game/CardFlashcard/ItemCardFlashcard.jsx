@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Text, TouchableOpacity, Image } from "react-native";
 import { View } from "react-native";
 import FlipCard from "react-native-flip-card";
@@ -8,7 +8,13 @@ import { colors, incorrect_correct_back } from "~/constants/theme";
 import { SvgXml } from "react-native-svg";
 import { Audio } from "expo-av";
 import { GetColor } from "~/helper";
-export default function ItemCardFlashcard({ onNextSlider, vocal }) {
+import { AuthContext } from "~/context/AuthContext";
+export default function ItemCardFlashcard({
+  onNextSlider,
+  vocal,
+  totalQuestion,
+}) {
+  const { setlistFlashCardError } = useContext(AuthContext);
   const [isFlip, setIsFlip] = useState(false);
   const playSound = async (audio) => {
     const sound = new Audio.Sound();
@@ -25,6 +31,16 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
         answer: true,
       });
     } else {
+      setlistFlashCardError((pre) => [
+        ...pre,
+        {
+          result: vocal.result,
+          word: vocal.word,
+          question: vocal.question,
+          answer: vocal.answer,
+          choose: answer,
+        },
+      ]);
       onNextSlider({
         answer: false,
       });
@@ -70,7 +86,13 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
             )}
           </TouchableOpacity>
           <View style={Styles.content}>
-            <Text style={{ ...Styles.word, fontFamily: "Quicksand-Bold" }}>
+            <Text
+              style={{
+                ...Styles.word,
+                fontFamily: "Quicksand-Bold",
+                textAlign: "center",
+              }}
+            >
               {vocal?.word}
             </Text>
             <View style={Styles.viewPos}>
@@ -113,7 +135,7 @@ export default function ItemCardFlashcard({ onNextSlider, vocal }) {
         </View>
         {/* Back Side */}
         <View style={Styles.cardBack}>
-          <View style={{ ...Styles.content, marginTop: "63%" }}>
+          <View style={{ ...Styles.content, marginTop: "56%" }}>
             <View style={Styles.viewExample}>
               <View style={Styles.example}>
                 <Text

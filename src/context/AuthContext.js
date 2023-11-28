@@ -10,6 +10,8 @@ export const AuthProvider = ({ children }) => {
     const [userToken, setUserToken] = useState("");
     const [splashLoading, setSplashLoading] = useState(false);
     const [listReview, setlistReview] = useState([]);
+    const [listSpellingError, setlistSpellingError] = useState([]);
+    const [listFlashCardError, setlistFlashCardError] = useState([]);
     const [isLogin, setIsLogin] = useState(false)
     const login = async ({ email, password }) => {
         setIsLoading(true);
@@ -92,6 +94,7 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+
     useEffect(() => {
         isLoggedIn();
     }, []);
@@ -108,7 +111,11 @@ export const AuthProvider = ({ children }) => {
                 isLogin,
                 listReview,
                 setlistReview,
-                updateListReview
+                updateListReview,
+                listFlashCardError,
+                setlistFlashCardError,
+                listSpellingError,
+                setlistSpellingError
             }}>
             {children}
         </AuthContext.Provider>

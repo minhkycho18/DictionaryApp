@@ -57,7 +57,6 @@ function VocalDetail() {
   }, [isOpen]);
   const handlePresentModal = (data) => {
     if (!isLogin) {
-      console.log("error");
       showToast("Error", "Please login to add", "error");
     } else {
       setDataUpdate(data);
