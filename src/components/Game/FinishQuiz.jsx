@@ -32,47 +32,12 @@ export default function FinishQuiz(props) {
   const [selectedBtn, setSelectedBtn] = useState("quiz");
   const [checkChoice, setCheckChoice] = useState(true);
   const [quizResult, setQuizResult] = useState(props.route.params.quiz_result);
+  const [listData, setListData] = useState(props.route.params.quiz_result);
   const [numberQuestion, setNumberQuestion] = useState(
     props.route.params.quiz_number_question
   );
 
-  // console.log("test list receive: \n\n", quizResult)
   const navigation = useNavigation();
-  const data_test = [
-    {
-      id: "1",
-      result: "true",
-      word: "greedy",
-      question: "immoderately desirous of acquiring e.g. wealth",
-      choose: "false",
-    },
-    {
-      id: "2",
-      result: "false",
-      word: "precautionary",
-      question:
-        "lotion consisting of an astringent alcoholic solution containing an extract from the witch hazel plant",
-      answer: "taken in advance to protect against possible danger or failure",
-      choose: "true",
-    },
-    {
-      id: "1",
-      result: "true",
-      word: "witch hazel",
-      question:
-        "lotion consisting of an astringent alcoholic solution containing an extract from the witch hazel plant",
-      choose: "false",
-    },
-  ];
-
-  // useEffect(() => {
-  //   // getSubCategory(wl.id);
-  // }, [selectedBtn]);
-
-  const [loaded] = useFonts(configFont);
-  if (!loaded) {
-    return null;
-  }
 
   const handleRedirect = async () => {
     setlistSpellingError([]);
@@ -84,9 +49,23 @@ export default function FinishQuiz(props) {
   };
 
   const handleAnswerPress = (text) => {
+    if (text === "flashcard") {
+      setListData(listFlashCardError);
+    }
+    if (text === "spelling") {
+      setListData(listSpellingError);
+    }
+    if (text === "quiz") {
+      setListData(quizResult);
+    }
     setSelectedBtn(text);
     setCheckChoice(true);
   };
+
+  const [loaded] = useFonts(configFont);
+  if (!loaded) {
+    return null;
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.main}>
@@ -131,7 +110,8 @@ export default function FinishQuiz(props) {
                         },
                         {
                           ...styles.icon,
-                          borderColor: "#37CABE",
+                          borderColor:
+                            selectedBtn === "flashcard" ? "#37CABE" : "#ccc",
                         },
 
                         {
@@ -143,7 +123,10 @@ export default function FinishQuiz(props) {
                       <SvgXml
                         width="25"
                         height="25"
-                        xml={svgStudy("flashcard", "#37CABE")}
+                        xml={svgStudy(
+                          "flashcard",
+                          selectedBtn === "flashcard" ? "#37CABE" : "#ccc"
+                        )}
                       />
                     </View>
                   </View>
@@ -152,7 +135,10 @@ export default function FinishQuiz(props) {
                       marginLeft: 15,
                     }}
                   >
-                    <Text style={[styles.number]}>2 / 6</Text>
+                    <Text style={[styles.number]}>
+                      {numberQuestion - listFlashCardError.length} /{" "}
+                      {numberQuestion}
+                    </Text>
                     <Text numberOfLines={2} style={[styles.label_correct]}>
                       Correct answers
                     </Text>
@@ -179,7 +165,8 @@ export default function FinishQuiz(props) {
                         },
                         {
                           ...styles.icon,
-                          borderColor: "#B7ADFF",
+                          borderColor:
+                            selectedBtn === "spelling" ? "#B7ADFF" : "#ccc",
                         },
                         {
                           backgroundColor:
@@ -190,7 +177,10 @@ export default function FinishQuiz(props) {
                       <SvgXml
                         width="25"
                         height="25"
-                        xml={svgStudy("spelling", "#B7ADFF")}
+                        xml={svgStudy(
+                          "spelling",
+                          selectedBtn === "spelling" ? "#B7ADFF" : "#ccc"
+                        )}
                       />
                     </View>
                   </View>
@@ -199,7 +189,10 @@ export default function FinishQuiz(props) {
                       marginLeft: 15,
                     }}
                   >
-                    <Text style={[styles.number]}>2 / 6</Text>
+                    <Text style={[styles.number]}>
+                      {numberQuestion - listSpellingError.length} /{" "}
+                      {numberQuestion}
+                    </Text>
                     <Text numberOfLines={2} style={[styles.label_correct]}>
                       Correct answers
                     </Text>
@@ -226,7 +219,8 @@ export default function FinishQuiz(props) {
                         },
                         {
                           ...styles.icon,
-                          borderColor: "#0766AD",
+                          borderColor:
+                            selectedBtn === "quiz" ? "#0766AD" : "#ccc",
                         },
                         {
                           backgroundColor:
@@ -237,7 +231,10 @@ export default function FinishQuiz(props) {
                       <SvgXml
                         width="25"
                         height="25"
-                        xml={svgStudy("quiz", "#0766AD")}
+                        xml={svgStudy(
+                          "quiz",
+                          selectedBtn === "quiz" ? "#0766AD" : "#ccc"
+                        )}
                       />
                     </View>
                   </View>
@@ -269,16 +266,21 @@ export default function FinishQuiz(props) {
               </View>
             </View>
           </View>
-          {/* {listFlashCardError.map((item, index) => (
-            <ItemVocabOfFlashcardResult
-              key={index}
-              Vocab={item}
-              index={index + 1}
-            />
-          ))} */}
-          {listSpellingError.map((item, index) => (
-            <ItemVocabOfQuizResult key={index} Vocab={item} index={index + 1} />
-          ))}
+          {selectedBtn === "flashcard"
+            ? listData.map((item, index) => (
+                <ItemVocabOfFlashcardResult
+                  key={index}
+                  Vocab={item}
+                  index={index + 1}
+                />
+              ))
+            : listData.map((item, index) => (
+                <ItemVocabOfQuizResult
+                  key={index}
+                  Vocab={item}
+                  index={index + 1}
+                />
+              ))}
         </ScrollView>
       </View>
     </SafeAreaView>

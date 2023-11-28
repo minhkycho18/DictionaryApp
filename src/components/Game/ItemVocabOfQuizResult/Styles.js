@@ -16,7 +16,7 @@ export const Styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 1,
         marginBottom: 3,
-        alignItems:'center'
+        alignItems: 'center'
     },
     wrappered: {
         width: "99%",
@@ -45,7 +45,7 @@ export const Styles = StyleSheet.create({
         // backgroundColor: 'green'
     },
     word: {
-        color: "#60BB64",
+        color: "#56CD96",
         fontFamily: "Quicksand-Bold",
         fontSize: 18,
         letterSpacing: 0.2,
@@ -61,7 +61,7 @@ export const Styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 15,
+        marginBottom: 10,
         // borderStyle: 'solid',
         // borderBottomWidth: 1,
         // borderTopWidth: 1,

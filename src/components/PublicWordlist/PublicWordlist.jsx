@@ -20,6 +20,7 @@ export default function PublicWordlist() {
   const [tempWordlist, setTempWordlist] = useState([]);
   const [wordlists, setWordlists] = useState([]);
   const [isClear, setIsClear] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
   const getWordlistPublic = async () => {
     const list = await getPublic();
     setWordlists(list);
@@ -39,6 +40,7 @@ export default function PublicWordlist() {
   }, []);
 
   const handleTextChange = (text) => {
+    setIsSearch(true);
     setIsClear(true);
     setSearch(text);
   };
@@ -143,23 +145,25 @@ export default function PublicWordlist() {
           )}
         />
       ) : (
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text
+        isSearch && (
+          <View
             style={{
-              fontSize: 25,
-              fontFamily: "Quicksand-Bold",
-              color: colors.textTitle,
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            No have wordlist
-          </Text>
-        </View>
+            <Text
+              style={{
+                fontSize: 25,
+                fontFamily: "Quicksand-Bold",
+                color: colors.textTitle,
+              }}
+            >
+              No have wordlist
+            </Text>
+          </View>
+        )
       )}
     </SafeAreaView>
   );
