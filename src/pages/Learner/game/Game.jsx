@@ -1,5 +1,5 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { Modal, Space, Spin } from "antd";
+import { Modal, Space, Spin, notification } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -37,6 +37,8 @@ const Game = (props) => {
   const [modal, modalCtx] = Modal.useModal();
   const [correctAnswerFlashcard, setCorrectAnswerFlashcard] = useState([]);
   const [incorrectAnswer, setIncorrectAnswer] = useState([]);
+  const [api, contextHolderMsg] = notification.useNotification();
+
   useEffect(() => {
     const gameTypeFromLocalStorage = localStorage.getItem("gameType");
     if (!gameTypeFromLocalStorage) {
@@ -109,16 +111,22 @@ const Game = (props) => {
         wordListId: wlId,
         subcategoryId: subId,
         gameType: type.toLowerCase(),
-        values: correctAnswerFlashcard.map((item) => ({
-          vocabId: item.vocabId,
-          defId: item.defId,
-        })),
+        values:
+          type.toLowerCase() === "review"
+            ? result.map((item) => ({
+                vocabId: item.vocabId,
+                defId: item.defId,
+              }))
+            : correctAnswerFlashcard.map((item) => ({
+                vocabId: item.vocabId,
+                defId: item.defId,
+              })),
       };
       try {
-        const rs = await updateVocabsByGameType(params);
-        console.log(rs);
+        await updateVocabsByGameType(params);
+        // openNotificationWithIcon("success", rs);
       } catch (error) {
-        console.log(error);
+        openNotificationWithIcon("error", "Fail to update game's status!");
       }
     }
     if (success) {
@@ -136,7 +144,25 @@ const Game = (props) => {
   const handleIncorrectAnswer = (item) => {
     setIncorrectAnswer([...incorrectAnswer, item]);
   };
+  const openNotificationWithIcon = (type, msg) => {
+    switch (type) {
+      case "success":
+        api[type]({
+          message: "Success",
+          description: msg,
+        });
+        break;
+      case "error":
+        api[type]({
+          message: "Error",
+          description: msg,
+        });
+        break;
 
+      default:
+        break;
+    }
+  };
   const responsive = {
     desktop: {
       breakpoint: {
@@ -343,6 +369,7 @@ const Game = (props) => {
   };
   return (
     <Space className="game game-wrap" direction="vertical">
+      {contextHolderMsg}
       {loading ? (
         <Space
           style={{
@@ -368,7 +395,9 @@ const Game = (props) => {
       )}
 
       {modalCtx}
-      <GameMenu onChangeLesson={handleChangeLesson} lesson={type} />
+      {type !== OVERVIEW && (
+        <GameMenu onChangeLesson={handleChangeLesson} lesson={type} />
+      )}
     </Space>
   );
 };

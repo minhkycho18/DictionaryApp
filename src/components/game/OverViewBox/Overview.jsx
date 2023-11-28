@@ -47,11 +47,11 @@ const Overview = (props) => {
           </Space>
         </Space>
         <Space className="overview__results">
-          <Space className="overview__results__item">
-            <Space
-              className="overview__results__image rotate-scale-up-diag-2"
-              onClick={() => handleOpenIncorrect("flashcard")}
-            >
+          <Space
+            className="overview__results__item"
+            onClick={() => handleOpenIncorrect("flashcard")}
+          >
+            <Space className="overview__results__image rotate-scale-up-diag-2">
               <Image src={flashcard} preview={false} width={32} />
             </Space>
 
@@ -65,11 +65,11 @@ const Overview = (props) => {
             </Space>
           </Space>
 
-          <Space className="overview__results__item ">
-            <Space
-              className="overview__results__image rotate-scale-up-diag-2"
-              onClick={() => handleOpenIncorrect("spelling")}
-            >
+          <Space
+            className="overview__results__item "
+            onClick={() => handleOpenIncorrect("spelling")}
+          >
+            <Space className="overview__results__image rotate-scale-up-diag-2">
               <Image src={spelling} preview={false} width={32} />
             </Space>
 
@@ -82,11 +82,11 @@ const Overview = (props) => {
               </Space>
             </Space>
           </Space>
-          <Space className="overview__results__item">
-            <Space
-              className="overview__results__image rotate-scale-up-diag-2"
-              onClick={() => handleOpenIncorrect("quiz")}
-            >
+          <Space
+            className="overview__results__item"
+            onClick={() => handleOpenIncorrect("quiz")}
+          >
+            <Space className="overview__results__image rotate-scale-up-diag-2">
               <Image src={quiz} preview={false} width={32} />
             </Space>
 
@@ -102,7 +102,8 @@ const Overview = (props) => {
         </Space>
         <Space className="overview__results">
           <Space className="overview__link">
-            Click tag to see your result.
+            {/* Click tag to see your result.
+             */}{" "}
             {/* <RightOutlined /> */}
           </Space>
           <Space

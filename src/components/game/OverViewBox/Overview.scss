@@ -66,12 +66,16 @@
     cursor: pointer;
   }
   &__link {
+    margin-top: 8px;
+    justify-content: center;
+    align-items: center;
     font-weight: 600;
-    color: $text-primary-color;
-    // cursor: pointer;
-    // &:hover {
-    //   color: $text-primary-color;
-    // }
+    font-size: 14px;
+    color: $border-text-phrase;
+    cursor: pointer;
+    &:hover {
+      color: $text-primary-color;
+    }
   }
   &__incorrect {
     width: 50vw;
