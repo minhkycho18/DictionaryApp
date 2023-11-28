@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form, Input, Space, Table } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
 import { DeleteTwoTone } from "@ant-design/icons";
 import "./WordListDataTable.scss";
+import DeleteModal from "../../../pages/Manager/WordList/CustomModals/DeleteModal";
 const SubcategoryDataTable = ({
   dataSource,
   onCLickItem,
@@ -13,7 +14,9 @@ const SubcategoryDataTable = ({
   const [form] = Form.useForm();
   const [data, setData] = useState(dataSource);
   const [editingRow, setEditingRow] = useState(null);
+  const [currentSub, setCurrentSub] = useState({});
   const [edittingValues, setEditingValues] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     const newData = dataSource.map((item) => {
@@ -42,6 +45,11 @@ const SubcategoryDataTable = ({
   const cancel = () => {
     setEditingRow(null);
     setEditingValues("");
+  };
+
+  const handleShowDeleteModal = (record) => {
+    setCurrentSub(record);
+    setIsDeleteModalOpen(!isDeleteModalOpen);
   };
 
   const columns = [
@@ -121,7 +129,9 @@ const SubcategoryDataTable = ({
               <DeleteTwoTone
                 twoToneColor="#EB1B36"
                 className="function-box__delete"
-                onClick={() => onDelete(record)}
+                onClick={() => {
+                  handleShowDeleteModal(record);
+                }}
               />
             </Space>
           ) : (
@@ -155,18 +165,26 @@ const SubcategoryDataTable = ({
   };
 
   return (
-    <Form form={form} onFinish={onFinish}>
-      <Table
-        bordered
-        dataSource={data}
-        columns={columns}
-        onRow={setOnRowProps}
-        pagination={{
-          onChange: cancel,
-        }}
-        rowClassName={"subcategoryRow"}
+    <>
+      <Form form={form} onFinish={onFinish}>
+        <Table
+          bordered
+          dataSource={data}
+          columns={columns}
+          onRow={setOnRowProps}
+          pagination={{
+            onChange: cancel,
+          }}
+          rowClassName={"subcategoryRow"}
+        />
+      </Form>
+      <DeleteModal
+        title={`"${currentSub?.title}"`}
+        isOpen={isDeleteModalOpen}
+        handleDelete={() => onDelete(currentSub)}
+        handleShow={() => setIsDeleteModalOpen(!isDeleteModalOpen)}
       />
-    </Form>
+    </>
   );
 };
 

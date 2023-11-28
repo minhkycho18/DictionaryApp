@@ -10,7 +10,7 @@ import {
   Tabs,
   message,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Subcategory from "../../../components/Category/Subcategory";
@@ -36,7 +36,7 @@ function WordListsPage() {
   //==========================================================================
 
   useEffect(() => {
-    dispatch(getSubcategory(id));
+    dispatch(getSubcategory({ wordlistId: id }));
   }, [dispatch, id]);
   //==========================================================================
 

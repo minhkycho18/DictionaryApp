@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./WordListManagement.scss";
 import { Button, Col, Input, Row, Select, Space, message } from "antd";
 import {
@@ -14,7 +14,6 @@ import {
   getWordListsDefault,
 } from "../../../stores/word-lists/wordLists-thunk";
 import {
-  addWordToSubcategory,
   createSubcategory,
   getAllVocabInSubcategory,
   getSubcategory,
@@ -32,6 +31,7 @@ import {
   getAllVocabInSub,
   deleteVocabsInSub,
   deleteSub,
+  addWordToSub,
 } from "../../../api/Subcategory/subcategory.api";
 import { deleteWordLists } from "../../../api/WordLists/word-lists.api";
 import VocabularyDetailModal from "../../../components/Modal/VocabularyDetailModal";
@@ -70,6 +70,19 @@ const WordListManagement = () => {
       responsive: true,
     });
   }, [currentPage, totalElements]);
+
+  const refreshDataVocabInSub = async () => {
+    const refresh = {
+      wordListId: selectedWL.id,
+      SubId: pagination.subId,
+      offset: 1,
+      limit: pagination.total + 1,
+    };
+    try {
+      const response = await getAllVocabInSub(refresh);
+      setCurrentVocabInSub(response.content);
+    } catch (error) {}
+  };
 
   const onCLickItem = async (record) => {
     if (currentDataType === WORDLIST_DATA_TYPE) {
@@ -147,19 +160,16 @@ const WordListManagement = () => {
       defId: param.definition.defId,
     };
     try {
-      dispatch(addWordToSubcategory(params));
-      setPaginations({
-        ...pagination,
-        total: pagination.total + 1,
-      });
-      const refresh = {
+      await addWordToSub(params);
+      refreshDataVocabInSub();
+      const param = {
         wordListId: selectedWL.id,
         SubId: pagination.subId,
-        offset: 1,
-        limit: pagination.total,
+        offset: (pagination.current - 1) * 10,
+        limit: 10,
       };
-      const response = await getAllVocabInSub(refresh);
-      setCurrentVocabInSub(response.content);
+      await dispatch(getAllVocabInSubcategory(param));
+      setPaginations({ ...pagination, total: pagination.total + 1 });
     } catch (error) {
       if (error.response && error.response.status === 400) {
         console.log("API returned status 400:");
@@ -170,6 +180,7 @@ const WordListManagement = () => {
   };
 
   const handleDeleteVocab = async (items) => {
+    console.log(items.currentPage, ">>>>", pagination.current);
     const param = {
       wordListId: selectedWL.id,
       SubId: pagination.subId,
@@ -182,7 +193,14 @@ const WordListManagement = () => {
       offset: items.currentPage,
       limit: 10,
     };
-    dispatch(getAllVocabInSubcategory(params));
+
+    await dispatch(getAllVocabInSubcategory(params));
+    setPaginations({
+      ...pagination,
+      currentPage: Math.ceil(items.currentPage / 10) - 1,
+      total: pagination.total - 1,
+    });
+    refreshDataVocabInSub();
   };
 
   const handleSearch = async (value) => {
@@ -269,18 +287,22 @@ const WordListManagement = () => {
             span={8}
             style={{ display: "flex", justifyContent: "center" }}
           >
-            <Input
-              className="search_vocab"
-              placeholder={`Search ${
-                currentDataType === WORDLIST_DATA_TYPE ? "WordList" : ""
-              }${
-                currentDataType === SUBCATEGORY_DATA_TYPE ? "Subcategory" : ""
-              }${currentDataType === VOCABULARY_DATA_TYPE ? "Vocabulary" : ""}`}
-              prefix={
-                <SearchOutlined style={{ color: "#bbb", padding: "0px 4px" }} />
-              }
-              onChange={(e) => handleSearch(e.target.value)}
-            ></Input>
+            {currentDataType !== VOCABULARY_DATA_TYPE && (
+              <Input
+                className="search_vocab"
+                placeholder={`Search ${
+                  currentDataType === WORDLIST_DATA_TYPE
+                    ? "WordList"
+                    : "Subcategory"
+                }`}
+                prefix={
+                  <SearchOutlined
+                    style={{ color: "#bbb", padding: "0px 4px" }}
+                  />
+                }
+                onChange={(e) => handleSearch(e.target.value)}
+              ></Input>
+            )}
           </Col>
         </Row>
         <Row offset={1} className={"box_data_item"}>

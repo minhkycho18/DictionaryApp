@@ -1,8 +1,9 @@
 import { Space, Table } from "antd";
-import React, { useState } from "react";
+import { useState } from "react";
 import "./WordListDataTable.scss";
 import { DeleteTwoTone } from "@ant-design/icons";
 import EditWordListModal from "../../../pages/Manager/WordList/CustomModals/EditWordListModal";
+import DeleteModal from "../../../pages/Manager/WordList/CustomModals/DeleteModal";
 
 const WordListDataTable = ({
   dataSource,
@@ -13,11 +14,7 @@ const WordListDataTable = ({
   handleDelete,
 }) => {
   const [selectedWordlist, setSelectedWordlist] = useState(null);
-
-  const onClickDelete = () => {
-    handleDelete(selectedWordlist.id);
-  };
-
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const columns = [
     {
       title: "Title",
@@ -27,13 +24,14 @@ const WordListDataTable = ({
       sorter: (a, b) => a.title.localeCompare(b.title),
       sortDirections: ["descend"],
       ellipsis: true,
+      width: "20%",
     },
     {
       title: "Description",
       dataIndex: "listDesc",
       key: "listDesc",
-      align: "center",
       ellipsis: true,
+      width: "20%",
     },
     {
       title: "Created by",
@@ -69,6 +67,7 @@ const WordListDataTable = ({
       dataIndex: "function",
       align: "center",
       className: "function-box",
+      width: "10%",
       onCell: () => {
         return {
           onClick: (e) => {
@@ -85,12 +84,16 @@ const WordListDataTable = ({
           <DeleteTwoTone
             twoToneColor="#EB1B36"
             className="function-box__delete"
-            onClick={onClickDelete}
+            onClick={handleShowDeleteModal}
           />
         </Space>
       ),
     },
   ];
+
+  const handleShowDeleteModal = () => {
+    setIsDeleteModalOpen(!isDeleteModalOpen);
+  };
 
   const setOnRowProps = (record) => {
     return {
@@ -104,15 +107,23 @@ const WordListDataTable = ({
   };
 
   return (
-    <Table
-      loading={loading}
-      bordered
-      columns={columns}
-      size={"small"}
-      dataSource={dataSource}
-      onChange={handleTableChange}
-      onRow={setOnRowProps}
-    />
+    <>
+      <Table
+        loading={loading}
+        bordered
+        columns={columns}
+        size={"small"}
+        dataSource={dataSource}
+        onChange={handleTableChange}
+        onRow={setOnRowProps}
+      />
+      <DeleteModal
+        title={`"${selectedWordlist?.title}"`}
+        isOpen={isDeleteModalOpen}
+        handleDelete={() => handleDelete(selectedWordlist.id)}
+        handleShow={() => setIsDeleteModalOpen(!isDeleteModalOpen)}
+      />
+    </>
   );
 };
 

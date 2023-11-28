@@ -3,7 +3,7 @@ import { Form, Input } from "antd";
 import { Modal } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
 
-const EditWordListModal = ({ type, editModalInfo, handleEditWordList }) => {
+const EditWordListModal = ({ editModalInfo, handleEditWordList }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
 
@@ -16,14 +16,6 @@ const EditWordListModal = ({ type, editModalInfo, handleEditWordList }) => {
     }
   }, [editModalInfo]);
 
-  const layout = {
-    labelCol: {
-      span: 4,
-    },
-    wrapperCol: {
-      span: 32,
-    },
-  };
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -58,14 +50,16 @@ const EditWordListModal = ({ type, editModalInfo, handleEditWordList }) => {
       <EditTwoTone className="function-box__edit" onClick={showModal} />
       <Modal
         title="Edit WordList"
+        centered
         open={isModalOpen}
         onOk={handleOk}
         onReset={onReset}
         onCancel={handleCancel}
+        style={{ textAlign: "center" }}
       >
         <Form
-          {...layout}
           form={form}
+          layout="vertical"
           name="edit-wordlist-form"
           onFinish={onFinish}
           style={{
@@ -75,6 +69,9 @@ const EditWordListModal = ({ type, editModalInfo, handleEditWordList }) => {
           <Form.Item
             name="title"
             label="Title"
+            style={{
+              marginTop: "20px",
+            }}
             rules={[
               {
                 required: true,
@@ -86,6 +83,9 @@ const EditWordListModal = ({ type, editModalInfo, handleEditWordList }) => {
           <Form.Item
             name="listDesc"
             label="Description"
+            style={{
+              marginTop: "20px",
+            }}
             rules={[
               {
                 required: true,

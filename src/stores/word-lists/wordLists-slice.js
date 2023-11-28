@@ -6,7 +6,6 @@ import {
   getWLById,
   getWordListsDefault,
   getWordListsPublic,
-  searchWordList,
   updateWl,
 } from "./wordLists-thunk";
 
@@ -75,19 +74,6 @@ const wordListsSlice = createSlice({
         state.wordListsPublic = action.payload;
       })
       .addCase(getWordListsPublic.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.detail;
-      })
-      //==========================================================Search
-      .addCase(searchWordList.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(searchWordList.fulfilled, (state, action) => {
-        state.loading = false;
-        state.wordLists = action.payload;
-      })
-      .addCase(searchWordList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.detail;
       })

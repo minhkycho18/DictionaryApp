@@ -1,4 +1,4 @@
-import { Button, Card, Input, Modal } from "antd";
+import { Button, Modal } from "antd";
 import React, { useState } from "react";
 import DefaultWord from "../../../../components/Category/DefaultWord/DefaultWord";
 

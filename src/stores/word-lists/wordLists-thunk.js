@@ -7,7 +7,6 @@ import {
   getPublic,
   getWordListById,
   updateWordLists,
-  searchWordListByKeyword,
 } from "../../api/WordLists/word-lists.api";
 
 export const getAllWL = createAsyncThunk(
@@ -48,17 +47,6 @@ export const getWordListsPublic = createAsyncThunk(
   async (userData, thunkApi) => {
     try {
       const response = await getPublic();
-      return response;
-    } catch (error) {
-      throw thunkApi.rejectWithValue(error);
-    }
-  }
-);
-export const searchWordList = createAsyncThunk(
-  "wordLists/searchWordList",
-  async (keyword, thunkApi) => {
-    try {
-      const response = await searchWordListByKeyword(keyword);
       return response;
     } catch (error) {
       throw thunkApi.rejectWithValue(error);
