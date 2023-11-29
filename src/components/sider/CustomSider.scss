@@ -76,5 +76,11 @@
       font-size: 20px;
       margin: 0px 4px 0px 16px;
     }
+    &--signout {
+      color: $border-text-adjective;
+      &:hover {
+        color: #ff2723;
+      }
+    }
   }
 }

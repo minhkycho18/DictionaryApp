@@ -5,6 +5,7 @@ import profileSlice from "./user/userSlice";
 import wordListsSlice from "./word-lists/wordLists-slice";
 import subcategorySlice from "./subcategory/subcategorySlice";
 import gameSlice from "./game/gameSlice";
+import leitnerSlice from "./leitner/leitnerSlice";
 
 const loadGameFromLocalStorage = () => {
   try {
@@ -34,6 +35,7 @@ const store = configureStore({
     wordLists: wordListsSlice,
     subcategory: subcategorySlice,
     game: gameSlice,
+    leitner: leitnerSlice,
   },
   preloadedState: {
     game: loadGameFromLocalStorage(),

@@ -1,4 +1,4 @@
-import { Breadcrumb, FloatButton, Image, Layout, Space, theme } from "antd";
+import { Breadcrumb, Image, Layout, Space, theme } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Link, Outlet, useLocation } from "react-router-dom";
@@ -81,7 +81,6 @@ const Dashboard = () => {
             }}
           >
             <Outlet />
-            <FloatButton.BackTop visibilityHeight={0} />
           </Content>
         </Layout>
       </Layout>

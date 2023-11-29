@@ -23,7 +23,7 @@ import {
 } from "../../../stores/subcategory/subcategoryThunk";
 import "./WordListsPage.scss";
 function WordListsPage() {
-  let { id } = useParams();
+  const { id } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
   const { loading, subcategories } = useSelector((state) => state.subcategory);
   const [isOpen, setIsOpen] = useState(false);

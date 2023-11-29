@@ -14,12 +14,13 @@ import {
   Menu,
   Modal,
   Pagination,
+  Select,
   Space,
   Spin,
   Tooltip,
   message,
 } from "antd";
-import { debounce } from "lodash";
+import { debounce, upperFirst } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { FaGraduationCap } from "react-icons/fa6";
 import { useSelector } from "react-redux";
@@ -34,6 +35,7 @@ import CustomWord from "./CustomWord/CustomWord";
 import DefaultWord from "./DefaultWord/DefaultWord";
 import SubcategoryItem from "./SubItem/SubcategoryItem";
 import "./Subcategory.scss";
+import { getAllPos } from "../../api/Vocabulary/vocabulary.api";
 
 const Subcategory = (props) => {
   let { id } = useParams();
@@ -46,7 +48,10 @@ const Subcategory = (props) => {
   const [vocabsInSub, setVocabsInSub] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [page, setPage] = useState(1);
+  const [allPos, setAllPos] = useState([]);
   const [, ctxHolder] = message.useMessage();
+  //  setCurrentPos(value);
+  const [currentPos, setCurrentPos] = useState("All");
   const navigate = useNavigate();
   useEffect(() => {
     const params = {
@@ -63,7 +68,16 @@ const Subcategory = (props) => {
         console.log(error);
       }
     };
+    const _getAllPos = async () => {
+      try {
+        const result = await getAllPos();
+        setAllPos(["All", ...result]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     getAllVocab();
+    _getAllPos();
   }, [id, props.subcategory.amountOfWord, props.subcategory.subcategoryId]);
 
   const plainOptions = vocabsInSub;
@@ -84,6 +98,7 @@ const Subcategory = (props) => {
   const debounceInputKey = useRef(
     debounce((nextValue) => {
       setKeyword(nextValue);
+      setPage(1);
     }, 500)
   ).current;
 
@@ -91,7 +106,9 @@ const Subcategory = (props) => {
   const onConfirmDelete = () => {
     props?.onDel([props.subcategory.subcategoryId]);
   };
-
+  const onChangePosFilter = (value) => {
+    setCurrentPos(value);
+  };
   //==============================================================================================================
   const onCheckAllChange = (e) => {
     const checkAllItem = vocabsInSub.map((vocab) => ({
@@ -128,7 +145,17 @@ const Subcategory = (props) => {
   const endIndex = startIndex + itemsPerPage;
 
   const wordsToDisplay = filterVocab.slice(startIndex, endIndex);
-  const renderVocabInSub = wordsToDisplay.map((vocab, index) => (
+  // const filterVocabByPos = wordsToDisplay.filter((vocab) =>
+  //   vocab.pos.toLowerCase().startsWith(currentPos.toLowerCase())
+  // );
+  const filterByPos =
+    currentPos === "All"
+      ? wordsToDisplay
+      : wordsToDisplay.filter((vocab) =>
+          vocab.pos.toLowerCase().startsWith(currentPos.toLowerCase())
+        );
+
+  const renderVocabInSub = filterByPos.map((vocab, index) => (
     <SubcategoryItem
       key={index}
       vocab={vocab}
@@ -196,7 +223,7 @@ const Subcategory = (props) => {
         const newWords = generateResult.map(({ definitions, ...rest }) => rest);
         setVocabsInSub([...vocabsInSub, ...newWords]);
       } catch (error) {
-        message.error("Cannot add this word to subcategory!");
+        // message.error("Cannot add this word to subcategory!");
       }
     };
     addVocab();
@@ -341,24 +368,38 @@ const Subcategory = (props) => {
                 width: "100%",
               }}
             >
-              <Space className="delete-btn">
-                <Checkbox
-                  style={{
-                    marginLeft: 12,
-                  }}
-                  indeterminate={indeterminate}
-                  onClick={onCheckAllChange}
-                  checked={checkAll}
-                ></Checkbox>
-                <Tooltip title="Delete selected items" color={"danger"}>
-                  <DeleteOutlined
-                    className="delete-btn__icon"
+              <Space>
+                <Space className="delete-btn">
+                  <Checkbox
                     style={{
-                      color: `${selectedIds.length > 0 ? "red" : "black"}`,
+                      marginLeft: 12,
                     }}
-                    onClick={() => handleDeleteVocabInSub(selectedIds)}
-                  />
-                </Tooltip>
+                    indeterminate={indeterminate}
+                    onClick={onCheckAllChange}
+                    checked={checkAll}
+                  ></Checkbox>
+                  <Tooltip title="Delete selected items" color={"danger"}>
+                    <DeleteOutlined
+                      className="delete-btn__icon"
+                      style={{
+                        color: `${selectedIds.length > 0 ? "red" : "black"}`,
+                      }}
+                      onClick={() => handleDeleteVocabInSub(selectedIds)}
+                    />
+                  </Tooltip>
+                </Space>
+                <Select
+                  bordered
+                  placeholder="Part of speech"
+                  style={{ width: 200 }}
+                  className="pos_filter-select"
+                  options={allPos.map((item) => ({
+                    value: upperFirst(item),
+                    label: upperFirst(item),
+                  }))}
+                  defaultValue={"All"}
+                  onChange={onChangePosFilter}
+                />
               </Space>
               <Pagination
                 defaultCurrent={1}

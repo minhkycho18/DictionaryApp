@@ -1,10 +1,15 @@
-import { CloseOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  CloseOutlined,
+  ExclamationCircleOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Card,
   Col,
   Form,
   Input,
+  Modal,
   Row,
   Select,
   Space,
@@ -20,6 +25,8 @@ import getAudioUpload from "../../../helpers/uploadCloudinary";
 const CustomWord = (props) => {
   const [pos, setPos] = useState([]);
   const [form] = Form.useForm();
+  const [modal, contextHolder] = Modal.useModal();
+
   const [definition] = useState([
     {
       wordDesc: "",
@@ -53,7 +60,16 @@ const CustomWord = (props) => {
       ...props.subInfo,
       data: data,
     };
-    props.handleAddCustomVocab(params);
+    modal.confirm({
+      title: "Confirm",
+      icon: <ExclamationCircleOutlined />,
+      content: "Do you want to Đề xuất this word ?",
+      okText: "Ok",
+      cancelText: "No",
+      onOk: props.handleAddCustomVocab(params),
+      onCancel: props.handleAddCustomVocab(params),
+    });
+    // props.handleAddCustomVocab(params);
     form.resetFields();
     form.setFieldsValue({
       definition,
@@ -128,7 +144,7 @@ const CustomWord = (props) => {
               <Select>
                 {pos &&
                   pos.map((item) => (
-                    <Select.Option key={item} value={upperFirst(item)}>
+                    <Select.Option key={item} value={item}>
                       {upperFirst(item)}
                     </Select.Option>
                   ))}
@@ -249,6 +265,7 @@ const CustomWord = (props) => {
           </Button>
         </Form.Item>
       </Form>
+      {contextHolder}
     </Space>
   );
 };

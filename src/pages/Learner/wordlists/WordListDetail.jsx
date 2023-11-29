@@ -18,27 +18,32 @@ import {
   notification,
 } from "antd";
 import { useEffect, useState } from "react";
+import { BiAddToQueue } from "react-icons/bi";
+import { FiFolderPlus } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { cloneSubcategory } from "../../../api/Subcategory/subcategory.api";
+import {
+  cloneWordLists,
+  getDefault,
+  getPublic,
+} from "../../../api/WordLists/word-lists.api";
 import logo from "../../../assets/images/category-back.png";
+import SubChoice from "../../../components/Category/SubChoice/SubChoice";
+import getTokenFromStorage from "../../../helpers/getTokenFromStorage";
 import { getSubcategory } from "../../../stores/subcategory/subcategoryThunk";
 import {
   createNewWL,
   getAllWL,
   getWLById,
+  getWordListsPublic,
 } from "../../../stores/word-lists/wordLists-thunk";
-import { BiAddToQueue } from "react-icons/bi";
-import { FiFolderPlus } from "react-icons/fi";
 import "./WordListDetail.scss";
-import { cloneWordLists } from "../../../api/WordLists/word-lists.api";
-import SubChoice from "../../../components/Category/SubChoice/SubChoice";
-import getTokenFromStorage from "../../../helpers/getTokenFromStorage";
-import { cloneSubcategory } from "../../../api/Subcategory/subcategory.api";
 const WordListDetail = (props) => {
   const [searchParams] = useSearchParams();
   const [query] = useState(searchParams.get("id"));
   const { subcategories } = useSelector((state) => state.subcategory);
-  const { selectedWordList, wordLists } = useSelector(
+  const { selectedWordList, wordLists, loading } = useSelector(
     (state) => state.wordLists
   );
   const dispatch = useDispatch();
@@ -51,12 +56,36 @@ const WordListDetail = (props) => {
   const [wlDesc, setWlDesc] = useState("");
   const [wlType, setWlType] = useState("PUBLIC");
   const [subAddedID, setSubAddedID] = useState();
+  const [isPublic, setIsPublic] = useState(false);
+  const [isDefault, setIsDefault] = useState(false);
   useEffect(() => {
+    dispatch(getWordListsPublic());
     dispatch(getWLById(query));
-    dispatch(getSubcategory(query));
+
     dispatch(getAllWL());
+    dispatch(getSubcategory({ wordlistId: query }));
+
     return () => {};
   }, [dispatch, query]);
+  useEffect(() => {
+    const publicWL = async () => {
+      const rs = await getPublic();
+      const rsDefault = await getDefault();
+      const isPub = rs.some(
+        (item) => JSON.stringify(item) === JSON.stringify(selectedWordList)
+      );
+      setIsDefault(
+        rsDefault.some(
+          (item) => JSON.stringify(item) === JSON.stringify(selectedWordList)
+        )
+      );
+      if (rs) {
+        setIsPublic(isPub);
+      }
+    };
+    publicWL();
+    return () => {};
+  }, [selectedWordList]);
   const openNotificationWithIcon = (type, msg) => {
     switch (type) {
       case "success":
@@ -169,7 +198,7 @@ const WordListDetail = (props) => {
               </Space>
               to leitner
             </Space>
-            {selectedWordList.listType !== "PRIVATE" && (
+            {selectedWordList.listType !== "PRIVATE" && isPublic && (
               <Space
                 className="wldetail__card-addLeitner"
                 direction="vertical"
@@ -212,120 +241,129 @@ const WordListDetail = (props) => {
       },
     }));
   return (
-    <Space className="wldetail-wrap" direction="vertical">
-      {contextHolder}
-      {contextHolderMsg}
-      <Space className="wldetail__content wldetail-wrap" direction="vertical">
-        <Avatar
-          className="wldetail__content-avatar"
-          size={156}
-          src={logo}
-        ></Avatar>
-        <Space className="wldetail__content-title">
-          {selectedWordList?.title}
-        </Space>
-        <Space className="wldetail__content-infor">
-          Created at{selectedWordList.createdAt}
-          {/* Created{calculateDateTime(selectedWordList.createdAt)}days ago */}
-        </Space>
-        <Space>{selectedWordList.listDesc}</Space>
-        <Space
-          className="wldetail__content-btn"
-          onClick={() => onHandleEdit(selectedWordList)}
-        >
-          Edit
-          <EditOutlined />
-        </Space>
-
-        {selectedWordList.listType !== "PRIVATE" && (
+    <>
+      {!loading && (
+        <Space className="wldetail-wrap" direction="vertical">
+          {contextHolder}
+          {contextHolderMsg}
           <Space
-            className="wldetail__content-btn"
-            onClick={() => {
-              modal.confirm({
-                title: "Clone Wordlist",
-                icon: <ExclamationCircleOutlined />,
-                content: "Do you want to add this wordlist ?",
-                okText: "Ok",
-                cancelText: "Cancel",
-                onOk: handleCloneWLConfirm,
-              });
-            }}
+            className="wldetail__content wldetail-wrap"
+            direction="vertical"
           >
-            Clone Wordlist
-            <FiFolderPlus />
-          </Space>
-        )}
-      </Space>
-      <Row className="row-css" gutter={[32, 32]}>
-        {renderSubcategory}
-      </Row>
-      <Modal
-        title="Clone a Subcategory"
-        open={isModalOpen}
-        // onOk={handleOk}
-        onCancel={handleCancel}
-        footer={null}
-        className="Modal_WL"
-      >
-        <Collapse
-          expandIcon={({ isActive }) => (
-            <CaretRightOutlined rotate={isActive ? 90 : 0} />
-          )}
-          ghost
-          items={renderItem}
-          accordion
-          className="collapse__item"
-        />
-        <Space className="AddNewWL_btn" direction="vertical">
-          {!isAddWL && (
-            <Space onClick={openAddNewWL}>
-              <PlusOutlined className="AddNewWL_btn__icon" />
-              <div className="AddNewWL_btn__content">Add new wordlist</div>
+            <Avatar
+              className="wldetail__content-avatar"
+              size={156}
+              src={logo}
+            ></Avatar>
+            <Space className="wldetail__content-title">
+              {selectedWordList?.title}
             </Space>
-          )}
-          {isAddWL && (
-            <Space className="form-wrap" direction="vertical">
-              <Space className="form-add" direction="vertical">
-                <div className="form-label">Title:</div>
-                <Input
-                  placeholder="title"
-                  onChange={(e) => setWlTitle(e.target.value)}
-                  value={wlTitle}
-                ></Input>
-                <div className="form-label">Descriptions:</div>
-                <Input.TextArea
-                  placeholder="Descriptions"
-                  onChange={(e) => setWlDesc(e.target.value)}
-                  value={wlDesc}
-                ></Input.TextArea>
-                <div className="form-label">Type:</div>
-                <Select
-                  placeholder="Select your type"
-                  onSelect={(e) => setWlType(e)}
-                  defaultValue={wlType}
-                  style={{
-                    width: "100px",
-                  }}
-                >
-                  <Select.Option value="PUBLIC">Public</Select.Option>
-                  <Select.Option value="PRIVATE">Private</Select.Option>
-                </Select>
-                <Space style={{ marginTop: 8 }}>
-                  <Button
-                    className="form-btn--submit"
-                    type="primary"
-                    onClick={handleAddNewWL}
-                  >
-                    Submit
-                  </Button>
-                  <Button onClick={openAddNewWL}>Cancel</Button>
-                </Space>
+            <Space className="wldetail__content-infor">
+              Created at{selectedWordList.createdAt}
+              {/* Created{calculateDateTime(selectedWordList.createdAt)}days ago */}
+            </Space>
+            <Space>{selectedWordList.listDesc}</Space>
+            {!isDefault && !isPublic && (
+              <Space
+                className="wldetail__content-btn"
+                onClick={() => onHandleEdit(selectedWordList)}
+              >
+                Edit
+                <EditOutlined />
               </Space>
+            )}
+
+            {selectedWordList.listType !== "PRIVATE" && isPublic && (
+              <Space
+                className="wldetail__content-btn"
+                onClick={() => {
+                  modal.confirm({
+                    title: "Clone Wordlist",
+                    icon: <ExclamationCircleOutlined />,
+                    content: "Do you want to add this wordlist ?",
+                    okText: "Ok",
+                    cancelText: "Cancel",
+                    onOk: handleCloneWLConfirm,
+                  });
+                }}
+              >
+                Clone Wordlist
+                <FiFolderPlus />
+              </Space>
+            )}
+          </Space>
+          <Row className="row-css" gutter={[32, 32]}>
+            {renderSubcategory}
+          </Row>
+          <Modal
+            title="Clone a Subcategory"
+            open={isModalOpen}
+            // onOk={handleOk}
+            onCancel={handleCancel}
+            footer={null}
+            className="Modal_WL"
+          >
+            <Collapse
+              expandIcon={({ isActive }) => (
+                <CaretRightOutlined rotate={isActive ? 90 : 0} />
+              )}
+              ghost
+              items={renderItem}
+              accordion
+              className="collapse__item"
+            />
+            <Space className="AddNewWL_btn" direction="vertical">
+              {!isAddWL && (
+                <Space onClick={openAddNewWL}>
+                  <PlusOutlined className="AddNewWL_btn__icon" />
+                  <div className="AddNewWL_btn__content">Add new wordlist</div>
+                </Space>
+              )}
+              {isAddWL && (
+                <Space className="form-wrap" direction="vertical">
+                  <Space className="form-add" direction="vertical">
+                    <div className="form-label">Title:</div>
+                    <Input
+                      placeholder="title"
+                      onChange={(e) => setWlTitle(e.target.value)}
+                      value={wlTitle}
+                    ></Input>
+                    <div className="form-label">Descriptions:</div>
+                    <Input.TextArea
+                      placeholder="Descriptions"
+                      onChange={(e) => setWlDesc(e.target.value)}
+                      value={wlDesc}
+                    ></Input.TextArea>
+                    <div className="form-label">Type:</div>
+                    <Select
+                      placeholder="Select your type"
+                      onSelect={(e) => setWlType(e)}
+                      defaultValue={wlType}
+                      style={{
+                        width: "100px",
+                      }}
+                    >
+                      <Select.Option value="PUBLIC">Public</Select.Option>
+                      <Select.Option value="PRIVATE">Private</Select.Option>
+                    </Select>
+                    <Space style={{ marginTop: 8 }}>
+                      <Button
+                        className="form-btn--submit"
+                        type="primary"
+                        onClick={handleAddNewWL}
+                      >
+                        Submit
+                      </Button>
+                      <Button onClick={openAddNewWL}>Cancel</Button>
+                    </Space>
+                  </Space>
+                </Space>
+              )}
             </Space>
-          )}
+          </Modal>
         </Space>
-      </Modal>
-    </Space>
+      )}
+    </>
   );
 };
 

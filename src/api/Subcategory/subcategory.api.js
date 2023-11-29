@@ -1,7 +1,7 @@
 import http from "../../helpers/http";
 
 export const getSubByWlsId = (wordListId, keyword) => {
-  if (keyword == null) {
+  if (!keyword) {
     return http.get(`/wordlists/${wordListId}/subcategories`);
   } else {
     return http.get(

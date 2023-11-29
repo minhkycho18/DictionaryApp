@@ -7,7 +7,8 @@ export const capitalizeFirstLetter = (str) => {
 const changeTitle = (path) => {
   const arrPath = path.split("/").filter(Boolean);
   document.title = arrPath[arrPath.length - 1]
-    ? capitalizeFirstLetter(arrPath[arrPath.length - 1]) + " - Dictionary App"
+    ? decodeURI(capitalizeFirstLetter(arrPath[arrPath.length - 1])) +
+      " - Dictionary App"
     : "Dictionary app";
 };
 export default changeTitle;

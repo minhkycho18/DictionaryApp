@@ -138,7 +138,7 @@ const ListItem = (props) => {
           <Select
             name="inputType"
             defaultValue={newListType}
-            onChange={(e) => setNewListType(e.target.value)}
+            onChange={(e) => setNewListType(e)}
           >
             {typeWL &&
               typeWL.map((type, index) => (

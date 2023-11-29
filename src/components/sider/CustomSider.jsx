@@ -49,7 +49,9 @@ const CustomSider = (props) => {
         {dashboardLink.map((link, index) => (
           <Space
             key={index}
-            className={`menu2__item ${
+            className={`${
+              link.label === "Sign Out" ? "menu2__item--signout" : ""
+            } menu2__item ${
               path[1].link === "/dashboard" + link?.path
                 ? "menu2__item--active"
                 : ""
