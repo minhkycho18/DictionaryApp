@@ -110,7 +110,6 @@ const WordListDataTable = ({
     <>
       <Table
         loading={loading}
-        bordered
         columns={columns}
         size={"small"}
         dataSource={dataSource}

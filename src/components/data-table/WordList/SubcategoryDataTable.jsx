@@ -168,8 +168,9 @@ const SubcategoryDataTable = ({
     <>
       <Form form={form} onFinish={onFinish}>
         <Table
-          bordered
           dataSource={data}
+          loading={loading}
+          size={"small"}
           columns={columns}
           onRow={setOnRowProps}
           pagination={{
