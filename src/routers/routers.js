@@ -17,6 +17,7 @@ import WordListDetail from "../pages/Learner/wordlists/WordListDetail";
 import ExploredWordList from "../pages/Learner/wordlists/ExploredWordList/ExploredWordList";
 import Game from "../pages/Learner/game/Game";
 import WordListManagement from "../pages/Manager/WordList/WordListManagement";
+import ContributionVocabulary from "../pages/Manager/Contribution/ContributionVocabulary";
 import { getLeiner } from "../api/Leitner/leitner.api";
 import LeitnerLevel from "../pages/Learner/leitner/LeitnerLevel";
 const routers = createBrowserRouter([
@@ -159,10 +160,10 @@ const routers = createBrowserRouter([
         path: "wordlist",
         element: <WordListManagement />,
       },
-      // {
-      //   path: "video",
-      //   element: <Leitner />,
-      // },
+      {
+        path: "contribution",
+        element: <ContributionVocabulary />,
+      },
     ],
   },
 ]);

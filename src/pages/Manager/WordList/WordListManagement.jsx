@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "./WordListManagement.scss";
 import { Button, Col, Input, Row, Select, Space, message } from "antd";
 import {
   FilterOutlined,

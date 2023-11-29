@@ -6,7 +6,7 @@
   height: 100vh;
   .sidebar {
     height: 100vh;
-    border-right: solid 1px #dadada;
+    margin: 0 8px;
     &__ava {
       height: 30%;
       display: flex;
@@ -17,7 +17,7 @@
         font-family: $font-manager;
         font-weight: bold !important;
         font-size: 17px;
-        color: #05041B;
+        color: #05041b;
       }
 
       &__role {
@@ -34,35 +34,39 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
+      border: none !important;
       .ant-menu-item {
         display: flex;
         justify-content: flex-start;
         align-items: center;
         gap: 35px;
         height: 60px;
+        border-radius: 32px;
         //margin-left: 15px;
         .anticon {
           font-size: 22px;
-          color: #B5BAD4;
+          color: #b5bad4;
         }
 
         .ant-menu-title-content {
           margin-right: 24px;
           font-size: 17px;
-          color: #B5BAD4;
+          color: #b5bad4;
+
           font-weight: bold !important;
         }
       }
       .ant-menu-item-selected {
-        background-color: white;
-        border-right: solid 4px #5E81F4;
-        border-radius: 0;
+        background-color: #e9f0ff;
+        border-radius: 32px;
         .anticon {
-          color: #5E81F4;
+          color: #3372fe;
+          transition: all 0.2s linear;
         }
 
         .ant-menu-title-content {
-          color: #05041B;
+          color: #3372fe;
+          transition: all 0.2s linear;
         }
       }
     }
@@ -71,7 +75,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      &_button{
+      &_button {
         width: 100%;
         border: none;
         display: flex;
@@ -79,28 +83,29 @@
         align-items: center;
         gap: 10px;
         height: 60px;
+        border-radius: 32px;
       }
-      &_button:hover{
-        background-color: #5E81F4;
+      &_button:hover {
+        background-color: #3372fe;
       }
-      &_button:hover > *{
+      &_button:hover > * {
         color: white;
       }
       &_icon {
         font-size: 22px;
-        color: #B5BAD4;
+        color: #b5bad4;
       }
       &_text {
         font-family: $font-manager;
         font-weight: bold !important;
         margin-right: 24px;
         font-size: 17px;
-        color: #B5BAD4;
+        color: #b5bad4;
       }
     }
   }
 
   .content-container {
-    background-color: #F5F5FB;
+    background-color: #f5f5fb;
   }
 }
