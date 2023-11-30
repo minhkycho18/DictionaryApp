@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Form, Input, Modal } from "antd";
 const WORDLIST_DATA_TYPE = "wordlist";
 const SUBCATEGORY_DATA_TYPE = "subcategory";
 const AddModal = ({ type, handleCreateNew }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
-
+  const [focusedField, setFocusedField] = useState("title");
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -26,6 +26,14 @@ const AddModal = ({ type, handleCreateNew }) => {
       console.log("Validation failed:", errorInfo);
     }
   };
+
+  const handleEnterPress = (e) => {
+    if (type === SUBCATEGORY_DATA_TYPE) {
+      handleOk();
+    } else {
+      form.getFieldInstance("listDesc").focus();
+    }
+  };
   const onReset = () => {
     form.resetFields();
   };
@@ -35,6 +43,7 @@ const AddModal = ({ type, handleCreateNew }) => {
   };
 
   const handleCancel = () => {
+    form.resetFields();
     setIsModalOpen(false);
   };
 
@@ -79,7 +88,7 @@ const AddModal = ({ type, handleCreateNew }) => {
               marginTop: "20px",
             }}
           >
-            <Input />
+            <Input onPressEnter={handleEnterPress} />
           </Form.Item>
           {type === WORDLIST_DATA_TYPE && (
             <Form.Item
@@ -95,7 +104,7 @@ const AddModal = ({ type, handleCreateNew }) => {
                 marginTop: "20px",
               }}
             >
-              <Input />
+              <Input onPressEnter={handleOk} />
             </Form.Item>
           )}
         </Form>

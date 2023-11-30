@@ -1,7 +1,34 @@
 import { FilterOutlined, SearchOutlined } from "@ant-design/icons";
 import { Col, Input, Row, Select, Space } from "antd";
+import ContributionDataTable from "../../../components/data-table/Contribution/ContributionDataTable";
+import { useEffect, useState } from "react";
+import { getAllContributionVocabs } from "../../../api/Vocabulary/vocabulary.api";
 
 const ContributionVocabulary = () => {
+  const [dataSource, setDataSource] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await getAllContributionVocabs();
+      setDataSource(response);
+    };
+    getData();
+  }, []);
+
+  const handleApproveAndReject = (record) => {
+    const newData = dataSource.filter((item) => {
+      return item.key !== record.key;
+    });
+    setDataSource(newData);
+  };
+
+  const handleTableChange = (record) => {
+    console.log(record);
+    const newData = dataSource.filter((item) => {
+      return item.key !== record.key;
+    });
+    setDataSource(newData);
+  };
   return (
     <>
       <Space
@@ -44,6 +71,17 @@ const ContributionVocabulary = () => {
                 }
                 // onChange={(e) => handleSearch(e.target.value)}
               ></Input>
+            </Col>
+          </Row>
+          <Row justify={"center"} className={"box_data_item table_box"}>
+            <Col span={22}>
+              <ContributionDataTable
+                dataSource={dataSource.map((item) => {
+                  return { ...item, key: item.id };
+                })}
+                handleAprroveVocab={handleApproveAndReject}
+                onTableChange={handleTableChange}
+              />
             </Col>
           </Row>
         </div>
