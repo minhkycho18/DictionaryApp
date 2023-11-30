@@ -6,8 +6,6 @@ import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularyLeitnerDetailDto;
 import java.util.List;
 
 public interface LeitnerService {
-    VocabLeitnerDetailDto getInfoVocabLeitner(VocabLeitnerRequestDto leitnerRequestDto);
-
     void addVocabToLeitner(VocabLeitnerRequestDto vocabLeitnerRequestDto);
 
     List<VocabularyLeitnerDetailDto> showVocabsByLevel(Integer level);

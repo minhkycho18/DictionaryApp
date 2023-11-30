@@ -29,16 +29,6 @@ import java.util.List;
 public class LeitnerController {
     private final LeitnerService leitnerService;
 
-    @Operation(summary = "Get info vocabulary in leitner", security = {@SecurityRequirement(name = "bearer-key")})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Get info vocabulary successfully",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VocabLeitnerDetailDto.class))}),
-            @ApiResponse(responseCode = "400", description = "Invalid data")})
-    @GetMapping("/vocab")
-    public VocabLeitnerDetailDto getVocabLeitnerInfo(@Valid @RequestBody VocabLeitnerRequestDto leitnerRequestDto) {
-        return leitnerService.getInfoVocabLeitner(leitnerRequestDto);
-    }
-
     @Operation(summary = "Add vocabulary to Leitner", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Add vocabulary to leitner successfully",

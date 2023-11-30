@@ -48,19 +48,6 @@ public class LeitnerServiceImpl implements LeitnerService {
     private final Random rand = new Random();
 
     @Override
-    public VocabLeitnerDetailDto getInfoVocabLeitner(VocabLeitnerRequestDto leitnerRequestDto) {
-        User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
-        LeitnerId leitnerId = LeitnerId.builder()
-                .userId(user.getUserId())
-                .defId(leitnerRequestDto.getDefId())
-                .vocabId(leitnerRequestDto.getVocabId())
-                .build();
-        VocabLeitner vocabLeitner = leitnerRepository.findById(leitnerId)
-                .orElseThrow(() -> new RecordNotFoundException("Vocabulary not found"));
-        return leitnerMapper.vocabLeitnerToVocabLeitnerDetailDto(vocabLeitner);
-    }
-
-    @Override
     @Transactional
     public void addVocabToLeitner(VocabLeitnerRequestDto leitnerRequestDto) {
         VocabDef vocabDef =
@@ -120,7 +107,6 @@ public class LeitnerServiceImpl implements LeitnerService {
                                 .toList()
                 )
         );
-
         return leitnerDetailDtoList;
     }
 
