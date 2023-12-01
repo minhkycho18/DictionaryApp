@@ -25,4 +25,5 @@ public class ContributionRequestDto {
     @Valid
     private List<DefinitionRequestDto> definition;
     private Long subcategoryId;
+    private Boolean isContribute;
 }

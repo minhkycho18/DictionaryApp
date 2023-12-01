@@ -56,4 +56,9 @@ public class VocabularyController {
     public List<String> getAllPos() {
         return vocabularyService.findAllPos();
     }
+
+    @GetMapping("/contribution")
+    public List<VocabDetailDto> getContributionVocab() {
+        return vocabularyService.getAllContributionVocab();
+    }
 }

@@ -2,6 +2,7 @@ package com.pbl6.dictionaryappbe.repository;
 
 
 import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
+import com.pbl6.dictionaryappbe.persistence.vocabulary.VocabularyStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -38,4 +39,6 @@ public interface VocabularyRepository extends JpaRepository<Vocabulary, Long>, J
 
     @Query(value = "SELECT distinct pos FROM vocabularies", nativeQuery = true)
     List<String> findAllPos();
+
+    List<Vocabulary> findAllByStatus(VocabularyStatus status);
 }

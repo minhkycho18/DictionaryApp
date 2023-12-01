@@ -107,7 +107,7 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
     @Override
     @Transactional
     public ContributionResponseDto contributeVocabulary(Long wordListId, ContributionRequestDto contributionVocabulary) {
-        User user = AuthenticationUtils.getUserFromSecurityContext();
+        User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
         Subcategory subcategory = getOwnedSubcategory(wordListId, contributionVocabulary.getSubcategoryId());
         List<SubcategoryDetail> subcategoryDetails = new ArrayList<>();
         Vocabulary newVocab = vocabularyRepository.save(Vocabulary.builder()
@@ -119,7 +119,7 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
                 .audioUk(contributionVocabulary.getAudioUk())
                 .contributedAt(LocalDateTime.now())
                 .contributedBy(user.getEmail())
-                .status(VocabularyStatus.PENDING)
+                .status(contributionVocabulary.getIsContribute() ? VocabularyStatus.PENDING : VocabularyStatus.PERSONAL)
                 .build());
         contributionVocabulary.getDefinition().forEach(definition -> {
             Definition newDef = definitionRepository.save(Definition.builder()
