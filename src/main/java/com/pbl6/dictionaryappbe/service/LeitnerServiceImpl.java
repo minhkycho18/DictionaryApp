@@ -1,10 +1,9 @@
 package com.pbl6.dictionaryappbe.service;
 
 import com.pbl6.dictionaryappbe.dto.leitner.*;
-import com.pbl6.dictionaryappbe.dto.definition.DefinitionLeitnerDetailDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularyLeitnerDetailDto;
 import com.pbl6.dictionaryappbe.exception.DuplicateDataException;
-import com.pbl6.dictionaryappbe.exception.FieldNotNullException;
+import com.pbl6.dictionaryappbe.exception.InvalidRequestDataException;
 import com.pbl6.dictionaryappbe.exception.RecordNotFoundException;
 import com.pbl6.dictionaryappbe.mapper.LeitnerMapper;
 import com.pbl6.dictionaryappbe.persistence.leitner.LeitnerId;
@@ -13,14 +12,15 @@ import com.pbl6.dictionaryappbe.persistence.level_leitner.LevelLeitner;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
 import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDefId;
-import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
-import com.pbl6.dictionaryappbe.repository.LeitnerRepository;
 import com.pbl6.dictionaryappbe.repository.LevelLeitnerRepository;
 import com.pbl6.dictionaryappbe.repository.VocabDefRepository;
-import com.pbl6.dictionaryappbe.repository.VocabularyRepository;
+import com.pbl6.dictionaryappbe.repository.leitner.LeitnerRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
 import com.pbl6.dictionaryappbe.utils.MapperUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,13 +28,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import static java.util.Comparator.comparing;
 
 @Service
 @RequiredArgsConstructor
@@ -42,23 +37,9 @@ public class LeitnerServiceImpl implements LeitnerService {
     private final VocabDefRepository vocabDefRepository;
     private final LeitnerRepository leitnerRepository;
     private final LevelLeitnerRepository levelLeitnerRepository;
-    private final VocabularyRepository vocabularyRepository;
     private final LeitnerMapper leitnerMapper;
 
     private final Random rand = new Random();
-
-    @Override
-    public VocabLeitnerDetailDto getInfoVocabLeitner(VocabLeitnerRequestDto leitnerRequestDto) {
-        User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
-        LeitnerId leitnerId = LeitnerId.builder()
-                .userId(user.getUserId())
-                .defId(leitnerRequestDto.getDefId())
-                .vocabId(leitnerRequestDto.getVocabId())
-                .build();
-        VocabLeitner vocabLeitner = leitnerRepository.findById(leitnerId)
-                .orElseThrow(() -> new RecordNotFoundException("Vocabulary not found"));
-        return leitnerMapper.vocabLeitnerToVocabLeitnerDetailDto(vocabLeitner);
-    }
 
     @Override
     @Transactional
@@ -83,45 +64,12 @@ public class LeitnerServiceImpl implements LeitnerService {
     }
 
     @Override
-    public List<VocabularyLeitnerDetailDto> showVocabsByLevel(Integer level) {
+    public Page<VocabularyLeitnerDetailDto> showVocabsByLevel(Integer level, String keyword, String pos,
+                                                              int offset, int limit) {
         User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
-        List<VocabLeitner> vocabLeitnerList = leitnerRepository.findByLevelLeitner_LevelAndUserId(level, user.getUserId());
-        Map<Long, List<VocabLeitner>> leitnerByVocabsId = vocabLeitnerList.stream()
-                .collect(Collectors.groupingBy(VocabLeitner::getVocabId));
-
-        List<VocabularyLeitnerDetailDto> leitnerDetailDtoList =
-                leitnerByVocabsId.entrySet().stream()
-                        // Map leitnerByVocabsId to List<VocabularyLeitnerDetailDto>
-                        .map(leitnerEntry -> {
-                            Vocabulary vocabulary = vocabularyRepository.findById(leitnerEntry.getKey())
-                                    .orElseThrow(() -> new RecordNotFoundException("Vocabulary not found"));
-                            return VocabularyLeitnerDetailDto.builder()
-                                    .vocabId(vocabulary.getVocabId())
-                                    .word(vocabulary.getWord())
-                                    .pos(vocabulary.getPos())
-                                    .shortDetailDtos(leitnerEntry.getValue().stream()
-                                            .map(leitnerMapper::vocabLeitnerToDefinition)
-                                            .toList())
-                                    .build();
-                        })
-                        // Descending sort the list DTOs based on the maximum studyTime value.
-                        .sorted(comparing(vocabularyLeitnerDetailDto ->
-                                vocabularyLeitnerDetailDto.getShortDetailDtos().stream()
-                                        .map(DefinitionLeitnerDetailDto::getStudyTime)
-                                        .max(comparing(Function.identity()))
-                                        .orElseThrow(() -> new FieldNotNullException("Study time must not be null"))
-                        ))
-                        .toList();
-        // Sort list definitions by study times
-        leitnerDetailDtoList.forEach(vocabularyLeitnerDetailDto ->
-                vocabularyLeitnerDetailDto.setShortDetailDtos(
-                        vocabularyLeitnerDetailDto.getShortDetailDtos().stream()
-                                .sorted(comparing(DefinitionLeitnerDetailDto::getStudyTime))
-                                .toList()
-                )
-        );
-
-        return leitnerDetailDtoList;
+        int pageNo = offset / limit;
+        Pageable pageable = PageRequest.of(pageNo, limit);
+        return leitnerRepository.getVocabInLeitnerBox(level, user.getUserId(), keyword, pos, pageable);
     }
 
     @Override
@@ -183,7 +131,7 @@ public class LeitnerServiceImpl implements LeitnerService {
 
         cardGameList.forEach(leitnerVocabCardGame -> {
             // set random percentage result
-            if(rand.nextBoolean()) {
+            if (rand.nextBoolean()) {
                 leitnerVocabCardGame.setQuestion(leitnerVocabCardGame.getAnswer());
             }
             String currentQuestion = leitnerVocabCardGame.getQuestion();
@@ -191,5 +139,17 @@ public class LeitnerServiceImpl implements LeitnerService {
             leitnerVocabCardGame.setResult(currentQuestion.equals(currentAnswer));
         });
         return cardGameList;
+    }
+
+    @Override
+    @Transactional
+    public void removeVocabLeitner(List<VocabLeitnerRequestDto> vocabLeitnerRequestDto) {
+        List<String> vocabDefIds = vocabLeitnerRequestDto.stream()
+                .map(vocabLeitner -> vocabLeitner.getVocabId() + "-" + vocabLeitner.getDefId())
+                .toList();
+        List<VocabLeitner> vocabLeitners = leitnerRepository.findAllByVocabDefId(vocabDefIds);
+        if(vocabLeitnerRequestDto.size() != vocabLeitners.size())
+            throw new InvalidRequestDataException("Vocab Leitner not found");
+        leitnerRepository.deleteAll(vocabLeitners);
     }
 }

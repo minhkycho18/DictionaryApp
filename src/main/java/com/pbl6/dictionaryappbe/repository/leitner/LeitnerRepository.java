@@ -1,4 +1,4 @@
-package com.pbl6.dictionaryappbe.repository;
+package com.pbl6.dictionaryappbe.repository.leitner;
 
 import com.pbl6.dictionaryappbe.dto.leitner.LeitnerVocabCardGame;
 import com.pbl6.dictionaryappbe.persistence.leitner.LeitnerId;
@@ -12,8 +12,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface LeitnerRepository extends JpaRepository<VocabLeitner, LeitnerId> {
-    List<VocabLeitner> findByLevelLeitner_LevelAndUserId(Integer level, Long userId);
+public interface LeitnerRepository extends JpaRepository<VocabLeitner, LeitnerId>, LeitnerDao {
+    @Query(value = """
+        SELECT *
+        FROM vocab_leitner
+        WHERE CONCAT(vocab_id, '-', def_id) IN :vocabDefs
+    """, nativeQuery = true)
+    List<VocabLeitner> findAllByVocabDefId(@Param("vocabDefs") List<String> vocabDefIds);
 
     boolean existsByVocabDef(VocabDef vocabDef);
 

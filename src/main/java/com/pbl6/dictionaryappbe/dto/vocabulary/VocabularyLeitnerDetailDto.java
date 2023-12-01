@@ -1,11 +1,11 @@
 package com.pbl6.dictionaryappbe.dto.vocabulary;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.pbl6.dictionaryappbe.dto.definition.DefinitionLeitnerDetailDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.pbl6.dictionaryappbe.dto.definition.DefinitionShortDetail;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -13,6 +13,14 @@ public class VocabularyLeitnerDetailDto {
     private Long vocabId;
     private String word;
     private String pos;
-    @JsonProperty("definitions")
-    private List<DefinitionLeitnerDetailDto> shortDetailDtos;
+    private String phoneUs;
+    private String phoneUk;
+    private String audioUs;
+    private String audioUk;
+    private Integer level;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private LocalDateTime lastLearning;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private LocalDateTime studyTime;
+    private DefinitionShortDetail definition;
 }
