@@ -1,6 +1,8 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Profile from '~/screens/ProfileScreen';
 import ProfileDetailScreen from '~/screens/ProfileDetailScreen';
+import YourWordList from '~/screens/YourWordList';
+import YourWordlistDetail from '~/screens/YourWordListDetail';
 import Leitner from '~/screens/Leitner';
 import LeitnerDetail from '~/screens/LeitnerDetail';
 export default function ProfileStack() {
@@ -31,6 +33,17 @@ export default function ProfileStack() {
                 options={{ headerShown: false }}
             />
             
+            <Stack.Screen
+                name="YourWordlist"
+                component={YourWordList}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="YourWordlistDetail"
+                component={YourWordlistDetail}
+                options={{ headerShown: false }}
+            />
+
 
 
 

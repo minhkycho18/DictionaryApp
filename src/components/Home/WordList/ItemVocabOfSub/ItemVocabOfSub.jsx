@@ -88,7 +88,7 @@ export default function ItemVocabOfSub({ Vocab, onDeleteVocal, subcategory }) {
 
             <View>
               <Text
-                numberOfLines={2}
+                numberOfLines={3}
                 style={[
                   {
                     color: colors.textColor,
@@ -102,7 +102,7 @@ export default function ItemVocabOfSub({ Vocab, onDeleteVocal, subcategory }) {
               </Text>
             </View>
 
-            <View style={Styles.viewItem}>
+            {/* <View style={Styles.viewItem}>
               <View
                 style={{
                   ...Styles.circle,
@@ -156,7 +156,7 @@ export default function ItemVocabOfSub({ Vocab, onDeleteVocal, subcategory }) {
                   )}
                 />
               </View>
-            </View>
+            </View> */}
           </View>
         </View>
       </View>

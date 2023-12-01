@@ -12,17 +12,24 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { colors, spacing, sizes, shadow } from "~/constants/theme";
 import ItemPublicWordlist from "./ItemPublicWordlist/ItemPublicWordlist";
-import { getPublic } from "~/api/WordList";
+import { getDefault, getPublic } from "~/api/WordList";
 import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
 import { cloneWordlist } from "~/api/WordList";
-export default function PublicWordlist() {
+export default function PublicWordlist(props) {
+  const [type, setType] = useState(props.route.params.type);
   const [search, setSearch] = useState("");
   const [tempWordlist, setTempWordlist] = useState([]);
   const [wordlists, setWordlists] = useState([]);
   const [isClear, setIsClear] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
-  const getWordlistPublic = async () => {
-    const list = await getPublic();
+  const getWordlist = async () => {
+    let list = [];
+    if (type === "public") {
+      list = await getPublic();
+    } else {
+      list = await getDefault();
+    }
+
     setWordlists(list);
     setTempWordlist(list);
   };
@@ -36,7 +43,7 @@ export default function PublicWordlist() {
     }
   };
   useEffect(() => {
-    getWordlistPublic();
+    getWordlist();
   }, []);
 
   const handleTextChange = (text) => {
@@ -141,7 +148,11 @@ export default function PublicWordlist() {
           keyExtractor={(item) => item.id}
           data={wordlists}
           renderItem={(item) => (
-            <ItemPublicWordlist wordlist={item} onClone={handleClone} />
+            <ItemPublicWordlist
+              wordlist={item}
+              onClone={handleClone}
+              type={type}
+            />
           )}
         />
       ) : (

@@ -28,10 +28,11 @@ import FormAdd from "~/components/BottomSheet/FormAdd/FormAdd";
 import ItemWordlist from "~/components/PublicWordlist/ItemWordList/ItemWordList";
 import ItemAddNewWordlist from "~/components/BottomSheet/ItemAddWordlist/ItemAddWordlist";
 import { delay } from "~/helper";
-export default function PublicWordlistDetail(props) {
+export default function PublicWordlistDetail() {
   const { params } = useRoute();
 
   const wl = params.Wordlist;
+  const type = params.type;
   const [subCategories, setSubCategories] = useState([]);
   const [isLogin, setIsLogin] = useState(false);
   ///modal
@@ -229,9 +230,18 @@ export default function PublicWordlistDetail(props) {
               </TouchableOpacity>
 
               <View style={styles.viewImage}>
-                <View style={styles.Image}>
+                <View
+                  style={{
+                    ...styles.Image,
+                    borderLeftColor: type === "public" ? "#BFD8C3" : "#A3D5D8",
+                  }}
+                >
                   <Image
-                    source={require("~/assets/communication.png")}
+                    source={
+                      type === "public"
+                        ? require("~/assets/communication.png")
+                        : require("~/assets/default.png")
+                    }
                     style={styles.image}
                   />
                 </View>
@@ -414,7 +424,7 @@ const styles = StyleSheet.create({
     height: 200,
     backgroundColor: "#fff",
     borderLeftWidth: 5,
-    borderLeftColor: "#BFD8C3",
+
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
