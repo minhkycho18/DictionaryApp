@@ -11,6 +11,15 @@
     max-height: 645px;
     overflow-y: scroll;
     overflow-x: hidden;
+
+    .approve-button:hover {
+      opacity: 0.8;
+    }
+
+    .reject-button:hover {
+      opacity: 0.7;
+    }
+
     &::-webkit-scrollbar {
       width: 8px;
     }
