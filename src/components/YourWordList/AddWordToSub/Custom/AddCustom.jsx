@@ -21,6 +21,7 @@ import { ListComponentDescContext } from "~/context/ListComponentDesc";
 import { Ionicons } from "@expo/vector-icons";
 import { addWordCustomToSub } from "~/api/Subcategory";
 import { delay } from "~/helper";
+import Modal from "react-native-modal";
 
 const AddCustom = (props) => {
   const { fieldMain, addFieldMain, Remove } = useContext(
@@ -39,13 +40,14 @@ const AddCustom = (props) => {
   const [phoneUs, setPhoneUs] = useState("");
   const [phoneUk, setPhoneUk] = useState("");
   const [pos, setPos] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   ////////
   const [fieldMainComponents, setFieldMainComponents] = useState(fieldMain);
   const [isDisplay, setIsDisplay] = useState(false);
   const params = props.route.params;
   const navigation = useNavigation();
 
-  const handleSave = async () => {
+  const handlePresentModal = async () => {
     if (title === "" || desc === "") {
       showToast("Warning", "Please fill in all field", "error");
       if (title === "") {
@@ -59,50 +61,96 @@ const AddCustom = (props) => {
         });
       }
     } else {
-      // params.wordlistId, params.subcategoryId
-      try {
-        const listDef = fieldMainComponents.map(
-          (component) => component.props.data
-        );
-        const customWord = {
-          word: title,
-          wordType: "DEFAULT",
-          pos: pos,
-          phoneUs: phoneUs,
-          phoneUk: phoneUk,
-          audioUs: fileResponseUS,
-          audioUk: fileResponseUK,
-          definition: [
-            {
-              wordDesc: desc,
-              example: example,
-            },
-            ...listDef,
-          ],
-          subcategoryId: params.subcategoryId,
-        };
-        const res = await addWordCustomToSub(
-          params.wordlistId,
-          params.subcategoryId,
-          customWord
-        );
-        console.log(`word custom ::`, res);
-        showToast(
-          "Success",
-          "Create custom vocabulary successfully",
-          "success"
-        );
+      setIsModalVisible(true);
+    }
+    // } else {
+    //   // params.wordlistId, params.subcategoryId
+    //   try {
+    //     const listDef = fieldMainComponents.map(
+    //       (component) => component.props.data
+    //     );
+    //     const customWord = {
+    //       word: title,
+    //       wordType: "DEFAULT",
+    //       pos: pos,
+    //       phoneUs: phoneUs,
+    //       phoneUk: phoneUk,
+    //       audioUs: fileResponseUS,
+    //       audioUk: fileResponseUK,
+    //       definition: [
+    //         {
+    //           wordDesc: desc,
+    //           example: example,
+    //         },
+    //         ...listDef,
+    //       ],
+    //       subcategoryId: params.subcategoryId,
+    //     };
+    //     const res = await addWordCustomToSub(
+    //       params.wordlistId,
+    //       params.subcategoryId,
+    //       customWord
+    //     );
+    //     console.log(`word custom ::`, res);
+    //     showToast(
+    //       "Success",
+    //       "Create custom vocabulary successfully",
+    //       "success"
+    //     );
 
-        const wordlist = await getWordListByWordlistId(params.wordlistId);
-        await delay(1000);
-        navigation.navigate("YourWordlistDetail", {
-          Wordlist: {
-            id: wordlist.id,
-            title: wordlist.title,
-            listDesc: wordlist.listDesc,
+    //     const wordlist = await getWordListByWordlistId(params.wordlistId);
+    //     await delay(1000);
+    //     navigation.navigate("YourWordlistDetail", {
+    //       Wordlist: {
+    //         id: wordlist.id,
+    //         title: wordlist.title,
+    //         listDesc: wordlist.listDesc,
+    //       },
+    //     });
+    //   } catch (error) {}
+    // }
+  };
+  const handleSave = async () => {
+    try {
+      const listDef = fieldMainComponents.map(
+        (component) => component.props.data
+      );
+      const customWord = {
+        word: title,
+        wordType: "DEFAULT",
+        pos: pos,
+        phoneUs: phoneUs,
+        phoneUk: phoneUk,
+        audioUs: fileResponseUS,
+        audioUk: fileResponseUK,
+        definition: [
+          {
+            wordDesc: desc,
+            example: example,
           },
-        });
-      } catch (error) {}
+          ...listDef,
+        ],
+        subcategoryId: params.subcategoryId,
+      };
+      const res = await addWordCustomToSub(
+        params.wordlistId,
+        params.subcategoryId,
+        customWord
+      );
+      console.log(`word custom ::`, res);
+      // showToast("Success", "Create custom vocabulary successfully", "success");
+
+      const wordlist = await getWordListByWordlistId(params.wordlistId);
+      // await delay(1000);
+      navigation.navigate("YourWordlistDetail", {
+        Wordlist: {
+          id: wordlist.id,
+          title: wordlist.title,
+          listDesc: wordlist.listDesc,
+        },
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
   useEffect(() => {
@@ -376,7 +424,7 @@ const AddCustom = (props) => {
           Toast.setRef(ref);
         }}
       />
-      <TouchableOpacity style={Styles.buttonAdd} onPress={handleSave}>
+      <TouchableOpacity style={Styles.buttonAdd} onPress={handlePresentModal}>
         <Ionicons
           name="add-circle"
           size={20}
@@ -393,6 +441,71 @@ const AddCustom = (props) => {
           Create
         </Text>
       </TouchableOpacity>
+
+      <View>
+        <Modal
+          animationType="slide"
+          isVisible={isModalVisible}
+          onRequestClose={() => setIsModalVisible(false)}
+        >
+          <View style={Styles.modal_container}>
+            <View style={Styles.modal_content}>
+              <View
+                style={{
+                  paddingBottom: 20,
+                  paddingTop: 10,
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={[
+                    {
+                      color: "#182B40",
+                      fontFamily: "Quicksand-SemiBold",
+                      textAlign: "center",
+                      fontSize: 15,
+                    },
+                  ]}
+                >
+                  Would you like to contribute this vocabulary to the system ?
+                </Text>
+              </View>
+              <View style={Styles.modal_view_button}>
+                <TouchableOpacity
+                  style={Styles.modal_button_cancel}
+                  onPress={() => setIsModalVisible(false)}
+                >
+                  <Text
+                    style={{
+                      color: "blue",
+                      fontFamily: "Quicksand-SemiBold",
+                      fontSize: 18
+                      ,
+                    }}
+                  >
+                    No
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={Styles.modal_button_delete}
+                  onPress={handleSave}
+                >
+                  <Text
+                    style={{
+                      color: "#28a745",
+                      textAlign: "center",
+                      fontFamily: "Quicksand-SemiBold",
+                      fontSize: 18,
+                    }}
+                  >
+                    Yes
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
     </SafeAreaView>
   );
 };

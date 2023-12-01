@@ -112,7 +112,9 @@ const AddWordList = () => {
           setIsLoading(false);
           showToast("Success", "Create new wordlist successfully", "success");
           await delay(1500);
-          navigation.navigate("YourWordlist", res);
+          // navigation.navigate("YourWordlist", res);
+
+          navigation.goBack();
         } catch (error) {
           setIsLoading(false);
           showToast("Error", error, "error");

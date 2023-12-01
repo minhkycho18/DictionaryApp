@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import { StyleSheet, Text, SafeAreaView, View, Image } from "react-native";
 import { Entypo } from "@expo/vector-icons";
@@ -7,7 +7,22 @@ import { useFonts } from "expo-font";
 import { TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LeitnerItem from "~/components/Leitner/LeitnerItem/LeitnerItem";
+import { useNavigation } from "@react-navigation/native";
+import { getInforBoxOfUser } from "~/api/Leitner";
 export default function Leitner() {
+  const navigation = useNavigation();
+
+  const [boxes, setBoxes] = useState([]);
+  const getBoxes = async () => {
+    try {
+      const res = await getInforBoxOfUser();
+      setBoxes(res);
+    } catch (error) {}
+  };
+  useEffect(() => {
+    getBoxes();
+  }, []);
+
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
@@ -16,7 +31,10 @@ export default function Leitner() {
     <SafeAreaView style={Styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={Styles.header}>
-          <TouchableOpacity style={{ padding: 5 }}>
+          <TouchableOpacity
+            style={{ padding: 5 }}
+            onPressIn={() => navigation.goBack()}
+          >
             <Entypo
               name="chevron-left"
               size={25}
@@ -107,24 +125,15 @@ export default function Leitner() {
         <View style={Styles.boxes}>
           <View style={{ paddingVertical: 20 }}>
             <Text style={{ ...Styles.textHeader, color: "#0A1741" }}>
-              Boxes
+              Leitner Boxes
             </Text>
           </View>
-          <View>
-            <LeitnerItem type={{ number: 1, day: "every day" }} />
-            <View style={Styles.line}></View>
-          </View>
-          <View>
-            <LeitnerItem type={{ number: 2, day: "every 2 days" }} />
-            <View style={Styles.line}></View>
-          </View>
-          <View>
-            <LeitnerItem type={{ number: 3, day: "every 4 days" }} />
-            <View style={Styles.line}></View>
-          </View>
-          <View>
-            <LeitnerItem type={{ number: 4, day: "every 8 days" }} />
-          </View>
+          {boxes.map((item, index) => (
+            <View key={index}>
+              <LeitnerItem type={item} />
+              {index !== 7 && <View style={Styles.line}></View>}
+            </View>
+          ))}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -214,16 +223,15 @@ const Styles = StyleSheet.create({
     borderTopRightRadius: 40,
     backgroundColor: "rgb(241 245 249)",
     width: "100%",
-    height: 600,
     marginTop: 30,
     paddingHorizontal: 20,
   },
   line: {
     position: "absolute",
-    width: 3,
-    height: 71,
+    width: 2,
+    height: 75,
     backgroundColor: "#ccc",
-    bottom: "-21%",
-    left: "5%",
+    bottom: "-23%",
+    left: "4.5%",
   },
 });

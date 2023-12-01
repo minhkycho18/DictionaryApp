@@ -57,11 +57,11 @@ export default function YourWordList() {
       getMyWordList();
     }
   }, [isLogin]);
-  useEffect(() => {
-    if (data.params !== undefined) {
-      setWordLists([...wordLists, data.params]);
-    }
-  }, [data.params]);
+  // useEffect(() => {
+  //   if (data.params !== undefined) {
+  //     setWordLists([...wordLists, data.params]);
+  //   }
+  // }, [data.params]);
 
   useFocusEffect(
     useCallback(() => {
@@ -75,17 +75,23 @@ export default function YourWordList() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={{ marginTop: 10, marginLeft: 13 }}>
+        <TouchableOpacity
+          style={{
+            marginTop: 10,
+            marginLeft: 13,
+            padding: 5,
+          }}
+        >
           <Entypo
             name="chevron-left"
             size={24}
             color={colors.textTitle}
             onPress={() => {
-              navigation.push("HomeScreen");
+              navigation.goBack();
             }}
           />
         </TouchableOpacity>
-        <View style={{ marginLeft: 10 }}>
+        <View style={{ marginLeft: 4 }}>
           <Text
             style={[
               tw`pl-2`,

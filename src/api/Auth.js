@@ -11,3 +11,7 @@ export const Logout = (data) => {
 export const Register = (data) => {
   return http.post("/users/register", data);
 };
+
+export const GetInforUser = () => {
+  return http.get(`/users/me`);
+}

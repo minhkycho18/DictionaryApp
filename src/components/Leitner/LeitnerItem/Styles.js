@@ -8,13 +8,13 @@ export const Styles = StyleSheet.create({
         // backgroundColor: 'red',
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 25,
+        gap: 18,
         marginBottom: 25
     },
     viewIcon: {
-        width: 40,
-        height: 40,
-        backgroundColor: '#402C4F',
+        width: 35,
+        height: 35,
+        backgroundColor: '#0b043d',
         borderRadius: 20,
         alignItems: 'center',
         justifyContent: 'center'
@@ -42,7 +42,7 @@ export const Styles = StyleSheet.create({
     viewWords: {
         display: 'flex',
         flexDirection: 'row',
-        gap: 10,
+        gap: 8,
         alignItems: 'center',
         width: '100%',
         // backgroundColor: 'red'
@@ -53,6 +53,7 @@ export const Styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center',
+
     },
     viewNext: {
         width: 30,

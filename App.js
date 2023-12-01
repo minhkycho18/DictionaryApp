@@ -11,6 +11,7 @@ import { colors, configFont } from "~/constants/theme";
 import Index from '~/components/Study';
 import GameStack from '~/navigations/gameStack';
 import FlashcardScreen from '~/screens/FlashcardScreen';
+import LeitnerStack from '~/navigations/leitnerStack';
 export default function App() {
   const Stack = createNativeStackNavigator();
   const [loaded] = useFonts(configFont);
@@ -62,6 +63,11 @@ export default function App() {
           <Stack.Screen
             name="PlayGame"
             component={GameStack}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='LeinerStack'
+            component={LeitnerStack}
             options={{ headerShown: false }}
           />
 

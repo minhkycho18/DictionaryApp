@@ -5,7 +5,7 @@ import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import { useNavigation } from "@react-navigation/native";
 import { getAllSubCategory } from "~/api/Subcategory";
-export default function ItemPublicWordlist({ wordlist, onClone }) {
+export default function ItemPublicWordlist({ wordlist, onClone, type }) {
   const [loaded] = useFonts(configFont);
   // const [wordLists, setWordLists] = useState([]);
   const [subs, setSubs] = useState([]);
@@ -24,10 +24,11 @@ export default function ItemPublicWordlist({ wordlist, onClone }) {
   const handleDetailPublicWordList = async () => {
     navigation.push("publicwordlistDetail", {
       Wordlist: {
-        id: 1,
-        title: "wordlist1",
-        listDesc: "wordlist1",
+        id: wordlist.item.id,
+        title: wordlist.item.title,
+        listDesc: wordlist.item.listDesc,
       },
+      type: type,
     });
   };
   return (
@@ -37,9 +38,18 @@ export default function ItemPublicWordlist({ wordlist, onClone }) {
     >
       <View style={Styles.wrappered}>
         <View style={Styles.viewLeft}>
-          <View style={Styles.viewImage}>
+          <View
+            style={{
+              ...Styles.viewImage,
+              borderLeftColor: type === "public" ? "#BFD8C3" : "#A3D5D8",
+            }}
+          >
             <Image
-              source={require("~/assets/communication.png")}
+              source={
+                type === "public"
+                  ? require("~/assets/communication.png")
+                  : require("~/assets/default.png")
+              }
               style={Styles.image}
             />
           </View>

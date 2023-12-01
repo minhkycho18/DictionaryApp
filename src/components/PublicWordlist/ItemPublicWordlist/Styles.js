@@ -53,7 +53,6 @@ export const Styles = StyleSheet.create({
         height: 130,
         backgroundColor: '#fff',
         borderLeftWidth: 5,
-        borderLeftColor: "#BFD8C3",
         position: 'absolute',
         top: -29,
         shadowColor: "#000",
