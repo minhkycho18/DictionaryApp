@@ -1,6 +1,8 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Profile from '~/screens/ProfileScreen';
 import ProfileDetailScreen from '~/screens/ProfileDetailScreen';
+import Leitner from '~/screens/Leitner';
+import LeitnerDetail from '~/screens/LeitnerDetail';
 export default function ProfileStack() {
     const Stack = createNativeStackNavigator();
 
@@ -18,6 +20,17 @@ export default function ProfileStack() {
                 component={ProfileDetailScreen}
                 options={{ headerShown: false }}
             />
+            <Stack.Screen
+                name="Leitner"
+                component={Leitner}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="LeitnerDetail"
+                component={LeitnerDetail}
+                options={{ headerShown: false }}
+            />
+            
 
 
 

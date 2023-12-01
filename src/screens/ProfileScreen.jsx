@@ -32,6 +32,9 @@ export default function Profile() {
   if (!loaded) {
     return null;
   }
+  const handleLeitner = async () => {
+      navigation.push("Leitner");
+  };
   return (
     <SafeAreaView style={Styles.container}>
       <LinearGradient
@@ -77,7 +80,10 @@ export default function Profile() {
             <SvgXml width="24" height="24" xml={svgWordlist} />
             <Text style={Styles.textItem}>My Word List</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={Styles.viewProfile}>
+          <TouchableOpacity 
+          style={Styles.viewProfile}
+          onPress={handleLeitner}
+          >
             <SvgXml width="24" height="24" xml={svgleitner} />
             <Text style={Styles.textItem}>Leitner</Text>
           </TouchableOpacity>

@@ -227,6 +227,7 @@ export default function YourWordlistDetail() {
             style={{
               marginTop: 10,
               padding: 3,
+              // backgroundColor: "red"
               // marginBottom: 15,
             }}
             showsVerticalScrollIndicator={false}
@@ -323,6 +324,7 @@ const styles = StyleSheet.create({
   dropdown: {
     display: "flex",
     width: "88%",
+    height: "98%",
     marginTop: 12,
     // marginBottom: 12,
     elevation: 4,

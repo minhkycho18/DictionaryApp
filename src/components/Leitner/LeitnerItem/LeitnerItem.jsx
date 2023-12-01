@@ -1,10 +1,18 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { Styles } from "./Styles";
 import { Octicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors } from "~/constants/theme";
+import { useNavigation } from "@react-navigation/native";
+
 export default function LeitnerItem({ type }) {
+  const navigation = useNavigation();
+  const handleLeitnerDetail = async () => {
+      navigation.push("LeitnerDetail");
+
+      console.log('test: ', 'detail leitner');
+  };
   return (
     <View style={Styles.container}>
       <View style={Styles.viewIcon}>
@@ -14,7 +22,10 @@ export default function LeitnerItem({ type }) {
           {type?.number}
         </Text>
       </View>
-      <View style={Styles.viewContent}>
+      <TouchableOpacity 
+      style={Styles.viewContent}
+      onPress={handleLeitnerDetail}
+      >
         <View style={Styles.viewContentLeft}>
           <View style={{ width: "100%" }}>
             <Text
@@ -62,7 +73,7 @@ export default function LeitnerItem({ type }) {
             color={colors.textColor}
           />
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }

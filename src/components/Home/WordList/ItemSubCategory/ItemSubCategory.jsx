@@ -34,16 +34,19 @@ export default function ItemSubCategory({ subcategory, onDelete }) {
     onDelete(idWL, idSub);
   };
   const leftSwipe = () => {
-    return (
-      <TouchableOpacity
-        style={Styles.trash}
-        onPress={() => {
-          setModalVisible(true);
-        }}
-      >
-        <Fontisto name="trash" size={22} color="white" />
-      </TouchableOpacity>
-    );
+    if (!open) {
+      return (
+        <TouchableOpacity
+          style={Styles.trash}
+          onPress={() => {
+            setModalVisible(true);
+          }}
+        >
+          <Fontisto name="trash" size={22} color="white" />
+        </TouchableOpacity>
+      );
+    }
+
   };
 
   const onSwipeableOpen = () => {
@@ -83,7 +86,7 @@ export default function ItemSubCategory({ subcategory, onDelete }) {
     }
   };
   const handleDeleteVocal = (vocalId, defId) => {
-    const listWordFilter = listVocabOfSubCategory.filter(
+    const listWordFilter = listVocabOfSubCategory.filter( 
       (item) => defId !== item.definition.defId
     );
 
