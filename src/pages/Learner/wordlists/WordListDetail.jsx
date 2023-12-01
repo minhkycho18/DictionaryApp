@@ -255,12 +255,14 @@ const WordListDetail = (props) => {
             )}
           </Space>
 
-          <Space
-            className="wldetail__card-iconLearn"
-            onClick={() => handleLearn(subcategory.subcategoryId)}
-          >
-            Learn
-          </Space>
+          {!isPublic && !isDefault && (
+            <Space
+              className="wldetail__card-iconLearn"
+              onClick={() => handleLearn(subcategory.subcategoryId)}
+            >
+              Learn
+            </Space>
+          )}
         </Space>
       </Space>
     </Col>

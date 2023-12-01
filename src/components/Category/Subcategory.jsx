@@ -143,19 +143,18 @@ const Subcategory = (props) => {
   const itemsPerPage = 10;
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-
-  const wordsToDisplay = filterVocab.slice(startIndex, endIndex);
+  const filterByPos =
+    currentPos === "All"
+      ? filterVocab
+      : filterVocab.filter((vocab) =>
+          vocab.pos.toLowerCase().startsWith(currentPos.toLowerCase())
+        );
+  const wordsToDisplay = filterByPos.slice(startIndex, endIndex);
   // const filterVocabByPos = wordsToDisplay.filter((vocab) =>
   //   vocab.pos.toLowerCase().startsWith(currentPos.toLowerCase())
   // );
-  const filterByPos =
-    currentPos === "All"
-      ? wordsToDisplay
-      : wordsToDisplay.filter((vocab) =>
-          vocab.pos.toLowerCase().startsWith(currentPos.toLowerCase())
-        );
 
-  const renderVocabInSub = filterByPos.map((vocab, index) => (
+  const renderVocabInSub = wordsToDisplay.map((vocab, index) => (
     <SubcategoryItem
       key={index}
       vocab={vocab}
@@ -403,7 +402,7 @@ const Subcategory = (props) => {
               </Space>
               <Pagination
                 defaultCurrent={1}
-                total={filterVocab.length}
+                total={filterByPos.length}
                 onChange={onChange}
                 size="small"
                 current={page}
