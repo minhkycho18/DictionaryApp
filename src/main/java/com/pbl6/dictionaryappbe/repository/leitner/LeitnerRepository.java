@@ -13,7 +13,12 @@ import java.util.List;
 
 @Repository
 public interface LeitnerRepository extends JpaRepository<VocabLeitner, LeitnerId>, LeitnerDao {
-    List<VocabLeitner> findByLevelLeitner_LevelAndUserId(Integer level, Long userId);
+    @Query(value = """
+        SELECT *
+        FROM vocab_leitner
+        WHERE CONCAT(vocab_id, '-', def_id) IN :vocabDefs
+    """, nativeQuery = true)
+    List<VocabLeitner> findAllByVocabDefId(@Param("vocabDefs") List<String> vocabDefIds);
 
     boolean existsByVocabDef(VocabDef vocabDef);
 

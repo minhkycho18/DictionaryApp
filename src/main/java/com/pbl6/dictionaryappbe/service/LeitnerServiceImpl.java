@@ -3,6 +3,7 @@ package com.pbl6.dictionaryappbe.service;
 import com.pbl6.dictionaryappbe.dto.leitner.*;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabularyLeitnerDetailDto;
 import com.pbl6.dictionaryappbe.exception.DuplicateDataException;
+import com.pbl6.dictionaryappbe.exception.InvalidRequestDataException;
 import com.pbl6.dictionaryappbe.exception.RecordNotFoundException;
 import com.pbl6.dictionaryappbe.mapper.LeitnerMapper;
 import com.pbl6.dictionaryappbe.persistence.leitner.LeitnerId;
@@ -138,5 +139,17 @@ public class LeitnerServiceImpl implements LeitnerService {
             leitnerVocabCardGame.setResult(currentQuestion.equals(currentAnswer));
         });
         return cardGameList;
+    }
+
+    @Override
+    @Transactional
+    public void removeVocabLeitner(List<VocabLeitnerRequestDto> vocabLeitnerRequestDto) {
+        List<String> vocabDefIds = vocabLeitnerRequestDto.stream()
+                .map(vocabLeitner -> vocabLeitner.getVocabId() + "-" + vocabLeitner.getDefId())
+                .toList();
+        List<VocabLeitner> vocabLeitners = leitnerRepository.findAllByVocabDefId(vocabDefIds);
+        if(vocabLeitnerRequestDto.size() != vocabLeitners.size())
+            throw new InvalidRequestDataException("Vocab Leitner not found");
+        leitnerRepository.deleteAll(vocabLeitners);
     }
 }

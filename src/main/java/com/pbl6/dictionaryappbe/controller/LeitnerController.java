@@ -103,4 +103,11 @@ public class LeitnerController {
     ) {
         return leitnerService.getLeitnerGameByLevel(level);
     }
+
+    @DeleteMapping("/vocabs")
+    @Operation(summary = "Delete vocab leitner", security = {@SecurityRequirement(name = "bearer-key")})
+    public ResponseEntity<String> getLeitnerGame(@Valid @RequestBody List<VocabLeitnerRequestDto> vocabLeitnerRequestDto) {
+        leitnerService.removeVocabLeitner(vocabLeitnerRequestDto);
+        return new ResponseEntity<>("Delete vocab leitner successfully", HttpStatus.ACCEPTED);
+    }
 }

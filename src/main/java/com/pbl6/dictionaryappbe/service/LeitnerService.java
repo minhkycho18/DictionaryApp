@@ -16,4 +16,6 @@ public interface LeitnerService {
     List<LeitnerBoxDto> getAllUserLeitnerBoxes();
 
     List<LeitnerVocabCardGame> getLeitnerGameByLevel(Integer level);
+
+    void removeVocabLeitner(List<VocabLeitnerRequestDto> vocabLeitnerRequestDto);
 }
