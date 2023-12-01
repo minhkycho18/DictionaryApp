@@ -17,8 +17,8 @@ import WordListDetail from "../pages/Learner/wordlists/WordListDetail";
 import ExploredWordList from "../pages/Learner/wordlists/ExploredWordList/ExploredWordList";
 import Game from "../pages/Learner/game/Game";
 import WordListManagement from "../pages/Manager/WordList/WordListManagement";
-import LeitnerGame from "../pages/Learner/leitner/LeitnerGame";
 import { getLeiner } from "../api/Leitner/leitner.api";
+import LeitnerLevel from "../pages/Learner/leitner/LeitnerLevel";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -91,7 +91,7 @@ const routers = createBrowserRouter([
           },
           {
             path: ":id",
-            element: <LeitnerGame />,
+            element: <LeitnerLevel />,
             loader: async ({ params }) => {
               try {
                 const rs = await getLeiner();

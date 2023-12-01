@@ -1,5 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Space } from "antd";
+import { Button, Card, Modal, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import getTokenFromStorage from "../../helpers/getTokenFromStorage";
@@ -13,7 +13,6 @@ import category_public from "../../assets/images/public_wordlist.png";
 const WordLists = ({ type, wordLists }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const [isSelf, setIsSelf] = useState(true);
 
   const [typeRender, setTypeRender] = useState({
     title: "",

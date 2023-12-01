@@ -58,6 +58,7 @@ const WordListDetail = (props) => {
   const [subAddedID, setSubAddedID] = useState();
   const [isPublic, setIsPublic] = useState(false);
   const [isDefault, setIsDefault] = useState(false);
+
   useEffect(() => {
     dispatch(getWordListsPublic());
     dispatch(getWLById(query));
@@ -86,6 +87,7 @@ const WordListDetail = (props) => {
     publicWL();
     return () => {};
   }, [selectedWordList]);
+
   const openNotificationWithIcon = (type, msg) => {
     switch (type) {
       case "success":
@@ -149,7 +151,7 @@ const WordListDetail = (props) => {
     // console.log(result);
   };
 
-  const info = () => {
+  const info = (msg) => {
     Modal.confirm({
       title: "Login",
       okText: "Sign In",
@@ -160,7 +162,7 @@ const WordListDetail = (props) => {
       onCancel() {},
       content: (
         <Space className="popconfirm-text">
-          <p>In order to add the word to your categories you must sign in.</p>
+          <p>{msg}</p>
         </Space>
       ),
     });
@@ -171,7 +173,42 @@ const WordListDetail = (props) => {
       setSubAddedID(e);
       setIsModalOpen(true);
     } else {
-      info();
+      info("In order to add the word to your categories you must sign in.");
+    }
+  };
+  const handleCloneWL = (e) => {
+    const token = getTokenFromStorage();
+    if (token) {
+      modal.confirm({
+        title: "Clone Wordlist",
+        icon: <ExclamationCircleOutlined />,
+        content: "Do you want to add this wordlist ?",
+        okText: "Ok",
+        cancelText: "Cancel",
+        onOk: handleCloneWLConfirm,
+      });
+    } else {
+      info("In order to clone this WordList you must sign in.");
+    }
+  };
+  const handleLearn = (subcategoryId) => {
+    const token = getTokenFromStorage();
+    if (token) {
+      navigate(
+        `/vocabulary/${selectedWordList.id}/detail/${subcategoryId}/learn`
+      );
+    } else {
+      info("In order to learn you must sign in.");
+    }
+  };
+  const handleAddToLeitner = (subcategoryId) => {
+    const token = getTokenFromStorage();
+    if (token) {
+      //  navigate(
+      //    `/vocabulary/${selectedWordList.id}/detail/${subcategoryId}/learn`
+      //  );
+    } else {
+      info("In order to add this subcategory you must sign in.");
     }
   };
   const handleCancel = () => {
@@ -192,7 +229,11 @@ const WordListDetail = (props) => {
           }}
         >
           <Space>
-            <Space className="wldetail__card-addLeitner" direction="vertical">
+            <Space
+              className="wldetail__card-addLeitner"
+              direction="vertical"
+              onClick={handleAddToLeitner}
+            >
               <Space className="wldetail__card-iconAdd">
                 <InboxOutlined />
               </Space>
@@ -216,11 +257,7 @@ const WordListDetail = (props) => {
 
           <Space
             className="wldetail__card-iconLearn"
-            onClick={() =>
-              navigate(
-                `/vocabulary/${selectedWordList.id}/detail/${subcategory.subcategoryId}/learn`
-              )
-            }
+            onClick={() => handleLearn(subcategory.subcategoryId)}
           >
             Learn
           </Space>
@@ -274,19 +311,7 @@ const WordListDetail = (props) => {
             )}
 
             {selectedWordList.listType !== "PRIVATE" && isPublic && (
-              <Space
-                className="wldetail__content-btn"
-                onClick={() => {
-                  modal.confirm({
-                    title: "Clone Wordlist",
-                    icon: <ExclamationCircleOutlined />,
-                    content: "Do you want to add this wordlist ?",
-                    okText: "Ok",
-                    cancelText: "Cancel",
-                    onOk: handleCloneWLConfirm,
-                  });
-                }}
-              >
+              <Space className="wldetail__content-btn" onClick={handleCloneWL}>
                 Clone Wordlist
                 <FiFolderPlus />
               </Space>
