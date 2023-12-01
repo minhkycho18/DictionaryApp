@@ -42,6 +42,9 @@ export default function Profile() {
   if (!loaded) {
     return null;
   }
+  const handleLeitner = async () => {
+      navigation.push("Leitner");
+  };
   return (
     <SafeAreaView style={Styles.container}>
       <LinearGradient
