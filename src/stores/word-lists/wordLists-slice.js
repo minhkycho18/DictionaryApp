@@ -21,7 +21,15 @@ const wordListsSlice = createSlice({
     wordListsDefault: [],
     searchWordListResult: [],
   },
-  reducers: {},
+  reducers: {
+    // deleteWL: (state, action) => {
+    //   state.messageDel = null;
+    //   const index = state.wordLists.findIndex((wl) => wl.id === action.payload);
+    //   if (index !== -1) {
+    //     state.wordLists.splice(index, 1);
+    //   }
+    // },
+  },
   extraReducers: (builder) => {
     builder
       //==========================================================GetAllWl
@@ -85,7 +93,7 @@ const wordListsSlice = createSlice({
       .addCase(createNewWL.fulfilled, (state, action) => {
         state.loading = false;
         state.wordLists.push(action.payload);
-        console.log(action.payload);
+        // console.log(action.payload);
 
         state.wordListsDefault.push(action.payload);
       })
@@ -99,25 +107,12 @@ const wordListsSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteExistWordList.fulfilled, (state, action) => {
-        const updateWordList = (array, payload, logMessage) => {
-          const index = array.findIndex((wl) => wl.id === payload.id);
-
-          if (index !== -1) {
-            array[index] = payload;
-          } else {
-            console.log(`No wordlist found in ${logMessage}`);
-          }
-        };
-
-        updateWordList(state.wordLists, action.payload, "wordLists");
-        updateWordList(
-          state.wordListsDefault,
-          action.payload,
-          "wordListsDefault"
+        const index = state.wordLists.findIndex(
+          (wl) => wl.id === action.payload
         );
-
+        state.wordLists.splice(index, 1);
         state.loading = false;
-        state.messageDel = null;
+        state.messageDel = action.payload;
       })
       .addCase(deleteExistWordList.rejected, (state, action) => {
         state.loading = false;

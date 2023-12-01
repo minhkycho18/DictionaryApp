@@ -1,5 +1,15 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Col, Form, Input, Modal, Radio, Row, Space, Spin } from "antd";
+import {
+  Col,
+  Form,
+  Input,
+  Modal,
+  Radio,
+  Row,
+  Space,
+  Spin,
+  message,
+} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,11 +25,16 @@ const MyWordLists = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { loading, wordLists } = useSelector((state) => state.wordLists);
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const { loading, wordLists, messageDel } = useSelector(
+    (state) => state.wordLists
+  );
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   useEffect(() => {
     dispatch(getAllWL());
+    // setWl(wordLists);
   }, [dispatch]);
 
   const handleSelectWordList = (wordlist) => {
@@ -27,6 +42,7 @@ const MyWordLists = () => {
   };
   const onDeleteAnItem = (id) => {
     dispatch(deleteExistWordList(id));
+    messageApi.success(messageDel);
   };
 
   const handleAddingWordList = () => {
@@ -41,6 +57,7 @@ const MyWordLists = () => {
       className={`MyWordLists ${loading ? "loading-css" : ""}`}
       style={{ width: "100%!important" }}
     >
+      {contextHolder}
       <Modal
         open={open}
         title="Create a new WordList"
