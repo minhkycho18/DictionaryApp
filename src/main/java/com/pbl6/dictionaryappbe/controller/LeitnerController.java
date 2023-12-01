@@ -14,6 +14,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -28,6 +30,9 @@ import java.util.List;
 @Validated
 public class LeitnerController {
     private final LeitnerService leitnerService;
+
+    @Value("${dictionary-app.api.default-page-size}")
+    private int defaultPageSize;
 
     @Operation(summary = "Add vocabulary to Leitner", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
@@ -56,12 +61,22 @@ public class LeitnerController {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VocabularyLeitnerDetailDto.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid data")})
     @GetMapping("/{level}")
-    public List<VocabularyLeitnerDetailDto> showVocabsLeitnerBox(
+    public Page<VocabularyLeitnerDetailDto> showVocabsLeitnerBox(
             @PathVariable("level")
             @Min(value = 0, message = "Minimum level is 0")
             @Max(value = 7, message = "Maximum level is 7")
-            int level) {
-        return leitnerService.showVocabsByLevel(level);
+            int level,
+            @RequestParam(name = "offset", defaultValue = "0")
+            @Min(value = 0, message = "Offset must be greater than or equal to 0")
+            int offset,
+            @Min(value = 1, message = "Limit must be greater than or equal to 1")
+            @RequestParam(name = "limit", required = false) Integer limit,
+            @RequestParam(name = "pos", required = false) String pos,
+            @RequestParam(defaultValue = "") String keyword) {
+        if (limit == null) {
+            limit = defaultPageSize;
+        }
+        return leitnerService.showVocabsByLevel(level, keyword, pos, offset, limit);
     }
 
     @Operation(summary = "Up/Down vocab leitner level", security = {@SecurityRequirement(name = "bearer-key")})
@@ -77,7 +92,6 @@ public class LeitnerController {
         leitnerService.modifyStatusLevelVocabLetiner(leitnerRequestDtos, statusLevel);
         return new ResponseEntity<>(statusLevel.toString() + " level vocabulary successfully", HttpStatus.ACCEPTED);
     }
-
 
     @GetMapping("/levels/{level}/game")
     @Operation(summary = "Get leitner game", security = {@SecurityRequirement(name = "bearer-key")})

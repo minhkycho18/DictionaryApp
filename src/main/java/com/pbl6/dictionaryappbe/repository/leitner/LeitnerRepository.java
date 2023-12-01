@@ -1,4 +1,4 @@
-package com.pbl6.dictionaryappbe.repository;
+package com.pbl6.dictionaryappbe.repository.leitner;
 
 import com.pbl6.dictionaryappbe.dto.leitner.LeitnerVocabCardGame;
 import com.pbl6.dictionaryappbe.persistence.leitner.LeitnerId;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface LeitnerRepository extends JpaRepository<VocabLeitner, LeitnerId> {
+public interface LeitnerRepository extends JpaRepository<VocabLeitner, LeitnerId>, LeitnerDao {
     List<VocabLeitner> findByLevelLeitner_LevelAndUserId(Integer level, Long userId);
 
     boolean existsByVocabDef(VocabDef vocabDef);
