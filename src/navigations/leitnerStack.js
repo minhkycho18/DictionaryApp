@@ -2,6 +2,7 @@
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Leitner from '~/screens/Leitner';
+import LeitnerDetail from '~/screens/LeitnerDetail';
 
 export default function LeitnerStack() {
     const Stack = createNativeStackNavigator();
@@ -19,7 +20,11 @@ export default function LeitnerStack() {
                 component={Leitner}
                 options={{ headerShown: false }}
             />
-
+            <Stack.Screen
+                name="LeitnerDetail"
+                component={LeitnerDetail}
+                options={{ headerShown: false }}
+            />
 
 
         </Stack.Navigator>

@@ -27,11 +27,11 @@ export default function ProfileStack() {
                 component={Leitner}
                 options={{ headerShown: false }}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
                 name="LeitnerDetail"
                 component={LeitnerDetail}
                 options={{ headerShown: false }}
-            />
+            /> */}
             
             <Stack.Screen
                 name="YourWordlist"
