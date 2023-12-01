@@ -15,9 +15,10 @@ import { TouchableOpacity } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { useNavigation } from "@react-navigation/native";
 import { checkLogin } from "~/helper/Auth";
+import { GetInforUser } from "~/api/Auth";
 export default function Profile() {
   const [isLogin, setIsLogin] = useState(false);
-
+  const [user, setUser] = useState({});
   const navigation = useNavigation();
   useEffect(() => {
     const checkToken = async () => {
@@ -27,6 +28,15 @@ export default function Profile() {
 
     checkToken();
   }, []);
+  useEffect(() => {
+    const getInfor = async () => {
+      const res = await GetInforUser();
+      setUser(res);
+    };
+    if (isLogin) {
+      getInfor();
+    }
+  }, [isLogin]);
 
   const [loaded] = useFonts(configFont);
   if (!loaded) {
@@ -43,8 +53,8 @@ export default function Profile() {
         {isLogin ? (
           <View style={{ gap: 10 }}>
             <Image source={require("~/assets/man.png")} style={Styles.image} />
-            <Text style={Styles.textName}>Bui Van Huy</Text>
-            <Text style={Styles.textEmail}>vanhuybuivips@gmail.com</Text>
+            <Text style={Styles.textName}>{user.name}</Text>
+            <Text style={Styles.textEmail}>{user.email}</Text>
           </View>
         ) : (
           <View style={Styles.viewImageLogo}>
@@ -66,18 +76,24 @@ export default function Profile() {
             borderBottomColor: "#ccc",
           }}
           onPress={() => {
-            navigation.navigate("ProfileDetail");
+            navigation.navigate("ProfileDetail", { user: user });
           }}
         >
           <Ionicons name="person-outline" size={24} color={colors.textColor} />
           <Text style={Styles.textItem}>View Profile</Text>
         </TouchableOpacity>
         <View style={{ borderBottomWidth: 1, borderBottomColor: "#ccc" }}>
-          <TouchableOpacity style={Styles.viewProfile}>
+          <TouchableOpacity
+            style={Styles.viewProfile}
+            onPress={() => navigation.navigate("YourWordlist")}
+          >
             <SvgXml width="24" height="24" xml={svgWordlist} />
             <Text style={Styles.textItem}>My Word List</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={Styles.viewProfile}>
+          <TouchableOpacity
+            style={Styles.viewProfile}
+            onPress={() => navigation.push("LeinerStack")}
+          >
             <SvgXml width="24" height="24" xml={svgleitner} />
             <Text style={Styles.textItem}>Leitner</Text>
           </TouchableOpacity>

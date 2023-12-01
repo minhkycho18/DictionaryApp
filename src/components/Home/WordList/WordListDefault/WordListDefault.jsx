@@ -14,8 +14,10 @@ import ItemWordList from "../ItemWordList/ItemWordList";
 import { getDefault } from "~/api/WordList";
 import { useFonts } from "expo-font";
 import { configFont, colors } from "~/constants/theme";
+import { useNavigation } from "@react-navigation/native";
 export default function WordListDefault() {
   const [defaultList, setDefaultList] = useState([]);
+  const navigation = useNavigation();
   useEffect(() => {
     const getDefaultWordList = async () => {
       const data = await getDefault();
@@ -48,7 +50,10 @@ export default function WordListDefault() {
         >
           Default Wordlist
         </Text>
-        <TouchableOpacity style={Styles.header}>
+        <TouchableOpacity
+          style={Styles.header}
+          onPress={() => navigation.push("publicWordlist", { type: "default" })}
+        >
           <Text
             style={[
               tw`text-base text-blue-600`,
@@ -71,6 +76,7 @@ export default function WordListDefault() {
             key={item.id}
             src={require("~/assets/default.png")}
             wordlist={item}
+            type={{ type: "default" }}
           />
         ))}
       </ScrollView>

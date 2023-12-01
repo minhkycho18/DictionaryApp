@@ -6,8 +6,11 @@ import { AntDesign } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
+import { useEffect } from "react";
+import { useState } from "react";
 
 export default function ProfileDetailScreen(props) {
+  const [user, setUser] = useState(props.route.params.user);
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
@@ -42,13 +45,13 @@ export default function ProfileDetailScreen(props) {
           <View style={Styles.ViewItem}>
             <View>
               <Text style={Styles.textLabel}>Name</Text>
-              <Text style={Styles.textPlacehoder}>Huy Bui Van</Text>
+              <Text style={Styles.textPlacehoder}>{user.name}</Text>
             </View>
           </View>
           <View style={Styles.ViewItem}>
             <View>
               <Text style={Styles.textLabel}>Email</Text>
-              <Text style={Styles.textPlacehoder}>vanhuybuivips@gmail.com</Text>
+              <Text style={Styles.textPlacehoder}>{user.email}</Text>
             </View>
           </View>
           <View style={{ ...Styles.ViewItem, borderBottomWidth: 0 }}>
@@ -58,13 +61,23 @@ export default function ProfileDetailScreen(props) {
                 <View
                   style={{ flexDirection: "row", gap: 10, marginRight: 25 }}
                 >
-                  <View style={Styles.cirle_choose}>
-                    <View style={Styles.cirle_child}></View>
-                  </View>
+                  {user.gender === "MALE" ? (
+                    <View style={Styles.cirle_choose}>
+                      <View style={Styles.cirle_child}></View>
+                    </View>
+                  ) : (
+                    <View style={Styles.cirle}></View>
+                  )}
                   <Text style={Styles.textLabel}>Male</Text>
                 </View>
                 <View style={{ flexDirection: "row", gap: 10 }}>
-                  <View style={Styles.cirle}></View>
+                  {user.gender === "FEMALE" ? (
+                    <View style={Styles.cirle_choose}>
+                      <View style={Styles.cirle_child}></View>
+                    </View>
+                  ) : (
+                    <View style={Styles.cirle}></View>
+                  )}
                   <Text style={Styles.textLabel}>Female</Text>
                 </View>
               </View>

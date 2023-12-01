@@ -54,7 +54,7 @@ export default function WordListPublic() {
         </Text>
         <TouchableOpacity
           style={Styles.header}
-          onPress={() => navigation.push("publicWordlist")}
+          onPress={() => navigation.push("publicWordlist", { type: "public" })}
         >
           <Text
             style={[

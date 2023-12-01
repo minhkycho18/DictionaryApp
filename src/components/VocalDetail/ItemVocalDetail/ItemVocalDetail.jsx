@@ -4,6 +4,7 @@ import { styles } from "./Styles";
 import { AntDesign } from "@expo/vector-icons";
 import { colors, configFont } from "~/constants/theme";
 import { useFonts } from "expo-font";
+import { addVocalToLeitner } from "~/api/Leitner";
 
 function ItemVocalDetail({
   definition,
@@ -14,6 +15,23 @@ function ItemVocalDetail({
   stateOfSub,
 }) {
   const [isWordlist, setIsWordlist] = useState(definition.isWordOfUserWordlist);
+  const [isWordOfUserLeitner, setIsWordOfUserLeitner] = useState(
+    definition.isWordOfUserLeitner
+  );
+
+  const addLeitner = async (vocabId, defId) => {
+    try {
+      const res = await addVocalToLeitner({
+        vocabId: vocabId,
+        defId: defId,
+      });
+      console.log(res);
+      setIsWordOfUserLeitner(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (stateOfSub.state && stateOfSub.defId === definition.defId) {
       console.log(`Sucessfully`);
@@ -48,19 +66,18 @@ function ItemVocalDetail({
             <View style={{ display: "flex", flexDirection: "row" }}>
               <TouchableOpacity
                 style={
-                  definition.isWordOfUserLeitner
+                  isWordOfUserLeitner
                     ? { ...styles.viewIcon, borderColor: "#3BC8F7" }
                     : styles.viewIcon
                 }
+                onPress={() => addLeitner(item.id, definition.defId)}
               >
                 <Image
                   source={require("~/assets/leitner.png")}
                   style={{
                     width: 24,
                     height: 24,
-                    tintColor: definition.isWordOfUserLeitner
-                      ? "#3BC8F7"
-                      : "#5E7172",
+                    tintColor: isWordOfUserLeitner ? "#3BC8F7" : "#5E7172",
                   }}
                 />
               </TouchableOpacity>

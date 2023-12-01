@@ -25,6 +25,20 @@ export default function ItemWordList({ src, wordlist, type }) {
                 title: wordlist.title,
                 listDesc: wordlist.listDesc,
               },
+              type: "public",
+            },
+          });
+        }
+        if (type.type === "default") {
+          navigation.navigate("publicWordlist", {
+            screen: "publicwordlistDetail",
+            params: {
+              Wordlist: {
+                id: wordlist.id,
+                title: wordlist.title,
+                listDesc: wordlist.listDesc,
+              },
+              type: "default",
             },
           });
         }

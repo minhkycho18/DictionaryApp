@@ -1,47 +1,74 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text } from "react-native";
 import { Styles } from "./Styles";
 import { Octicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
-import { colors } from "~/constants/theme";
+import { IconBook, IconCheck, IconReturn, colors } from "~/constants/theme";
+import { SvgXml } from "react-native-svg";
 export default function LeitnerItem({ type }) {
+  const getViewIcon = (type) => {
+    switch (parseInt(type.level)) {
+      case 0:
+        return (
+          <View style={{ ...Styles.viewIcon, backgroundColor: "#6c757d" }}>
+            <SvgXml width="17" height="17" xml={IconReturn} />
+          </View>
+        );
+      case 7:
+        return (
+          <View style={{ ...Styles.viewIcon, backgroundColor: "#28a745" }}>
+            <SvgXml width="17" height="17" xml={IconCheck} />
+          </View>
+        );
+      default:
+        return (
+          <View style={Styles.viewIcon}>
+            <Text
+              style={{
+                fontFamily: "Quicksand-Bold",
+                fontSize: 18,
+                color: "#fff",
+              }}
+            >
+              {type?.level}
+            </Text>
+          </View>
+        );
+    }
+  };
   return (
     <View style={Styles.container}>
-      <View style={Styles.viewIcon}>
+      {/* <View style={Styles.viewIcon}>
         <Text
           style={{ fontFamily: "Quicksand-Bold", fontSize: 18, color: "#fff" }}
         >
           {type?.number}
         </Text>
-      </View>
+      </View> */}
+      {getViewIcon(type)}
       <View style={Styles.viewContent}>
         <View style={Styles.viewContentLeft}>
           <View style={{ width: "100%" }}>
             <Text
               style={{
                 fontFamily: "Quicksand-SemiBold",
-                fontSize: 19,
+                fontSize: 18,
                 color: colors.textTitle,
               }}
             >
-              {type?.day}
+              {type?.levelName}
             </Text>
           </View>
           <View style={Styles.viewWords}>
-            <Octicons
-              name="book"
-              size={20}
-              color={colors.textColor}
-              style={{ marginTop: 5 }}
-            />
+            <SvgXml width="18" height="18" xml={IconBook} />
             <Text
               style={{
                 fontFamily: "Quicksand-Medium",
-                fontSize: 18,
+                fontSize: 17,
                 color: colors.textColor,
               }}
             >
-              0
+              {type?.amountOfWord}
             </Text>
             <Text
               style={{

@@ -191,6 +191,47 @@ export const Styles = StyleSheet.create({
         borderBottomColor: "#4F62F7",
         borderRadius: 2
     },
+    modal_container: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    modal_content: {
+        backgroundColor: "white",
+        marginVertical: 60,
+        width: "95%",
+        borderWidth: 1,
+        borderColor: "#fff",
+        borderRadius: 7,
+        position: "relative",
+    },
+    modal_view_button: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: 'space-between',
+        borderTopWidth: 2,
+        borderTopColor: '#ccc',
+    },
+    modal_button_cancel: {
+        width: '50%',
+        height: '100%',
+        textAlign: "center",
+        padding: 5,
+        display: "flex",
+        alignItems: "center",
+        borderRightWidth: 2,
+        borderRightColor: '#ccc',
+        paddingVertical: 10,
+    },
+    modal_button_delete: {
+        width: '50%',
+        paddingVertical: 10,
+        textAlign: "center",
+        padding: 5,
+        display: "flex",
+        alignItems: "center",
+
+    },
 
 
 })

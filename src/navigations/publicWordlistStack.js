@@ -1,11 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import React from 'react'
+import React, { useEffect } from 'react'
 import PublicWordlist from '~/components/PublicWordlist/PublicWordlist';
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import PublicWordlistDetail from '~/screens/PublicWordlistDetail';
-export default function PublicWordlistStack() {
+export default function PublicWordlistStack(props) {
     const Stack = createNativeStackNavigator();
+
     const [loaded] = useFonts(configFont);
     if (!loaded) {
         return null;
@@ -13,13 +14,14 @@ export default function PublicWordlistStack() {
 
     return (
 
-        <Stack.Navigator screenOptions={{ headerShadowVisible: false }} initialRouteName="publicWordlist">
+        <Stack.Navigator screenOptions={{ headerShadowVisible: false }} >
             <Stack.Screen
+                initialParams={props.route.params}
                 name="publicwordlist"
                 component={PublicWordlist}
                 options={
                     {
-                        title: "Public Wordlist",
+                        title: props.route.params.type === "public" ? "Public Wordlist" : "Default Wordlist",
                         headerTitleStyle: {
                             color: colors.textTitle,
                             fontSize: 25,
