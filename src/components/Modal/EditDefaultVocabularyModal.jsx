@@ -301,32 +301,58 @@ const EditDefaultVocabularyModal = (props) => {
                 </div>
               )}
             </Form.List>
-            <Space style={{ margin: "30px 20px 0 0", float: "right" }}>
-              {!props.contribution ? (
-                <>
-                  <Button onClick={handleCancel}>Cancel</Button>
-                  <Button type="primary" onClick={handleShowSubmitModal}>
-                    Submit
-                  </Button>
-                </>
-              ) : (
-                <>
+            {!props.contribution ? (
+              <Space style={{ margin: "30px 20px 0 0", float: "right" }}>
+                <Button onClick={handleCancel}>Cancel</Button>
+                <Button type="primary" onClick={handleShowSubmitModal}>
+                  Submit
+                </Button>
+              </Space>
+            ) : (
+              <Space
+                style={{
+                  margin: "30px 20px 0 0",
+                  width: "100%",
+                  display: "block",
+                }}
+              >
+                <Form.Item name="status">
                   <Button
-                    onClick={handleCancel}
-                    style={{ backgroundColor: "#FF0000", color: "white" }}
+                    onClick={() => {
+                      form.setFieldsValue({ status: "REJECTED" });
+                      handleCancel();
+                    }}
+                    className="reject-button"
+                    size="large"
+                    style={{
+                      backgroundColor: "#FF0000",
+                      color: "white",
+                      border: "none",
+                      marginLeft: "50px",
+                    }}
                   >
                     Reject
                   </Button>
                   <Button
-                    type="primary"
-                    onClick={handleShowSubmitModal}
-                    style={{ backgroundColor: "#009900" }}
+                    className="approve-button"
+                    onClick={() => {
+                      form.setFieldsValue({ status: "DEFAULT" });
+                      handleShowSubmitModal();
+                    }}
+                    size="large"
+                    style={{
+                      backgroundColor: "#009900",
+                      color: "white",
+                      border: "none",
+                      float: "right",
+                      marginRight: "40px",
+                    }}
                   >
                     Approve
                   </Button>
-                </>
-              )}
-            </Space>
+                </Form.Item>
+              </Space>
+            )}
           </Form>
         </Space>
         <Modal
