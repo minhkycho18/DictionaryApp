@@ -52,10 +52,18 @@ const EditDefaultVocabularyModal = (props) => {
     };
     try {
       await updateDefaultVocab(props.vocabDetail.id, data);
-      props.notification("success", "edit");
+      if (props.contribution) {
+        props.notification("success", "contribute");
+      } else {
+        props.notification("success", "edit");
+      }
       props.handleEditForm();
     } catch (e) {
-      props.notification("error", "edit");
+      if (props.contribution) {
+        props.notification("error", "contribute");
+      } else {
+        props.notification("error", "edit");
+      }
     }
     handleShowSubmitModal();
     props.handleShow();
@@ -73,6 +81,11 @@ const EditDefaultVocabularyModal = (props) => {
       return isAudio || Upload.LIST_IGNORE;
     },
   };
+
+  const handleRejectVocab = () => {
+    props.handleRejectVocab();
+  };
+
   const handleCancel = () => {
     props.handleShow();
   };
@@ -317,39 +330,40 @@ const EditDefaultVocabularyModal = (props) => {
                 }}
               >
                 <Form.Item name="status">
-                  <Button
-                    onClick={() => {
-                      form.setFieldsValue({ status: "REJECTED" });
-                      handleCancel();
-                    }}
-                    className="reject-button"
-                    size="large"
-                    style={{
-                      backgroundColor: "#FF0000",
-                      color: "white",
-                      border: "none",
-                      marginLeft: "50px",
-                    }}
-                  >
-                    Reject
-                  </Button>
-                  <Button
-                    className="approve-button"
-                    onClick={() => {
-                      form.setFieldsValue({ status: "DEFAULT" });
-                      handleShowSubmitModal();
-                    }}
-                    size="large"
-                    style={{
-                      backgroundColor: "#009900",
-                      color: "white",
-                      border: "none",
-                      float: "right",
-                      marginRight: "40px",
-                    }}
-                  >
-                    Approve
-                  </Button>
+                  <>
+                    <Button
+                      onClick={() => {
+                        handleRejectVocab();
+                      }}
+                      className="reject-button"
+                      size="large"
+                      style={{
+                        backgroundColor: "#FF0000",
+                        color: "white",
+                        border: "none",
+                        marginLeft: "50px",
+                      }}
+                    >
+                      Reject
+                    </Button>
+                    <Button
+                      className="approve-button"
+                      onClick={() => {
+                        form.setFieldsValue({ status: "DEFAULT" });
+                        handleShowSubmitModal();
+                      }}
+                      size="large"
+                      style={{
+                        backgroundColor: "#009900",
+                        color: "white",
+                        border: "none",
+                        float: "right",
+                        marginRight: "40px",
+                      }}
+                    >
+                      Approve
+                    </Button>
+                  </>
                 </Form.Item>
               </Space>
             )}

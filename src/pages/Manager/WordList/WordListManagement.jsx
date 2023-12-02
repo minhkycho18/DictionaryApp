@@ -120,7 +120,6 @@ const WordListManagement = () => {
     currentDataType === WORDLIST_DATA_TYPE
       ? dispatch(createNewWL(param))
       : dispatch(createSubcategory({ ...param, wordListId: selectedWL.id }));
-    message.success("Create successfully!");
   };
 
   const handleEdit = (param) => {
@@ -132,7 +131,6 @@ const WordListManagement = () => {
             wordListId: selectedWL.id,
           })
         );
-    message.success("Edit successfully!");
   };
 
   const handleDelete = async (param) => {
@@ -236,7 +234,6 @@ const WordListManagement = () => {
       setCurrentVocabInSub([]);
     } else if (currentDataType === SUBCATEGORY_DATA_TYPE) {
       setCurrentDataType(WORDLIST_DATA_TYPE);
-      console.log(currentVocabInSub);
     }
   };
 

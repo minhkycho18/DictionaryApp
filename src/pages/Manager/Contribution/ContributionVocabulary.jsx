@@ -2,33 +2,43 @@ import { FilterOutlined, SearchOutlined } from "@ant-design/icons";
 import { Col, Input, Row, Select, Space } from "antd";
 import ContributionDataTable from "../../../components/data-table/Contribution/ContributionDataTable";
 import { useEffect, useState } from "react";
-import { getAllContributionVocabs } from "../../../api/Vocabulary/vocabulary.api";
+import { useDispatch, useSelector } from "react-redux";
+import { getContributionVocab } from "../../../stores/search-word/searchThunk";
+import { setContributionVocab } from "../../../stores/search-word/searchSlice";
 
 const ContributionVocabulary = () => {
-  const [dataSource, setDataSource] = useState([]);
+  const [dataSearch, setDataSearch] = useState([]);
+  const [searching, setSearching] = useState(false);
+  const { contributionVocab, loading } = useSelector((state) => state.search);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const getData = async () => {
-      const response = await getAllContributionVocabs();
-      setDataSource(response);
-    };
-    getData();
+    dispatch(getContributionVocab());
   }, []);
 
-  const handleApproveAndReject = (record) => {
-    const newData = dataSource.filter((item) => {
-      return item.key !== record.key;
-    });
-    setDataSource(newData);
+  const handleApprove = (record) => {
+    dispatch(setContributionVocab(record.id));
   };
 
-  const handleTableChange = (record) => {
-    console.log(record);
-    const newData = dataSource.filter((item) => {
-      return item.key !== record.key;
-    });
-    setDataSource(newData);
+  const handleReject = (record) => {
+    dispatch(setContributionVocab(record.id));
   };
+
+  const handleSearch = (keyword) => {
+    const trimmedKeyword = keyword.trim();
+    if (trimmedKeyword === "") {
+      setDataSearch([]);
+    } else {
+      const lowerKeyword = trimmedKeyword.toLowerCase();
+      const newData = contributionVocab.filter((item) =>
+        item.word.toLowerCase().startsWith(lowerKeyword)
+      );
+      setDataSearch(newData);
+    }
+    setSearching(!!trimmedKeyword);
+  };
+
+  const handleTableChange = (record) => {};
   return (
     <>
       <Space
@@ -69,17 +79,32 @@ const ContributionVocabulary = () => {
                     style={{ color: "#bbb", padding: "0px 4px" }}
                   />
                 }
-                // onChange={(e) => handleSearch(e.target.value)}
+                // suffix={
+                //   searching && (
+                //     <CloseOutlined
+                //       style={{
+                //         fontSize: "12px",
+                //         padding: "2px",
+                //         marginLeft: "2px",
+                //         textAlign: "center",
+                //         cursor: "pointer",
+                //       }}
+                //     ></CloseOutlined>
+                //   )
+                // }
+                onChange={(e) => {
+                  handleSearch(e.target.value);
+                }}
               ></Input>
             </Col>
           </Row>
           <Row justify={"center"} className={"box_data_item table_box"}>
             <Col span={22}>
               <ContributionDataTable
-                dataSource={dataSource.map((item) => {
-                  return { ...item, key: item.id };
-                })}
-                handleAprroveVocab={handleApproveAndReject}
+                loading={loading}
+                dataSource={searching ? dataSearch : contributionVocab}
+                handleAprroveVocab={handleApprove}
+                handleRejectVocab={handleReject}
                 onTableChange={handleTableChange}
               />
             </Col>

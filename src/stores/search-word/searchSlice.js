@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getSearchResult } from "./searchThunk";
+import { getContributionVocab, getSearchResult } from "./searchThunk";
 import { addWordToSubcategory } from "../subcategory/subcategoryThunk";
 
 const initialState = {
   keyword: "",
   result: [],
+  contributionVocab: [],
   currentPage: 1,
   totalElements: 0,
   selectedMeaning: {},
@@ -50,6 +51,11 @@ const searchSlice = createSlice({
         (item, index) => item.word === action.payload
       );
     },
+    setContributionVocab: (state, action) => {
+      state.contributionVocab = state.contributionVocab.filter(
+        (item) => item.id !== action.payload
+      );
+    },
     setErrorAdd: (state, action) => {
       state.errorAdd = null;
     },
@@ -67,6 +73,19 @@ const searchSlice = createSlice({
         state.totalElements = action.payload.totalElements;
       })
       .addCase(getSearchResult.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.detail;
+      })
+      //============================================================================
+      .addCase(getContributionVocab.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getContributionVocab.fulfilled, (state, action) => {
+        state.loading = false;
+        state.contributionVocab = action.payload;
+      })
+      .addCase(getContributionVocab.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.detail;
       })
@@ -109,7 +128,12 @@ const searchSlice = createSlice({
   },
 });
 
-export const { setMeaningWord, setKeyWord, setVocabDetails, setErrorAdd } =
-  searchSlice.actions;
+export const {
+  setMeaningWord,
+  setKeyWord,
+  setVocabDetails,
+  setErrorAdd,
+  setContributionVocab,
+} = searchSlice.actions;
 
 export default searchSlice.reducer;

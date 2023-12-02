@@ -110,7 +110,11 @@ const wordListsSlice = createSlice({
         const index = state.wordLists.findIndex(
           (wl) => wl.id === action.payload
         );
+        const defaultIndex = state.wordListsDefault.findIndex(
+          (wl) => wl.id === action.payload
+        );
         state.wordLists.splice(index, 1);
+        state.wordListsDefault.splice(defaultIndex, 1);
         state.loading = false;
         state.messageDel = action.payload;
       })
@@ -126,7 +130,6 @@ const wordListsSlice = createSlice({
       .addCase(updateWl.fulfilled, (state, action) => {
         const updateWordList = (array, payload, logMessage) => {
           const index = array.findIndex((wl) => wl.id === payload.id);
-
           if (index !== -1) {
             array[index] = payload;
           } else {

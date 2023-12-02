@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form, Input, Modal } from "antd";
 const WORDLIST_DATA_TYPE = "wordlist";
 const SUBCATEGORY_DATA_TYPE = "subcategory";
 const AddModal = ({ type, handleCreateNew }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
-  const [focusedField, setFocusedField] = useState("title");
+
+  useEffect(() => {
+    if (form) {
+      form.getFieldInstance("title");
+    }
+  }, [form]);
+
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -27,7 +33,7 @@ const AddModal = ({ type, handleCreateNew }) => {
     }
   };
 
-  const handleEnterPress = (e) => {
+  const handleEnterPress = () => {
     if (type === SUBCATEGORY_DATA_TYPE) {
       handleOk();
     } else {
@@ -55,7 +61,7 @@ const AddModal = ({ type, handleCreateNew }) => {
         }`}
       </Button>
       <Modal
-        title="Add a new WordList"
+        title="Add a new "
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
