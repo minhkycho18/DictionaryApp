@@ -283,11 +283,21 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
     @Override
     public Subcategory getOwnedSubcategory(Long wordListId, Long subcategoryId) {
         User user = AuthenticationUtils.getUserFromSecurityContext();
-        WordList wordList = (user.getRole().getName().equals(RoleName.LEARNER))
-                ? wordListRepository.findByUserAndWordListId(user, wordListId)
-                .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"))
-                : wordListRepository.findById(wordListId)
-                .orElseThrow(() -> new EntityNotFoundException("You do not have permission to access this WordList"));
+        WordList wordList;
+        if (user == null) {
+            wordList = wordListRepository.findById(wordListId)
+                    .orElseThrow(() -> new EntityNotFoundException("WordList not found"));
+            if (wordList.getListType() == ListType.PRIVATE) {
+                throw new AccessDeniedException("You do not have permission to access this WordList");
+            }
+        } else {
+            wordList = (user.getRole().getName().equals(RoleName.LEARNER))
+                    ? wordListRepository.findByUserAndWordListId(user, wordListId)
+                    .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"))
+                    : wordListRepository.findById(wordListId)
+                    .orElseThrow(() -> new EntityNotFoundException("You do not have permission to access this WordList"));
+        }
+
         return subcategoryRepository.findBySubcategoryIdAndWordList(subcategoryId, wordList)
                 .orElseThrow(() -> new EntityNotFoundException("Subcategory not found with ID:" + subcategoryId));
     }
