@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./Styles";
 import { AntDesign } from "@expo/vector-icons";
 import { colors, configFont } from "~/constants/theme";
 import { useFonts } from "expo-font";
 import { addVocalToLeitner } from "~/api/Leitner";
+import { checkLogin } from "~/helper/Auth";
+import { useFocusEffect } from "@react-navigation/native";
 
 function ItemVocalDetail({
   definition,
@@ -13,24 +15,41 @@ function ItemVocalDetail({
   count,
   onPresentModal,
   stateOfSub,
+  toastLeitner,
 }) {
   const [isWordlist, setIsWordlist] = useState(definition.isWordOfUserWordlist);
   const [isWordOfUserLeitner, setIsWordOfUserLeitner] = useState(
     definition.isWordOfUserLeitner
   );
+  const [isLogin, setIsLogin] = useState(false);
 
+  const checkToken = async () => {
+    const check = await checkLogin();
+    setIsLogin(check);
+  };
   const addLeitner = async (vocabId, defId) => {
     try {
-      const res = await addVocalToLeitner({
-        vocabId: vocabId,
-        defId: defId,
-      });
-      console.log(res);
-      setIsWordOfUserLeitner(true);
+      if (isLogin) {
+        const res = await addVocalToLeitner({
+          vocabId: vocabId,
+          defId: defId,
+        });
+        console.log(res);
+        toastLeitner("Success", res, "success");
+        setIsWordOfUserLeitner(true);
+      } else {
+        toastLeitner("Error", "Please login to add", "error");
+      }
     } catch (error) {
       console.log(error);
+      toastLeitner("Error", error, "error");
     }
   };
+  useFocusEffect(
+    useCallback(() => {
+      checkToken();
+    }, [])
+  );
 
   useEffect(() => {
     if (stateOfSub.state && stateOfSub.defId === definition.defId) {
@@ -88,7 +107,12 @@ function ItemVocalDetail({
                     : styles.viewIcon
                 }
                 onPress={() =>
-                  onPresentModal({ vocabId: item.id, defId: definition.defId })
+                  isLogin
+                    ? onPresentModal({
+                        vocabId: item.id,
+                        defId: definition.defId,
+                      })
+                    : toastLeitner("Error", "Please login to add", "error")
                 }
               >
                 <AntDesign

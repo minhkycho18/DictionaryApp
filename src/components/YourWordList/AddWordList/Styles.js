@@ -3,7 +3,7 @@ import { colors } from "~/constants/theme";
 export const Styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 20,
+        // marginTop: 20,
         flexDirection: "column",
         position: 'relative',
         backgroundColor: "#fff"

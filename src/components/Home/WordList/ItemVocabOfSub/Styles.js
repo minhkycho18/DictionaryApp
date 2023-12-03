@@ -6,8 +6,6 @@ export const Styles = StyleSheet.create({
         // zIndex: -1,
         // marginBottom: 10,
         // borderBottomLeftRadius: 20,
-
-
         elevation: 4,
         shadowOffset: {
             width: 0,
@@ -15,6 +13,7 @@ export const Styles = StyleSheet.create({
         },
         shadowOpacity: 0.17,
         shadowRadius: 4,
+
 
     },
     wrappered: {
@@ -26,6 +25,8 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
         position: 'relative',
         marginTop: 2,
+        height: 110,
+
         // backgroundColor: 'red'
 
     },

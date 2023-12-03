@@ -4,6 +4,7 @@ import { colors } from "~/constants/theme";
 export const styles = StyleSheet.create({
 
     borderStyle: {
+        backgroundColor: '#949EE4',
 
         // backgroundColor: colors.primary,
         height: '100%',

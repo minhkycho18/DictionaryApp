@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Platform,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -18,8 +19,10 @@ import { getWordListByWordlistId } from "~/api/WordList";
 import ItemCardFlashcard from "~/components/Game/CardFlashcard/ItemCardFlashcard";
 import { getGameFromSub, updateStatusGame } from "~/api/Game";
 import ResultGame from "~/components/Game/ResultGame";
+import { AuthContext } from "~/context/AuthContext";
 
 export default function FlashcardScreen(props) {
+  const { setIsFlashcard } = useContext(AuthContext);
   const [listAnswer, setListAnswer] = useState([]);
   const [data, setData] = useState([]);
   const [countFail, setCountFail] = useState(0);
@@ -68,7 +71,6 @@ export default function FlashcardScreen(props) {
 
   const handleRedirect = async () => {
     try {
-      const res = await getWordListByWordlistId(props.route.params.wordListId);
       if (listAnswer.length > 0) {
         const resResult = await updateStatusGame(
           props.route.params.wordListId,
@@ -78,7 +80,7 @@ export default function FlashcardScreen(props) {
         );
         console.log(resResult);
       }
-      navigation.navigate("StudySub", { wordlist: res });
+      navigation.goBack();
     } catch (error) {}
   };
 
@@ -91,6 +93,7 @@ export default function FlashcardScreen(props) {
       listAnswer
     );
     console.log(res);
+    setIsFlashcard(true);
     navigation.push("FinishGame", { type: "flashcard" });
   };
 
@@ -186,7 +189,7 @@ export default function FlashcardScreen(props) {
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    marginTop: StatusBar.currentHeight,
     paddingHorizontal: 20,
   },
   wrappered: {
@@ -210,7 +213,7 @@ const Styles = StyleSheet.create({
     color: colors.textTitle,
   },
   progress: {
-    marginTop: 40,
+    marginTop: 20,
     position: "relative",
   },
   numberTotal: {

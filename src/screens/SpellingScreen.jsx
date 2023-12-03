@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Platform,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
@@ -18,7 +19,9 @@ import { getGameFromSub, updateStatusGame } from "~/api/Game";
 import { useNavigation } from "@react-navigation/native";
 import { getWordListByWordlistId } from "~/api/WordList";
 import ResultGame from "~/components/Game/ResultGame";
+import { AuthContext } from "~/context/AuthContext";
 export default function SpellingScreen(props) {
+  const { setIsSpelling } = useContext(AuthContext);
   const [listAnswer, setListAnswer] = useState([]);
   const [countFail, setCountFail] = useState(0);
   const [data, setData] = useState([]);
@@ -67,6 +70,7 @@ export default function SpellingScreen(props) {
       listAnswer
     );
     console.log(res);
+    setIsSpelling(true);
     navigation.push("FinishGame", { type: "spelling" });
   };
 
@@ -79,7 +83,6 @@ export default function SpellingScreen(props) {
   };
   const handleRedirect = async () => {
     try {
-      const res = await getWordListByWordlistId(props.route.params.wordListId);
       if (listAnswer.length > 0) {
         const resUpdate = await updateStatusGame(
           props.route.params.wordListId,
@@ -89,7 +92,7 @@ export default function SpellingScreen(props) {
         );
         console.log(resUpdate);
       }
-      navigation.navigate("StudySub", { wordlist: res });
+      navigation.goBack();
     } catch (error) {}
   };
 
@@ -170,7 +173,7 @@ export default function SpellingScreen(props) {
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    marginTop: StatusBar.currentHeight,
     paddingHorizontal: 20,
   },
   wrappered: {
@@ -194,7 +197,7 @@ const Styles = StyleSheet.create({
     color: colors.textTitle,
   },
   progress: {
-    marginTop: 40,
+    marginTop: 20,
     position: "relative",
   },
   numberTotal: {

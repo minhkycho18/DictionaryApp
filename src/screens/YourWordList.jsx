@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   Platform,
+  StatusBar,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -73,7 +74,12 @@ export default function YourWordList() {
     return null;
   }
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{
+        ...styles.container,
+        marginTop: StatusBar.currentHeight,
+      }}
+    >
       <View style={styles.header}>
         <TouchableOpacity
           style={{
@@ -113,20 +119,20 @@ export default function YourWordList() {
             {wordLists.length} Wordlist
           </Text>
         </View>
+        <TouchableOpacity
+          style={{
+            ...styles.Button,
+            bottom: -10,
+          }}
+        >
+          <Ionicons
+            name="add"
+            size={25}
+            color="white"
+            onPress={handleAddWordlist}
+          />
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={{
-          ...styles.Button,
-          top: Platform.OS === "ios" ? "18%" : "14.5%",
-        }}
-      >
-        <Ionicons
-          name="add"
-          size={25}
-          color="white"
-          onPress={handleAddWordlist}
-        />
-      </TouchableOpacity>
 
       <View style={styles.flatlist}>
         <FlatList
@@ -152,7 +158,7 @@ export default function YourWordList() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    // marginTop: 20,
     backgroundColor: "#fff",
   },
   header: {

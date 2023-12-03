@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "~/context/AuthContext";
 import { updateStatusGame } from "~/api/Game";
 export default function FinishReview({ wordlist }) {
-  const { listReview } = useContext(AuthContext);
+  const { listReview, setIsReview } = useContext(AuthContext);
   const navigation = useNavigation();
   const handleContinue = async () => {
     const res = await updateStatusGame(
@@ -18,6 +18,7 @@ export default function FinishReview({ wordlist }) {
       listReview
     );
     console.log(res);
+    setIsReview(true);
     navigation.push("FinishGame", { type: "review" });
   };
   const [loaded] = useFonts(configFont);

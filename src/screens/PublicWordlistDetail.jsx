@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import {
   useNavigation,
@@ -197,7 +198,7 @@ export default function PublicWordlistDetail() {
               flex: 1,
               justifyContent: "flex-end",
               width: "100%",
-              height: 350,
+              height: 320,
             }}
           >
             <View
@@ -216,7 +217,7 @@ export default function PublicWordlistDetail() {
                   width: 40,
                   height: 40,
                   left: 10,
-                  top: "-32%",
+                  top: "-40%",
                   zIndex: 1000,
                   padding: 5,
                 }}
@@ -388,10 +389,11 @@ export default function PublicWordlistDetail() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: StatusBar.currentHeight,
   },
   header: {
     backgroundColor: "#EDEDED",
-    marginBottom: 10,
+    // marginBottom: 10,
   },
   body: {
     flex: 1,

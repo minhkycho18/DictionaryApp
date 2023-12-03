@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { EvilIcons } from "@expo/vector-icons";
 import {
   Text,
@@ -15,6 +15,8 @@ import ItemPublicWordlist from "./ItemPublicWordlist/ItemPublicWordlist";
 import { getDefault, getPublic } from "~/api/WordList";
 import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
 import { cloneWordlist } from "~/api/WordList";
+import { checkLogin } from "~/helper/Auth";
+import { useFocusEffect } from "@react-navigation/native";
 export default function PublicWordlist(props) {
   const [type, setType] = useState(props.route.params.type);
   const [search, setSearch] = useState("");
@@ -22,6 +24,7 @@ export default function PublicWordlist(props) {
   const [wordlists, setWordlists] = useState([]);
   const [isClear, setIsClear] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
   const getWordlist = async () => {
     let list = [];
     if (type === "public") {
@@ -33,17 +36,26 @@ export default function PublicWordlist(props) {
     setWordlists(list);
     setTempWordlist(list);
   };
+  const checkToken = async () => {
+    const check = await checkLogin();
+    setIsLogin(check);
+  };
   const handleClone = async (id) => {
     try {
-      const res = await cloneWordlist(id);
-      console.log(res);
-      showToast("Success", "Clone wordlist successfully", "success");
+      if (isLogin) {
+        const res = await cloneWordlist(id);
+        console.log(res);
+        showToast("Success", "Clone wordlist successfully", "success");
+      } else {
+        showToast("Error", "Please login to clone wordlist", "error");
+      }
     } catch (error) {
       showToast("Error", "Clone wordlist fail", "error");
     }
   };
   useEffect(() => {
     getWordlist();
+    checkToken();
   }, []);
 
   const handleTextChange = (text) => {
@@ -51,6 +63,11 @@ export default function PublicWordlist(props) {
     setIsClear(true);
     setSearch(text);
   };
+  useFocusEffect(
+    useCallback(() => {
+      checkToken();
+    }, [])
+  );
 
   useEffect(() => {
     if (search !== "") {

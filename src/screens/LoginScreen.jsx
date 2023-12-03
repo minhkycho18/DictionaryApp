@@ -317,7 +317,7 @@ export default function LoginScreen() {
                     onPress={handlePressItem}
                   >
                     <Text style={tw`text-xl font-bold text-white text-center`}>
-                      Sign In
+                      Login
                     </Text>
                   </TouchableOpacity>
                 </Animated.View>
@@ -328,7 +328,7 @@ export default function LoginScreen() {
                 >
                   <Text>Don't have an account? </Text>
                   <TouchableOpacity onPress={() => navigation.push("SignUp")}>
-                    <Text style={tw`text-sky-600 underline`}>Sign Up</Text>
+                    <Text style={tw`text-sky-600 underline`}>Register</Text>
                   </TouchableOpacity>
                 </Animated.View>
               </View>
