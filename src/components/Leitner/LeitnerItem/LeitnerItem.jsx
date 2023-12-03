@@ -10,7 +10,10 @@ import { useNavigation } from "@react-navigation/native";
 export default function LeitnerItem({ type }) {
   const navigation = useNavigation();
   const handleLeitnerDetail = async () => {
-      navigation.push("LeitnerDetail");
+    const Level = type?.level;
+      navigation.push("LeitnerDetail",{
+        level: Level
+      });
 
       console.log('test: ', 'detail leitner');
   };

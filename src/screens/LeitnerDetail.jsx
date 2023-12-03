@@ -6,7 +6,6 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
-  Dimensions,
 } from "react-native";
 import {
   useNavigation,
@@ -15,23 +14,20 @@ import {
 } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
 
-import ItemSubCategory from "~/components/Home/WordList/ItemSubCategory/ItemSubCategory";
-import { Image } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { colors, svgstudy } from "~/constants/theme";
-import { deleteSubCategory, getAllSubCategory } from "~/api/Subcategory";
+
 import { configFont } from "~/constants/theme";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { ListVocalContext } from "~/context/ListVocal";
-import Modal from "react-native-modal";
-import FormAdd from "~/components/BottomSheet/FormAdd/FormAdd";
-import { delay } from "~/helper/index";
-import ItemVocabOfLeitner from "~/components/Leitner/ItemVocabOfLeitner/ItemVocabOfLeitner";
 
-export default function LeitnerDetail() {
+import ItemVocabOfLeitner from "~/components/Leitner/ItemVocabOfLeitner/ItemVocabOfLeitner";
+import { getVocabOfLeitnerLevelOfUser } from "~/api/Leitner";
+
+export default function LeitnerDetail(props) {
+  const level = props.route.params.level;
+  
   const data_mau = [
     {
       "audioUk": "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/a/att/atten/attend__gb_1.mp3",
@@ -206,7 +202,22 @@ export default function LeitnerDetail() {
     }
   ];
   const navigation = useNavigation();
+  const [listVocabOfLeitner, setListVocabOfLeitner] = useState([]);
 
+
+  const getVocabOfLeitnerLevel = async (level) => {
+    const data = await getVocabOfLeitnerLevelOfUser(level);
+    setListVocabOfLeitner(data.content);
+
+  };
+  const handleStudy = () => {
+    console.log('\n\ndone nha:\n',listVocabOfLeitner);
+  }
+
+  useEffect(() => {
+    getVocabOfLeitnerLevel(level);
+
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -257,7 +268,7 @@ export default function LeitnerDetail() {
               Leitner box Pending
             </Text>
             {/* Description */}
-            {data_mau.length == 1 ? (<Text
+            {listVocabOfLeitner.length == 1 ? (<Text
               style={[
                 {
                   marginTop: 10,
@@ -281,7 +292,7 @@ export default function LeitnerDetail() {
                 },
               ]}
             >
-              {data_mau.length} words
+              {listVocabOfLeitner.length} words
             </Text>}
             {/* <Text
               style={[
@@ -294,7 +305,7 @@ export default function LeitnerDetail() {
                 },
               ]}
             >
-              {data_mau.length} words
+              {listVocabOfLeitner.length} words
             </Text> */}
           </View>
         </View>
@@ -304,7 +315,7 @@ export default function LeitnerDetail() {
         {/* Button Study */}
         <TouchableOpacity
           style={styles.ButtonStudy}
-        // onPress={() => handleStudy()}
+        onPress={() => handleStudy()}
         >
           <SvgXml width="30" height="30" xml={svgstudy} />
           <Text
@@ -321,7 +332,7 @@ export default function LeitnerDetail() {
           </Text>
         </TouchableOpacity>
 
-        {/* List Subcategory */}
+        {/* List vocab */}
         <View style={styles.dropdown}>
           <FlatList
             style={{
@@ -330,7 +341,7 @@ export default function LeitnerDetail() {
               // marginBottom: 15,
             }}
             showsVerticalScrollIndicator={false}
-            data={data_mau}
+            data={listVocabOfLeitner}
             keyExtractor={(item) => item.definition.defId}
             renderItem={(item) => (
               <GestureHandlerRootView>
