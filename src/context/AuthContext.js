@@ -12,7 +12,11 @@ export const AuthProvider = ({ children }) => {
     const [listReview, setlistReview] = useState([]);
     const [listSpellingError, setlistSpellingError] = useState([]);
     const [listFlashCardError, setlistFlashCardError] = useState([]);
-    const [isLogin, setIsLogin] = useState(false)
+    const [isLogin, setIsLogin] = useState(false);
+    const [isReview, setIsReview] = useState(false)
+    const [isFlashcard, setIsFlashcard] = useState(false)
+    const [isSpelling, setIsSpelling] = useState(false)
+    const [isQuiz, setIsQuiz] = useState(false)
     const login = async ({ email, password }) => {
         setIsLoading(true);
         try {
@@ -115,7 +119,15 @@ export const AuthProvider = ({ children }) => {
                 listFlashCardError,
                 setlistFlashCardError,
                 listSpellingError,
-                setlistSpellingError
+                setlistSpellingError,
+                isReview,
+                setIsReview,
+                isFlashcard,
+                setIsFlashcard,
+                isSpelling,
+                setIsSpelling,
+                isQuiz,
+                setIsQuiz
             }}>
             {children}
         </AuthContext.Provider>

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "~/constants/theme";
@@ -85,7 +86,7 @@ export default function Index(props) {
 
 const Styles = StyleSheet.create({
   container: {
-    marginTop: 20,
+    marginTop: StatusBar.currentHeight,
     flex: 1,
     display: "flex",
     justifyContent: "flex-end",

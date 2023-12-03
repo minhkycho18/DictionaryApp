@@ -5,7 +5,7 @@ import {
   StyleSheet,
   SafeAreaView,
   Text,
-  TextInput,
+  StatusBar,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import HeaderVocalDetail from "~/components/VocalDetail/HeaderVocalDetail/HeaderVocalDetail";
@@ -119,6 +119,7 @@ function VocalDetail() {
                 count={count}
                 onPresentModal={handlePresentModal}
                 stateOfSub={isWordOfSub}
+                toastLeitner={(t1, t2, t3) => showToast(t1, t2, t3)}
               />
             </View>
           );
@@ -270,7 +271,7 @@ function VocalDetail() {
           />
         )}
       </Modal>
-      {!isLogin && (
+      {!isOpen && (
         <Toast
           config={toastConfig}
           refs={(ref) => {
@@ -284,7 +285,8 @@ function VocalDetail() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    // marginTop: 20,
+    marginTop: StatusBar.currentHeight,
     backgroundColor: "#fff",
   },
   viewBottomSheet: {

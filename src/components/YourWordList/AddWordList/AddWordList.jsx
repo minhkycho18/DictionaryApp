@@ -6,6 +6,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  StatusBar,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -165,7 +166,9 @@ const AddWordList = () => {
   }
 
   return (
-    <SafeAreaView style={Styles.container}>
+    <SafeAreaView
+      style={{ ...Styles.container, marginTop: StatusBar.currentHeight }}
+    >
       <View style={Styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons

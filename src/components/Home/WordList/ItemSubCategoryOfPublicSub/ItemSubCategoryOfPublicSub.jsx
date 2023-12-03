@@ -1,18 +1,20 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Animated, Text, TouchableOpacity, View, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
-import { Ionicons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 import { Styles } from "./Styles";
-import { colors, configFont } from "~/constants/theme";
+import { IconClone, colors, configFont } from "~/constants/theme";
 import { useFonts } from "expo-font";
 import { getAllVocabOfSubCategory } from "~/api/Subcategory";
-import { ListVocalContext } from "~/context/ListVocal";
+import { checkLogin } from "~/helper/Auth";
+import { SvgXml } from "react-native-svg";
 import ItemListVocabOfSub_PublicWordlist from "../ItemListVocabOfSub_PublicWordlist/ItemListVocabOfSub_PublicWordlist";
 export default function ItemSubCategoryOfPublicSub({
   subcategory,
   onPresentModal,
 }) {
+  const [isLogin, setIsLogin] = useState(false);
   const [title, setTitle] = useState(subcategory.title);
   const [listVocabOfSubCategory, setListVocabOfSubCategory] = useState([]);
   const [open, setOpen] = useState(false);
@@ -26,6 +28,11 @@ export default function ItemSubCategoryOfPublicSub({
 
   const navigation = useNavigation();
 
+  const checkToken = async () => {
+    const check = await checkLogin();
+    setIsLogin(check);
+  };
+
   const getVocabOfSubCategory = async (idWL, idSub, limit) => {
     const data = await getAllVocabOfSubCategory(idWL, idSub, limit);
     setListVocabOfSubCategory(data.content);
@@ -37,7 +44,13 @@ export default function ItemSubCategoryOfPublicSub({
       subcategory.subcategoryId,
       subcategory.amountOfWord === 0 ? 20 : subcategory.amountOfWord
     );
+    checkToken();
   }, []);
+  useFocusEffect(
+    useCallback(() => {
+      checkToken();
+    }, [])
+  );
 
   const [loaded] = useFonts(configFont);
   if (!loaded) {
@@ -51,27 +64,23 @@ export default function ItemSubCategoryOfPublicSub({
         borderRadius: 15,
       }}
     >
-      <TouchableOpacity
-        style={Styles.buttonClone}
-        onPress={() => onPresentModal(subcategory.subcategoryId)}
-      >
-        <Text
-          style={{
-            fontFamily: "Quicksand-Bold",
-            fontSize: 14,
-            color: `#2959a2`,
-          }}
+      {isLogin && (
+        <TouchableOpacity
+          style={Styles.buttonClone}
+          onPress={() => onPresentModal(subcategory.subcategoryId)}
         >
-          Clone
-        </Text>
-        <Image
-          source={require("~/assets/add-button.png")}
-          style={Styles.imageClone}
-        />
-      </TouchableOpacity>
-      {/* //item sub */}
-      {/* <View> */}
-      {/* View combobox */}
+          <Text
+            style={{
+              fontFamily: "Quicksand-Bold",
+              fontSize: 14,
+              color: `#2959a2`,
+            }}
+          >
+            Clone
+          </Text>
+          <SvgXml width="20" height="20" xml={IconClone("#2959a2")} />
+        </TouchableOpacity>
+      )}
       <View
         // style={{ marginTop: 15 }}
         style={[Styles.wrappered]}

@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Styles } from "./Styles";
 import { useFonts } from "expo-font";
-import { colors, configFont } from "~/constants/theme";
+import { IconClone, colors, configFont } from "~/constants/theme";
 import { useNavigation } from "@react-navigation/native";
 import { getAllSubCategory } from "~/api/Subcategory";
+import { SvgXml } from "react-native-svg";
 export default function ItemPublicWordlist({ wordlist, onClone, type }) {
   const [loaded] = useFonts(configFont);
   // const [wordLists, setWordLists] = useState([]);
@@ -72,9 +73,10 @@ export default function ItemPublicWordlist({ wordlist, onClone, type }) {
               style={Styles.cloneButton}
               onPress={() => onClone(wordlist.item.id)}
             >
-              <Image
-                source={require("~/assets/add-button.png")}
-                style={{ width: 25, height: 25, tintColor: colors.textTitle }}
+              <SvgXml
+                width="22"
+                height="22"
+                xml={IconClone(colors.textTitle)}
               />
             </TouchableOpacity>
           </View>
@@ -99,6 +101,36 @@ export default function ItemPublicWordlist({ wordlist, onClone, type }) {
           >
             {wordlist.item?.listDesc}
           </Text>
+
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              gap: 5,
+              marginTop: 8,
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "Quicksand-Medium",
+                fontSize: 14,
+                //   S
+                color: colors.textColor,
+              }}
+            >
+              Created by
+            </Text>
+            <Text
+              style={{
+                fontFamily: "Quicksand-SemiBold",
+                fontSize: 14,
+                //   S
+                color: "#6c757d",
+              }}
+            >
+              {wordlist.item.createdBy}
+            </Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>

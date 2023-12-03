@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useMemo, useContext } from "react";
+import React, {
+  useEffect,
+  useState,
+  useMemo,
+  useContext,
+  useCallback,
+} from "react";
 import {
   View,
   StyleSheet,
@@ -7,6 +13,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Platform,
+  StatusBar,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
@@ -26,6 +33,10 @@ export default function ReviewScreen(props) {
     updateListReview,
     setlistSpellingError,
     setlistFlashCardError,
+    setIsReview,
+    setIsFlashcard,
+    setIsSpelling,
+    setIsQuiz,
   } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [count, setCount] = useState(0);
@@ -52,6 +63,10 @@ export default function ReviewScreen(props) {
     setlistReview([]);
     setlistFlashCardError([]);
     setlistSpellingError([]);
+    setIsReview(false);
+    setIsFlashcard(false);
+    setIsSpelling(false);
+    setIsQuiz(false);
     getGame(
       props.route.params.wordListId,
       props.route.params.subcategoryId,
@@ -59,10 +74,14 @@ export default function ReviewScreen(props) {
     );
   }, []);
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       setlistReview([]);
       setlistFlashCardError([]);
       setlistSpellingError([]);
+      setIsReview(false);
+      setIsFlashcard(false);
+      setIsSpelling(false);
+      setIsQuiz(false);
     }, [])
   );
   const handleScroll = (index) => {
@@ -157,7 +176,7 @@ export default function ReviewScreen(props) {
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    marginTop: StatusBar.currentHeight,
     paddingHorizontal: 20,
   },
   wrappered: {
@@ -181,7 +200,7 @@ const Styles = StyleSheet.create({
     color: colors.textTitle,
   },
   progress: {
-    marginTop: 40,
+    marginTop: 20,
     position: "relative",
   },
   numberTotal: {

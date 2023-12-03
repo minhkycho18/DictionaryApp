@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
-import { StyleSheet, Text, SafeAreaView, View, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  View,
+  Image,
+  StatusBar,
+} from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { colors, configFont } from "~/constants/theme";
 import { useFonts } from "expo-font";
@@ -143,7 +150,7 @@ export default function Leitner() {
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    marginTop: StatusBar.currentHeight,
     backgroundColor: "#fff",
   },
   header: {

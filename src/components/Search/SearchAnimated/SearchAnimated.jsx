@@ -28,10 +28,10 @@ function SearchAnimated({ scrollY, handleSearchPress, opacity }) {
         },
       ]}
     >
-      <LinearGradient
-        start={{ x: 0, y: 0.5 }}
-        end={{ x: 1, y: 0.5 }}
-        colors={["#5671CC", "#9D97F9"]}
+      <View
+        // start={{ x: 0, y: 0.5 }}
+        // end={{ x: 1, y: 0.5 }}
+        // colors={["#5671CC", "#9D97F9"]}
         style={styles.borderStyle}
       >
         <View style={{ backgroundColor: "transparents" }}>
@@ -49,7 +49,7 @@ function SearchAnimated({ scrollY, handleSearchPress, opacity }) {
             Search for a word
           </Text>
         </TouchableOpacity>
-      </LinearGradient>
+      </View>
     </Animated.View>
   );
 }

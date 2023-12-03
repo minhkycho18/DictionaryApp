@@ -8,7 +8,14 @@ import {
   svgleitner,
 } from "~/constants/theme";
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet, SafeAreaView } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  SafeAreaView,
+  StatusBar,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
@@ -16,8 +23,11 @@ import { SvgXml } from "react-native-svg";
 import { useNavigation } from "@react-navigation/native";
 import { checkLogin } from "~/helper/Auth";
 import { GetInforUser } from "~/api/Auth";
+import { delay } from "~/helper";
+import AppLoader from "~/components/AppLoader";
 export default function Profile() {
   const [isLogin, setIsLogin] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState({});
   const navigation = useNavigation();
   useEffect(() => {
@@ -43,7 +53,7 @@ export default function Profile() {
     return null;
   }
   const handleLeitner = async () => {
-      navigation.push("Leitner");
+    navigation.push("Leitner");
   };
   return (
     <SafeAreaView style={Styles.container}>
@@ -106,6 +116,10 @@ export default function Profile() {
             style={Styles.viewProfile}
             onPress={async () => {
               await AsyncStorage.clear();
+
+              setIsLoading(true);
+              await delay(1500);
+              setIsLoading(false);
               setIsLogin(false);
             }}
           >
@@ -120,11 +134,20 @@ export default function Profile() {
         ) : (
           <TouchableOpacity
             style={Styles.viewProfile}
-            onPress={() => navigation.push("Authenticate")}
+            onPress={async () => {
+              setIsLoading(true);
+              await delay(1500);
+              navigation.push("Authenticate");
+            }}
           >
             <Image
               source={require("~/assets/log-in.png")}
-              style={{ width: 25, height: 25, tintColor: "#0766AD" }}
+              style={{
+                width: 30,
+                height: 27,
+                tintColor: "#0766AD",
+                marginLeft: -5,
+              }}
             />
             <Text style={{ ...Styles.textItem, color: "#0766AD" }}>
               Sign in
@@ -132,6 +155,8 @@ export default function Profile() {
           </TouchableOpacity>
         )}
       </View>
+
+      {isLoading && <AppLoader />}
     </SafeAreaView>
   );
 }
@@ -139,7 +164,7 @@ export default function Profile() {
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    marginTop: StatusBar.currentHeight,
     backgroundColor: "#fff",
   },
   infor: {

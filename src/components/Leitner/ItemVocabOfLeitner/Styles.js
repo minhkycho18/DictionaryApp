@@ -2,34 +2,31 @@ import { StyleSheet } from "react-native";
 
 export const Styles = StyleSheet.create({
     container: {
-        // flex: 1,
-        // zIndex: -1,
-        // marginBottom: 10,
-        borderRadius: 6,
-        width: "100%",
-        height: 100,
-        backgroundColor: "#FEFEFE",
-        paddingLeft: 15,
-        marginBottom: 3,
-        marginTop: 15,
-        backgroundColor: '#fff',
-        borderLeftWidth: 7,
-        borderLeftColor: "#56BAF9",
-        display:'flex',
-        justifyContent:'center'
+        paddingHorizontal: 30,
+        paddingVertical: 10,
 
 
     },
     wrappered: {
-        // paddingTop: 15,
-        paddingRight: 20,
-        // paddingBottom: 25,
+        borderLeftWidth: 7,
+        borderLeftColor: "#56BAF9",
+        alignItems: 'center',
+        width: "100%",
+        height: 100,
+        paddingHorizontal: 15,
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center',
-        position: 'relative',
-        // backgroundColor: 'red'
-
+        justifyContent: 'space-between',
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+        elevation: 3,
     },
     Text_content: {
         marginLeft: 2,
