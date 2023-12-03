@@ -16,3 +16,15 @@ export const updateVocabLeitnerLevel = (params) => {
 export const addVocabToLeitner = (data) => {
   return http.post(`/leitners`, data);
 };
+export const getLeitnerVocabs = (params) => {
+  const { level, pos, limit, offset, keyword } = params;
+  let url = `/leitners/${level}?offset=${offset}`;
+
+  if (pos) {
+    url = url + `&pos=${pos}`;
+  }
+  if (keyword) {
+    url = url + `&keyword=${keyword}`;
+  }
+  return http.get(url);
+};

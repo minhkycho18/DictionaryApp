@@ -1,74 +1,132 @@
-import React, { useEffect, useState } from "react";
-import "./LeitnerGame.scss";
-import { getAllVocabInALevel } from "../../../api/Leitner/leitner.api";
-import { useLoaderData } from "react-router-dom";
+import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
 import {
   Button,
   Checkbox,
-  Modal,
+  Input,
   Pagination,
   Select,
   Space,
+  Tag,
   Tooltip,
 } from "antd";
+import { debounce, upperFirst } from "lodash";
+import React, { useEffect, useRef, useState } from "react";
 import { FaGraduationCap } from "react-icons/fa6";
-import { DeleteOutlined } from "@ant-design/icons";
-import { upperFirst } from "lodash";
+import { useLoaderData } from "react-router-dom";
+import { getLeitnerVocabs } from "../../../api/Leitner/leitner.api";
+import { getAllPos } from "../../../api/Vocabulary/vocabulary.api";
+import colorPos from "../../../helpers/ColorPos";
+import "./LeitnerGame.scss";
+import { useDispatch } from "react-redux";
+import { setCurrentLeitnerLevel } from "../../../stores/leitner/leitnerSlice";
 const LeitnerLevel = (props) => {
   const loader = useLoaderData();
   const [vocabs, setVocabs] = useState();
-  // const { id } = useParams();
+  const [allPos, setAllPos] = useState([]);
+  const [keyword, setKeywords] = useState("");
+  const [currentPos, setCurrentPos] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [offset, setOffset] = useState(0);
+  const dispatch = useDispatch();
+
   useEffect(() => {
+    dispatch(setCurrentLeitnerLevel(+loader.data.level));
     const _getAllVocab = async () => {
-      const result = await getAllVocabInALevel(+loader.data.level);
+      const result = await getLeitnerVocabs({
+        level: +loader.data.level,
+        offset: offset,
+      });
       if (result) {
         setVocabs(result);
       }
     };
+    const _getAllPos = async () => {
+      try {
+        const result = await getAllPos();
+        setAllPos(["All", ...result]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    _getAllPos();
     _getAllVocab();
-    return () => {};
-  }, [loader.data.level]);
-  console.log(vocabs);
-  // const plainOptions = vocabsInSub;
-  // const checkAll =
-  //   plainOptions.length === selectedIds.length && plainOptions.length !== 0;
-  // const indeterminate =
-  //   selectedIds.length > 0 && selectedIds.length < plainOptions.length;
-  // const filterVocab = vocabsInSub.filter((vocab) =>
-  //   vocab.word.toLowerCase().startsWith(keyword.toLowerCase())
-  // );
-  // const itemsPerPage = 10;
-  // const startIndex = (page - 1) * itemsPerPage;
-  // const endIndex = startIndex + itemsPerPage;
+  }, [dispatch, loader.data.level, offset]);
+  const onChangePosFilter = async (value) => {
+    setCurrentPos(value);
+    try {
+      const result = await getLeitnerVocabs({
+        level: +loader.data.level,
+        pos: value === "All" ? null : value,
+        offset: offset,
+      });
+      if (result) {
+        setVocabs(result);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const onPageChange = (value) => {
+    setCurrentPage(value);
+    setOffset((value - 1) * 10);
+  };
+  const onChangeInput = (event) => {
+    const newValue = event.target.value;
+    setKeywords(newValue);
+    debounceInputKey({ keyword: newValue, pos: currentPos });
+  };
 
-  // const wordsToDisplay = filterVocab.slice(startIndex, endIndex);
-  // const filterByPos =
-  //   currentPos === "All"
-  //     ? wordsToDisplay
-  //     : wordsToDisplay.filter((vocab) =>
-  //         vocab.pos.toLowerCase().startsWith(currentPos.toLowerCase())
-  //       );
-  // const renderVocabInSub = filterByPos.map((vocab, index) => (
-  //   <SubcategoryItem
-  //     key={index}
-  //     vocab={vocab}
-  //     setList={onChangeList}
-  //     isChecked={selectedIds.some(
-  //       (item) =>
-  //         item.vocabId === vocab.vocabId &&
-  //         item.defId === vocab.definition.defId
-  //     )}
-  //   />
-  // ));
+  const debounceInputKey = useRef(
+    debounce(async (nextValue) => {
+      try {
+        const result = await getLeitnerVocabs({
+          level: +loader.data.level,
+          pos: nextValue.pos === "All" ? null : nextValue.pos,
+          offset: offset,
+          keyword: nextValue.keyword,
+        });
+        if (result) {
+          setVocabs(result);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }, 500)
+  ).current;
+  // const onPageChange = (value) => {
+  //   setCurrentPage(value);
+  //   setOffset((value - 1) * 10);
+  // };
+  const renderVocabInSub =
+    vocabs &&
+    vocabs?.content.map((vocab, index) => (
+      <Space className="subcategory-item" key={index}>
+        <Space>
+          <Checkbox
+            // onChange={onCheckbox}
+            // checked={isChecked}
+            className="checkbox__del"
+          ></Checkbox>
+          <Space className="subcategory__header" direction="vertical">
+            <Space className="vocabulary">
+              <Space className="vocabulary__title">{vocab?.word}</Space>
+              <Space className="vocabulary__phonetic">
+                {vocab?.phoneUs || vocab?.phoneUk}
+              </Space>
+            </Space>
+            <Space className="subcategory__content">
+              {vocab?.definition?.wordDesc}
+            </Space>
+          </Space>
+        </Space>
+        <Tag color={colorPos.get(vocab?.pos)} style={{ fontSize: "15px" }}>
+          {upperFirst(vocab?.pos)}
+        </Tag>
+        {/* <span className="vocabulary__pos">[{vocab?.pos}]</span> */}
+      </Space>
+    ));
   return (
     <Space className="subcategory" direction="vertical">
-      <Space style={{ justifyContent: "space-between", width: "100%" }}>
-        <Button className="subcategory__study">
-          <span style={{ marginRight: 8 }}>Study</span>
-          <FaGraduationCap size={22} />
-        </Button>
-      </Space>
-
       <div className="subcategory__back" direction="vertical">
         {/* {contextHolder} */}
 
@@ -104,24 +162,38 @@ const LeitnerLevel = (props) => {
                 placeholder="Part of speech"
                 style={{ width: 200 }}
                 className="pos_filter-select"
-                // options={allPos.map((item) => ({
-                //   value: upperFirst(item),
-                //   label: upperFirst(item),
-                // }))}
-                // defaultValue={"All"}
-                // onChange={onChangePosFilter}
+                options={allPos.map((item) => ({
+                  value: item,
+                  label: upperFirst(item),
+                }))}
+                defaultValue={"All"}
+                value={currentPos}
+                onChange={onChangePosFilter}
               />
             </Space>
-            <Pagination
-            // defaultCurrent={1}
-            // total={filterVocab.length}
-            // onChange={onChange}
-            // size="small"
-            // current={page}
-            />
+            <Space>
+              <Input
+                className="search__sub search__vocab"
+                placeholder="Search"
+                prefix={
+                  <SearchOutlined
+                    style={{ color: "#bbb", padding: "0px 4px" }}
+                  />
+                }
+                value={keyword}
+                onChange={onChangeInput}
+              ></Input>
+              <Pagination
+                defaultCurrent={1}
+                total={vocabs?.totalElements}
+                onChange={onPageChange}
+                size="small"
+                current={currentPage}
+              />
+            </Space>
           </Space>
 
-          {/* {renderVocabInSub} */}
+          {vocabs && renderVocabInSub}
         </Space>
         {/* {!VocabLoading && !vocabsInSub.length && renderEmpty} */}
         {/* {VocabLoading && <Spin spinning={VocabLoading} />} */}

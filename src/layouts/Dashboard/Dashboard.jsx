@@ -1,6 +1,6 @@
-import { Breadcrumb, Image, Layout, Space, theme } from "antd";
+import { Breadcrumb, Button, Image, Layout, Space, theme } from "antd";
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import categoryBack from "../../assets/images/category-back.png";
 import CustomSider from "../../components/sider/CustomSider";
@@ -9,8 +9,10 @@ import changeTitle from "../../helpers/changeTitle";
 import getFullPath from "../../helpers/getPath";
 import { getUserProfile } from "../../stores/user/userThunk";
 import "./dashboard.scss";
+import { FaGraduationCap } from "react-icons/fa6";
 const { Header, Content } = Layout;
 const Dashboard = () => {
+  const { currentLevel } = useSelector((state) => state.leitner);
   const { pathname } = useLocation();
   changeTitle(pathname);
   const path = getFullPath(pathname);
@@ -54,6 +56,7 @@ const Dashboard = () => {
               height: 125,
               border: "1px solid #eee",
               paddingLeft: 16,
+              position: "relative",
             }}
           >
             {path.slice(0, 3).length === 3 && (
@@ -73,6 +76,24 @@ const Dashboard = () => {
                 className="headerPage__breadcum"
               />
             </Space>
+            {path[1].title === "Leitner" && path.length > 2 && (
+              <Space
+                style={{
+                  justifyContent: "space-between",
+                  // width: "100%",
+                  position: "absolute",
+                  right: 32,
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                }}
+                onClick={() => console.log(currentLevel)}
+              >
+                <Button className="subcategory__study">
+                  <span style={{ marginRight: 8 }}>Study</span>
+                  <FaGraduationCap size={22} />
+                </Button>
+              </Space>
+            )}
           </Header>
           <Content
             style={{

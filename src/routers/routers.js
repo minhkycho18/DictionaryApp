@@ -19,6 +19,7 @@ import Game from "../pages/Learner/game/Game";
 import WordListManagement from "../pages/Manager/WordList/WordListManagement";
 import { getLeiner } from "../api/Leitner/leitner.api";
 import LeitnerLevel from "../pages/Learner/leitner/LeitnerLevel";
+import { useDispatch } from "react-redux";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -99,6 +100,7 @@ const routers = createBrowserRouter([
                 const vocab = rs.filter(
                   (item) => item.levelName === decodeURI(id)
                 );
+
                 return { data: vocab[0], error: null };
               } catch (error) {
                 return { data: [], error: "fail" };

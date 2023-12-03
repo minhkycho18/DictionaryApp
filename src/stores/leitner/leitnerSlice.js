@@ -1,13 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {};
+const initialState = {
+  currentLevel: null,
+};
 
 const leitnerSlice = createSlice({
   name: "leitner",
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentLeitnerLevel(state, action) {
+      state.currentLevel = action.payload;
+    },
+  },
 });
 
-export const {} = leitnerSlice.actions;
+export const { setCurrentLeitnerLevel } = leitnerSlice.actions;
 
 export default leitnerSlice.reducer;
