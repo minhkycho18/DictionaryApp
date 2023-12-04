@@ -6,8 +6,6 @@ export const Styles = StyleSheet.create({
         // zIndex: -1,
         // marginBottom: 10,
         // borderBottomLeftRadius: 20,
-
-
         elevation: 4,
         shadowOffset: {
             width: 0,
@@ -16,28 +14,38 @@ export const Styles = StyleSheet.create({
         shadowOpacity: 0.17,
         shadowRadius: 4,
 
+
     },
     wrappered: {
-        // paddingTop: 10,
-        paddingRight: 20,
-        paddingBottom: 25,
+        // paddingTop: 5,
+        paddingRight: 17,
+        paddingLeft: 17,
+        paddingBottom: 0,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         position: 'relative',
         marginTop: 2,
+        height: 130,
+        backgroundColor: "#FEFEFE",
+
         // backgroundColor: 'red'
 
     },
     Text_content: {
-        marginLeft: 2,
+        // marginLeft: 15,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
         width: '100%',
-        height: "75%",
+        height: "80%",
         justifyContent: 'flex-start',
-        // backgroundColor: 'green'
+        // backgroundColor: 'green',
+        // marginTop: 15,
+        // marginBottom: 15,
+        // paddingBottom:15,
+
+
     },
     Title_Status: {
         display: 'flex',
@@ -49,18 +57,18 @@ export const Styles = StyleSheet.create({
         // borderTopWidth: 1,
         alignItems: "center",
     },
-    viewItem: {
-        width: "35%",
-        // backgroundColor: 'blue',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        // position: 'absolute',
-        // marginLeft: 20
-        // top: -7,
-        // right: -18
-        marginTop: 10
-    },
+    // viewItem: {
+    //     width: "35%",
+    //     // backgroundColor: 'blue',
+    //     display: 'flex',
+    //     flexDirection: 'row',
+    //     justifyContent: 'space-between',
+    //     // position: 'absolute',
+    //     // marginLeft: 20
+    //     // top: -7,
+    //     // right: -18
+    //     // marginTop: 10
+    // },
     // item: {
     //     paddingRight: 100,
     //     backgroundColor: 'red'
@@ -81,5 +89,10 @@ export const Styles = StyleSheet.create({
         width: 12,
         height: 12,
         borderWidth: 1
-    }
+    },
+
+
+      phoneticType: {
+        fontSize: 12,
+      },
 })

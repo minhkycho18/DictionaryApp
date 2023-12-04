@@ -5,6 +5,7 @@ import {
   View,
   StyleSheet,
   ActivityIndicator,
+  StatusBar,
 } from "react-native";
 import { Animated, Text } from "react-native";
 import SearchInput from "~/components/Search/SearchInput/SearchInput";
@@ -176,7 +177,8 @@ const Dictionary = () => {
 styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    // marginTop: 20,
+    marginTop: StatusBar.currentHeight,
     backgroundColor: "#fff",
   },
   viewLoaderSearch: {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Platform,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -17,7 +18,9 @@ import * as Progress from "react-native-progress";
 import { getWordListByWordlistId } from "~/api/WordList";
 import { getGameFromSub, updateStatusGame } from "~/api/Game";
 import ItemCardQuiz from "~/components/Game/CardQuiz/ItemCardQuiz";
+import { AuthContext } from "~/context/AuthContext";
 export default function QuizScreen(props) {
+  const { setIsQuiz } = useContext(AuthContext);
   const [listAnswer, setListAnswer] = useState([]);
   const [listIncorrectAnswer, setListIncorrectAnswer] = useState([]);
   const [numberQuestion, setNumberQuestion] = useState(0);
@@ -38,11 +41,9 @@ export default function QuizScreen(props) {
       if (obj.answer) {
         setListAnswer((pre) => [...pre, obj.vocal]);
         // console.log('Da them tu \n');
-
       } else {
         setListIncorrectAnswer((pre) => [...pre, obj.vocal]);
         // console.log('Da them tu sai \n');
-
       }
 
       scrollViewRef.current.scrollTo({
@@ -59,12 +60,9 @@ export default function QuizScreen(props) {
       if (obj.answer) {
         updateResult.push(obj.vocal);
         // console.log('Da them tu \n');
-      }
-      else
-      {
+      } else {
         updateIncorrectResult.push(obj.vocal);
         // console.log('Da them tu sai \n');
-
       }
       console.log(updateResult);
       await updateStatusGame(
@@ -73,8 +71,11 @@ export default function QuizScreen(props) {
         "quiz",
         updateResult
       );
-      navigation.push("FinishQuiz", { quiz_number_question: numberQuestion, quiz_result: updateIncorrectResult});
-
+      setIsQuiz(true);
+      navigation.push("FinishQuiz", {
+        quiz_number_question: numberQuestion,
+        quiz_result: updateIncorrectResult,
+      });
     }
   };
   const getGame = async (wordListId, subId, type) => {
@@ -93,7 +94,6 @@ export default function QuizScreen(props) {
 
   const handleRedirect = async () => {
     try {
-      const res = await getWordListByWordlistId(props.route.params.wordListId);
       if (listAnswer.length > 0) {
         const resResult = await updateStatusGame(
           props.route.params.wordListId,
@@ -103,8 +103,8 @@ export default function QuizScreen(props) {
         );
         console.log(resResult);
       }
-      navigation.navigate("StudySub", { wordlist: res });
-    } catch (error) { }
+      navigation.goBack();
+    } catch (error) {}
   };
 
   const [loaded] = useFonts(configFont);
@@ -161,10 +161,7 @@ export default function QuizScreen(props) {
               key={index}
             >
               <View style={Styles.content}>
-                <ItemCardQuiz
-                  onNextSlider={handleNextSlide}
-                  vocal={item}
-                />
+                <ItemCardQuiz onNextSlider={handleNextSlide} vocal={item} />
               </View>
             </View>
           ))}
@@ -179,7 +176,7 @@ export default function QuizScreen(props) {
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    marginTop: StatusBar.currentHeight,
     paddingHorizontal: 20,
   },
   wrappered: {
@@ -203,7 +200,7 @@ const Styles = StyleSheet.create({
     color: colors.textTitle,
   },
   progress: {
-    marginTop: 40,
+    marginTop: 20,
     position: "relative",
   },
   numberTotal: {

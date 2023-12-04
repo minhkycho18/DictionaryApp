@@ -24,6 +24,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import ItemVocabOfLeitner from "~/components/Leitner/ItemVocabOfLeitner/ItemVocabOfLeitner";
 import { getVocabOfLeitnerLevelOfUser } from "~/api/Leitner";
+import SplashScreen from "~/components/SplashScreen";
 
 export default function LeitnerDetail(props) {
   const level = props.route.params.level;
@@ -203,12 +204,14 @@ export default function LeitnerDetail(props) {
   ];
   const navigation = useNavigation();
   const [listVocabOfLeitner, setListVocabOfLeitner] = useState([]);
+  const [showLoader, setShowLoader] = useState(false);
+  const [offset, setOffset] = useState(5);
 
 
   const getVocabOfLeitnerLevel = async (level) => {
     const data = await getVocabOfLeitnerLevelOfUser(level);
     setListVocabOfLeitner(data.content);
-
+    
   };
   const handleStudy = () => {
     console.log('\n\ndone nha:\n',listVocabOfLeitner);
@@ -216,8 +219,20 @@ export default function LeitnerDetail(props) {
 
   useEffect(() => {
     getVocabOfLeitnerLevel(level);
-
   }, []);
+  const handleEndReach = async () => {
+    if (listVocabOfLeitner.length > 4) {
+      try {
+        setShowLoader(true);
+        const data = await getVocabOfLeitnerLevelOfUser(level, offset);
+        setListVocabOfLeitner([...listVocabOfLeitner, ...data.content]);
+        setOffset(offset + 20);
+        setShowLoader(false);
+      } catch (error) {
+        console.log(`error ::`, error);
+      }
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -348,6 +363,8 @@ export default function LeitnerDetail(props) {
                 <ItemVocabOfLeitner Vocab={item} />
               </GestureHandlerRootView>
             )}
+            onEndReached={handleEndReach}
+            ListFooterComponent={showLoader && <SplashScreen/>}
           />
         </View>
 

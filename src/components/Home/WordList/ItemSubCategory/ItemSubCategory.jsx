@@ -194,6 +194,7 @@ export default function ItemSubCategory({ subcategory, onDelete }) {
         renderLeftActions={leftSwipe}
         onSwipeableOpen={onSwipeableOpen}
         onSwipeableWillClose={onSwipeableClose}
+        enabled={!open}
       >
         {/* //item sub */}
         {/* <View> */}

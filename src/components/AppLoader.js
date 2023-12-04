@@ -3,7 +3,7 @@ import { View, StyleSheet, Dimensions } from 'react-native'
 import LottieView from "lottie-react-native";
 
 const screenWidth = Dimensions.get('window').width;
-const size_logo = 160
+const size_logo = 130
 
 const AppLoader = () => {
     return (

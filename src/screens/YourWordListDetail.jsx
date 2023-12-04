@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
-  Dimensions,
+  StatusBar,
 } from "react-native";
 import {
   useNavigation,
@@ -133,7 +133,9 @@ export default function YourWordlistDetail() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{ ...styles.container, marginTop: StatusBar.currentHeight }}
+    >
       <View style={styles.header}>
         <TouchableOpacity style={{ marginTop: 10, marginLeft: 13, padding: 3 }}>
           <Entypo
@@ -302,7 +304,7 @@ export default function YourWordlistDetail() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    // marginTop: 20,
     backgroundColor: "#CFC5EA",
   },
   header: {

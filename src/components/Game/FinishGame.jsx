@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Platform,
+  StatusBar,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
@@ -15,35 +16,21 @@ import { Feather } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { getWordListByWordlistId } from "~/api/WordList";
+import { AuthContext } from "~/context/AuthContext";
 export default function FinishGame(props) {
+  const { isReview, isFlashcard, isSpelling, isQuiz } = useContext(AuthContext);
+
   const state = ["success", "pending", "waiting"];
-  const [review, setRiview] = useState("waiting");
-  const [flascard, setFlascard] = useState("waiting");
-  const [spelling, setSpelling] = useState("waiting");
-  const [quiz, setQuiz] = useState("waiting");
+  const [review, setRiview] = useState(false);
+  const [flascard, setFlascard] = useState(false);
+  const [spelling, setSpelling] = useState(false);
+  const [quiz, setQuiz] = useState(false);
   const navigation = useNavigation();
   useEffect(() => {
-    if (props.route.params.type === "review") {
-      setRiview(state[0]);
-      setFlascard(state[1]);
-    }
-    if (props.route.params.type === "flashcard") {
-      setRiview(state[0]);
-      setFlascard(state[0]);
-      setSpelling(state[1]);
-    }
-    if (props.route.params.type === "spelling") {
-      setRiview(state[0]);
-      setFlascard(state[0]);
-      setSpelling(state[0]);
-      setQuiz(state[1]);
-    }
-    if (props.route.params.type === "quiz") {
-      setRiview(state[0]);
-      setFlascard(state[0]);
-      setSpelling(state[0]);
-      setQuiz(state[0]);
-    }
+    setRiview(isReview);
+    setFlascard(isFlashcard);
+    setSpelling(isSpelling);
+    setQuiz(isQuiz);
   }, []);
   const [loaded] = useFonts(configFont);
   if (!loaded) {
@@ -66,33 +53,33 @@ export default function FinishGame(props) {
   );
   const getStatusStyle = (status) => {
     switch (status) {
-      case "pending":
-        return Styles.buttonSuccess;
       case "success":
+        return Styles.buttonSuccess;
+      case true:
         return Styles.buttonPending;
-      case "waiting":
+      case false:
       default:
         return Styles.buttonWaiting;
     }
   };
   const getProgess = (status) => {
     switch (status) {
-      case "success":
+      case true:
         return <Success />;
       case "pending":
         return <Pending />;
-      case "waiting":
+      case false:
       default:
         return <Waiting />;
     }
   };
   const getTextStyle = (status) => {
     switch (status) {
-      case "pending":
-        return Styles.textButtonSuccess;
       case "success":
+        return Styles.textButtonSuccess;
+      case true:
         return Styles.textButtonPending;
-      case "waiting":
+      case false:
       default:
         return Styles.textButtonWaiting;
     }
@@ -150,7 +137,7 @@ export default function FinishGame(props) {
             <TouchableOpacity style={[getStatusStyle(review)]}>
               <Text style={[getTextStyle(review)]}>Review</Text>
             </TouchableOpacity>
-            <View style={[getLineStyle(review)]}></View>
+            <View style={[getLineStyle(true)]}></View>
           </View>
           {/*  */}
 
@@ -167,7 +154,7 @@ export default function FinishGame(props) {
             >
               <Text style={[getTextStyle(flascard)]}>Flashcard Practice</Text>
             </TouchableOpacity>
-            <View style={[getLineStyle(flascard)]}></View>
+            <View style={[getLineStyle(true)]}></View>
           </View>
           {/*  */}
           <View
@@ -183,7 +170,7 @@ export default function FinishGame(props) {
             >
               <Text style={[getTextStyle(spelling)]}>Spelling Practice</Text>
             </TouchableOpacity>
-            <View style={[getLineStyle(spelling)]}></View>
+            <View style={[getLineStyle(true)]}></View>
           </View>
           {/*  */}
 
@@ -194,9 +181,9 @@ export default function FinishGame(props) {
             }}
           >
             <View style={Styles.viewCircle}>{getProgess(quiz)}</View>
-            <TouchableOpacity 
-            style={[getStatusStyle(quiz)]}
-            onPress={() => navigation.push("QuizScreen")}
+            <TouchableOpacity
+              style={[getStatusStyle(quiz)]}
+              onPress={() => navigation.push("QuizScreen")}
             >
               <Text style={[getTextStyle(quiz)]}>Quiz</Text>
             </TouchableOpacity>
@@ -210,7 +197,7 @@ export default function FinishGame(props) {
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    marginTop: StatusBar.currentHeight,
     paddingHorizontal: 20,
     backgroundColor: "#fff",
   },

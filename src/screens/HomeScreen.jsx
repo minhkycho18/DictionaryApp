@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { SafeAreaView, ScrollView, Text } from "react-native";
+import { SafeAreaView, ScrollView, Text, StatusBar } from "react-native";
 import HeaderHome from "~/components/Home/HeaderHome/HeaderHome";
 import MyWordList from "~/components/Home/WordList/MyWordList/MyWordList";
 import tw from "twrnc";
@@ -17,7 +17,7 @@ export default function HomeScreen() {
     <SafeAreaView
       style={{
         flex: 1,
-        marginTop: 20,
+        marginTop: StatusBar.currentHeight,
         flexDirection: "column",
         backgroundColor: "rgb(241 245 249)",
       }}

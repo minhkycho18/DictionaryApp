@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   FlatList,
   View,
@@ -15,17 +15,23 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useFonts } from "expo-font";
 import { configFont, colors } from "~/constants/theme";
 import { Entypo } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 export default function WordListPublic() {
   const [defaultList, setDefaultList] = useState([]);
   const navigation = useNavigation();
+  const getPublicWordList = async () => {
+    const data = await getPublic();
+    setDefaultList(data);
+  };
   useEffect(() => {
-    const getPublicWordList = async () => {
-      const data = await getPublic();
-      setDefaultList(data);
-    };
     getPublicWordList();
   }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getPublicWordList();
+    }, [])
+  );
 
   const [loaded] = useFonts(configFont);
   if (!loaded) {
