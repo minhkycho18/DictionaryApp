@@ -239,6 +239,8 @@ export default function LeitnerDetail(props) {
         <TouchableOpacity style={{ 
           // marginTop: 10, 
           marginLeft: 13, 
+          paddingBottom: 10,
+
           // marginBottom:10,
           // backgroundColor:'red',
           // padding: 3 
@@ -377,7 +379,7 @@ export default function LeitnerDetail(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    marginTop: '9%',
     backgroundColor: "#F2F5FE",
   },
   header: {
@@ -386,7 +388,8 @@ const styles = StyleSheet.create({
     height: "20%",
     display: "flex",
     flexDirection:'row',
-    alignItems:'center'
+    alignItems:'center',
+    paddingBottom: 10,
     // justifyContent:'center'
     // borderBottomRightRadius: 60,
   },
