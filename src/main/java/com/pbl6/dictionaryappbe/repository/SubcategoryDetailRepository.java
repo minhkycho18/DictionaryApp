@@ -77,12 +77,11 @@ public interface SubcategoryDetailRepository
                                                 @Param("numberOfLearnedItem") int numberOfLearnedItem);
 
     @Query(value = """
-            SELECT sd.* FROM subcategory_detail sd
-            JOIN vocabularies v
-            ON sd.vocab_id = v.vocab_id
-            WHERE v.status = "DEFAUlT" AND sd.subcategory_id = :subcategoryId
-            ORDER BY v.word
-            """, nativeQuery = true)
+            SELECT sd
+            FROM SubcategoryDetail sd
+            JOIN Vocabulary v ON sd.vocabId = v.vocabId
+            WHERE v.status = 'DEFAULT' AND sd.subcategoryId = :subcategoryId
+            """)
     Page<SubcategoryDetail> findAllDefaultVocabBySubcategoryId(@Param("subcategoryId") Long subcategoryId, Pageable pageable);
 
     @Query(value = """

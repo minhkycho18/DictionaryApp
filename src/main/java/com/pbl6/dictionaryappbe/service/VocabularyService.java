@@ -12,6 +12,8 @@ import java.util.List;
 public interface VocabularyService {
     List<String> findAllPos();
 
+    List<VocabDetailDto> getAllContributionVocab();
+
     Page<VocabDetailDto> findByKeyword(String keyword, String pos, int offset, int limit);
 
     void setInfoVocabOfUser(Page<VocabDetailDto> vocabDetailDtos, Page<Vocabulary> vocabularies, User user);

@@ -88,26 +88,29 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
     }
 
     @Override
-    public Page<SubcategoryDetailResponseDto> getAllVocabularies(Long wordListId, Long subcategoryId, int offset, int limit) {
+    public Page<SubcategoryDetailResponseDto> getAllVocabularies(Long wordListId, Long subcategoryId, int offset, int limit, String keyword) {
         int pageNo = offset / limit;
         Pageable pageable = PageRequest.of(pageNo, limit);
         Page<SubcategoryDetail> vocabularyPage;
-
         try {
             getOwnedSubcategory(wordListId, subcategoryId);
             vocabularyPage = subcategoryDetailRepository.findAllBySubcategoryId(subcategoryId, pageable);
         } catch (AccessDeniedException e) {
             vocabularyPage = subcategoryDetailRepository.findAllDefaultVocabBySubcategoryId(subcategoryId, pageable);
         }
-
         List<SubcategoryDetailResponseDto> vocabularyDtos = MapperUtils.toTargetList(subcategoryDetailMapper::toSubcategoryDetailResponseDto, SubcategoryDetailUtils.filterDeletedVocabulary(vocabularyPage.getContent()));
+        vocabularyDtos = vocabularyDtos.stream()
+                .filter(vocab -> vocab.getWord().toLowerCase().startsWith(keyword.toLowerCase()))
+                .sorted(Comparator.comparing(SubcategoryDetailResponseDto::getWord))
+                .toList()
+        ;
         return new PageImpl<>(vocabularyDtos, pageable, vocabularyPage.getTotalElements());
     }
 
     @Override
     @Transactional
     public ContributionResponseDto contributeVocabulary(Long wordListId, ContributionRequestDto contributionVocabulary) {
-        User user = AuthenticationUtils.getUserFromSecurityContext();
+        User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
         Subcategory subcategory = getOwnedSubcategory(wordListId, contributionVocabulary.getSubcategoryId());
         List<SubcategoryDetail> subcategoryDetails = new ArrayList<>();
         Vocabulary newVocab = vocabularyRepository.save(Vocabulary.builder()
@@ -119,7 +122,7 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
                 .audioUk(contributionVocabulary.getAudioUk())
                 .contributedAt(LocalDateTime.now())
                 .contributedBy(user.getEmail())
-                .status(VocabularyStatus.PENDING)
+                .status(contributionVocabulary.getIsContribute() ? VocabularyStatus.PENDING : VocabularyStatus.PERSONAL)
                 .build());
         contributionVocabulary.getDefinition().forEach(definition -> {
             Definition newDef = definitionRepository.save(Definition.builder()

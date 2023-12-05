@@ -14,6 +14,7 @@ import com.pbl6.dictionaryappbe.repository.DefinitionRepository;
 import com.pbl6.dictionaryappbe.repository.VocabDefRepository;
 import com.pbl6.dictionaryappbe.repository.VocabularyRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
+import com.pbl6.dictionaryappbe.utils.MapperUtils;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,12 @@ public class VocabularyServiceImpl implements VocabularyService {
     @Override
     public List<String> findAllPos() {
         return vocabularyRepository.findAllPos();
+    }
+
+    @Override
+    public List<VocabDetailDto> getAllContributionVocab() {
+        List<Vocabulary> vocabularies = vocabularyRepository.findAllByStatus(VocabularyStatus.PENDING);
+        return MapperUtils.toTargetList(vocabularyMapper::toVocabDetailDto, vocabularies);
     }
 
     @Override
@@ -129,6 +136,7 @@ public class VocabularyServiceImpl implements VocabularyService {
         vocabulary.setAudioUk(updateDefaultVocabRequest.getAudioUk());
         vocabulary.setPhoneUs(updateDefaultVocabRequest.getPhoneUs());
         vocabulary.setPhoneUk(updateDefaultVocabRequest.getPhoneUk());
+        vocabulary.setStatus(updateDefaultVocabRequest.getStatus());
         updateDefaultVocabRequest.getDefinitions().forEach(definitionShortDetail -> {
             if (definitionShortDetail.getDefId() != null) {
                 // Case update existed def
