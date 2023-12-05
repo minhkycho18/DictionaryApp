@@ -69,11 +69,52 @@ const Game = (props) => {
       localStorage.setItem("gameType", REVIEW);
     };
   }, [dispatch, subId, type, wlId]);
-
+  const handleExit = async () => {
+    const params = {
+      wordListId: wlId,
+      subcategoryId: subId,
+      gameType: type.toLowerCase(),
+      values:
+        type.toLowerCase() === "review"
+          ? result.map((item) => ({
+              vocabId: item.vocabId,
+              defId: item.defId,
+            }))
+          : correctAnswerFlashcard.map((item) => ({
+              vocabId: item.vocabId,
+              defId: item.defId,
+            })),
+    };
+    try {
+      await updateVocabsByGameType(params);
+    } catch (error) {
+      openNotificationWithIcon("error", "Fail to update game's status!");
+    }
+  };
   const handleChangeLesson = async (lessonType, success) => {
-    const handleModalAction = (confirmed) => {
+    const params = {
+      wordListId: wlId,
+      subcategoryId: subId,
+      gameType: type.toLowerCase(),
+      values:
+        type.toLowerCase() === "review"
+          ? result.map((item) => ({
+              vocabId: item.vocabId,
+              defId: item.defId,
+            }))
+          : correctAnswerFlashcard.map((item) => ({
+              vocabId: item.vocabId,
+              defId: item.defId,
+            })),
+    };
+    const handleModalAction = async (confirmed) => {
       setIsModalOpen(false);
       if (confirmed) {
+        try {
+          await updateVocabsByGameType(params);
+        } catch (error) {
+          openNotificationWithIcon("error", "Fail to update game's status!");
+        }
         setCurrent(0);
         setCorrectAnswerFlashcard([]);
         setIncorrectAnswer([]);
@@ -92,7 +133,6 @@ const Game = (props) => {
           </Space>
         ),
         icon: <></>,
-
         onOk: () => handleModalAction(true),
         onCancel: () => handleModalAction(false),
         okText: <Space>Yes</Space>,
@@ -107,24 +147,8 @@ const Game = (props) => {
       });
     }
     if (lessonType.toLowerCase() !== type.toLowerCase() && success) {
-      const params = {
-        wordListId: wlId,
-        subcategoryId: subId,
-        gameType: type.toLowerCase(),
-        values:
-          type.toLowerCase() === "review"
-            ? result.map((item) => ({
-                vocabId: item.vocabId,
-                defId: item.defId,
-              }))
-            : correctAnswerFlashcard.map((item) => ({
-                vocabId: item.vocabId,
-                defId: item.defId,
-              })),
-      };
       try {
         await updateVocabsByGameType(params);
-        // openNotificationWithIcon("success", rs);
       } catch (error) {
         openNotificationWithIcon("error", "Fail to update game's status!");
       }
@@ -138,8 +162,15 @@ const Game = (props) => {
       slide.current.next();
     }
   };
-  const handleCorrectFlashCard = (item) => {
-    setCorrectAnswerFlashcard([...correctAnswerFlashcard, item]);
+  const handleCorrectFlashCard = (value) => {
+    if (correctAnswerFlashcard) {
+      const index = correctAnswerFlashcard.findIndex(
+        (item) => item.vocabId === value.vocabId && item.defId === value.defId
+      );
+      if (index === -1) {
+        setCorrectAnswerFlashcard([...correctAnswerFlashcard, value]);
+      }
+    } else setCorrectAnswerFlashcard([...correctAnswerFlashcard, value]);
   };
   const handleIncorrectAnswer = (item) => {
     setIncorrectAnswer([...incorrectAnswer, item]);
@@ -210,6 +241,9 @@ const Game = (props) => {
                 key={index}
                 onSelect={current === index}
                 vocabInfo={item}
+                handleChangeSlide={handleChangeSlide}
+                handleCorrectFlashCard={handleCorrectFlashCard}
+                handleIncorrectAnswer={handleIncorrectAnswer}
               />
             ))}
             <SuccessCard
@@ -396,7 +430,11 @@ const Game = (props) => {
 
       {modalCtx}
       {type !== OVERVIEW && (
-        <GameMenu onChangeLesson={handleChangeLesson} lesson={type} />
+        <GameMenu
+          onChangeLesson={handleChangeLesson}
+          lesson={type}
+          handleExit={handleExit}
+        />
       )}
     </Space>
   );

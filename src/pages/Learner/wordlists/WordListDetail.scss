@@ -100,6 +100,18 @@
       color: #fff;
     }
   }
+  &__amount {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  &__icon {
+    font-size: 20px;
+  }
+  &__wrap {
+    font-size: 16px;
+    font-weight: 500;
+    color: $text-grey-color;
+  }
 }
 
 .row-css {

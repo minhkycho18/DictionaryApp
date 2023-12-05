@@ -1,5 +1,6 @@
 import {
   CaretRightOutlined,
+  ContainerOutlined,
   EditOutlined,
   ExclamationCircleOutlined,
   InboxOutlined,
@@ -217,9 +218,15 @@ const WordListDetail = (props) => {
   const renderSubcategory = subcategories.map((subcategory, index) => (
     <Col key={index} className="col-css">
       <Space className="wldetail__card" direction="vertical">
-        <Space>
+        <Space direction="vertical">
           <Space className="wldetail__card-title">{subcategory?.title}</Space>
-          <Space className="wldetail__card-options"></Space>
+          <Space className="wldetail__card__wrap">
+            <ContainerOutlined className="wldetail__card__icon" />
+            <Space className="wldetail__card__amount">
+              {subcategory?.amountOfWord}
+            </Space>
+            Words
+          </Space>
         </Space>
         <Space
           style={{

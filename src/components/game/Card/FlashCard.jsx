@@ -12,11 +12,15 @@ import "./FlashCard.scss";
 import WrapCard from "./WrapCard";
 const FlashCard = (props) => {
   const [isFlip, setIsFlip] = useState(false);
+  const [answer, setAnswer] = useState("");
 
   const changeToNext = () => {
     props.onSelect && props.handleChangeSlide();
   };
   const handleCheckCorrect = (answer) => {
+    if (answer) {
+      setAnswer("correct");
+    } else setAnswer("incorrect");
     if (answer === props.vocabInfo.result) {
       props.handleCorrectFlashCard(props.vocabInfo);
     } else {
@@ -25,7 +29,7 @@ const FlashCard = (props) => {
         ...props.vocabInfo,
       };
       props.handleIncorrectAnswer(item);
-    } 
+    }
   };
   const flipCard = () => {
     setIsFlip(!isFlip);
@@ -115,7 +119,11 @@ const FlashCard = (props) => {
           <Row style={{ width: 482 }}>
             <Col className="col-css" span={12}>
               <Space
-                className="flash-card__options--item flash-card__unknown"
+                className={`${
+                  answer && answer === "incorrect"
+                    ? "flash-card__unknown--choiced"
+                    : ""
+                } flash-card__options--item flash-card__unknown`}
                 onClick={() => {
                   handleCheckCorrect(false);
                   changeToNext();
@@ -128,7 +136,11 @@ const FlashCard = (props) => {
             </Col>
             <Col className="col-css" span={12}>
               <Space
-                className="flash-card__options--item flash-card__know"
+                className={`${
+                  answer && answer === "correct"
+                    ? "flash-card__know--choiced"
+                    : ""
+                } flash-card__options--item flash-card__know`}
                 onClick={() => {
                   handleCheckCorrect(true);
                   changeToNext();

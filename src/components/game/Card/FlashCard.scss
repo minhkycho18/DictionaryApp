@@ -66,6 +66,11 @@
     border-left: 1px solid #eee;
     &--icon {
       color: #3f9243;
+      border-radius: 50%;
+    }
+    &--choiced {
+      background-color: #3f9243;
+      color: #fff;
     }
   }
   &__unknown {
@@ -74,7 +79,12 @@
     color: #dc2929;
 
     &--icon {
+      border-radius: 50%;
       color: #dc2929;
+    }
+    &--choiced {
+      background-color: #dc2929;
+      color: #fff;
     }
   }
   &__example {

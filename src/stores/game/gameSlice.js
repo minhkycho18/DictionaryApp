@@ -15,19 +15,23 @@ const gameSlice = createSlice({
     correctFlashcard: { correct: [], total: 0, incorrect: [] },
     correctQuiz: { correct: [], total: 0, incorrect: [] },
     correctSpelling: { correct: [], total: 0, incorrect: [] },
+    reviewed: [],
   },
   reducers: {
     updateVocab(state, action) {
-      // const initResult = [...state.result];
-      // const index = initResult.findIndex(
-      //   (item) =>
-      //     item.vocabId === action.payload.vocabId &&
-      //     item.defId === action.payload.defId
-      // );
-      // if (index !== -1) {
-      //   initResult[index] = action.payload;
-      // }
-      // state.result = initResult;
+      // const initResult = [...state.reviewed];
+      console.log(state.reviewed);
+      if (state.reviewed) {
+        const index = state.reviewed.findIndex(
+          (item) =>
+            item.vocabId === action.payload.vocabId &&
+            item.defId === action.payload.defId
+        );
+        if (index === -1) {
+          console.log(action.payload);
+          state.reviewed.push(action.payload);
+        }
+      } else state.reviewed.push(action.payload);
     },
     getGameStatus(state, action) {
       state.isReview = action.payload.every((item) => item?.isReview === true);

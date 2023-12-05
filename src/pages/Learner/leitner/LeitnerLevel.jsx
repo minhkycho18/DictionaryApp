@@ -1,24 +1,14 @@
 import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Checkbox,
-  Input,
-  Pagination,
-  Select,
-  Space,
-  Tag,
-  Tooltip,
-} from "antd";
+import { Checkbox, Input, Pagination, Select, Space, Tag, Tooltip } from "antd";
 import { debounce, upperFirst } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
-import { FaGraduationCap } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
 import { useLoaderData } from "react-router-dom";
 import { getLeitnerVocabs } from "../../../api/Leitner/leitner.api";
 import { getAllPos } from "../../../api/Vocabulary/vocabulary.api";
 import colorPos from "../../../helpers/ColorPos";
-import "./LeitnerGame.scss";
-import { useDispatch } from "react-redux";
 import { setCurrentLeitnerLevel } from "../../../stores/leitner/leitnerSlice";
+import "./LeitnerGame.scss";
 const LeitnerLevel = (props) => {
   const loader = useLoaderData();
   const [vocabs, setVocabs] = useState();

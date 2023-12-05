@@ -21,13 +21,17 @@ const GameMenu = (props) => {
   const handleChangeLesson = (lesson) => {
     props.onChangeLesson(lesson, false);
   };
+  const handleExitGame = () => {
+    props.handleExit();
+    navigate(-1);
+  };
 
   return (
     <Space className="game-menu__wrap">
       <Space
         className="game-menu game-menu__item--mobile"
         style={{ marginTop: 13, marginRight: 8 }}
-        onClick={() => navigate(-1)}
+        onClick={() => handleExitGame()}
       >
         <Space className="game-menu__item game-menu__item--back">
           <ArrowLeftOutlined style={{ fontSize: 25, marginTop: 12 }} />

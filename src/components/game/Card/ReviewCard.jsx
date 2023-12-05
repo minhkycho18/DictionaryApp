@@ -17,9 +17,10 @@ const ReviewCard = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (props?.onSelect) {
-      dispatch(updateVocab(props.vocabInfo));
+      props.handleCorrectFlashCard(props.vocabInfo);
     }
-  }, [dispatch, props?.onSelect, props.vocabInfo]);
+  }, [props]);
+
   return (
     <ReactCardFlip isFlipped={isFlip} flipDirection="horizontal">
       <WrapCard {...props} imgTop={waveTop} imgBot={waveBottom}>

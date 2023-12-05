@@ -49,13 +49,30 @@ const SuccessCard = (props) => {
           <Space direction="vertical" className="success-card ">
             <Space direction="vertical" className="success-card__body">
               <Image src={logo} loading="lazy" preview={false}></Image>
-              <Space direction="vertical">
-                {/* <Space className="review-card__title">Great !</Space> */}
-                <Space className="review-card__title">
-                  {props.onSelect &&
-                    props?.resultLength -
-                      props?.correctAnswerFlashcard.length}{" "}
-                  Difficult words{" "}
+              <Space>
+                <Space
+                  className="overview__results__item--incorrect overview__results__item"
+                  direction="vertical"
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <Space className="overview__results__count">
+                    {props?.resultLength - props?.correctAnswerFlashcard.length}
+                  </Space>
+                  <Space className="overview__success-label overview__results__label">
+                    Incorrect
+                  </Space>
+                </Space>
+                <Space
+                  className="overview__results__item--correct overview__results__item"
+                  direction="vertical"
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <Space className="overview__results__count">
+                    {props?.correctAnswerFlashcard.length}
+                  </Space>
+                  <Space className="overview__success-label overview__results__label">
+                    Correct
+                  </Space>
                 </Space>
               </Space>
               <Space className="success-card__box" direction="vertical">
@@ -97,13 +114,30 @@ const SuccessCard = (props) => {
           <Space direction="vertical" className="success-card ">
             <Space direction="vertical" className="success-card__body">
               <Image src={logo} loading="lazy" preview={false}></Image>
-              <Space direction="vertical">
-                {/* <Space className="review-card__title">Great !</Space> */}
-                <Space className="review-card__title">
-                  {props.onSelect &&
-                    props?.resultLength -
-                      props?.correctAnswerFlashcard.length}{" "}
-                  wrong answers{" "}
+              <Space>
+                <Space
+                  className="overview__results__item--incorrect overview__results__item"
+                  direction="vertical"
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <Space className="overview__results__count">
+                    {props?.resultLength - props?.correctAnswerFlashcard.length}
+                  </Space>
+                  <Space className="overview__success-label overview__results__label">
+                    Incorrect
+                  </Space>
+                </Space>
+                <Space
+                  className="overview__results__item--correct overview__results__item"
+                  direction="vertical"
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <Space className="overview__results__count">
+                    {props?.correctAnswerFlashcard.length}
+                  </Space>
+                  <Space className="overview__success-label overview__results__label">
+                    Correct
+                  </Space>
                 </Space>
               </Space>
               <Space className="success-card__box" direction="vertical">
@@ -146,13 +180,30 @@ const SuccessCard = (props) => {
           <Space direction="vertical" className="success-card ">
             <Space direction="vertical" className="success-card__body">
               <Image src={logo} loading="lazy" preview={false}></Image>
-              <Space direction="vertical">
-                {/* <Space className="review-card__title">Great !</Space> */}
-                <Space className="review-card__title">
-                  {props.onSelect &&
-                    props?.resultLength -
-                      props?.correctAnswerFlashcard.length}{" "}
-                  Difficult words{" "}
+              <Space>
+                <Space
+                  className="overview__results__item--incorrect overview__results__item"
+                  direction="vertical"
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <Space className="overview__results__count">
+                    {props?.resultLength - props?.correctAnswerFlashcard.length}
+                  </Space>
+                  <Space className="overview__success-label overview__results__label">
+                    Incorrect
+                  </Space>
+                </Space>
+                <Space
+                  className="overview__results__item--correct overview__results__item"
+                  direction="vertical"
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <Space className="overview__results__count">
+                    {props?.correctAnswerFlashcard.length}
+                  </Space>
+                  <Space className="overview__success-label overview__results__label">
+                    Correct
+                  </Space>
                 </Space>
               </Space>
               <Space className="success-card__box" direction="vertical">
