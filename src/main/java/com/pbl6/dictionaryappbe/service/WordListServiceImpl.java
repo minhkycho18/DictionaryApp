@@ -60,7 +60,7 @@ public class WordListServiceImpl implements WordListService {
     public List<WordListResponseDto> getAllSystemWordList(RoleName role, String keyword) {
         List<WordList> wordLists = wordListRepository.findAllByUserRole(roleRepository.findByName(RoleName.CONTENT_MANAGER));
         wordLists = wordLists.stream()
-                .filter(wordList -> wordList.getTitle().toLowerCase().startsWith(keyword.toLowerCase()))
+                .filter(wordList -> wordList.getTitle().toLowerCase().contains(keyword.toLowerCase()))
                 .sorted(Comparator.comparing(WordList::getTitle, String.CASE_INSENSITIVE_ORDER))
                 .toList();
         return MapperUtils.toTargetList(wordListMapper::toWordListDto, wordLists);

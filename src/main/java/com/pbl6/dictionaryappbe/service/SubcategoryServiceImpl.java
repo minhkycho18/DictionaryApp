@@ -70,7 +70,7 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
         }
         List<Subcategory> subcategories = subcategoryRepository.findAllByWordList(wordList);
         subcategories = subcategories.stream()
-                .filter(subcategory -> subcategory.getTitle().toLowerCase().startsWith(keyword.toLowerCase()))
+                .filter(subcategory -> subcategory.getTitle().toLowerCase().contains(keyword.toLowerCase()))
                 .sorted(Comparator.comparing(Subcategory::getTitle, String.CASE_INSENSITIVE_ORDER))
                 .toList();
         return MapperUtils.toTargetList(subcategoryMapper::toSubcategoryResponseDto, subcategories);
@@ -187,8 +187,14 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
     @Override
     @Transactional
     public SubcategoryResponseDto createSubcategory(Long wordListId, String title) {
-        WordList wordList = wordListRepository.findByUserAndWordListId(AuthenticationUtils.getUserFromSecurityContext(), wordListId)
-                .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"));
+        User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
+        WordList wordList;
+        if (user.getRole().getName() == RoleName.CONTENT_MANAGER) {
+            wordList = wordListRepository.findById(wordListId).orElseThrow(() -> new EntityNotFoundException("WordList not found"));
+        } else {
+            wordList = wordListRepository.findByUserAndWordListId(AuthenticationUtils.getUserFromSecurityContext(), wordListId)
+                    .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"));
+        }
         if (subcategoryRepository.findByTitleAndWordList(title, wordList) != null) {
             throw new DuplicateDataException("Title's subcategory is existed");
         }
@@ -293,12 +299,13 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
             if (wordList.getListType() == ListType.PRIVATE) {
                 throw new AccessDeniedException("You do not have permission to access this WordList");
             }
+
         } else {
             wordList = (user.getRole().getName().equals(RoleName.LEARNER))
                     ? wordListRepository.findByUserAndWordListId(user, wordListId)
                     .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"))
                     : wordListRepository.findById(wordListId)
-                    .orElseThrow(() -> new EntityNotFoundException("You do not have permission to access this WordList"));
+                    .orElseThrow(() -> new EntityNotFoundException("WordList not found"));
         }
 
         return subcategoryRepository.findBySubcategoryIdAndWordList(subcategoryId, wordList)
