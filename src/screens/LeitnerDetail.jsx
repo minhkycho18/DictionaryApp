@@ -6,7 +6,6 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
-  StatusBar,
 } from "react-native";
 import {
   useNavigation,
@@ -15,225 +14,237 @@ import {
 } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
 
-import ItemSubCategory from "~/components/Home/WordList/ItemSubCategory/ItemSubCategory";
-import { Image } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { colors, svgstudy } from "~/constants/theme";
-import { deleteSubCategory, getAllSubCategory } from "~/api/Subcategory";
+
 import { configFont } from "~/constants/theme";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { ListVocalContext } from "~/context/ListVocal";
-import Modal from "react-native-modal";
-import FormAdd from "~/components/BottomSheet/FormAdd/FormAdd";
-import { delay } from "~/helper/index";
-import ItemVocabOfLeitner from "~/components/Leitner/ItemVocabOfLeitner/ItemVocabOfLeitner";
 
-export default function LeitnerDetail() {
+import ItemVocabOfLeitner from "~/components/Leitner/ItemVocabOfLeitner/ItemVocabOfLeitner";
+import { getVocabOfLeitnerLevelOfUser } from "~/api/Leitner";
+import SplashScreen from "~/components/SplashScreen";
+
+export default function LeitnerDetail(props) {
+  const level = props.route.params.level;
+  
   const data_mau = [
     {
-      audioUk:
-        "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/a/att/atten/attend__gb_1.mp3",
-      audioUs:
-        "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/a/att/atten/attend__us_2.mp3",
-      definition: {
-        defId: 23160,
-        examples: "I don't attend Mass.",
-        wordDesc: "to be present at ",
+      "audioUk": "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/a/att/atten/attend__gb_1.mp3",
+      "audioUs": "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/a/att/atten/attend__us_2.mp3",
+      "definition": {
+        "defId": 23160,
+        "examples": "I don't attend Mass.",
+        "wordDesc": "to be present at "
       },
-      flashcard: false,
-      lastLearning: null,
-      phoneUk: "/əˈtend/",
-      phoneUs: "/əˈtend/",
-      pos: "verb",
-      quiz: false,
-      review: true,
-      spelling: false,
-      vocabId: 7387,
-      word: "attend",
+      "flashcard": false,
+      "lastLearning": null,
+      "phoneUk": "/əˈtend/",
+      "phoneUs": "/əˈtend/",
+      "pos": "verb",
+      "quiz": false,
+      "review": true,
+      "spelling": false,
+      "vocabId": 7387,
+      "word": "attend"
     },
     {
-      audioUk:
-        "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/b/bor/borde/border__gb_1.mp3",
-      audioUs:
-        "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/b/bor/borde/border__us_1.mp3",
-      definition: {
-        defId: 12194,
-        examples: "the rug had a wide blue border",
-        wordDesc: "a strip forming the outer edge of something",
+      "audioUk": "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/b/bor/borde/border__gb_1.mp3",
+      "audioUs": "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/b/bor/borde/border__us_1.mp3",
+      "definition": {
+        "defId": 12194,
+        "examples": "the rug had a wide blue border",
+        "wordDesc": "a strip forming the outer edge of something"
       },
-      flashcard: true,
-      lastLearning: null,
-      phoneUk: "/ˈbɔːdə(r)/",
-      phoneUs: "/ˈbɔːrdər/",
-      pos: "noun",
-      quiz: true,
-      review: false,
-      spelling: false,
-      vocabId: 10763,
-      word: "border",
+      "flashcard": true,
+      "lastLearning": null,
+      "phoneUk": "/ˈbɔːdə(r)/",
+      "phoneUs": "/ˈbɔːrdər/",
+      "pos": "noun",
+      "quiz": true,
+      "review": false,
+      "spelling": false,
+      "vocabId": 10763,
+      "word": "border"
     },
     {
-      audioUk:
-        "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/b/ben/benef/benefit__gb_2.mp3",
-      audioUs:
-        "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/b/ben/benef/benefit__us_1.mp3",
-      definition: {
-        defId: 14605,
-        examples: null,
-        wordDesc: "a performance to raise money for a charitable cause",
+      "audioUk": "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/b/ben/benef/benefit__gb_2.mp3",
+      "audioUs": "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/b/ben/benef/benefit__us_1.mp3",
+      "definition": {
+        "defId": 14605,
+        "examples": null,
+        "wordDesc": "a performance to raise money for a charitable cause"
       },
-      flashcard: true,
-      lastLearning: null,
-      phoneUk: "/ˈbenɪfɪt/",
-      phoneUs: "/ˈbenɪfɪt/",
-      pos: "noun",
-      quiz: false,
-      review: true,
-      spelling: false,
-      vocabId: 11463,
-      word: "benefit",
+      "flashcard": true,
+      "lastLearning": null,
+      "phoneUk": "/ˈbenɪfɪt/",
+      "phoneUs": "/ˈbenɪfɪt/",
+      "pos": "noun",
+      "quiz": false,
+      "review": true,
+      "spelling": false,
+      "vocabId": 11463,
+      "word": "benefit"
     },
     {
-      audioUk: null,
-      audioUs: null,
-      definition: {
-        defId: 19323,
-        examples: null,
-        wordDesc:
-          "deciduous low-growing perennial of Canada and eastern and central United States",
+      "audioUk": null,
+      "audioUs": null,
+      "definition": {
+        "defId": 19323,
+        "examples": null,
+        "wordDesc": "deciduous low-growing perennial of Canada and eastern and central United States"
       },
-      flashcard: false,
-      lastLearning: null,
-      phoneUk: null,
-      phoneUs: null,
-      pos: "noun",
-      quiz: false,
-      review: true,
-      spelling: false,
-      vocabId: 13136,
-      word: "black snakeroot",
+      "flashcard": false,
+      "lastLearning": null,
+      "phoneUk": null,
+      "phoneUs": null,
+      "pos": "noun",
+      "quiz": false,
+      "review": true,
+      "spelling": false,
+      "vocabId": 13136,
+      "word": "black snakeroot"
     },
     {
-      audioUk:
-        "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/c/coa/coat_/coat__gb_2.mp3",
-      audioUs:
-        "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/c/coa/coat_/coat__us_1.mp3",
-      definition: {
-        defId: 14629,
-        examples: null,
-        wordDesc:
-          "growth of hair or wool or fur covering the body of an animal",
+      "audioUk": "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/c/coa/coat_/coat__gb_2.mp3",
+      "audioUs": "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/c/coa/coat_/coat__us_1.mp3",
+      "definition": {
+        "defId": 14629,
+        "examples": null,
+        "wordDesc": "growth of hair or wool or fur covering the body of an animal"
       },
-      flashcard: false,
-      lastLearning: null,
-      phoneUk: "/kəʊt/",
-      phoneUs: "/kəʊt/",
-      pos: "noun",
-      quiz: false,
-      review: true,
-      spelling: false,
-      vocabId: 18526,
-      word: "coat",
+      "flashcard": false,
+      "lastLearning": null,
+      "phoneUk": "/kəʊt/",
+      "phoneUs": "/kəʊt/",
+      "pos": "noun",
+      "quiz": false,
+      "review": true,
+      "spelling": false,
+      "vocabId": 18526,
+      "word": "coat"
     },
     {
-      audioUk:
-        "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/c/clo/cloak/cloak__gb_1.mp3",
-      audioUs:
-        "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/c/clo/cloak/cloak__us_1.mp3",
-      definition: {
-        defId: 18258,
-        examples: null,
-        wordDesc: "to cover as if with clothing",
+      "audioUk": "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/c/clo/cloak/cloak__gb_1.mp3",
+      "audioUs": "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/c/clo/cloak/cloak__us_1.mp3",
+      "definition": {
+        "defId": 18258,
+        "examples": null,
+        "wordDesc": "to cover as if with clothing"
       },
-      flashcard: true,
-      lastLearning: null,
-      phoneUk: "/kləʊk/",
-      phoneUs: "/kləʊk/",
-      pos: "verb",
-      quiz: true,
-      review: false,
-      spelling: false,
-      vocabId: 19711,
-      word: "cloak",
+      "flashcard": true,
+      "lastLearning": null,
+      "phoneUk": "/kləʊk/",
+      "phoneUs": "/kləʊk/",
+      "pos": "verb",
+      "quiz": true,
+      "review": false,
+      "spelling": false,
+      "vocabId": 19711,
+      "word": "cloak"
     },
     {
-      audioUk: null,
-      audioUs: null,
-      definition: {
-        defId: 24951,
-        examples: null,
-        wordDesc: "the limits of the area occupied by a city or town",
+      "audioUk": null,
+      "audioUs": null,
+      "definition": {
+        "defId": 24951,
+        "examples": null,
+        "wordDesc": "the limits of the area occupied by a city or town"
       },
-      flashcard: false,
-      lastLearning: null,
-      phoneUk: null,
-      phoneUs: null,
-      pos: "noun",
-      quiz: false,
-      review: true,
-      spelling: false,
-      vocabId: 22725,
-      word: "city limits",
+      "flashcard": false,
+      "lastLearning": null,
+      "phoneUk": null,
+      "phoneUs": null,
+      "pos": "noun",
+      "quiz": false,
+      "review": true,
+      "spelling": false,
+      "vocabId": 22725,
+      "word": "city limits"
     },
     {
-      audioUk:
-        "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/c/com/commi/commissioner__gb_1.mp3",
-      audioUs:
-        "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/c/com/commi/commissioner__us_1.mp3",
-      definition: {
-        defId: 27834,
-        examples: null,
-        wordDesc: "a government administrator",
+      "audioUk": "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/c/com/commi/commissioner__gb_1.mp3",
+      "audioUs": "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/c/com/commi/commissioner__us_1.mp3",
+      "definition": {
+        "defId": 27834,
+        "examples": null,
+        "wordDesc": "a government administrator"
       },
-      flashcard: true,
-      lastLearning: null,
-      phoneUk: "/kəˈmɪʃənə(r)/",
-      phoneUs: "/kəˈmɪʃənər/",
-      pos: "noun",
-      quiz: true,
-      review: false,
-      spelling: false,
-      vocabId: 23117,
-      word: "commissioner",
+      "flashcard": true,
+      "lastLearning": null,
+      "phoneUk": "/kəˈmɪʃənə(r)/",
+      "phoneUs": "/kəˈmɪʃənər/",
+      "pos": "noun",
+      "quiz": true,
+      "review": false,
+      "spelling": false,
+      "vocabId": 23117,
+      "word": "commissioner"
     },
     {
-      audioUk: null,
-      audioUs: null,
-      definition: {
-        defId: 36450,
-        examples: null,
-        wordDesc:
-          "the solid matter remaining after oil has been pressed from cottonseeds",
+      "audioUk": null,
+      "audioUs": null,
+      "definition": {
+        "defId": 36450,
+        "examples": null,
+        "wordDesc": "the solid matter remaining after oil has been pressed from cottonseeds"
       },
-      flashcard: false,
-      lastLearning: null,
-      phoneUk: null,
-      phoneUs: null,
-      pos: "noun",
-      quiz: false,
-      review: true,
-      spelling: false,
-      vocabId: 25350,
-      word: "cotton cake",
-    },
+      "flashcard": false,
+      "lastLearning": null,
+      "phoneUk": null,
+      "phoneUs": null,
+      "pos": "noun",
+      "quiz": false,
+      "review": true,
+      "spelling": false,
+      "vocabId": 25350,
+      "word": "cotton cake"
+    }
   ];
   const navigation = useNavigation();
+  const [listVocabOfLeitner, setListVocabOfLeitner] = useState([]);
+  const [showLoader, setShowLoader] = useState(false);
+  const [offset, setOffset] = useState(5);
 
+
+  const getVocabOfLeitnerLevel = async (level) => {
+    const data = await getVocabOfLeitnerLevelOfUser(level);
+    setListVocabOfLeitner(data.content);
+    
+  };
+  const handleStudy = () => {
+    console.log('\n\ndone nha:\n',listVocabOfLeitner);
+  }
+
+  useEffect(() => {
+    getVocabOfLeitnerLevel(level);
+  }, []);
+  const handleEndReach = async () => {
+    if (listVocabOfLeitner.length > 4) {
+      try {
+        setShowLoader(true);
+        const data = await getVocabOfLeitnerLevelOfUser(level, offset);
+        setListVocabOfLeitner([...listVocabOfLeitner, ...data.content]);
+        setOffset(offset + 20);
+        setShowLoader(false);
+      } catch (error) {
+        console.log(`error ::`, error);
+      }
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
-          style={{
-            // marginTop: 10,
-            marginLeft: 13,
-            // marginBottom:10,
-            // backgroundColor:'red',
-            // padding: 3
-          }}
-        >
+        <TouchableOpacity style={{ 
+          // marginTop: 10, 
+          marginLeft: 13, 
+          paddingBottom: 10,
+
+          // marginBottom:10,
+          // backgroundColor:'red',
+          // padding: 3 
+          }}>
           <Entypo
             name="chevron-left"
             size={24}
@@ -256,7 +267,9 @@ export default function LeitnerDetail() {
             // position: 'relative',
           }}
         >
-          <View>
+
+          <View
+          >
             {/* Title */}
             <Text
               style={[
@@ -272,35 +285,32 @@ export default function LeitnerDetail() {
               Leitner box Pending
             </Text>
             {/* Description */}
-            {data_mau.length == 1 ? (
-              <Text
-                style={[
-                  {
-                    marginTop: 10,
-                    color: colors.gray,
-                    fontFamily: "Quicksand-SemiBold",
-                    fontSize: 18,
-                    letterSpacing: 0.1,
-                  },
-                ]}
-              >
-                1 word
-              </Text>
-            ) : (
-              <Text
-                style={[
-                  {
-                    marginTop: 10,
-                    color: colors.gray,
-                    fontFamily: "Quicksand-SemiBold",
-                    fontSize: 18,
-                    letterSpacing: 0.1,
-                  },
-                ]}
-              >
-                {data_mau.length} words
-              </Text>
-            )}
+            {listVocabOfLeitner.length == 1 ? (<Text
+              style={[
+                {
+                  marginTop: 10,
+                  color: colors.gray,
+                  fontFamily: "Quicksand-SemiBold",
+                  fontSize: 18,
+                  letterSpacing: 0.1,
+                },
+              ]}
+            >
+              1 word
+            </Text>
+            ) : <Text
+              style={[
+                {
+                  marginTop: 10,
+                  color: colors.gray,
+                  fontFamily: "Quicksand-SemiBold",
+                  fontSize: 18,
+                  letterSpacing: 0.1,
+                },
+              ]}
+            >
+              {listVocabOfLeitner.length} words
+            </Text>}
             {/* <Text
               style={[
                 {
@@ -312,7 +322,7 @@ export default function LeitnerDetail() {
                 },
               ]}
             >
-              {data_mau.length} words
+              {listVocabOfLeitner.length} words
             </Text> */}
           </View>
         </View>
@@ -322,7 +332,7 @@ export default function LeitnerDetail() {
         {/* Button Study */}
         <TouchableOpacity
           style={styles.ButtonStudy}
-          // onPress={() => handleStudy()}
+        onPress={() => handleStudy()}
         >
           <SvgXml width="30" height="30" xml={svgstudy} />
           <Text
@@ -339,16 +349,29 @@ export default function LeitnerDetail() {
           </Text>
         </TouchableOpacity>
 
-        {/* List Subcategory */}
-        {/* <View style={styles.dropdown}> */}
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={data_mau}
-          keyExtractor={(item) => item.definition.defId}
-          renderItem={(item) => <ItemVocabOfLeitner Vocab={item} />}
-        />
-        {/* </View> */}
+        {/* List vocab */}
+        <View style={styles.dropdown}>
+          <FlatList
+            style={{
+              // marginTop: 10,
+              padding: 3,
+              // marginBottom: 15,
+            }}
+            showsVerticalScrollIndicator={false}
+            data={listVocabOfLeitner}
+            keyExtractor={(item) => item.definition.defId}
+            renderItem={(item) => (
+              <GestureHandlerRootView>
+                <ItemVocabOfLeitner Vocab={item} />
+              </GestureHandlerRootView>
+            )}
+            onEndReached={handleEndReach}
+            ListFooterComponent={showLoader && <SplashScreen/>}
+          />
+        </View>
+
       </View>
+
     </SafeAreaView>
   );
 }
@@ -356,7 +379,7 @@ export default function LeitnerDetail() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight,
+    marginTop: '9%',
     backgroundColor: "#F2F5FE",
   },
   header: {
@@ -364,8 +387,9 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "20%",
     display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection:'row',
+    alignItems:'center',
+    paddingBottom: 10,
     // justifyContent:'center'
     // borderBottomRightRadius: 60,
   },
@@ -378,7 +402,21 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
   },
-
+  dropdown: {
+    display: "flex",
+    width: "88%",
+    height: "100%",
+    // marginTop: 12,
+    // marginBottom: 12,
+    elevation: 4,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.17,
+    shadowRadius: 4,
+    marginBottom: 20,
+  },
   ButtonStudy: {
     backgroundColor: "#3D3A4D",
     borderRadius: 18,
