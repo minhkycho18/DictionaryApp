@@ -7,7 +7,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { colors } from "~/constants/theme";
 import { Audio } from "expo-av";
 import { Entypo } from "@expo/vector-icons";
-import { GetColor } from "~/helper";
+import { GetColor, checkNull } from "~/helper";
 export default function ItemCardReview({ vocal }) {
   const [isFlip, setIsFlip] = useState(false);
   const playSound = async (audio) => {
@@ -45,9 +45,9 @@ export default function ItemCardReview({ vocal }) {
           <TouchableOpacity
             style={Styles.viewSound}
             onPress={() => playSound(vocal?.audioUk)}
-            disabled={vocal.audioUs === null}
+            disabled={!checkNull(vocal.audioUs)}
           >
-            {vocal.audioUs !== null ? (
+            {checkNull(vocal.audioUs) ? (
               <AntDesign name="sound" size={24} color="#4DB5AA" />
             ) : (
               <Image
@@ -69,7 +69,7 @@ export default function ItemCardReview({ vocal }) {
             </Text>
 
             <View style={Styles.viewPos}>
-              {vocal.phoneUs !== null && (
+              {checkNull(vocal.phoneUs) && (
                 <View style={Styles.Pos}>
                   <Text
                     style={{
@@ -134,7 +134,7 @@ export default function ItemCardReview({ vocal }) {
           <TouchableOpacity
             style={Styles.bottom}
             onPress={() => setIsFlip(true)}
-            disabled={vocal?.example === null}
+            disabled={!checkNull(vocal?.example)}
           >
             <Image
               source={require("~/assets/wave.png")}
@@ -147,7 +147,7 @@ export default function ItemCardReview({ vocal }) {
                 tintColor: "#4DB5AA",
               }}
             />
-            {vocal?.example !== null && (
+            {checkNull(vocal?.example) && (
               <Text
                 style={{ ...Styles.textButton, fontFamily: "Quicksand-Bold" }}
               >
@@ -171,9 +171,9 @@ export default function ItemCardReview({ vocal }) {
           <TouchableOpacity
             style={Styles.viewSound}
             onPress={() => playSound(vocal?.audioUk)}
-            disabled={vocal.audioUs === null}
+            disabled={!checkNull(vocal.audioUs)}
           >
-            {vocal.audioUs !== null ? (
+            {checkNull(vocal.audioUs) ? (
               <AntDesign name="sound" size={24} color="#00BFA5" />
             ) : (
               <Image
@@ -194,7 +194,7 @@ export default function ItemCardReview({ vocal }) {
             </Text>
             <View style={Styles.viewExample}>
               <View style={Styles.example}>
-                {vocal.example !== null && (
+                {checkNull(vocal?.example) && (
                   <Text
                     style={{
                       ...Styles.word,

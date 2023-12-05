@@ -7,6 +7,7 @@ import {
   svgWordlist,
   svgleitner,
 } from "~/constants/theme";
+
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -25,11 +26,15 @@ import { checkLogin } from "~/helper/Auth";
 import { GetInforUser } from "~/api/Auth";
 import { delay } from "~/helper";
 import AppLoader from "~/components/AppLoader";
+import ModalSignIn from "~/components/ModalSignIn";
 export default function Profile() {
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState({});
+  const [content, setContent] = useState("");
   const navigation = useNavigation();
+
   useEffect(() => {
     const checkToken = async () => {
       const check = await checkLogin();
@@ -75,9 +80,12 @@ export default function Profile() {
               source={require("~/assets/logo.png")}
               style={Styles.imageLogo}
             />
-            <Text style={{ ...Styles.textName, fontSize: 32 }}>
-              English Vocabulary
-            </Text>
+            <View style={{ flexDirection: "column" }}>
+              <Text style={{ ...Styles.textName, fontSize: 32 }}>English</Text>
+              <Text style={{ ...Styles.textName, fontSize: 32 }}>
+                Vocabulary
+              </Text>
+            </View>
           </View>
         )}
       </LinearGradient>
@@ -89,7 +97,12 @@ export default function Profile() {
             borderBottomColor: "#ccc",
           }}
           onPress={() => {
-            navigation.navigate("ProfileDetail", { user: user });
+            if (isLogin) {
+              navigation.navigate("ProfileDetail", { user: user });
+            } else {
+              setIsOpenModal(true);
+              setContent("see your profile");
+            }
           }}
         >
           <Ionicons name="person-outline" size={24} color={colors.textColor} />
@@ -98,14 +111,28 @@ export default function Profile() {
         <View style={{ borderBottomWidth: 1, borderBottomColor: "#ccc" }}>
           <TouchableOpacity
             style={Styles.viewProfile}
-            onPress={() => navigation.navigate("YourWordlist")}
+            onPress={() => {
+              if (isLogin) {
+                navigation.navigate("YourWordlist");
+              } else {
+                setIsOpenModal(!isOpenModal);
+                setContent("access to your own wordlist");
+              }
+            }}
           >
             <SvgXml width="24" height="24" xml={svgWordlist} />
             <Text style={Styles.textItem}>My Word List</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={Styles.viewProfile}
-            onPress={() => navigation.push("LeinerStack")}
+            onPress={() => {
+              if (isLogin) {
+                navigation.push("LeinerStack");
+              } else {
+                setIsOpenModal(!isOpenModal);
+                setContent("access to your own leitner");
+              }
+            }}
           >
             <SvgXml width="24" height="24" xml={svgleitner} />
             <Text style={Styles.textItem}>Leitner</Text>
@@ -135,7 +162,7 @@ export default function Profile() {
           <TouchableOpacity
             style={Styles.viewProfile}
             onPress={async () => {
-              setIsLoading(true);
+              setIsLoading(!isLoading);
               await delay(1500);
               navigation.push("Authenticate");
             }}
@@ -157,6 +184,7 @@ export default function Profile() {
       </View>
 
       {isLoading && <AppLoader />}
+      <ModalSignIn isOpenModal={isOpenModal} content={content} />
     </SafeAreaView>
   );
 }

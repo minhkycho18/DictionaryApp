@@ -19,7 +19,7 @@ import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
 
 import ItemSubCategory from "~/components/Home/WordList/ItemSubCategory/ItemSubCategory";
 import { Image } from "react-native";
-import { SvgXml } from "react-native-svg";
+import { SvgUri, SvgXml } from "react-native-svg";
 import { colors, svgstudy } from "~/constants/theme";
 import { deleteSubCategory, getAllSubCategory } from "~/api/Subcategory";
 import { configFont } from "~/constants/theme";
@@ -36,12 +36,13 @@ export default function YourWordlistDetail() {
 
   const [subCategories, setSubCategories] = useState([]);
   const [isOpenModaAdd, setIsOpenModaAdd] = useState(false);
-
+  const [isCheck, setIsCheck] = useState(false);
   const navigation = useNavigation();
 
   const getSubCategory = async (id) => {
     const data = await getAllSubCategory(id);
     setSubCategories(data);
+    setIsCheck(true);
   };
   const handleStudy = () => {
     navigation.navigate("StudySub", { wordlist: wl });
@@ -224,24 +225,52 @@ export default function YourWordlistDetail() {
         </TouchableOpacity>
 
         {/* List Subcategory */}
-        <View style={styles.dropdown}>
-          <FlatList
-            style={{
-              marginTop: 10,
-              padding: 3,
-              // backgroundColor: "red"
-              // marginBottom: 15,
-            }}
-            showsVerticalScrollIndicator={false}
-            data={subCategories} //subCategories.subcategoryId
-            keyExtractor={(item) => item.subcategoryId}
-            renderItem={({ item }) => (
-              <GestureHandlerRootView>
-                <ItemSubCategory subcategory={item} onDelete={handleDelete} />
-              </GestureHandlerRootView>
-            )}
-          />
-        </View>
+        {subCategories.length > 0 ? (
+          <View style={styles.dropdown}>
+            <FlatList
+              style={{
+                marginTop: 10,
+                padding: 3,
+                // backgroundColor: "red"
+                // marginBottom: 15,
+              }}
+              showsVerticalScrollIndicator={false}
+              data={subCategories} //subCategories.subcategoryId
+              keyExtractor={(item) => item.subcategoryId}
+              renderItem={({ item }) => (
+                <GestureHandlerRootView>
+                  <ItemSubCategory subcategory={item} onDelete={handleDelete} />
+                </GestureHandlerRootView>
+              )}
+            />
+          </View>
+        ) : (
+          isCheck && (
+            <View
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "80%",
+              }}
+            >
+              <Image
+                source={require("~/assets/empty.png")}
+                style={{ width: 200, height: 120 }}
+              />
+              <Text
+                style={{
+                  marginTop: 10,
+                  fontFamily: "Quicksand-SemiBold",
+                  fontSize: 18,
+                  color: colors.textTitle,
+                }}
+              >
+                You don't have any categories yet
+              </Text>
+            </View>
+          )
+        )}
 
         {/* Add new Subcategory */}
 

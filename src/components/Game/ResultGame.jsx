@@ -69,6 +69,24 @@ export default function ResultGame({ result, onContinue }) {
         </View>
 
         <View style={Styles.viewButton}>
+          <TouchableOpacity
+            style={Styles.buttonAddLeitner}
+            // onPress={() => onContinue()}
+          >
+            <Image
+              source={require("~/assets/leitner.png")}
+              style={{ width: 20, height: 20, tintColor: "#00a64f" }}
+            />
+            <Text
+              style={{
+                fontFamily: "Quicksand-Bold",
+                fontSize: 18,
+                color: "#00a64f",
+              }}
+            >
+              Add to leitner
+            </Text>
+          </TouchableOpacity>
           <TouchableOpacity style={Styles.button} onPress={() => onContinue()}>
             <Text
               style={{
@@ -126,6 +144,19 @@ const Styles = StyleSheet.create({
     borderColor: "#4F00AD",
     alignItems: "center",
   },
+  buttonAddLeitner: {
+    marginTop: "5%",
+    width: 200,
+    flexDirection: "row",
+    paddingVertical: 10,
+    borderRadius: 15,
+    backgroundColor: "#fff",
+    borderWidth: 2,
+    borderColor: "#00a64f",
+    alignItems: "center",
+    justifyContent: "space-around",
+    paddingHorizontal: 10,
+  },
   boxes: {
     backgroundColor: "rgb(248 250 252)",
     width: "100%",
@@ -175,6 +206,6 @@ const Styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     position: "absolute",
-    bottom: 50,
+    bottom: 20,
   },
 });

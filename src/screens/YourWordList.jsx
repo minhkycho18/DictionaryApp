@@ -8,6 +8,7 @@ import {
   FlatList,
   Platform,
   StatusBar,
+  Image,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -22,12 +23,14 @@ import { colors, configFont } from "~/constants/theme";
 import { useFocusEffect } from "@react-navigation/native";
 export default function YourWordList() {
   const [wordLists, setWordLists] = useState([]);
+  const [isCheck, setIsCheck] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const navigation = useNavigation();
   const data = useRoute();
   const getMyWordList = async () => {
     const data = await getWordListById();
     setWordLists(data);
+    setIsCheck(true);
   };
   const refreshWordlist = async (res) => {
     const wordlist = wordLists.filter((item) => item.id !== res.id);
@@ -134,23 +137,51 @@ export default function YourWordList() {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.flatlist}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          vertical
-          keyExtractor={(item) => item.id}
-          data={wordLists}
-          renderItem={(item) => (
-            <GestureHandlerRootView>
-              <ItemWordList
-                wordlist={item}
-                onRefresh={refreshWordlist}
-                onDelete={handleDelete}
-              />
-            </GestureHandlerRootView>
-          )}
-        />
-      </View>
+      {wordLists.length > 0 ? (
+        <View style={styles.flatlist}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            vertical
+            keyExtractor={(item) => item.id}
+            data={wordLists}
+            renderItem={(item) => (
+              <GestureHandlerRootView>
+                <ItemWordList
+                  wordlist={item}
+                  onRefresh={refreshWordlist}
+                  onDelete={handleDelete}
+                />
+              </GestureHandlerRootView>
+            )}
+          />
+        </View>
+      ) : (
+        isCheck && (
+          <View
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "60%",
+            }}
+          >
+            <Image
+              source={require("~/assets/empty.png")}
+              style={{ width: 200, height: 120 }}
+            />
+            <Text
+              style={{
+                marginTop: 10,
+                fontFamily: "Quicksand-SemiBold",
+                fontSize: 18,
+                color: colors.textTitle,
+              }}
+            >
+              You don't have any wordlists yet
+            </Text>
+          </View>
+        )
+      )}
     </SafeAreaView>
   );
 }

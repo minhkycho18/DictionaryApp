@@ -38,7 +38,7 @@ function ItemVocalDetail({
         toastLeitner("Success", res, "success");
         setIsWordOfUserLeitner(true);
       } else {
-        toastLeitner("Error", "Please login to add", "error");
+        toastLeitner("Error", "add vocal to leitner", "error");
       }
     } catch (error) {
       console.log(error);
@@ -112,7 +112,11 @@ function ItemVocalDetail({
                         vocabId: item.id,
                         defId: definition.defId,
                       })
-                    : toastLeitner("Error", "Please login to add", "error")
+                    : toastLeitner(
+                        "Error",
+                        "add vocal to your wordlist",
+                        "error"
+                      )
                 }
               >
                 <AntDesign

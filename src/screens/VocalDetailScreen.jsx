@@ -22,6 +22,7 @@ import { checkLogin } from "~/helper/Auth";
 import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
 import { getWordListById } from "~/api/WordList";
 import { delay } from "~/helper/index";
+import ModalSignIn from "~/components/ModalSignIn";
 
 function VocalDetail() {
   const {
@@ -37,6 +38,8 @@ function VocalDetail() {
   const [isWordOfSub, setIsWordOfSub] = useState({});
   const [wordlistId, setWordlistId] = useState("");
   const [newSub, setNewSub] = useState({});
+  const [isOpenModalSingIn, setIsOpenModalSingIn] = useState(false);
+  const [content, setContent] = useState("");
   useEffect(() => {
     const checkToken = async () => {
       const check = await checkLogin();
@@ -119,7 +122,14 @@ function VocalDetail() {
                 count={count}
                 onPresentModal={handlePresentModal}
                 stateOfSub={isWordOfSub}
-                toastLeitner={(t1, t2, t3) => showToast(t1, t2, t3)}
+                toastLeitner={(t1, t2, t3) => {
+                  if (t1 === "Error") {
+                    setContent(t2);
+                    setIsOpenModalSingIn(!isOpenModalSingIn);
+                  } else {
+                    showToast(t1, t2, t3);
+                  }
+                }}
               />
             </View>
           );
@@ -279,6 +289,7 @@ function VocalDetail() {
           }}
         />
       )}
+      <ModalSignIn isOpenModal={isOpenModalSingIn} content={content} />
     </SafeAreaView>
   );
 }
