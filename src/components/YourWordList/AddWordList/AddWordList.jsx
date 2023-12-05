@@ -19,6 +19,7 @@ import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
 import { delay, getIdValueInArr } from "~/helper";
 import AppLoader from "~/components/AppLoader";
+import { LinearGradient } from "expo-linear-gradient";
 const data = [
   {
     id: "1",
@@ -169,7 +170,12 @@ const AddWordList = () => {
     <SafeAreaView
       style={{ ...Styles.container, marginTop: StatusBar.currentHeight }}
     >
-      <View style={Styles.header}>
+      <LinearGradient
+        colors={["#5671CC", "#9D97F9"]}
+        start={{ x: 0, y: 0.5 }}
+        end={{ x: 1, y: 0.5 }}
+        style={Styles.header}
+      >
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
             name="arrow-back-sharp"
@@ -195,7 +201,7 @@ const AddWordList = () => {
         >
           <AntDesign name="check" size={26} color="white" style={tw`ml-4`} />
         </TouchableOpacity>
-      </View>
+      </LinearGradient>
       <View style={{ marginTop: 40, margin: 20 }}>
         <View style={Styles.inputContent}>
           <View>

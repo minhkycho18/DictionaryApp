@@ -17,7 +17,7 @@ import { colors } from "~/constants/theme";
 import { configFont } from "~/constants/theme";
 import { useFonts } from "expo-font";
 import { Entypo } from "@expo/vector-icons";
-export default function MyWordList() {
+export default function MyWordList({ onOpenModal }) {
   const [wordLists, setWordLists] = useState([]);
   const [isLogin, setIsLogin] = useState(false);
   const navigation = useNavigation();
@@ -47,9 +47,10 @@ export default function MyWordList() {
 
   const handlePressSeeAll = async () => {
     if (!isLogin) {
-      showToast();
-      await delay(1000);
-      navigation.push("Authenticate");
+      // showToast();
+      // await delay(1000);
+      // navigation.push("Authenticate");
+      onOpenModal();
     } else {
       navigation.push("YourWordlist");
     }

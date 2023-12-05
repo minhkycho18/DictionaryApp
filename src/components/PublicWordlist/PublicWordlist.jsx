@@ -17,6 +17,7 @@ import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
 import { cloneWordlist } from "~/api/WordList";
 import { checkLogin } from "~/helper/Auth";
 import { useFocusEffect } from "@react-navigation/native";
+import ModalSignIn from "../ModalSignIn";
 export default function PublicWordlist(props) {
   const [type, setType] = useState(props.route.params.type);
   const [search, setSearch] = useState("");
@@ -25,6 +26,8 @@ export default function PublicWordlist(props) {
   const [isClear, setIsClear] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [content, setContent] = useState("");
   const getWordlist = async () => {
     let list = [];
     if (type === "public") {
@@ -47,7 +50,8 @@ export default function PublicWordlist(props) {
         console.log(res);
         showToast("Success", "Clone wordlist successfully", "success");
       } else {
-        showToast("Error", "Please login to clone wordlist", "error");
+        setIsOpenModal(!isOpenModal);
+        setContent("clone wordlist");
       }
     } catch (error) {
       showToast("Error", "Clone wordlist fail", "error");
@@ -193,6 +197,7 @@ export default function PublicWordlist(props) {
           </View>
         )
       )}
+      <ModalSignIn isOpenModal={isOpenModal} content={content} />
     </SafeAreaView>
   );
 }

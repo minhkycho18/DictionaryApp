@@ -46,3 +46,11 @@ export const getIdValueInArr = (arr, newId) => {
 export const checkData = (arr, obj) => {
   return arr.some(item => item.defId === obj.defId && item.vocabId === obj.vocabId)
 }
+export const checkNull = (str) => {
+  if (str === null || str === "") {
+    return false
+  }
+  else {
+    return true
+  }
+}

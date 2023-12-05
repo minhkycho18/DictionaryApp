@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, Text, StatusBar } from "react-native";
 import HeaderHome from "~/components/Home/HeaderHome/HeaderHome";
 import MyWordList from "~/components/Home/WordList/MyWordList/MyWordList";
@@ -8,8 +8,11 @@ import WordListPublic from "~/components/Home/WordList/WordListPublic/WordListPu
 import { StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
 import { colorSynonym, colors, configFont } from "~/constants/theme";
+import ModalSignIn from "~/components/ModalSignIn";
 export default function HomeScreen() {
   const [loaded] = useFonts(configFont);
+  const [isOpen, setIsOpen] = useState(false);
+  const [content, setIsContent] = useState("");
   if (!loaded) {
     return null;
   }
@@ -24,7 +27,12 @@ export default function HomeScreen() {
     >
       <HeaderHome />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <MyWordList />
+        <MyWordList
+          onOpenModal={() => {
+            setIsOpen(!isOpen);
+            setIsContent("access to your own wordlist");
+          }}
+        />
         <Text
           style={{
             fontFamily: "Quicksand-Bold",
@@ -40,6 +48,7 @@ export default function HomeScreen() {
         <WordListDefault />
         <WordListPublic />
       </ScrollView>
+      <ModalSignIn isOpenModal={isOpen} content={content} />
     </SafeAreaView>
   );
 }
