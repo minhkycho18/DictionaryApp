@@ -70,11 +70,14 @@ public class SubcategoryController {
                                                                @Min(value = 0, message = "Offset must be greater than or equal to 0") int offset,
                                                                @RequestParam(name = "limit", required = false)
                                                                @Min(value = 1, message = "Limit must be greater than or equal to 1")
-                                                               Integer limit) {
-        if (limit == null) {
-            limit = defaultPageSize;
-        }
-        return subcategoryService.getAllVocabularies(wordListId, subcategoryId, offset, limit);
+                                                               Integer limit,
+                                                               @RequestParam(name = "keyword", required = false) String keyword) {
+        
+        return subcategoryService.getAllVocabularies(wordListId,
+                subcategoryId,
+                offset,
+                limit == null ? defaultPageSize : limit,
+                keyword == null ? "" : keyword);
     }
 
     @Operation(summary = "Add vocabulary to subcategory", security = {@SecurityRequirement(name = "bearer-key")})
