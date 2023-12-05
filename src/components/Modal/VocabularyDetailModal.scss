@@ -4,7 +4,7 @@
 .phonetic {
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
 
   &__word {
     font-size: 30px;
@@ -19,7 +19,7 @@
   }
   &__symbol {
     padding-top: 16px;
-    align-items: start;
+    align-items: flex-start;
     display: flex;
   }
   &__icon {
@@ -41,7 +41,6 @@
     font-family: $font;
     font-weight: 500;
   }
-
 }
 .meaning {
   &__content {
@@ -69,7 +68,8 @@
   padding: 0 !important;
   margin: 0 !important;
 }
-.synonym, .example {
+.synonym,
+.example {
   padding: 8px 0 8px 16px;
   font-family: "Quicksand", sans-serif;
   font-size: 18px;
@@ -78,7 +78,7 @@
   font-weight: 500;
   overflow-wrap: inherit;
   display: flex;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
   .synonym__word {
     display: flex;
     justify-content: center;
@@ -87,10 +87,6 @@
     text-align: center;
     color: #0d47a1;
     margin-right: 8px;
-    border-bottom: 2px dashed; 
+    border-bottom: 2px dashed;
   }
 }
-  
-    
-
-

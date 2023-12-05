@@ -78,7 +78,7 @@ const ContributionDataTable = ({
     const newData = dataSource.map((item) => {
       return {
         ...item,
-        key: item.subcategoryId,
+        key: item.id,
       };
     });
     setData(newData);
