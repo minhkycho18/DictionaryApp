@@ -1,11 +1,7 @@
 
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-<<<<<<< HEAD
 import FlashcardLeitnerScreen from '~/screens/FlashcardLeitnerScreen';
-=======
-import ListBoxesGame from '~/components/Leitner/ListBoxesGame';
->>>>>>> dd7325a (leitner-boxes)
 import Leitner from '~/screens/Leitner';
 import LeitnerDetail from '~/screens/LeitnerDetail';
 

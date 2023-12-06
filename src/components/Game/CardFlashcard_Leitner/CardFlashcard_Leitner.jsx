@@ -8,40 +8,29 @@ import { colors, incorrect_correct_back } from "~/constants/theme";
 import { SvgXml } from "react-native-svg";
 import { Audio } from "expo-av";
 import { GetColor, checkNull } from "~/helper";
-import { AuthContext } from "~/context/AuthContext";
 export default function CardFlashcard_Leitner({
   onNextSlider,
   vocal,
   totalQuestion,
 }) {
-  const { setlistFlashCardError } = useContext(AuthContext);
   const [isFlip, setIsFlip] = useState(false);
+  useEffect(() => {
+    console.log(vocal);
+  }, []);
   const playSound = async (audio) => {
-    // const sound = new Audio.Sound();
-    // await sound.loadAsync({
-    //   uri: audio,
-    // });
-    // await sound.playAsync();
-    console.log('test word: ', vocal);
+    const sound = new Audio.Sound();
+    await sound.loadAsync({
+      uri: audio,
+    });
+    await sound.playAsync();
   };
   const hanleClickAnswer = (answer) => {
-    console.log(`Answer :: ${answer}   Result :: ${vocal.result}`);
     if (answer === vocal.result) {
       onNextSlider({
         vocal: { vocabId: vocal.vocabId, defId: vocal.defId },
         answer: true,
       });
     } else {
-      setlistFlashCardError((pre) => [
-        ...pre,
-        {
-          result: vocal.result,
-          word: vocal.word,
-          question: vocal.question,
-          answer: vocal.answer,
-          choose: answer,
-        },
-      ]);
       onNextSlider({
         answer: false,
       });
@@ -57,38 +46,29 @@ export default function CardFlashcard_Leitner({
         flipVertical={false}
         flip={isFlip}
         clickable={false}
-        onFlipStart={() => { }}
+        onFlipStart={() => {}}
       >
         {/* Face Side */}
         <View style={Styles.cardFace}>
-          {/* <Image
-            source={require("~/assets/wave.png")}
-            style={{
-              width: "100%",
-              height: "25%",
-              borderTopLeftRadius: 30,
-              borderTopRightRadius: 30,
-              tintColor: "#4DB5AA",
-            }}
-          /> */}
           <View style={Styles.headercard}>
             {/* Preposition */}
             <View
               style={{
-                width: '100%',
-                height: '40%',
+                width: "100%",
+                height: "40%",
                 // backgroundColor: 'blue',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent:'center',
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 marginTop: 10,
-              }}>
+              }}
+            >
               <View
                 style={{
                   ...Styles.type,
-                  backgroundColor: '#F4F3F1',
+                  backgroundColor: GetColor(vocal?.pos),
                   // width: '35%',
-                  padding:4
+                  padding: 4,
                 }}
               >
                 <Text
@@ -96,27 +76,26 @@ export default function CardFlashcard_Leitner({
                     ...Styles.textType,
                     fontFamily: "Quicksand-Bold",
                     fontSize: 16,
-
                   }}
                 >
-                  {vocal?.pos} Adjective
+                  {vocal?.pos}
                 </Text>
               </View>
             </View>
-
 
             {/* number of question  */}
 
             <View
               style={{
-                width: '100%',
-                height: '25%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent:'center',
+                width: "100%",
+                height: "25%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
 
                 // backgroundColor: 'red',
-              }}>
+              }}
+            >
               <Text
                 style={{
                   ...Styles.word,
@@ -126,8 +105,7 @@ export default function CardFlashcard_Leitner({
                   textAlign: "center",
                 }}
               >
-                {/* {vocal?.vocabId} */}
-                1/10
+                {totalQuestion?.index}/{totalQuestion?.total}
               </Text>
             </View>
           </View>
@@ -139,8 +117,7 @@ export default function CardFlashcard_Leitner({
                 textAlign: "center",
               }}
             >
-              {/* {vocal?.vocabId} */}
-              appropriate
+              {vocal?.word}
             </Text>
             <View style={Styles.viewPos}>
               {checkNull(vocal.phoneUs) && (
@@ -152,8 +129,7 @@ export default function CardFlashcard_Leitner({
                       fontSize: 16,
                     }}
                   >
-                    {/* {vocal?.phoneUs} */}
-                    /ˈbɔːdə(r)/
+                    {vocal?.phoneUs}
                   </Text>
                   <Text
                     style={{
@@ -171,16 +147,13 @@ export default function CardFlashcard_Leitner({
                       fontSize: 16,
                     }}
                   >
-                    {/* {vocal?.phoneUk} */}
-                    /ˈbɔːdə(r)/
+                    {vocal?.phoneUk}
                   </Text>
                 </View>
               )}
             </View>
           </View>
-          <View
-            style={Styles.sound}
-          >
+          <View style={Styles.sound}>
             <TouchableOpacity
               style={Styles.viewSound}
               onPress={() => playSound(vocal?.audioUk)}
@@ -197,23 +170,11 @@ export default function CardFlashcard_Leitner({
             </TouchableOpacity>
           </View>
 
-
           <View style={Styles.temp}></View>
           <TouchableOpacity
             style={Styles.bottom}
             onPress={() => setIsFlip(true)}
           >
-            {/* <Image
-              source={require("~/assets/wave.png")}
-              style={{
-                width: "100%",
-                height: "100%",
-                borderTopLeftRadius: 30,
-                borderTopRightRadius: 30,
-                transform: [{ rotate: "180deg" }],
-                tintColor: "#4DB5AA",
-              }}
-            /> */}
             <Text
               style={{ ...Styles.textButton, fontFamily: "Quicksand-Bold" }}
             >
@@ -223,22 +184,20 @@ export default function CardFlashcard_Leitner({
         </View>
         {/* Back Side */}
         <View style={Styles.cardBack}>
-          <View style={{ ...Styles.content, marginTop: "56%" }}>
+          <View style={{ ...Styles.content, marginTop: "45%" }}>
             <View style={Styles.viewExample}>
-              <View style={Styles.example}>
-                <Text
-                  style={{
-                    ...Styles.word,
-                    fontFamily: "Quicksand-SemiBold",
-                    fontSize: 18,
-                    color: colors.textColor,
-                    marginTop: 10,
-                    textAlign: "center",
-                  }}
-                >
-                  {vocal?.question}
-                </Text>
-              </View>
+              <Text
+                style={{
+                  ...Styles.word,
+                  fontFamily: "Quicksand-SemiBold",
+                  fontSize: 18,
+                  color: colors.textColor,
+                  marginTop: 10,
+                  textAlign: "center",
+                }}
+              >
+                {vocal?.question}
+              </Text>
             </View>
             {/* //sys */}
           </View>

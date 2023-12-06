@@ -27,12 +27,5 @@ export default function ListBoxesGame() {
 const Styles = StyleSheet.create({
   container: {
     width: "100%",
-    // height: 200,
-    paddingHorizontal: 20,
-    position: "absolute",
-    top: "50%",
-    // backgroundColor: "#fff",
-    // alignItems: "center",
-    // justifyContent: "center",
   },
 });

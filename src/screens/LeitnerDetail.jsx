@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   StatusBar,
+  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Entypo } from "@expo/vector-icons";
@@ -31,11 +32,11 @@ export default function LeitnerDetail(props) {
     setListVocabOfLeitner(data.content);
   };
   const handleStudy = () => {
-    // console.log("\n\ndone nha:\n", listVocabOfLeitner);
-    navigation.navigate("test");
+    navigation.push("FlashcardLeitnerScreen", { level: level });
   };
 
   useEffect(() => {
+    console.log(typeof level);
     getVocabOfLeitnerLevel(level);
   }, []);
   const handleEndReach = async () => {
@@ -117,36 +118,64 @@ export default function LeitnerDetail(props) {
 
       <View style={styles.body}>
         {/* Button Study */}
-        <TouchableOpacity
-          style={styles.ButtonStudy}
-          onPress={() => handleStudy()}
-        >
-          <SvgXml width="30" height="30" xml={svgstudy} />
-          <Text
-            style={[
-              {
-                color: "#FFF7FF",
-                fontFamily: "Quicksand-SemiBold",
-                marginLeft: 5,
-                fontSize: 15,
-              },
-            ]}
+        {level !== "0" && (
+          <TouchableOpacity
+            style={styles.ButtonStudy}
+            onPress={() => handleStudy()}
           >
-            Study
-          </Text>
-        </TouchableOpacity>
+            <SvgXml width="30" height="30" xml={svgstudy} />
+            <Text
+              style={[
+                {
+                  color: "#FFF7FF",
+                  fontFamily: "Quicksand-SemiBold",
+                  marginLeft: 5,
+                  fontSize: 15,
+                },
+              ]}
+            >
+              Study
+            </Text>
+          </TouchableOpacity>
+        )}
 
-        <FlatList
-          style={{
-            padding: 3,
-          }}
-          showsVerticalScrollIndicator={false}
-          data={listVocabOfLeitner}
-          keyExtractor={(item) => item.definition.defId}
-          renderItem={(item) => <ItemVocabOfLeitner Vocab={item} />}
-          onEndReached={handleEndReach}
-          ListFooterComponent={showLoader && <SplashScreen />}
-        />
+        {listVocabOfLeitner.length > 0 ? (
+          <FlatList
+            style={{
+              padding: 3,
+            }}
+            showsVerticalScrollIndicator={false}
+            data={listVocabOfLeitner}
+            keyExtractor={(item) => item.definition.defId}
+            renderItem={(item) => <ItemVocabOfLeitner Vocab={item} />}
+            onEndReached={handleEndReach}
+            ListFooterComponent={showLoader && <SplashScreen />}
+          />
+        ) : (
+          <View
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "60%",
+            }}
+          >
+            <Image
+              source={require("~/assets/empty.png")}
+              style={{ width: 200, height: 120 }}
+            />
+            <Text
+              style={{
+                marginTop: 10,
+                fontFamily: "Quicksand-SemiBold",
+                fontSize: 18,
+                color: colors.textTitle,
+              }}
+            >
+              You don't have any words yet
+            </Text>
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );

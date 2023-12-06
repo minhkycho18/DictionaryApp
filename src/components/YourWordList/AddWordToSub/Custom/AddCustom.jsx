@@ -110,7 +110,7 @@ const AddCustom = (props) => {
     //   } catch (error) {}
     // }
   };
-  const handleSave = async () => {
+  const handleSave = async (contribute) => {
     try {
       const listDef = fieldMainComponents.map(
         (component) => component.props.data
@@ -131,6 +131,7 @@ const AddCustom = (props) => {
           ...listDef,
         ],
         subcategoryId: params.subcategoryId,
+        isContribute: contribute,
       };
       const res = await addWordCustomToSub(
         params.wordlistId,
@@ -473,14 +474,13 @@ const AddCustom = (props) => {
               <View style={Styles.modal_view_button}>
                 <TouchableOpacity
                   style={Styles.modal_button_cancel}
-                  onPress={() => setIsModalVisible(false)}
+                  onPress={() => handleSave(false)}
                 >
                   <Text
                     style={{
                       color: "blue",
                       fontFamily: "Quicksand-SemiBold",
-                      fontSize: 18
-                      ,
+                      fontSize: 18,
                     }}
                   >
                     No
@@ -488,7 +488,7 @@ const AddCustom = (props) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={Styles.modal_button_delete}
-                  onPress={handleSave}
+                  onPress={() => handleSave(true)}
                 >
                   <Text
                     style={{

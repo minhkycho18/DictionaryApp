@@ -9,7 +9,7 @@ export const Styles = StyleSheet.create({
     },
     wrappered: {
         borderLeftWidth: 7,
-        borderLeftColor: "#56BAF9",
+        // borderLeftColor: "#56BAF9",
         alignItems: 'center',
         width: "100%",
         height: 100,

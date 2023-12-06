@@ -7,33 +7,17 @@ import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
 import { Fontisto } from "@expo/vector-icons";
 import { svgTrash } from "~/constants/theme";
+import { useEffect } from "react";
+import { GetColor } from "~/helper";
 
-
-import { deleteWordInSub } from "~/api/Subcategory";
-import { Image } from "react-native";
 export default function ItemVocabOfLeitner({ Vocab }) {
-
   const [word, setWord] = useState(Vocab.item.word);
   const [isLoading, setIsLoading] = useState(false);
   const [definition, setDefinition] = useState(Vocab.item.definition.wordDesc);
 
   const wrapRef = useRef();
   const handleDeleteWord = async () => {
-    setIsLoading(!isLoading);
     try {
-      const res = await deleteWordInSub(
-        subcategory.wordListId,
-        subcategory.subcategoryId,
-        [
-          {
-            vocabId: Vocab.item.vocabId,
-            defId: Vocab.item.definition.defId,
-          },
-        ]
-      );
-      setIsLoading(false);
-      console.log(res);
-      onDeleteVocal(Vocab.item.vocabId, Vocab.item.definition.defId);
     } catch (error) {
       console.log(`Delete word fail::`, error);
     }
@@ -42,12 +26,14 @@ export default function ItemVocabOfLeitner({ Vocab }) {
   if (!loaded) {
     return null;
   }
+
   return (
     <>
       <View style={Styles.container}>
         <View
           style={{
             ...Styles.wrappered,
+            borderLeftColor: GetColor(Vocab.item.pos),
           }}
           ref={wrapRef}
         >
@@ -73,7 +59,7 @@ export default function ItemVocabOfLeitner({ Vocab }) {
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "flex-end",
-                  alignItems:'center',
+                  alignItems: "center",
                 }}
               >
                 {isLoading && (
@@ -87,13 +73,12 @@ export default function ItemVocabOfLeitner({ Vocab }) {
                     paddingLeft: 10,
                     // paddingTop:5,
                     borderRadius: 7,
-                    display: 'flex',
-                    flexDirection: 'row',
+                    display: "flex",
+                    flexDirection: "row",
                     // alignItems:'center',
-                    justifyContent: 'center',
-                    backgroundColor: '#F5F5F5',
+                    justifyContent: "center",
+                    backgroundColor: "#F5F5F5",
                     marginRight: 15,
-
                   }}
                 >
                   <Text
@@ -104,7 +89,7 @@ export default function ItemVocabOfLeitner({ Vocab }) {
                         fontFamily: "Quicksand-Medium",
                         fontSize: 14,
                         letterSpacing: 0.2,
-                        marginRight:2
+                        marginRight: 2,
                       },
                     ]}
                   >
@@ -113,7 +98,7 @@ export default function ItemVocabOfLeitner({ Vocab }) {
                   <SvgXml
                     width="20"
                     height="20"
-                    xml={svgWaitingClock('#ABABAB')}
+                    xml={svgWaitingClock("#ABABAB")}
                   />
                 </View>
 
