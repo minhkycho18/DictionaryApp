@@ -24,7 +24,7 @@ export default function Leitner() {
     try {
       const res = await getInforBoxOfUser();
       setBoxes(res);
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
     getBoxes();
@@ -34,6 +34,12 @@ export default function Leitner() {
   if (!loaded) {
     return null;
   }
+
+  const handleGO = () => {
+    console.log('\n\ndone nha:\n');
+    navigation.push("FlashcardLeitnerScreen");
+  }
+  
   return (
     <SafeAreaView style={Styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -53,7 +59,10 @@ export default function Leitner() {
         </View>
         <View style={Styles.content}>
           <View style={Styles.circle_large}>
-            <View style={Styles.circle_medium}>
+            <TouchableOpacity style={Styles.circle_medium}
+              onPress={() => handleGO()}
+
+            >
               <View style={Styles.circle_small}>
                 <View>
                   <Text style={{ ...Styles.textHeader, textAlign: "center" }}>
@@ -64,7 +73,7 @@ export default function Leitner() {
                   </Text>
                 </View>
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
           <View style={Styles.content_right}>
             <View style={Styles.content_item}>
