@@ -54,3 +54,8 @@ export const checkNull = (str) => {
     return true
   }
 }
+export const getNameLevel = (level) => {
+  if (level === "0") return "waiting";
+  else if (level === "7") return "learned";
+  else return `Box ${level}`
+}
