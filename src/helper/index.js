@@ -9,7 +9,7 @@ export const GetColor = text => {
   }
 }
 export const UpperText = text => {
-  return text.charAt(0).toUpperCase() + text.slice(1);
+  return text?.charAt(0).toUpperCase() + text?.slice(1);
 }
 export const delay = (delayInms) => {
   return new Promise((resolve) => setTimeout(resolve, delayInms));
@@ -53,4 +53,9 @@ export const checkNull = (str) => {
   else {
     return true
   }
+}
+export const getNameLevel = (level) => {
+  if (level === "0") return "waiting";
+  else if (level === "7") return "learned";
+  else return `Box ${level}`
 }

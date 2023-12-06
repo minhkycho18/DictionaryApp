@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   StatusBar,
+  TextInput,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native";
@@ -13,15 +14,28 @@ import { AntDesign } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
-import { useEffect } from "react";
-import { useState } from "react";
+import * as DocumentPicker from "expo-document-picker";
 
 export default function ProfileDetailScreen(props) {
   const [user, setUser] = useState(props.route.params.user);
+  const [isEdit, setEdit] = useState(false);
+  const [name, setName] = useState(props.route.params.user.name);
+  const [email, setEmail] = useState(props.route.params.user.email);
+  const [gender, setGender] = useState(props.route.params.user.gender);
   const [loaded] = useFonts(configFont);
+
   if (!loaded) {
     return null;
   }
+  const pickDocument = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "image/*", // Specify the allowed MIME types for audio files
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <SafeAreaView style={Styles.container}>
       <LinearGradient
@@ -41,34 +55,77 @@ export default function ProfileDetailScreen(props) {
           <Text style={Styles.textHeader}>Profile</Text>
         </View>
         <View style={Styles.content}>
-          <Image
-            source={require("~/assets/man.png")}
-            style={Styles.viewImage}
-          />
-          <View style={Styles.viewEdit}>
-            <FontAwesome name="pencil" size={24} color={colors.textColor} />
+          <View
+            style={{
+              position: "absolute",
+              left: "53%",
+              // transform: [{ translateX: -50 }],
+            }}
+          >
+            <Image
+              source={require("~/assets/man.png")}
+              style={Styles.viewImage}
+            />
+            <TouchableOpacity
+              style={Styles.viewCamera}
+              onPress={() => pickDocument()}
+              disabled={!isEdit}
+            >
+              <Image
+                source={require("~/assets/camera.png")}
+                style={Styles.iconCamera}
+              />
+            </TouchableOpacity>
           </View>
+
+          <TouchableOpacity
+            style={Styles.viewEdit}
+            onPress={() => setEdit(!isEdit)}
+          >
+            <FontAwesome name="pencil" size={24} color={colors.textColor} />
+          </TouchableOpacity>
 
           <View style={Styles.ViewItem}>
             <View>
               <Text style={Styles.textLabel}>Name</Text>
-              <Text style={Styles.textPlacehoder}>{user.name}</Text>
+              {!isEdit ? (
+                <Text style={Styles.textPlacehoder}>{name}</Text>
+              ) : (
+                <TextInput
+                  style={Styles.textPlacehoder}
+                  value={name}
+                  focusable
+                  onChangeText={setName}
+                />
+              )}
             </View>
           </View>
           <View style={Styles.ViewItem}>
             <View>
               <Text style={Styles.textLabel}>Email</Text>
-              <Text style={Styles.textPlacehoder}>{user.email}</Text>
+              {!isEdit ? (
+                <Text style={Styles.textPlacehoder}>{email}</Text>
+              ) : (
+                <TextInput
+                  style={Styles.textPlacehoder}
+                  value={email}
+                  onChangeText={setEmail}
+                />
+              )}
             </View>
           </View>
           <View style={{ ...Styles.ViewItem, borderBottomWidth: 0 }}>
             <View>
               <Text style={Styles.textLabel}>Gender</Text>
               <View style={Styles.viewGender}>
-                <View
+                <TouchableOpacity
                   style={{ flexDirection: "row", gap: 10, marginRight: 25 }}
+                  disabled={!isEdit}
+                  onPress={() => {
+                    setGender("MALE");
+                  }}
                 >
-                  {user.gender === "MALE" ? (
+                  {gender === "MALE" ? (
                     <View style={Styles.cirle_choose}>
                       <View style={Styles.cirle_child}></View>
                     </View>
@@ -76,9 +133,16 @@ export default function ProfileDetailScreen(props) {
                     <View style={Styles.cirle}></View>
                   )}
                   <Text style={Styles.textLabel}>Male</Text>
-                </View>
-                <View style={{ flexDirection: "row", gap: 10 }}>
-                  {user.gender === "FEMALE" ? (
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{ flexDirection: "row", gap: 10 }}
+                  disabled={!isEdit}
+                  onPress={() => {
+                    setGender("FEMALE");
+                  }}
+                >
+                  {gender === "FEMALE" ? (
                     <View style={Styles.cirle_choose}>
                       <View style={Styles.cirle_child}></View>
                     </View>
@@ -86,7 +150,7 @@ export default function ProfileDetailScreen(props) {
                     <View style={Styles.cirle}></View>
                   )}
                   <Text style={Styles.textLabel}>Female</Text>
-                </View>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -218,5 +282,22 @@ const Styles = StyleSheet.create({
     shadowRadius: 2.22,
 
     elevation: 3,
+  },
+  iconCamera: {
+    position: "absolute",
+    width: 20,
+    height: 20,
+  },
+  viewCamera: {
+    position: "absolute",
+    backgroundColor: "rgb(228 228 231)",
+    width: 35,
+    height: 35,
+    bottom: -40,
+    left: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 20,
+    zIndex: 1000,
   },
 });

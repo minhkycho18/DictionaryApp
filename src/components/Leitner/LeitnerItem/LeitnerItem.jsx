@@ -11,11 +11,11 @@ export default function LeitnerItem({ type }) {
   const navigation = useNavigation();
   const handleLeitnerDetail = async () => {
     const Level = type?.level;
-      navigation.push("LeitnerDetail",{
-        level: Level
-      });
+    navigation.push("LeitnerDetail", {
+      level: Level,
+    });
 
-      console.log('test: ', 'detail leitner');
+    console.log("test: ", "detail leitner");
   };
   const getViewIcon = (type) => {
     switch (parseInt(type.level)) {
@@ -49,17 +49,10 @@ export default function LeitnerItem({ type }) {
   };
   return (
     <View style={Styles.container}>
-      {/* <View style={Styles.viewIcon}>
-        <Text
-          style={{ fontFamily: "Quicksand-Bold", fontSize: 18, color: "#fff" }}
-        >
-          {type?.number}
-        </Text>
-      </View> */}
       {getViewIcon(type)}
-      <TouchableOpacity 
-      style={Styles.viewContent}
-      onPress={handleLeitnerDetail}
+      <TouchableOpacity
+        style={Styles.viewContent}
+        onPress={handleLeitnerDetail}
       >
         <View style={Styles.viewContentLeft}>
           <View style={{ width: "100%" }}>

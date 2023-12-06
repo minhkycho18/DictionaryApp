@@ -57,8 +57,8 @@ export const Styles = StyleSheet.create({
         width: '100%',
         // backgroundColor: 'green',
         height: '35%',
-            borderTopLeftRadius: 30,
-            borderTopRightRadius: 30,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
     },
     content: {
         display: 'flex',
@@ -84,7 +84,7 @@ export const Styles = StyleSheet.create({
     viewExample: {
         marginTop: 10,
         width: '90%',
-        alignItems: 'center',
+        // textAlign: 'center'
     },
     viewSyn: {
         marginTop: 10,
@@ -126,9 +126,7 @@ export const Styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingBottom: 2,
         borderRadius: 20,
-        // backgroundColor: "#B4B6E6",
-        // color: '#fff',
-        color: '#82898E',
+        color: '#fff',
 
 
     },
@@ -164,7 +162,7 @@ export const Styles = StyleSheet.create({
         color: '#8A9092',
         position: "absolute",
         bottom: 22,
-        marginBottom:5,
+        marginBottom: 5,
 
     },
     synonym: {
