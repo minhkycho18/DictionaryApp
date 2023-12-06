@@ -40,7 +40,7 @@ public class LeitnerController {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid data")})
     @PostMapping
-    public ResponseEntity<String> addVocabLeitner(@Valid @RequestBody VocabLeitnerRequestDto leitnerRequestDto) {
+    public ResponseEntity<String> addVocabLeitner(@Valid @RequestBody List<VocabLeitnerRequestDto> leitnerRequestDto) {
         leitnerService.addVocabToLeitner(leitnerRequestDto);
         return new ResponseEntity<>("Add vocabulary to leitner successfully", HttpStatus.CREATED);
     }

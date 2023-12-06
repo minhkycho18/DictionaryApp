@@ -10,10 +10,7 @@ import com.pbl6.dictionaryappbe.persistence.leitner.LeitnerId;
 import com.pbl6.dictionaryappbe.persistence.leitner.VocabLeitner;
 import com.pbl6.dictionaryappbe.persistence.level_leitner.LevelLeitner;
 import com.pbl6.dictionaryappbe.persistence.user.User;
-import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
-import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDefId;
 import com.pbl6.dictionaryappbe.repository.LevelLeitnerRepository;
-import com.pbl6.dictionaryappbe.repository.VocabDefRepository;
 import com.pbl6.dictionaryappbe.repository.leitner.LeitnerRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
 import com.pbl6.dictionaryappbe.utils.MapperUtils;
@@ -34,7 +31,6 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 public class LeitnerServiceImpl implements LeitnerService {
-    private final VocabDefRepository vocabDefRepository;
     private final LeitnerRepository leitnerRepository;
     private final LevelLeitnerRepository levelLeitnerRepository;
     private final LeitnerMapper leitnerMapper;
@@ -43,24 +39,26 @@ public class LeitnerServiceImpl implements LeitnerService {
 
     @Override
     @Transactional
-    public void addVocabToLeitner(VocabLeitnerRequestDto leitnerRequestDto) {
-        VocabDef vocabDef =
-                vocabDefRepository.findById(new VocabDefId(leitnerRequestDto.getVocabId(), leitnerRequestDto.getDefId()))
-                        .orElseThrow(() -> new RecordNotFoundException("Vocabulary not found"));
-        if (leitnerRepository.existsByVocabDef(vocabDef)) {
-            throw new DuplicateDataException("This vocabulary already exists in Leitner");
-        }
+    public void addVocabToLeitner(List<VocabLeitnerRequestDto> leitnerRequestDto) {
         User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
-        VocabLeitner vocabLeitner = VocabLeitner.builder()
-                .vocabId(leitnerRequestDto.getVocabId())
-                .defId(leitnerRequestDto.getDefId())
-                .userId(user.getUserId())
-                .levelLeitner(levelLeitnerRepository.findById(0)
-                        .orElseThrow(() -> new RecordNotFoundException("Level leitner not found")))
-                .user(user)
-                .vocabDef(vocabDef)
-                .build();
-        leitnerRepository.save(vocabLeitner);
+        List<String> vocabDefIds = leitnerRequestDto.stream()
+                .map(vocabLeitnerRequestDto -> vocabLeitnerRequestDto.getVocabId() + "-" + vocabLeitnerRequestDto.getDefId())
+                .toList();
+        List<VocabLeitner> vocabDefs = leitnerRepository.findAllByVocabDefId(vocabDefIds);
+        if(!vocabDefs.isEmpty()) {
+            throw new DuplicateDataException("Have a vocabulary already exists in Leitner");
+        }
+        List<VocabLeitner> leitners =  leitnerRequestDto.stream()
+                .map(vocabDef -> VocabLeitner.builder()
+                        .vocabId(vocabDef.getVocabId())
+                        .defId(vocabDef.getDefId())
+                        .userId(user.getUserId())
+                        .levelLeitner(levelLeitnerRepository.findById(0)
+                                .orElseThrow(() -> new RecordNotFoundException("Level leitner not found")))
+                        .lastLearning(null)
+                        .build())
+                .toList();
+        leitnerRepository.saveAll(leitners);
     }
 
     @Override
