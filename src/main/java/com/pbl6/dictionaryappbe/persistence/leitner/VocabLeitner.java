@@ -26,6 +26,12 @@ import java.time.LocalDateTime;
                     ORDER BY rand()
                 ), leitner_game AS (
                     SELECT vl.vocab_id AS vocabId,
+                           v.word,
+                           v.pos,
+                           v.audio_us AS audioUs,
+                           v.audio_uk AS audioUk,
+                           v.phonetics_us AS phoneUs,
+                           v.phonetics_uk AS phoneUk,
                            vl.def_id AS defId,
                            vl.level AS level,
                            vl.last_learning AS lastLearning,
@@ -36,11 +42,10 @@ import java.time.LocalDateTime;
                     CROSS JOIN randDesc
                     JOIN level_leitner ll
                         ON vl.level = ll.level
-                    JOIN vocab_def vd
-                         ON vd.vocab_id = vl.vocab_id
-                         AND vd.def_id = vl.def_id
                     JOIN definitions d
-                         ON d.def_id = vd.def_id
+                         ON d.def_id = vl.def_id
+                    JOIN vocabularies v 
+                         ON v.vocab_id = vl.vocab_id
                     WHERE vl.level = :level
                         AND (DATE_ADD(last_learning, INTERVAL ll.time HOUR) < CURRENT_TIMESTAMP()
                                  OR last_learning IS NULL)
@@ -60,6 +65,12 @@ import java.time.LocalDateTime;
                 columns = {
                         @ColumnResult(name = "vocabId", type = Long.class),
                         @ColumnResult(name = "defId", type = Long.class),
+                        @ColumnResult(name = "word", type = String.class),
+                        @ColumnResult(name = "pos", type = String.class),
+                        @ColumnResult(name = "audioUs", type = String.class),
+                        @ColumnResult(name = "audioUk", type = String.class),
+                        @ColumnResult(name = "phoneUs", type = String.class),
+                        @ColumnResult(name = "phoneUk", type = String.class),
                         @ColumnResult(name = "lastLearning", type = LocalDateTime.class),
                         @ColumnResult(name = "level", type = Integer.class),
                         @ColumnResult(name = "question", type = String.class),
