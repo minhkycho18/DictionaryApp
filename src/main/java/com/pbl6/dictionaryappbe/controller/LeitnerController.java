@@ -106,7 +106,7 @@ public class LeitnerController {
 
     @DeleteMapping("/vocabs")
     @Operation(summary = "Delete vocab leitner", security = {@SecurityRequirement(name = "bearer-key")})
-    public ResponseEntity<String> getLeitnerGame(@Valid @RequestBody List<VocabLeitnerRequestDto> vocabLeitnerRequestDto) {
+    public ResponseEntity<String> deleteVocabLeitner(@Valid @RequestBody List<VocabLeitnerRequestDto> vocabLeitnerRequestDto) {
         leitnerService.removeVocabLeitner(vocabLeitnerRequestDto);
         return new ResponseEntity<>("Delete vocab leitner successfully", HttpStatus.ACCEPTED);
     }
