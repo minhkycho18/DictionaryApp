@@ -28,3 +28,15 @@ export const getLeitnerVocabs = (params) => {
   }
   return http.get(url);
 };
+export const deleteVocabInLeitner = (data) => {
+  return http.delete(`/leitners/vocabs`, data);
+};
+export const getLeitnerData = (level) => {
+  return http.get(`/leitners/levels/${level}/game`);
+};
+//
+// /leitners/levels/{statusLevel}
+export const changeLevelVocab = (data) => {
+  const { statusLevel, params } = data;
+  return http.patch(`/leitners/levels/${statusLevel}`, params);
+};

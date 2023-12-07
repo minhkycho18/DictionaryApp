@@ -1,14 +1,31 @@
 import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
-import { Checkbox, Input, Pagination, Select, Space, Tag, Tooltip } from "antd";
+import {
+  Button,
+  Checkbox,
+  Empty,
+  Input,
+  Pagination,
+  Select,
+  Space,
+  Tag,
+  Tooltip,
+  notification,
+} from "antd";
 import { debounce, upperFirst } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLoaderData } from "react-router-dom";
-import { getLeitnerVocabs } from "../../../api/Leitner/leitner.api";
+import {
+  changeLevelVocab,
+  deleteVocabInLeitner,
+  getLeitnerVocabs,
+} from "../../../api/Leitner/leitner.api";
 import { getAllPos } from "../../../api/Vocabulary/vocabulary.api";
 import colorPos from "../../../helpers/ColorPos";
 import { setCurrentLeitnerLevel } from "../../../stores/leitner/leitnerSlice";
 import "./LeitnerGame.scss";
+import { PiClockCounterClockwiseBold } from "react-icons/pi";
+import DeleteModal from "../../Manager/WordList/CustomModals/DeleteModal";
 const LeitnerLevel = (props) => {
   const loader = useLoaderData();
   const [vocabs, setVocabs] = useState();
@@ -17,8 +34,11 @@ const LeitnerLevel = (props) => {
   const [currentPos, setCurrentPos] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [offset, setOffset] = useState(0);
+  const [selectedIds, setSelectedIds] = useState([]);
   const dispatch = useDispatch();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  //=======================================================================================================================================================
   useEffect(() => {
     dispatch(setCurrentLeitnerLevel(+loader.data.level));
     const _getAllVocab = async () => {
@@ -41,6 +61,8 @@ const LeitnerLevel = (props) => {
     _getAllPos();
     _getAllVocab();
   }, [dispatch, loader.data.level, offset]);
+  //=======================================================================================================================================================
+
   const onChangePosFilter = async (value) => {
     setCurrentPos(value);
     try {
@@ -83,18 +105,102 @@ const LeitnerLevel = (props) => {
       }
     }, 500)
   ).current;
-  // const onPageChange = (value) => {
-  //   setCurrentPage(value);
-  //   setOffset((value - 1) * 10);
-  // };
+  //=======================================================================================================================================================
+  const onChangeList = (item) => {
+    const isSelected = selectedIds.some(
+      (selectedItem) =>
+        selectedItem.vocabId === item.vocabId &&
+        selectedItem.defId === item.defId
+    );
+
+    if (isSelected) {
+      setSelectedIds((prevSelectedIds) =>
+        prevSelectedIds.filter(
+          (selectedItem) =>
+            selectedItem.vocabId !== item.vocabId ||
+            selectedItem.defId !== item.defId
+        )
+      );
+    } else {
+      setSelectedIds((prevSelectedIds) => [...prevSelectedIds, item]);
+    }
+  };
+  const onCheckAllChange = (e) => {
+    const checkAllItem = vocabs.content.map((vocab) => ({
+      vocabId: vocab.vocabId,
+      defId: vocab.definition.defId,
+    }));
+    setSelectedIds(e.target.checked ? checkAllItem : []);
+  };
+  //=======================================================================================================================================================
+  const handleDeleteVocab = async () => {
+    try {
+      const result = await deleteVocabInLeitner(selectedIds);
+      if (result) {
+        const updatedVocabs = vocabs.content.filter((vocab) => {
+          return !selectedIds.some(
+            (selectedItem) =>
+              selectedItem.vocabId === vocab.vocabId &&
+              selectedItem.defId === vocab.definition.defId
+          );
+        });
+        setVocabs({
+          ...vocabs,
+          content: updatedVocabs,
+        });
+        setSelectedIds([]);
+        setIsDeleteModalOpen(false);
+      }
+    } catch (error) {}
+  };
+  //=======================================================================================================================================================
+
+  const renderEmpty = (
+    <Empty
+      image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+      imageStyle={{
+        height: "120px",
+      }}
+      className=""
+      description={
+        <span className="empty__sub--content">
+          You don't have any vocab yet.
+        </span>
+      }
+    ></Empty>
+  );
+
+  //=======================================================================================================================================================
+
+  const checkAll = vocabs && vocabs.content.length === selectedIds.length;
+  const indeterminate =
+    selectedIds.length > 0 && selectedIds.length < vocabs.content.length;
+  //=======================================================================================================================================================
+
   const renderVocabInSub =
     vocabs &&
     vocabs?.content.map((vocab, index) => (
       <Space className="subcategory-item" key={index}>
         <Space>
           <Checkbox
-            // onChange={onCheckbox}
-            // checked={isChecked}
+            onChange={() =>
+              onChangeList(
+                {
+                  vocabId: vocab.vocabId,
+                  defId: vocab.definition.defId,
+                },
+                !selectedIds.some(
+                  (item) =>
+                    item.vocabId === vocab.vocabId &&
+                    item.defId === vocab.definition.defId
+                )
+              )
+            }
+            checked={selectedIds.some(
+              (item) =>
+                item.vocabId === vocab.vocabId &&
+                item.defId === vocab.definition.defId
+            )}
             className="checkbox__del"
           ></Checkbox>
           <Space className="subcategory__header" direction="vertical">
@@ -109,12 +215,66 @@ const LeitnerLevel = (props) => {
             </Space>
           </Space>
         </Space>
-        <Tag color={colorPos.get(vocab?.pos)} style={{ fontSize: "15px" }}>
-          {upperFirst(vocab?.pos)}
-        </Tag>
-        {/* <span className="vocabulary__pos">[{vocab?.pos}]</span> */}
+        <Space>
+          <Tag color={colorPos.get(vocab?.pos)} style={{ fontSize: "15px" }}>
+            {upperFirst(vocab?.pos)}
+          </Tag>
+          <Space
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Space
+              style={{
+                borderLeft: "1px solid #ccc",
+                lineHeight: "28px",
+                padding: "0px 8px",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Today
+            </Space>
+            <PiClockCounterClockwiseBold
+              style={{
+                fontSize: "20px",
+                color: "#6c757d",
+              }}
+            />
+          </Space>
+        </Space>
       </Space>
     ));
+  //=======================================================================================================================================================
+  const upLevelVocab = async () => {
+    const params = {
+      level: loader?.data?.level,
+      leitnerIds: [...selectedIds],
+    };
+    const data = { statusLevel: "up", params: params };
+    try {
+      const rs = await changeLevelVocab(data);
+      console.log(rs);
+      if (rs) {
+        const updatedVocabs = vocabs.content.filter((vocab) => {
+          return !selectedIds.some(
+            (selectedItem) =>
+              selectedItem.vocabId === vocab.vocabId &&
+              selectedItem.defId === vocab.definition.defId
+          );
+        });
+        setVocabs({
+          ...vocabs,
+          content: updatedVocabs,
+        });
+        setSelectedIds([]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Space className="subcategory" direction="vertical">
       <div className="subcategory__back" direction="vertical">
@@ -134,18 +294,22 @@ const LeitnerLevel = (props) => {
                   style={{
                     marginLeft: 12,
                   }}
-                  // indeterminate={indeterminate}
-                  // onClick={onCheckAllChange}
-                  // checked={checkAll}
+                  indeterminate={indeterminate}
+                  onClick={onCheckAllChange}
+                  checked={checkAll}
                 ></Checkbox>
                 <Tooltip title="Delete selected items" color={"danger"}>
                   <DeleteOutlined
                     className="delete-btn__icon"
-                    // style={{
-                    //   color: `${selectedIds.length > 0 ? "red" : "black"}`,
-                    // }}
+                    style={{
+                      color: `${selectedIds.length > 0 ? "red" : "black"}`,
+                    }}
+                    onClick={() => setIsDeleteModalOpen(true)}
                   />
                 </Tooltip>
+                {selectedIds.length > 0 && +loader.data.level === 0 && (
+                  <Button onClick={upLevelVocab}>Start to learn</Button>
+                )}
               </Space>
               <Select
                 bordered
@@ -173,20 +337,27 @@ const LeitnerLevel = (props) => {
                 value={keyword}
                 onChange={onChangeInput}
               ></Input>
-              <Pagination
-                defaultCurrent={1}
-                total={vocabs?.totalElements}
-                onChange={onPageChange}
-                size="small"
-                current={currentPage}
-              />
+              {!vocabs?.empty && (
+                <Pagination
+                  defaultCurrent={1}
+                  total={vocabs?.totalElements}
+                  onChange={onPageChange}
+                  size="small"
+                  current={currentPage}
+                />
+              )}
             </Space>
           </Space>
 
-          {vocabs && renderVocabInSub}
+          {!vocabs?.empty && renderVocabInSub}
+          {vocabs?.empty && renderEmpty}
         </Space>
-        {/* {!VocabLoading && !vocabsInSub.length && renderEmpty} */}
-        {/* {VocabLoading && <Spin spinning={VocabLoading} />} */}
+        <DeleteModal
+          title={`vocab`}
+          isOpen={isDeleteModalOpen}
+          handleDelete={handleDeleteVocab}
+          handleShow={() => setIsDeleteModalOpen(!isDeleteModalOpen)}
+        />
       </div>
     </Space>
   );

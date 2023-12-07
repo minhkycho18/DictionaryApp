@@ -1,0 +1,99 @@
+@import "../../../assets/scss/font.scss";
+@import "../../../assets/scss/variable.scss";
+.carouselLeitner {
+  z-index: 2;
+  width: 1500px !important;
+  margin-bottom: 80px;
+  padding: 16px 0px;
+}
+.leitner-menu {
+  overflow: hidden;
+  font-family: $font;
+  font-weight: 600;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+  &__item {
+    // filter: invert(90%) sepia(0%) saturate(2381%) hue-rotate(39deg)
+    //   brightness(96%) contrast(87%);
+    padding: 36px 48px;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-top: 4px solid transparent;
+    transition: border-top linear 0.5s;
+
+    &--active {
+      border-top: 4px solid #143b72;
+      &--green {
+        background-color: green;
+      }
+      &--red {
+        background-color: red;
+      }
+    }
+    &--count {
+      margin-top: 4px;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      filter: invert(20%) sepia(16%) saturate(4951%) hue-rotate(189deg)
+        brightness(93%) contrast(95%);
+    }
+    &--icon {
+      filter: invert(20%) sepia(16%) saturate(4951%) hue-rotate(189deg)
+        brightness(93%) contrast(95%);
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      fill: green;
+    }
+  }
+  &__back {
+    filter: invert(20%) sepia(16%) saturate(4951%) hue-rotate(189deg)
+      brightness(93%) contrast(95%);
+    font-size: 15px;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 32px;
+    cursor: pointer;
+  }
+  &__icon {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    color: #fff;
+    font-size: 16px;
+    z-index: 200;
+    border-radius: 50%;
+    height: 16px;
+    width: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    &--cong {
+      background-color: green;
+    }
+    &--tru {
+      background-color: red;
+    }
+  }
+}

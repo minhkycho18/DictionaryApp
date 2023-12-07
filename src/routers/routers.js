@@ -21,6 +21,7 @@ import ContributionVocabulary from "../pages/Manager/Contribution/ContributionVo
 import { getLeiner } from "../api/Leitner/leitner.api";
 import LeitnerLevel from "../pages/Learner/leitner/LeitnerLevel";
 import { useDispatch } from "react-redux";
+import LeitnerGame from "../pages/Learner/leitner/LeitnerGame";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -93,20 +94,44 @@ const routers = createBrowserRouter([
           },
           {
             path: ":id",
-            element: <LeitnerLevel />,
-            loader: async ({ params }) => {
-              try {
-                const rs = await getLeiner();
-                const id = params.id;
-                const vocab = rs.filter(
-                  (item) => item.levelName === decodeURI(id)
-                );
+            // element: <LeitnerLevel />,
 
-                return { data: vocab[0], error: null };
-              } catch (error) {
-                return { data: [], error: "fail" };
-              }
-            },
+            children: [
+              {
+                path: "",
+                element: <LeitnerLevel />,
+                loader: async ({ params }) => {
+                  try {
+                    const rs = await getLeiner();
+                    const id = params.id;
+                    const vocab = rs.filter(
+                      (item) => item.levelName === decodeURI(id)
+                    );
+
+                    return { data: vocab[0], error: null };
+                  } catch (error) {
+                    return { data: [], error: "fail" };
+                  }
+                },
+              },
+              {
+                path: "learn",
+                element: <LeitnerGame />,
+                loader: async ({ params }) => {
+                  try {
+                    const rs = await getLeiner();
+                    const id = params.id;
+                    const vocab = rs.filter(
+                      (item) => item.levelName === decodeURI(id)
+                    );
+
+                    return { data: vocab[0], error: null };
+                  } catch (error) {
+                    return { data: [], error: "fail" };
+                  }
+                },
+              },
+            ],
           },
         ],
       },

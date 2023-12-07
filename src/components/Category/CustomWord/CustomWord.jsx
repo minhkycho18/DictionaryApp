@@ -63,7 +63,7 @@ const CustomWord = (props) => {
     modal.confirm({
       title: "Confirm",
       icon: <ExclamationCircleOutlined />,
-      content: "Do you want to Đề xuất this word ?",
+      content: "Would you like to contribute this vocabulary?",
       okText: "Ok",
       cancelText: "No",
       onOk: props.handleAddCustomVocab(params),

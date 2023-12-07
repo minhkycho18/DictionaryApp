@@ -8,8 +8,9 @@ import {
 import { Col, Row, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { getLeiner } from "../../../api/Leitner/leitner.api";
-import LeitnerItem from "../../../components/leitner-item/LeitnerItem";
+// import LeitnerItem from "../../../components/leitner-item/LeitnerItem";
 import "./Leitner.scss";
+import LeitnerItem from "../../../components/leitner/leitner-item/LeitnerItem";
 
 const Leitner = () => {
   const [leitner, setLeitner] = useState([]);
