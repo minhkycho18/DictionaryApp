@@ -1,10 +1,10 @@
 import axios from "axios";
 import getTokenFromStorage from "./getTokenFromStorage";
-// const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = process.env.REACT_APP_API_URL;
 class Http {
   constructor() {
     this.instance = axios.create({
-      baseURL: "http://localhost:8080",
+      baseURL: apiUrl,
       name: "Dictionary App",
       timeout: 10000,
       headers: {

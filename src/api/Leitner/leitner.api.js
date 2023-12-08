@@ -26,6 +26,9 @@ export const getLeitnerVocabs = (params) => {
   if (keyword) {
     url = url + `&keyword=${keyword}`;
   }
+  if (limit) {
+    url = url + `&limit=${limit}`;
+  }
   return http.get(url);
 };
 export const deleteVocabInLeitner = (data) => {
