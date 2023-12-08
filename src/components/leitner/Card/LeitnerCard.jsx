@@ -11,7 +11,6 @@ import "./LeitnerCard.scss";
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 const LeitnerCard = (props) => {
   const [isFlip, setIsFlip] = useState(false);
-  const [answer, setAnswer] = useState("");
   const onChangeSlide = () => {
     props.onSelect && props.handleChangeSlide();
   };
@@ -129,13 +128,10 @@ const LeitnerCard = (props) => {
         </Space>
 
         <Row style={{ width: "400px" }}>
-          <Col className="col-css" span={12}>
+          <Col className="col-css" span={12} style={{ cursor: "pointer" }}>
             <Space
-              className={`${
-                answer && answer === "incorrect"
-                  ? "leitner-card__unknown--choiced"
-                  : ""
-              } leitner-card__options--item leitner-card__unknown`}
+              className={`leitner-card__options--item leitner-card__unknown`}
+              style={{ cursor: "pointer" }}
               onClick={() => {
                 changeLevelVocab("down", [
                   {
@@ -143,20 +139,19 @@ const LeitnerCard = (props) => {
                     defId: props?.vocabInfo?.defId,
                   },
                 ]);
-                onChangeSlide();
+                if (props.isLastItem) {
+                  props.handleOpenModal(true);
+                } else onChangeSlide();
               }}
             >
               <AiOutlineCloseCircle className="leitner-card__options--icon leitner-card__unknown--icon" />
               <span>Incorrect</span>
             </Space>
           </Col>
-          <Col className="col-css" span={12}>
+          <Col className="col-css" style={{ cursor: "pointer" }} span={12}>
             <Space
-              className={`${
-                answer && answer === "correct"
-                  ? "leitner-card__know--choiced"
-                  : ""
-              } leitner-card__options--item leitner-card__know`}
+              className={`leitner-card__options--item leitner-card__know`}
+              style={{ cursor: "pointer" }}
               onClick={() => {
                 changeLevelVocab("up", [
                   {
@@ -164,7 +159,9 @@ const LeitnerCard = (props) => {
                     defId: props?.vocabInfo?.defId,
                   },
                 ]);
-                onChangeSlide();
+                if (props.isLastItem) {
+                  props.handleOpenModal(true);
+                } else onChangeSlide();
               }}
             >
               <AiOutlineCheckCircle className="leitner-card__options--icon leitner-card__know--icon" />

@@ -1,5 +1,5 @@
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { Empty, Image, Space } from "antd";
+import { Button, Empty, Image, Modal, Result, Space } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -28,13 +28,17 @@ const LeitnerGame = (props) => {
   const navigate = useNavigate();
   const [increasedLevels, setIncreasedLevels] = useState();
   const [decreasedLevels, setDecreasedLevels] = useState();
+  const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     const getGameByLevel = async () => {
+      setLoading(true);
       try {
         const result = await getLeitnerData(loader?.data?.level);
         const level = await getLeiner();
         setVocabularies(result);
         setLevel(level);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -69,31 +73,28 @@ const LeitnerGame = (props) => {
     const data = { statusLevel: statusLevel, params: params };
     try {
       const rs = await changeLevelVocab(data);
-      if (rs && statusLevel === "up") {
+
+      if (rs && statusLevel === "up" && loader.data.level !== "7") {
         const nextLevelIndex = +loader?.data?.level + 1;
         const updatedLevels = [...level];
         updatedLevels[loader?.data?.level].amountOfWord -= value.length;
         updatedLevels[nextLevelIndex].amountOfWord += value.length;
         setDecreasedLevels(+loader?.data?.level);
-        setTimeout(() => {
-          setDecreasedLevels();
-        }, 1000);
         setIncreasedLevels(+loader?.data?.level + 1);
         setTimeout(() => {
+          setDecreasedLevels();
           setIncreasedLevels();
         }, 1000);
         setLevel(updatedLevels);
-      } else if (rs && statusLevel === "down") {
+      } else if (rs && statusLevel === "down" && loader.data.level !== "1") {
         const prevLevelIndex = loader?.data?.level - 1;
         const updatedLevels = [...level];
         updatedLevels[loader?.data?.level].amountOfWord -= value.length;
         updatedLevels[prevLevelIndex].amountOfWord += value.length;
         setDecreasedLevels(+loader?.data?.level);
-        setTimeout(() => {
-          setDecreasedLevels();
-        }, 1000);
         setIncreasedLevels(+loader?.data?.level - 1);
         setTimeout(() => {
+          setDecreasedLevels();
           setIncreasedLevels();
         }, 1000);
         setLevel(updatedLevels);
@@ -112,7 +113,39 @@ const LeitnerGame = (props) => {
         justifyContent: "center",
       }}
     >
-      {vocabularies.length > 0 && (
+      <Modal centered open={isOpen} closable={false} footer={false}>
+        <Result
+          status="success"
+          title="You have reviewed all the card!"
+          style={{
+            fontSize: 20,
+          }}
+        />
+        <Space
+          style={{
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+            color: "#0d47a1",
+          }}
+        >
+          <Button
+            type="text"
+            style={{
+              color: "#0d47a1",
+              fontSize: 16,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 8,
+            }}
+            onClick={() => navigate("/dashboard/leitner/")}
+          >
+            Back to home
+          </Button>
+        </Space>
+      </Modal>
+      {!loading && !isOpen && vocabularies.length > 0 && (
         <Carousel
           slidesToSlide={1}
           ref={slide}
@@ -139,12 +172,14 @@ const LeitnerGame = (props) => {
                     handleCorrectFlashCard={handleCorrectFlashCard}
                     handleIncorrectAnswer={handleIncorrectAnswer}
                     changeLevelVocabulary={changeLevelVocabulary}
+                    handleOpenModal={setIsOpen}
+                    isLastItem={current === vocabularies.length - 1}
                   />
                 );
             })}
         </Carousel>
       )}
-      {vocabularies.length === 0 && (
+      {!loading && vocabularies.length === 0 && (
         <Empty
           image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
           imageStyle={{
@@ -158,12 +193,13 @@ const LeitnerGame = (props) => {
         <Space
           className="leitner-menu__back"
           direction="vertical"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/dashboard/leitner/")}
         >
           <ArrowLeftOutlined />
           <Space className="">Back</Space>
         </Space>
-        {level &&
+        {!loading &&
+          level &&
           level.map((item, index) => (
             <div
               className={`${

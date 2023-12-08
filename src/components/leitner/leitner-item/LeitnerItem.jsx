@@ -1,6 +1,6 @@
+import { ContainerOutlined, RightOutlined } from "@ant-design/icons";
 import { Space } from "antd";
 import React from "react";
-import { ContainerOutlined, RightOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 const LeitnerItem = ({ levelItem }) => {
   const navigate = useNavigate();

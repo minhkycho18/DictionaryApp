@@ -9,12 +9,11 @@ import {
   Space,
   Tag,
   Tooltip,
-  notification,
 } from "antd";
 import { debounce, upperFirst } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import {
   changeLevelVocab,
   deleteVocabInLeitner,
@@ -36,6 +35,7 @@ const LeitnerLevel = (props) => {
   const [offset, setOffset] = useState(0);
   const [selectedIds, setSelectedIds] = useState([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   //=======================================================================================================================================================
@@ -307,10 +307,8 @@ const LeitnerLevel = (props) => {
                     onClick={() => setIsDeleteModalOpen(true)}
                   />
                 </Tooltip>
-                {selectedIds.length > 0 && +loader.data.level === 0 && (
-                  <Button onClick={upLevelVocab}>Start to learn</Button>
-                )}
               </Space>
+
               <Select
                 bordered
                 placeholder="Part of speech"
@@ -326,6 +324,17 @@ const LeitnerLevel = (props) => {
               />
             </Space>
             <Space>
+              {selectedIds.length > 0 && +loader.data.level === 0 && (
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    upLevelVocab();
+                    navigate("/dashboard/leitner/Starting");
+                  }}
+                >
+                  Start to learn
+                </Button>
+              )}
               <Input
                 className="search__sub search__vocab"
                 placeholder="Search"

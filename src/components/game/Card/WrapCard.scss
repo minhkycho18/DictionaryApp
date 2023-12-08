@@ -14,7 +14,8 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  transition: scale 0.5s linear;
+  transition: scale 1s linear;
+  transition: opacity 0.5s linear;
   position: relative;
   &__wave {
     width: max-content;

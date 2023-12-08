@@ -5,6 +5,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
+import { addVocabToLeitner } from "../../../api/Leitner/leitner.api";
 import { updateVocabsByGameType } from "../../../api/Subcategory/game.api";
 import FlashCard from "../../../components/game/Card/FlashCard";
 import QuizCard from "../../../components/game/Card/QuizCard";
@@ -219,7 +220,22 @@ const Game = (props) => {
       partialVisibilityGutter: 30,
     },
   };
-
+  const handleAddVocabToLeitner = async () => {
+    if (incorrectAnswer) {
+      try {
+        const data = incorrectAnswer.map((item) => {
+          return {
+            vocabId: item.vocabId,
+            defId: item.defId,
+          };
+        });
+        const rs = await addVocabToLeitner(data);
+        openNotificationWithIcon("success", rs);
+      } catch (error) {
+        openNotificationWithIcon("error", "Fail to add!");
+      }
+    }
+  };
   const renderCard = () => {
     switch (type) {
       case REVIEW:
@@ -250,6 +266,7 @@ const Game = (props) => {
               type={"success-review"}
               onSelect={current === result.length}
               handleChangeLesson={handleChangeLesson}
+              handleAddVocabToLeitner={handleAddVocabToLeitner}
             />
             <ReviewCard type={"default"} />
           </Carousel>
@@ -287,6 +304,7 @@ const Game = (props) => {
               resultLength={result.length}
               handleChangeLesson={handleChangeLesson}
               incorrectAnswer={incorrectAnswer}
+              handleAddVocabToLeitner={handleAddVocabToLeitner}
             />
             <ReviewCard type={"default"} />
           </Carousel>
@@ -325,6 +343,7 @@ const Game = (props) => {
               resultLength={result.length}
               handleChangeLesson={handleChangeLesson}
               incorrectAnswer={incorrectAnswer}
+              handleAddVocabToLeitner={handleAddVocabToLeitner}
             />
             <ReviewCard type={"default"} />
           </Carousel>
@@ -362,6 +381,7 @@ const Game = (props) => {
               resultLength={result.length}
               handleChangeLesson={handleChangeLesson}
               incorrectAnswer={incorrectAnswer}
+              handleAddVocabToLeitner={handleAddVocabToLeitner}
             />
             <ReviewCard type={"default"} />
           </Carousel>
@@ -395,6 +415,7 @@ const Game = (props) => {
               onSelect={current === result.length}
               handleChangeLesson={handleChangeLesson}
               resultLength={result.length}
+              handleAddVocabToLeitner={handleAddVocabToLeitner}
             />
             <ReviewCard type={"default"} />
           </Carousel>

@@ -1,20 +1,17 @@
 import { Space, Tag } from "antd";
-import React, { useEffect, useState } from "react";
-import "./ReviewCard.scss";
-import { BsArrowReturnLeft, BsVolumeUp } from "react-icons/bs";
-import WrapCard from "./WrapCard";
-import waveBottom from "../../../assets/images/wave-bottom.svg";
-import waveTop from "../../../assets/images/wave-top.svg";
 import { upperFirst } from "lodash";
-import colorPos from "../../../helpers/ColorPos";
+import React, { useEffect, useState } from "react";
 import ReactCardFlip from "react-card-flip";
 import { BiSolidVolumeFull, BiSolidVolumeMute } from "react-icons/bi";
-import { useDispatch } from "react-redux";
-import { updateVocab } from "../../../stores/game/gameSlice";
+import { BsArrowReturnLeft, BsVolumeUp } from "react-icons/bs";
+import waveBottom from "../../../assets/images/wave-bottom.svg";
+import waveTop from "../../../assets/images/wave-top.svg";
+import colorPos from "../../../helpers/ColorPos";
+import "./ReviewCard.scss";
+import WrapCard from "./WrapCard";
 
 const ReviewCard = (props) => {
   const [isFlip, setIsFlip] = useState(false);
-  const dispatch = useDispatch();
   useEffect(() => {
     if (props?.onSelect) {
       props.handleCorrectFlashCard(props.vocabInfo);

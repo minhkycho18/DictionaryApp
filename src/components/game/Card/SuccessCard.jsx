@@ -12,7 +12,9 @@ const SuccessCard = (props) => {
   const changeToNextLesson = (lesson) => {
     props.handleChangeLesson(lesson, true);
   };
-
+  const handleAddLeitner = () => {
+    props.handleAddVocabToLeitner();
+  };
   const renderBody = () => {
     switch (props?.type) {
       case "success-review":
@@ -76,7 +78,13 @@ const SuccessCard = (props) => {
                 </Space>
               </Space>
               <Space className="success-card__box" direction="vertical">
-                <Space className="success-card__options success-card__options--leitner">
+                <Space
+                  className="success-card__options success-card__options--leitner"
+                  onClick={() => {
+                    handleAddLeitner();
+                    changeToNextLesson("spelling");
+                  }}
+                >
                   <InboxOutlined className="success-card__options__icon" />
                   <Space direction="vertical">
                     <div className="success-card__options__title ">
@@ -141,7 +149,13 @@ const SuccessCard = (props) => {
                 </Space>
               </Space>
               <Space className="success-card__box" direction="vertical">
-                <Space className="success-card__options success-card__options--leitner">
+                <Space
+                  className="success-card__options success-card__options--leitner"
+                  onClick={() => {
+                    handleAddLeitner();
+                    changeToNextLesson("quiz");
+                  }}
+                >
                   <InboxOutlined className="success-card__options__icon" />
                   <Space direction="vertical">
                     <div className="success-card__options__title ">
@@ -207,7 +221,13 @@ const SuccessCard = (props) => {
                 </Space>
               </Space>
               <Space className="success-card__box" direction="vertical">
-                <Space className="success-card__options success-card__options--leitner">
+                <Space
+                  className="success-card__options success-card__options--leitner"
+                  onClick={() => {
+                    handleAddLeitner();
+                    changeToNextLesson("overview");
+                  }}
+                >
                   <InboxOutlined className="success-card__options__icon" />
                   <Space direction="vertical">
                     <div className="success-card__options__title ">
