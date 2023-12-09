@@ -19,4 +19,5 @@ public class RegisterRequestDto {
     @NotBlank(message = "Name is required")
     private String name;
     private Gender gender;
+    private String role;
 }

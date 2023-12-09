@@ -85,7 +85,8 @@ public class WebSecurityConfig {
                                 "/users/authenticate",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**").permitAll()
-                        .requestMatchers("/users/**").hasAnyAuthority(forAllRole())
+                        .requestMatchers("/users/me/**").hasAnyAuthority(forAllRole())
+                        .requestMatchers("/users/**").hasAnyAuthority(forAdminAndManager())
                         .requestMatchers("/leitners/**").hasAnyAuthority(forAllRole())
                         .requestMatchers("/managements/**").hasAnyAuthority(forAdminAndManager())
                         .anyRequest()

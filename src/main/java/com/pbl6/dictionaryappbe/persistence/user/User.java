@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -45,6 +46,9 @@ public class User implements UserDetails {
     @Column
     private Boolean isLock = false;
 
+    @Column
+    private LocalDateTime createdAt;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     private Role role;
@@ -65,6 +69,7 @@ public class User implements UserDetails {
         return this.email;
     }
 
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -72,7 +77,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !this.isLock;
     }
 
     @Override
