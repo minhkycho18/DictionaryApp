@@ -177,6 +177,9 @@ const SubcategoryDataTable = ({
             onChange: cancel,
           }}
           rowClassName={"subcategoryRow"}
+          style={{
+            marginBottom: "10px",
+          }}
         />
       </Form>
       <DeleteModal

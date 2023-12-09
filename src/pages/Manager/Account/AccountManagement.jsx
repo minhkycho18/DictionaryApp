@@ -1,44 +1,78 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Col, Input, Row, Space } from "antd";
-import ContributionDataTable from "../../../components/data-table/Contribution/ContributionDataTable";
+import { Col, Input, Row, Space, notification } from "antd";
+import "./AccountManagement.scss";
+import AccountDataTable from "../../../components/data-table/Account/AccountDataTable";
+import AddAccountModal from "./AddAccountModal";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getContributionVocab } from "../../../stores/search-word/searchThunk";
-import { setContributionVocab } from "../../../stores/search-word/searchSlice";
+import {
+  createAccount,
+  getAllUser,
+  lockAccount,
+  unlockAccount,
+} from "../../../api/User/user";
 
-const ContributionVocabulary = () => {
+const AccountManagement = () => {
+  const [usersData, setUsersData] = useState([]);
   const [dataSearch, setDataSearch] = useState([]);
   const [searching, setSearching] = useState(false);
-  const { contributionVocab, loading } = useSelector((state) => state.search);
-  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getContributionVocab());
+    const getData = async () => {
+      const response = await getAllUser();
+      setUsersData(response);
+    };
+    getData();
   }, []);
-
-  const handleApprove = (record) => {
-    dispatch(setContributionVocab(record.id));
-  };
-
-  const handleReject = (record) => {
-    dispatch(setContributionVocab(record.id));
-  };
 
   const handleSearch = (keyword) => {
     const trimmedKeyword = keyword.trim();
+
     if (trimmedKeyword === "") {
       setDataSearch([]);
     } else {
       const lowerKeyword = trimmedKeyword.toLowerCase();
-      const newData = contributionVocab.filter((item) =>
-        item.word.toLowerCase().startsWith(lowerKeyword)
-      );
+      const newData = usersData.filter((item) => {
+        const lowerName = item.name.toLowerCase();
+        const lowerEmail = item.email.toLowerCase();
+        return (
+          lowerName.includes(lowerKeyword) || lowerEmail.includes(lowerKeyword)
+        );
+      });
       setDataSearch(newData);
     }
     setSearching(!!trimmedKeyword);
   };
 
-  const handleTableChange = (record) => {};
+  const register = async (data) => {
+    try {
+      const response = await createAccount(data);
+      const newData = [...usersData, response];
+      setUsersData(newData);
+      notification.success({
+        message: "Registration Success",
+      });
+    } catch (error) {
+      console.log(error);
+      notification.error({
+        message: "Registration Failed",
+        description: error,
+      });
+    }
+  };
+
+  const handleLockAndUnlockAccount = async (data) => {
+    if (data.action === "lock") {
+      await lockAccount(data.id);
+    } else if (data.action === "unlock") {
+      await unlockAccount(data.id);
+    }
+    setUsersData((prevUsersData) =>
+      prevUsersData.map((item) =>
+        item.userId === data.id ? { ...item, lock: !item.lock } : item
+      )
+    );
+  };
+
   return (
     <>
       <Space
@@ -48,7 +82,7 @@ const ContributionVocabulary = () => {
       >
         <Row className={"box_title"}>
           <Col className={"title"} span={24}>
-            Contribution Vocabulary
+            Account Management
           </Col>
         </Row>
         <div className="box_data" style={{ gap: "20px" }}>
@@ -73,7 +107,7 @@ const ContributionVocabulary = () => {
             >
               <Input
                 className="search_vocab"
-                placeholder={`Search Vocabulary`}
+                placeholder={`Search User`}
                 prefix={
                   <SearchOutlined
                     style={{ color: "#bbb", padding: "0px 4px" }}
@@ -97,15 +131,16 @@ const ContributionVocabulary = () => {
                 }}
               ></Input>
             </Col>
+            <Col offset={20} span={4} style={{ marginTop: "20px" }}>
+              <AddAccountModal handleRegister={register} />
+            </Col>
           </Row>
           <Row justify={"center"} className={"box_data_item table_box"}>
             <Col span={22}>
-              <ContributionDataTable
-                loading={loading}
-                dataSource={searching ? dataSearch : contributionVocab}
-                handleAprroveVocab={handleApprove}
-                handleRejectVocab={handleReject}
-                onTableChange={handleTableChange}
+              <AccountDataTable
+                dataSource={searching ? dataSearch : usersData}
+                handleRegister={register}
+                handleChangeStatusAccount={handleLockAndUnlockAccount}
               />
             </Col>
           </Row>
@@ -115,4 +150,4 @@ const ContributionVocabulary = () => {
   );
 };
 
-export default ContributionVocabulary;
+export default AccountManagement;

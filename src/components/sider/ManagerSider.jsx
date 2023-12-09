@@ -9,7 +9,7 @@ import {
 import { Avatar, Button, Flex, Menu, Space } from "antd";
 import "./ManagerSider.scss";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../stores/authenticate/authSlice";
 import Sider from "antd/es/layout/Sider";
 
@@ -41,8 +41,7 @@ const Manager = () => {
   // const {pathname} = useLocation();
   // const path = getFullPath(pathname);
   const dispatch = useDispatch();
-  // const {profile} = useSelector((state) => state.profile);
-
+  const { profile } = useSelector((state) => state.profile);
   const [current, setCurrent] = useState("/vocabulary");
 
   const items = dashboardManagerLink.map((item) => ({
@@ -85,9 +84,27 @@ const Manager = () => {
       >
         <div className={"sidebar__ava"}>
           <Space align={"center"} direction={"vertical"} size={"middle"}>
-            <Avatar shape="square" size={64} icon={<UserOutlined />} />
-            <span className={"sidebar__ava__name"}>dangvannhatminh93</span>
-            <span className={"sidebar__ava__role"}>Admin</span>
+            {profile?.image ? (
+              <Avatar
+                shape="square"
+                size={64}
+                style={{
+                  border: "1px solid #ccc",
+                }}
+                src={profile.image}
+              />
+            ) : (
+              <Avatar
+                shape="square"
+                size={64}
+                style={{
+                  border: "1px solid #ccc",
+                }}
+                icon={<UserOutlined />}
+              />
+            )}
+            <span className={"sidebar__ava__name"}>{profile?.name}</span>
+            <span className={"sidebar__ava__role"}>{profile?.role.name}</span>
           </Space>
         </div>
         <Menu

@@ -115,6 +115,9 @@ const WordListDataTable = ({
         dataSource={dataSource}
         onChange={handleTableChange}
         onRow={setOnRowProps}
+        style={{
+          marginBottom: "10px",
+        }}
       />
       <DeleteModal
         title={`"${selectedWordlist?.title}"`}

@@ -20,8 +20,8 @@ import WordListManagement from "../pages/Manager/WordList/WordListManagement";
 import ContributionVocabulary from "../pages/Manager/Contribution/ContributionVocabulary";
 import { getLeiner } from "../api/Leitner/leitner.api";
 import LeitnerLevel from "../pages/Learner/leitner/LeitnerLevel";
-import { useDispatch } from "react-redux";
 import LeitnerGame from "../pages/Learner/leitner/LeitnerGame";
+import AccountManagement from "../pages/Manager/Account/AccountManagement";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -175,10 +175,10 @@ const routers = createBrowserRouter([
     path: "/manager",
     element: <Manager />,
     children: [
-      // {
-      //   path: "account",
-      //   element: <Profile />,
-      // },
+      {
+        path: "account",
+        element: <AccountManagement />,
+      },
       {
         path: "vocabulary",
         element: <VocabularyManagement />,

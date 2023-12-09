@@ -1,5 +1,5 @@
 import { Button, Modal } from "antd";
-import React, { useState } from "react";
+import { useState } from "react";
 import DefaultWord from "../../../../components/Category/DefaultWord/DefaultWord";
 
 const AddNewVocabularyModal = ({ vocabInSub, onAddVocab }) => {
@@ -15,11 +15,9 @@ const AddNewVocabularyModal = ({ vocabInSub, onAddVocab }) => {
   };
   return (
     <>
-      <Button type="primary" onClick={showModal}>
-        Add a new Vocabulary
-      </Button>
+      <Button onClick={showModal}>Add a new Vocabulary</Button>
       <Modal
-        title="Basic Modal"
+        title="Add to your subcategory"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}

@@ -55,7 +55,7 @@ const AddModal = ({ type, handleCreateNew }) => {
 
   return (
     <>
-      <Button type="primary" onClick={showModal}>
+      <Button onClick={showModal}>
         {`Add a new${type === WORDLIST_DATA_TYPE ? " WordList" : ""}${
           type === SUBCATEGORY_DATA_TYPE ? " Subcategory" : ""
         }`}

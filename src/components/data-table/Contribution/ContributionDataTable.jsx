@@ -154,6 +154,9 @@ const ContributionDataTable = ({
         dataSource={data}
         onChange={handleTableChange}
         onRow={setOnRowProps}
+        style={{
+          marginBottom: "10px",
+        }}
       ></Table>
       {isModalOpen && (
         <>
