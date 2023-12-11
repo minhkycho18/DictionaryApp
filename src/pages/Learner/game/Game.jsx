@@ -5,7 +5,10 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
-import { addVocabToLeitner, getLeitnerVocabs } from "../../../api/Leitner/leitner.api";
+import {
+  addVocabToLeitner,
+  getLeitnerVocabs,
+} from "../../../api/Leitner/leitner.api";
 import { updateVocabsByGameType } from "../../../api/Subcategory/game.api";
 import FlashCard from "../../../components/game/Card/FlashCard";
 import QuizCard from "../../../components/game/Card/QuizCard";
@@ -39,8 +42,6 @@ const Game = (props) => {
   const [correctAnswerFlashcard, setCorrectAnswerFlashcard] = useState([]);
   const [incorrectAnswer, setIncorrectAnswer] = useState([]);
   const [api, contextHolderMsg] = notification.useNotification();
-  const [levelWaiting, setLevelWaiting] = useState([]);
-
 
   useEffect(() => {
     const gameTypeFromLocalStorage = localStorage.getItem("gameType");
@@ -231,8 +232,8 @@ const Game = (props) => {
             defId: item.defId,
           };
         });
-        const result = await getLeitnerVocabs(0,)
-        
+        const result = await getLeitnerVocabs(0);
+
         const rs = await addVocabToLeitner(data);
         openNotificationWithIcon("success", rs);
       } catch (error) {
