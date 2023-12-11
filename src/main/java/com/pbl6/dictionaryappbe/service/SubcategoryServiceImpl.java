@@ -192,7 +192,7 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
         if (user.getRole().getName() == RoleName.CONTENT_MANAGER) {
             wordList = wordListRepository.findById(wordListId).orElseThrow(() -> new EntityNotFoundException("WordList not found"));
         } else {
-            wordList = wordListRepository.findByUserAndWordListId(AuthenticationUtils.getUserFromSecurityContext(), wordListId)
+            wordList = wordListRepository.findByUserAndWordListId(user, wordListId)
                     .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"));
         }
         if (subcategoryRepository.findByTitleAndWordList(title, wordList) != null) {

@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -46,6 +47,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .name(request.getName())
                 .password(passwordEncode)
                 .gender(request.getGender())
+                .createdAt(LocalDateTime.now())
+                .isLock(false)
                 .role(role)
                 .build();
         User savedUser = userRepository.save(user);

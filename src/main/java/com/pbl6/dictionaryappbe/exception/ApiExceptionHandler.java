@@ -54,7 +54,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {EntityNotFoundException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleExtityNotFoundException(Exception ex) {
+    public ResponseEntity<String> handleEntityNotFoundException(Exception ex) {
         return ResponseEntity.status(400).body(ex.getMessage());
     }
 

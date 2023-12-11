@@ -1,5 +1,6 @@
 package com.pbl6.dictionaryappbe.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pbl6.dictionaryappbe.persistence.role.Role;
 import com.pbl6.dictionaryappbe.persistence.user.Gender;
 import jakarta.validation.constraints.Email;
@@ -9,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -25,4 +28,7 @@ public class UserDto {
     private String image;
     private Gender gender;
     private Role role;
+    @JsonFormat(pattern = "dd-MM-yyyy hh:MM:ss")
+    private LocalDateTime createdAt;
+    private boolean isLock;
 }
