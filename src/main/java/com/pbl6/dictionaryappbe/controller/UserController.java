@@ -93,11 +93,7 @@ public class UserController {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))}),
             @ApiResponse(responseCode = "401", description = "Authentication failed")})
     @PostMapping
-    public UserDto createAccount(@RequestBody RegisterRequestDto userRequest) throws AccessDeniedException {
-        User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
-        if (user.getRole().getName().equals(RoleName.LEARNER)) {
-            throw new AccessDeniedException("You do not have permission to access this resource");
-        }
+    public UserDto createAccount(@RequestBody RegisterRequestDto userRequest) {
         return userMapper.entityToUserDTO(userService.createAccount(userRequest));
     }
 
@@ -112,9 +108,9 @@ public class UserController {
         return "Lock successfully";
     }
 
-    @Operation(summary = "Lock account", security = {@SecurityRequirement(name = "bearer-key")})
+    @Operation(summary = "Unlock account", security = {@SecurityRequirement(name = "bearer-key")})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lock account Success",
+            @ApiResponse(responseCode = "200", description = "Unlock account Success",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),
             @ApiResponse(responseCode = "401", description = "Authentication failed")})
     @PostMapping("/unlock")
