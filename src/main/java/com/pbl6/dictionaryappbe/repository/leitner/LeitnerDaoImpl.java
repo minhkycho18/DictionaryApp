@@ -46,13 +46,12 @@ public class LeitnerDaoImpl implements LeitnerDao {
                                             ON vd.vocab_id = v.vocab_id
                                         JOIN definitions d
                                             ON d.def_id = vd.def_id
-            
                     """;
 
     private static final String COUNT_ALL_BY_LEVEL_SQL = """
                     SELECT count(*)
                     FROM vocab_leitner
-                    WHERE level = :level
+                    WHERE level = :level AND user_id = :userId
             """;
 
     @Override
@@ -107,6 +106,7 @@ public class LeitnerDaoImpl implements LeitnerDao {
 
         Long amountOfElement = session.createNativeQuery(COUNT_ALL_BY_LEVEL_SQL, Long.class)
                 .setParameter("level", level)
+                .setParameter("userId", userId)
                 .getSingleResult();
         return new PageImpl<>(
                 result,
