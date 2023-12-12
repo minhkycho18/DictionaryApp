@@ -15,8 +15,12 @@ import { Entypo } from "@expo/vector-icons";
 import { SvgXml } from "react-native-svg";
 import { colors, svgstudy } from "~/constants/theme";
 import ItemVocabOfLeitner from "~/components/Leitner/ItemVocabOfLeitner/ItemVocabOfLeitner";
-import { getVocabOfLeitnerLevelOfUser } from "~/api/Leitner";
+import { UpVocabLeitner, getVocabOfLeitnerLevelOfUser } from "~/api/Leitner";
 import SplashScreen from "~/components/SplashScreen";
+import { Ionicons } from "@expo/vector-icons";
+import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
+import AppLoader from "~/components/AppLoader";
+
 
 export default function LeitnerDetail(props) {
   const level = props.route.params.level;
@@ -26,6 +30,12 @@ export default function LeitnerDetail(props) {
   const [showLoader, setShowLoader] = useState(false);
   const [offset, setOffset] = useState(6);
 
+  const [listWordAdd, setListWordAdd] = useState([]);
+  const [countWord, setcountWord] = useState(0);
+  const [btnAdd, setBtnAdd] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+
   const getVocabOfLeitnerLevel = async (level) => {
     const data = await getVocabOfLeitnerLevelOfUser(level);
     setTotal(data.totalElements);
@@ -34,6 +44,14 @@ export default function LeitnerDetail(props) {
   const handleStudy = () => {
     navigation.push("FlashcardLeitnerScreen", { level: level });
   };
+
+  useEffect(() => {
+    // console.log('\ntes count:', countWord);
+    // console.log(listWordAdd);
+    if (countWord !== 0) {
+      setBtnAdd(true);
+    }
+  }, [countWord]);
 
   useEffect(() => {
     console.log(typeof level);
@@ -54,6 +72,83 @@ export default function LeitnerDetail(props) {
         console.log(`error ::`, error);
       }
     }
+  };
+  const handleAddWord = async (obj) => {
+    setListWordAdd((pre) => [...pre, obj.vocab]);
+    setcountWord((pre) => pre + 1);
+
+  };
+  const handleRemoveWord = async (obj) => {
+    // console.log('tes remove: ', obj.vocab)
+    const data = listWordAdd.filter((item) => item !== obj.vocab);
+    setListWordAdd(data);
+    // setcountWord(listWordAdd.length);
+    setcountWord((pre) => pre - 1);
+  };
+  const handleStartToLearn = async (obj) => {
+
+    // const create = async () => {
+    //   // const listType = type === "1" ? "PUBLIC" : "PRIVATE";
+    //   try {
+    //     const newArray = listWordAdd.map(item => ({
+    //       vocabId: item.vocabId,
+    //       defId: item.definition.defId
+    //     }));
+
+    //     console.log(newArray);
+    //     setIsLoading(true);
+    //     const res = await UpVocabLeitner("up",{
+    //       level: level,
+    //       leitnerIds: newArray
+    //     });
+    //     console.log('\nresponse: ', res);
+    //     setIsLoading(false);
+    //     showToast("Success", "Create new wordlist successfully", "success");
+    //     await delay(1500);
+    //     // // navigation.navigate("YourWordlist", res);
+
+    //     navigation.goBack();
+    //   } catch (error) {
+    //     setIsLoading(false);
+    //     showToast("Error", error, "error");
+    //   }
+    // };
+    create();
+  };
+  const toastConfig = {
+    error: (props) => (
+      <ErrorToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
+    success: (props) => (
+      <SuccessToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
+  };
+  const showToast = (text1, text2, type) => {
+    Toast.show({
+      position: "top",
+      type: type,
+      text1: text1,
+      text2: text2,
+      visibilityTime: 1300,
+      autoHide: true,
+      topOffset: 50,
+    });
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -147,7 +242,11 @@ export default function LeitnerDetail(props) {
             showsVerticalScrollIndicator={false}
             data={listVocabOfLeitner}
             keyExtractor={(item) => item.definition.defId}
-            renderItem={(item) => <ItemVocabOfLeitner Vocab={item} />}
+            renderItem={(item) =>
+              <ItemVocabOfLeitner
+                Vocab={item}
+                onAddWord={(vocab) => handleAddWord(vocab)}
+                onRemoveWord={(vocab) => handleRemoveWord(vocab)} />}
             onEndReached={handleEndReach}
             ListFooterComponent={showLoader && <SplashScreen />}
           />
@@ -176,7 +275,38 @@ export default function LeitnerDetail(props) {
             </Text>
           </View>
         )}
+
+        {countWord !== 0 && (
+          <TouchableOpacity style={styles.viewButtonReturn}
+            onPress={() => {
+              console.log('test vocab1:  ', listWordAdd);
+              handleStartToLearn();
+            }}
+          >
+            <View style={styles.buttonReturn}>
+              <Ionicons name="return-up-back" size={24} color="#fff" />
+              <Text
+                style={{
+                  fontFamily: "Quicksand-SemiBold",
+                  fontSize: 16,
+                  marginLeft: 4,
+                  color: "#fff",
+                  marginTop: 2,
+                }}
+              >
+                Start to learn ( {countWord} )
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
+      <Toast
+        config={toastConfig}
+        refs={(ref) => {
+          Toast.setRef(ref);
+        }}
+      />
+      {isLoading ? <AppLoader /> : ""}
     </SafeAreaView>
   );
 }
@@ -277,5 +407,18 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
     height: "77%",
+  },
+  viewButtonReturn: {
+    backgroundColor: '#2C94E6',
+    position: 'absolute',
+    borderRadius: 20,
+    right: 20,
+    bottom: 20
+  },
+  buttonReturn: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: "100%",
+    padding: 8
   },
 });

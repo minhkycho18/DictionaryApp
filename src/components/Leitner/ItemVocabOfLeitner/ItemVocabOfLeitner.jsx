@@ -9,11 +9,18 @@ import { Fontisto } from "@expo/vector-icons";
 import { svgTrash } from "~/constants/theme";
 import { useEffect } from "react";
 import { GetColor } from "~/helper";
+import { AntDesign } from "@expo/vector-icons";
 
-export default function ItemVocabOfLeitner({ Vocab }) {
+
+export default function ItemVocabOfLeitner({
+  Vocab,
+  onAddWord,
+  onRemoveWord
+}) {
   const [word, setWord] = useState(Vocab.item.word);
   const [isLoading, setIsLoading] = useState(false);
   const [definition, setDefinition] = useState(Vocab.item.definition.wordDesc);
+  const [isSelected, setIsSelected] = useState(false);
 
   const wrapRef = useRef();
   const handleDeleteWord = async () => {
@@ -26,10 +33,28 @@ export default function ItemVocabOfLeitner({ Vocab }) {
   if (!loaded) {
     return null;
   }
+  const handleAddWordToSub = async () => {
+    // console.log('test vocab:  ', Vocab.item);
+    if (isSelected) {
+      setIsSelected(!isSelected);
+      onRemoveWord({
+        vocab: Vocab.item
+      })
 
+    }
+    else {
+      onAddWord({
+        vocab: Vocab.item
+      })
+      setIsSelected(!isSelected);
+
+    }
+  };
   return (
     <>
-      <View style={Styles.container}>
+      <TouchableOpacity style={Styles.container}
+        onPress={handleAddWordToSub}
+      >
         <View
           style={{
             ...Styles.wrappered,
@@ -65,42 +90,67 @@ export default function ItemVocabOfLeitner({ Vocab }) {
                 {isLoading && (
                   <ActivityIndicator size="small" color="#2C94E6" />
                 )}
-                <View
-                  style={{
-                    paddingTop: 1,
-                    paddingBottom: 1,
-                    paddingRight: 10,
-                    paddingLeft: 10,
-                    // paddingTop:5,
-                    borderRadius: 7,
-                    display: "flex",
-                    flexDirection: "row",
-                    // alignItems:'center',
-                    justifyContent: "center",
-                    backgroundColor: "#F5F5F5",
-                    marginRight: 15,
-                  }}
-                >
-                  <Text
-                    numberOfLines={2}
-                    style={[
-                      {
-                        color: colors.textColor,
-                        fontFamily: "Quicksand-Medium",
-                        fontSize: 14,
-                        letterSpacing: 0.2,
-                        marginRight: 2,
-                      },
-                    ]}
+
+
+                {Vocab.item.level != 0 ? (
+                  <View
+                    style={{
+                      paddingTop: 1,
+                      paddingBottom: 1,
+                      paddingRight: 10,
+                      paddingLeft: 10,
+                      // paddingTop:5,
+                      borderRadius: 7,
+                      display: "flex",
+                      flexDirection: "row",
+                      // alignItems:'center',
+                      justifyContent: "center",
+                      backgroundColor: "#F5F5F5",
+                      marginRight: 15,
+                    }}
                   >
-                    Today
-                  </Text>
-                  <SvgXml
-                    width="20"
-                    height="20"
-                    xml={svgWaitingClock("#ABABAB")}
-                  />
-                </View>
+                    <Text
+                      numberOfLines={2}
+                      style={[
+                        {
+                          color: colors.textColor,
+                          fontFamily: "Quicksand-Medium",
+                          fontSize: 14,
+                          letterSpacing: 0.2,
+                          marginRight: 2,
+                        },
+                      ]}
+                    >
+                      Today
+                    </Text>
+                    <SvgXml
+                      width="20"
+                      height="20"
+                      xml={svgWaitingClock("#ABABAB")}
+                    />
+                  </View>
+
+
+                ) : !isSelected ? (
+                  <View
+                    style={{
+                      marginRight: 10,
+                    }}
+                  >
+                    <View style={Styles.viewIcon}></View>
+
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      marginRight: 10,
+                    }}
+                  >
+                    <AntDesign name="checkcircle" size={20} color="#2C94E6" />
+                  </View>
+
+                )}
+
 
                 <TouchableOpacity
                 //  onPress={() => handleDeleteWord()}
@@ -131,7 +181,7 @@ export default function ItemVocabOfLeitner({ Vocab }) {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     </>
   );
 }

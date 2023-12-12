@@ -49,4 +49,11 @@ export const Styles = StyleSheet.create({
         alignItems: "center",
         // backgroundColor:'yellow'
     },
+    viewIcon: {
+        borderRadius: 15,
+        borderColor: '#ccc',
+        borderWidth: 2,
+        width: 20,
+        height: 20,
+     },
 })
