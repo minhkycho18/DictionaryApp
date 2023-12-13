@@ -8,7 +8,7 @@ import { colors, incorrect_correct_back } from "~/constants/theme";
 import { SvgXml } from "react-native-svg";
 import { Audio } from "expo-av";
 import { GetColor, checkNull } from "~/helper";
-import { updateLevel } from "~/api/Leitner";
+import { UpVocabLeitner } from "~/api/Leitner";
 export default function CardFlashcard_Leitner({
   onNextSlider,
   vocal,
@@ -26,7 +26,7 @@ export default function CardFlashcard_Leitner({
   const hanleClickAnswer = async (answer) => {
     if (answer === vocal.result) {
       if (level !== "7") {
-        await updateLevel("up", {
+        await UpVocabLeitner("up", {
           level: parseInt(level),
           leitnerIds: [
             {
@@ -41,7 +41,7 @@ export default function CardFlashcard_Leitner({
       }
     } else {
       if (level !== "1") {
-        await updateLevel("down", {
+        await UpVocabLeitner("down", {
           level: parseInt(level),
           leitnerIds: [
             {

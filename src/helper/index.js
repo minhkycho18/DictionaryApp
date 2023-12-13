@@ -87,3 +87,11 @@ export const compareDate = (date) => {
     return false
   }
 }
+export const getVocalIdAndDefId = (data) => {
+  return data.map(item => (
+    {
+      vocabId: item.vocabId,
+      defId: item.defId
+    }
+  ))
+}

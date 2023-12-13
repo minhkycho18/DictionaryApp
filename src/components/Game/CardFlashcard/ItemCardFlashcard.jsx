@@ -39,6 +39,8 @@ export default function ItemCardFlashcard({
           question: vocal.question,
           answer: vocal.answer,
           choose: answer,
+          vocabId: vocal.vocabId,
+          defId: vocal.defId,
         },
       ]);
       onNextSlider({

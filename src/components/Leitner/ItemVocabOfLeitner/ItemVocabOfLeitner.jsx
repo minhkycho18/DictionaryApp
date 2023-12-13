@@ -45,7 +45,11 @@ export default function ItemVocabOfLeitner({ Vocab, onAddWord, onRemoveWord }) {
   };
   return (
     <>
-      <TouchableOpacity style={Styles.container} onPress={handleAddWordToSub}>
+      <TouchableOpacity
+        style={Styles.container}
+        onPress={handleAddWordToSub}
+        disabled={Vocab.item.level !== 0 ? true : false}
+      >
         <View
           style={{
             ...Styles.wrappered,
@@ -95,7 +99,9 @@ export default function ItemVocabOfLeitner({ Vocab, onAddWord, onRemoveWord }) {
                       flexDirection: "row",
                       // alignItems:'center',
                       justifyContent: "center",
-                      backgroundColor: "#F5F5F5",
+                      backgroundColor: compareDate(Vocab.item.studyTime)
+                        ? "#ff7875"
+                        : "#F5F5F5",
                       marginRight: 15,
                     }}
                   >
@@ -103,7 +109,9 @@ export default function ItemVocabOfLeitner({ Vocab, onAddWord, onRemoveWord }) {
                       numberOfLines={2}
                       style={[
                         {
-                          color: colors.textColor,
+                          color: compareDate(Vocab.item.studyTime)
+                            ? "#fff"
+                            : colors.textColor,
                           fontFamily: "Quicksand-Medium",
                           fontSize: 14,
                           letterSpacing: 0.2,
@@ -116,7 +124,9 @@ export default function ItemVocabOfLeitner({ Vocab, onAddWord, onRemoveWord }) {
                     <SvgXml
                       width="20"
                       height="20"
-                      xml={svgWaitingClock("#ABABAB")}
+                      xml={svgWaitingClock(
+                        compareDate(Vocab.item.studyTime) ? "#fff" : "#ABABAB"
+                      )}
                     />
                   </View>
                 ) : !isSelected ? (
