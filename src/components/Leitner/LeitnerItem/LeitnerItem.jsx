@@ -13,6 +13,7 @@ export default function LeitnerItem({ type }) {
     const Level = type?.level;
     navigation.push("LeitnerDetail", {
       level: Level,
+      needStudy: type.needStudy,
     });
 
     console.log("test: ", "detail leitner");

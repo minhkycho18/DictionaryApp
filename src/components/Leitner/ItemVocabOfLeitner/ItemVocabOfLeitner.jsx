@@ -8,15 +8,11 @@ import { configFont } from "~/constants/theme";
 import { Fontisto } from "@expo/vector-icons";
 import { svgTrash } from "~/constants/theme";
 import { useEffect } from "react";
-import { GetColor } from "~/helper";
+
 import { AntDesign } from "@expo/vector-icons";
+import { GetColor, compareDate } from "~/helper";
 
-
-export default function ItemVocabOfLeitner({
-  Vocab,
-  onAddWord,
-  onRemoveWord
-}) {
+export default function ItemVocabOfLeitner({ Vocab, onAddWord, onRemoveWord }) {
   const [word, setWord] = useState(Vocab.item.word);
   const [isLoading, setIsLoading] = useState(false);
   const [definition, setDefinition] = useState(Vocab.item.definition.wordDesc);
@@ -38,23 +34,18 @@ export default function ItemVocabOfLeitner({
     if (isSelected) {
       setIsSelected(!isSelected);
       onRemoveWord({
-        vocab: Vocab.item
-      })
-
-    }
-    else {
+        vocab: Vocab.item,
+      });
+    } else {
       onAddWord({
-        vocab: Vocab.item
-      })
+        vocab: Vocab.item,
+      });
       setIsSelected(!isSelected);
-
     }
   };
   return (
     <>
-      <TouchableOpacity style={Styles.container}
-        onPress={handleAddWordToSub}
-      >
+      <TouchableOpacity style={Styles.container} onPress={handleAddWordToSub}>
         <View
           style={{
             ...Styles.wrappered,
@@ -90,7 +81,6 @@ export default function ItemVocabOfLeitner({
                 {isLoading && (
                   <ActivityIndicator size="small" color="#2C94E6" />
                 )}
-
 
                 {Vocab.item.level != 0 ? (
                   <View
@@ -129,8 +119,6 @@ export default function ItemVocabOfLeitner({
                       xml={svgWaitingClock("#ABABAB")}
                     />
                   </View>
-
-
                 ) : !isSelected ? (
                   <View
                     style={{
@@ -138,7 +126,6 @@ export default function ItemVocabOfLeitner({
                     }}
                   >
                     <View style={Styles.viewIcon}></View>
-
                   </View>
                 ) : (
                   <View
@@ -148,9 +135,7 @@ export default function ItemVocabOfLeitner({
                   >
                     <AntDesign name="checkcircle" size={20} color="#2C94E6" />
                   </View>
-
                 )}
-
 
                 <TouchableOpacity
                 //  onPress={() => handleDeleteWord()}

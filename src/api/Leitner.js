@@ -13,5 +13,5 @@ export const getDataForGame = (level) => {
     return http.get(`/leitners/levels/${level}/game`)
 }
 export const UpVocabLeitner = (statusLevel, data) => {
-    return http.patch(`/leitners/levels/${statusLevel}`,data)
+    return http.patch(`/leitners/levels/${statusLevel}`, data)
 }

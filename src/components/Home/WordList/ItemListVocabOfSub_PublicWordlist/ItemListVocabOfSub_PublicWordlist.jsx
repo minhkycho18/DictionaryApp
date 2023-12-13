@@ -38,7 +38,7 @@ export default function ItemListVocabOfSub_PublicWordlist({
               color: colors.textColor,
             }}
           >
-            No have vocal in subcategory
+            No vocabulary in subcategory
           </Text>
         </View>
       )}

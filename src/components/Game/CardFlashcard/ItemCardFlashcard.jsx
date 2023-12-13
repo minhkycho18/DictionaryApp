@@ -7,7 +7,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { colors, incorrect_correct_back } from "~/constants/theme";
 import { SvgXml } from "react-native-svg";
 import { Audio } from "expo-av";
-import { GetColor } from "~/helper";
+import { GetColor, checkNull } from "~/helper";
 import { AuthContext } from "~/context/AuthContext";
 export default function ItemCardFlashcard({
   onNextSlider,
@@ -74,9 +74,9 @@ export default function ItemCardFlashcard({
           <TouchableOpacity
             style={Styles.viewSound}
             onPress={() => playSound(vocal?.audioUk)}
-            disabled={vocal.audioUs === null}
+            disabled={!checkNull(vocal.audioUs)}
           >
-            {vocal.audioUs !== null ? (
+            {checkNull(vocal.audioUs) ? (
               <AntDesign name="sound" size={24} color="#4DB5AA" />
             ) : (
               <Image

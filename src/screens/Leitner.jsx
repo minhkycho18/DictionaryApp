@@ -17,7 +17,6 @@ import LeitnerItem from "~/components/Leitner/LeitnerItem/LeitnerItem";
 import { useNavigation } from "@react-navigation/native";
 import { getInforBoxOfUser } from "~/api/Leitner";
 import { useFocusEffect } from "@react-navigation/native";
-
 export default function Leitner() {
   const navigation = useNavigation();
 
@@ -26,7 +25,7 @@ export default function Leitner() {
     try {
       const res = await getInforBoxOfUser();
       setBoxes(res);
-    } catch (error) { }
+    } catch (error) {}
   };
   useEffect(() => {
     getBoxes();
@@ -42,9 +41,9 @@ export default function Leitner() {
   }
 
   const handleGO = () => {
-    console.log('\n\ndone nha:\n');
+    console.log("\n\ndone nha:\n");
     navigation.push("FlashcardLeitnerScreen");
-  }
+  };
 
   return (
     <SafeAreaView style={Styles.container}>
@@ -65,9 +64,9 @@ export default function Leitner() {
         </View>
         <View style={Styles.content}>
           <View style={Styles.circle_large}>
-            <TouchableOpacity style={Styles.circle_medium}
+            <TouchableOpacity
+              style={Styles.circle_medium}
               onPress={() => handleGO()}
-
             >
               <View style={Styles.circle_small}>
                 <View>

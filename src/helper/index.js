@@ -59,3 +59,31 @@ export const getNameLevel = (level) => {
   else if (level === "7") return "learned";
   else return `Box ${level}`
 }
+
+export const filterBoxes = (data, level) => {
+  data.shift();
+  if (level < 4) {
+    return data.slice(0, 5)
+  }
+  else if (level >= 4 && level < 6) {
+    return data.slice(2)
+  }
+  else if (level >= 6) {
+    return data.slice(3)
+  }
+
+}
+export const compareDate = (date) => {
+  var [datePart, timePart] = date.split(" ");
+  var [day, month, year] = datePart.split("-");
+  var [hour, minute, second] = timePart.split(":");
+  var providedDate = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+  // var providedDate = new Date(date)
+  var currentDate = new Date();
+  if (currentDate.getTime() >= providedDate.getTime()) {
+
+    return true
+  } else {
+    return false
+  }
+}
