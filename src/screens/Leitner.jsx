@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { ScrollView } from "react-native";
 import {
   StyleSheet,
@@ -16,6 +16,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LeitnerItem from "~/components/Leitner/LeitnerItem/LeitnerItem";
 import { useNavigation } from "@react-navigation/native";
 import { getInforBoxOfUser } from "~/api/Leitner";
+import { useFocusEffect } from "@react-navigation/native";
+
 export default function Leitner() {
   const navigation = useNavigation();
 
@@ -29,7 +31,11 @@ export default function Leitner() {
   useEffect(() => {
     getBoxes();
   }, []);
-
+  useFocusEffect(
+    useCallback(() => {
+      getBoxes();
+    }, [])
+  );
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
@@ -39,7 +45,7 @@ export default function Leitner() {
     console.log('\n\ndone nha:\n');
     navigation.push("FlashcardLeitnerScreen");
   }
-  
+
   return (
     <SafeAreaView style={Styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
