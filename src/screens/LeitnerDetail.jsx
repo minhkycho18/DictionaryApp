@@ -20,6 +20,7 @@ import SplashScreen from "~/components/SplashScreen";
 import { Ionicons } from "@expo/vector-icons";
 import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
 import AppLoader from "~/components/AppLoader";
+import { delay, getIdValueInArr } from "~/helper";
 
 
 export default function LeitnerDetail(props) {
@@ -87,32 +88,33 @@ export default function LeitnerDetail(props) {
   };
   const handleStartToLearn = async (obj) => {
 
-    // const create = async () => {
-    //   // const listType = type === "1" ? "PUBLIC" : "PRIVATE";
-    //   try {
-    //     const newArray = listWordAdd.map(item => ({
-    //       vocabId: item.vocabId,
-    //       defId: item.definition.defId
-    //     }));
+    const create = async () => {
+      try {
+        const newArray = listWordAdd.map(item => ({
+          vocabId: item.vocabId,
+          defId: item.definition.defId
+        }));
 
-    //     console.log(newArray);
-    //     setIsLoading(true);
-    //     const res = await UpVocabLeitner("up",{
-    //       level: level,
-    //       leitnerIds: newArray
-    //     });
-    //     console.log('\nresponse: ', res);
-    //     setIsLoading(false);
-    //     showToast("Success", "Create new wordlist successfully", "success");
-    //     await delay(1500);
-    //     // // navigation.navigate("YourWordlist", res);
+        console.log(newArray);
+        setIsLoading(true);
+        const res = await UpVocabLeitner("up",{
+          level: level,
+          leitnerIds: newArray
+        });
+        console.log('\nresponse: ', res);
+        setIsLoading(false);
+        showToast("Success", "Create new wordlist successfully", "success");
+        await delay(1500);
+        // navigation.navigate("YourWordlist", res);
 
-    //     navigation.goBack();
-    //   } catch (error) {
-    //     setIsLoading(false);
-    //     showToast("Error", error, "error");
-    //   }
-    // };
+        navigation.goBack();
+      } catch (error) {
+        setIsLoading(false);
+        console.log('\error: ', error);
+        
+        showToast("Error", error, "error");
+      }
+    };
     create();
   };
   const toastConfig = {
@@ -147,7 +149,7 @@ export default function LeitnerDetail(props) {
       text2: text2,
       visibilityTime: 1300,
       autoHide: true,
-      topOffset: 50,
+      topOffset: 60,
     });
   };
   return (
