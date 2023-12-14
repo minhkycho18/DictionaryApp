@@ -2,17 +2,35 @@ import React, { useRef, useState, useContext } from "react";
 import { Text, TouchableOpacity, Image } from "react-native";
 import { View } from "react-native";
 import { StyleSheet } from "react-native";
-import { IconLike, colors, configFont } from "~/constants/theme";
+import { colors, configFont } from "~/constants/theme";
 import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "~/context/AuthContext";
-import { updateStatusGame } from "~/api/Game";
-import { SvgXml } from "react-native-svg";
-export default function ResultGame({ result, onContinue }) {
+import { getVocalIdAndDefId } from "~/helper";
+import { addVocalToLeitner } from "~/api/Leitner";
+
+export default function ResultGame({ result, onContinue, onShowToast }) {
+  const { listFlashCardError, listSpellingError } = useContext(AuthContext);
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
   }
+  const handleAddVocabToLeitner = async () => {
+    let arr = [];
+    if (result.type === "Flashcard") {
+      arr = listFlashCardError;
+    } else {
+      arr = listSpellingError;
+    }
+    try {
+      const res = await addVocalToLeitner(getVocalIdAndDefId(arr));
+      console.log("add word to leitner ::", res);
+      onShowToast("Success", "Add vocab to leitner successful", "success");
+    } catch (error) {
+      onShowToast("Error", error, "error");
+    }
+  };
+
   return (
     <View style={Styles.cardFace}>
       {result.correct / (result.incorrect + result.correct) >= 0.5 ? (
@@ -71,7 +89,16 @@ export default function ResultGame({ result, onContinue }) {
         <View style={Styles.viewButton}>
           <TouchableOpacity
             style={Styles.buttonAddLeitner}
-            // onPress={() => onContinue()}
+            onPress={handleAddVocabToLeitner}
+            disabled={
+              result.type === "Flashcard"
+                ? listFlashCardError.length > 0
+                  ? false
+                  : true
+                : listSpellingError.length > 0
+                ? false
+                : true
+            }
           >
             <Image
               source={require("~/assets/leitner.png")}

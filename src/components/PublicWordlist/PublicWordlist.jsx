@@ -192,7 +192,7 @@ export default function PublicWordlist(props) {
                 color: colors.textTitle,
               }}
             >
-              No have wordlist
+              No results were found
             </Text>
           </View>
         )

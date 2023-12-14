@@ -8,15 +8,14 @@ import { colors, incorrect_correct_back } from "~/constants/theme";
 import { SvgXml } from "react-native-svg";
 import { Audio } from "expo-av";
 import { GetColor, checkNull } from "~/helper";
+import { UpVocabLeitner } from "~/api/Leitner";
 export default function CardFlashcard_Leitner({
   onNextSlider,
   vocal,
   totalQuestion,
+  level,
 }) {
   const [isFlip, setIsFlip] = useState(false);
-  useEffect(() => {
-    console.log(vocal);
-  }, []);
   const playSound = async (audio) => {
     const sound = new Audio.Sound();
     await sound.loadAsync({
@@ -24,16 +23,37 @@ export default function CardFlashcard_Leitner({
     });
     await sound.playAsync();
   };
-  const hanleClickAnswer = (answer) => {
+  const hanleClickAnswer = async (answer) => {
     if (answer === vocal.result) {
-      onNextSlider({
-        vocal: { vocabId: vocal.vocabId, defId: vocal.defId },
-        answer: true,
-      });
+      if (level !== "7") {
+        await UpVocabLeitner("up", {
+          level: parseInt(level),
+          leitnerIds: [
+            {
+              vocabId: vocal.vocabId,
+              defId: vocal.defId,
+            },
+          ],
+        });
+        onNextSlider({
+          upLevel: true,
+        });
+      }
     } else {
-      onNextSlider({
-        answer: false,
-      });
+      if (level !== "1") {
+        await UpVocabLeitner("down", {
+          level: parseInt(level),
+          leitnerIds: [
+            {
+              vocabId: vocal.vocabId,
+              defId: vocal.defId,
+            },
+          ],
+        });
+        onNextSlider({
+          upLevel: false,
+        });
+      }
     }
   };
   return (
@@ -157,15 +177,10 @@ export default function CardFlashcard_Leitner({
             <TouchableOpacity
               style={Styles.viewSound}
               onPress={() => playSound(vocal?.audioUk)}
-              disabled={vocal.audioUs === null}
+              disabled={!checkNull(vocal?.audioUk)}
             >
-              {vocal.audioUs !== null ? (
+              {checkNull(vocal?.audioUk) && (
                 <AntDesign name="sound" size={40} color="#402850" />
-              ) : (
-                <Image
-                  source={require("~/assets/mute.png")}
-                  style={{ width: 28, height: 28, tintColor: colors.textColor }}
-                />
               )}
             </TouchableOpacity>
           </View>
@@ -184,7 +199,7 @@ export default function CardFlashcard_Leitner({
         </View>
         {/* Back Side */}
         <View style={Styles.cardBack}>
-          <View style={{ ...Styles.content, marginTop: "45%" }}>
+          <View style={{ ...Styles.content, marginTop: "25%", height: "40%" }}>
             <View style={Styles.viewExample}>
               <Text
                 style={{

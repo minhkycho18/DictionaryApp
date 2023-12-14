@@ -36,49 +36,83 @@ export default function Index(props) {
   }
   return (
     <SafeAreaView style={Styles.container}>
-      <TouchableOpacity
-        style={Styles.iconClose}
-        onPress={() => {
-          navigation.goBack();
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "flex-end",
         }}
       >
-        <Ionicons name="close" size={30} color={colors.textTitle} />
-      </TouchableOpacity>
-      <View style={Styles.content}>
-        <View style={Styles.viewImage}>
-          <View style={Styles.imageWordlist}>
-            <Image
-              source={require("~/assets/wordlist.png")}
-              style={Styles.Image}
-            />
-          </View>
-        </View>
-        <View>
-          <Text
-            style={[
-              tw`mt-2`,
-              {
-                textAlign: "center",
-                color: colors.textTitle,
-                fontFamily: "Quicksand-Bold",
-                fontSize: 22,
-              },
-            ]}
-          >
-            {props.route.params.wordlist.title}
-          </Text>
-        </View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{
-            flex: 1,
-            marginTop: 5,
+        <TouchableOpacity
+          style={Styles.iconClose}
+          onPress={() => {
+            navigation.goBack();
           }}
         >
-          {subs.map((item) => (
-            <ItemSub key={item.subcategoryId} Sub={item} />
-          ))}
-        </ScrollView>
+          <Ionicons name="close" size={30} color={colors.textTitle} />
+        </TouchableOpacity>
+        <View style={Styles.content}>
+          <View style={Styles.viewImage}>
+            <View style={Styles.imageWordlist}>
+              <Image
+                source={require("~/assets/wordlist.png")}
+                style={Styles.Image}
+              />
+            </View>
+          </View>
+          <View>
+            <Text
+              style={[
+                tw`mt-2`,
+                {
+                  textAlign: "center",
+                  color: colors.textTitle,
+                  fontFamily: "Quicksand-Bold",
+                  fontSize: 22,
+                },
+              ]}
+            >
+              {props.route.params.wordlist.title}
+            </Text>
+          </View>
+          {subs.length > 0 ? (
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              style={{
+                flex: 1,
+                marginTop: 5,
+              }}
+            >
+              {subs.map((item) => (
+                <ItemSub key={item.subcategoryId} Sub={item} />
+              ))}
+            </ScrollView>
+          ) : (
+            <View
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                // height: "%",
+                marginTop: "20%",
+              }}
+            >
+              <Image
+                source={require("~/assets/empty.png")}
+                style={{ width: 200, height: 120 }}
+              />
+              <Text
+                style={{
+                  marginTop: 10,
+                  fontFamily: "Quicksand-SemiBold",
+                  fontSize: 18,
+                  color: colors.textTitle,
+                }}
+              >
+                You don't have any categories
+              </Text>
+            </View>
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -88,8 +122,6 @@ const Styles = StyleSheet.create({
   container: {
     marginTop: StatusBar.currentHeight,
     flex: 1,
-    display: "flex",
-    justifyContent: "flex-end",
   },
   content: {
     backgroundColor: "#fff",

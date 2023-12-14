@@ -20,8 +20,10 @@ import { useNavigation } from "@react-navigation/native";
 import { getWordListByWordlistId } from "~/api/WordList";
 import ResultGame from "~/components/Game/ResultGame";
 import { AuthContext } from "~/context/AuthContext";
+import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
+import { delay } from "~/helper";
 export default function SpellingScreen(props) {
-  const { setIsSpelling } = useContext(AuthContext);
+  const { setIsSpelling, setlistSpellingError } = useContext(AuthContext);
   const [listAnswer, setListAnswer] = useState([]);
   const [countFail, setCountFail] = useState(0);
   const [data, setData] = useState([]);
@@ -39,6 +41,7 @@ export default function SpellingScreen(props) {
     setData([...res, specialCardData]);
   };
   useEffect(() => {
+    setlistSpellingError([]);
     getGame(
       props.route.params.wordListId,
       props.route.params.subcategoryId,
@@ -94,6 +97,50 @@ export default function SpellingScreen(props) {
       }
       navigation.goBack();
     } catch (error) {}
+  };
+  const handleAddVocabToLeitner = async (text1, text2, type) => {
+    showToast(text1, text2, type);
+
+    if (type === "success") {
+      await delay(500);
+      navigation.push("FinishGame", { type: "spelling" });
+    }
+  };
+
+  const toastConfig = {
+    error: (props) => (
+      <ErrorToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
+    success: (props) => (
+      <SuccessToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
+  };
+  const showToast = (text1, text2, type) => {
+    Toast.show({
+      position: "top",
+      type: type,
+      text1: text1,
+      text2: text2,
+      visibilityTime: 1500,
+      autoHide: true,
+      topOffset: 20,
+    });
   };
 
   const [loaded] = useFonts(configFont);
@@ -152,8 +199,15 @@ export default function SpellingScreen(props) {
             >
               {item.special ? (
                 <ResultGame
-                  result={{ correct: listAnswer.length, incorrect: countFail }}
+                  result={{
+                    correct: listAnswer.length,
+                    incorrect: countFail,
+                    type: "Spelling",
+                  }}
                   onContinue={handleContinue}
+                  onShowToast={(text1, text2, type) =>
+                    handleAddVocabToLeitner(text1, text2, type)
+                  }
                 />
               ) : (
                 <ItemCardSpelling
@@ -166,6 +220,12 @@ export default function SpellingScreen(props) {
           ))}
         </ScrollView>
       </View>
+      <Toast
+        config={toastConfig}
+        refs={(ref) => {
+          Toast.setRef(ref);
+        }}
+      />
     </SafeAreaView>
   );
 }

@@ -19,6 +19,9 @@ import CardFlashcard_Leitner from "~/components/Game/CardFlashcard_Leitner/CardF
 import { getDataForGame } from "~/api/Leitner";
 export default function FlashcardLeitnerScreen(props) {
   const [data, setData] = useState([]);
+  const [changeLevel, setChangeLevel] = useState({});
+  const [downLevel, setDownLevel] = useState({});
+  const [level, setLevel] = useState(props.route.params.level);
   const [screenWidth, setScreenWidth] = useState(
     Dimensions.get("window").width
   );
@@ -28,7 +31,7 @@ export default function FlashcardLeitnerScreen(props) {
 
   const getGame = async () => {
     try {
-      const res = await getDataForGame(props.route.params.level);
+      const res = await getDataForGame(level);
       setData(res);
     } catch (error) {
       console.log("get game leitner ::", error);
@@ -36,6 +39,19 @@ export default function FlashcardLeitnerScreen(props) {
   };
 
   const handleNextSlide = async (obj) => {
+    if (obj.upLevel) {
+      setChangeLevel({
+        levelUp: (parseInt(level) + 1).toString(),
+        level: level,
+        answer: true,
+      });
+    } else {
+      setChangeLevel({
+        levelUp: (parseInt(level) - 1).toString(),
+        level: level,
+        answer: false,
+      });
+    }
     const nextSlide = currentSlide + 1;
     if (nextSlide < data.length) {
       scrollViewRef.current.scrollTo({
@@ -53,7 +69,6 @@ export default function FlashcardLeitnerScreen(props) {
   const handleRedirect = async () => {
     navigation.goBack();
   };
-
   const [loaded] = useFonts(configFont);
   if (!loaded) {
     return null;
@@ -76,7 +91,7 @@ export default function FlashcardLeitnerScreen(props) {
       </View>
       <View style={Styles.wrappered}>
         <View style={Styles.progress}>
-          <ListBoxesGame />
+          <ListBoxesGame level={level} changeLevel={changeLevel} />
         </View>
 
         <ScrollView
@@ -103,12 +118,13 @@ export default function FlashcardLeitnerScreen(props) {
             >
               <View style={Styles.content}>
                 <CardFlashcard_Leitner
-                  onNextSlider={(vocal) => handleNextSlide(vocal)}
+                  onNextSlider={(obj) => handleNextSlide(obj)}
                   vocal={item}
                   totalQuestion={{
                     index: index + 1,
                     total: data.length,
                   }}
+                  level={level}
                 />
               </View>
             </View>

@@ -74,6 +74,8 @@ export default function ItemCardSpelling(
             answer: question,
             question: vocal.wordDesc,
             choose: answer,
+            vocabId: vocal.vocabId,
+            defId: vocal.defId,
           },
         ]);
         onUpdateResult({
@@ -96,6 +98,8 @@ export default function ItemCardSpelling(
             answer: question,
             question: vocal.wordDesc,
             choose: answer,
+            vocabId: vocal.vocabId,
+            defId: vocal.defId,
           },
         ]);
         onUpdateResult({

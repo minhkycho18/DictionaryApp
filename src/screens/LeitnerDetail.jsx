@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -9,7 +9,7 @@ import {
   StatusBar,
   Image,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Entypo } from "@expo/vector-icons";
 
 import { SvgXml } from "react-native-svg";
@@ -22,7 +22,6 @@ import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
 import AppLoader from "~/components/AppLoader";
 import { delay, getIdValueInArr } from "~/helper";
 
-
 export default function LeitnerDetail(props) {
   const level = props.route.params.level;
   const [total, setTotal] = useState(0);
@@ -30,22 +29,28 @@ export default function LeitnerDetail(props) {
   const [listVocabOfLeitner, setListVocabOfLeitner] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
   const [offset, setOffset] = useState(6);
+  const [isCheck, setIsCheck] = useState(false);
 
   const [listWordAdd, setListWordAdd] = useState([]);
   const [countWord, setcountWord] = useState(0);
   const [btnAdd, setBtnAdd] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-
   const getVocabOfLeitnerLevel = async (level) => {
     const data = await getVocabOfLeitnerLevelOfUser(level);
-    setTotal(data.totalElements);
+    setTotal(data.numberOfElements);
     setListVocabOfLeitner(data.content);
+    setIsCheck(true);
   };
   const handleStudy = () => {
     navigation.push("FlashcardLeitnerScreen", { level: level });
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      getVocabOfLeitnerLevel(level);
+    }, [])
+  );
   useEffect(() => {
     // console.log('\ntes count:', countWord);
     // console.log(listWordAdd);
@@ -55,7 +60,6 @@ export default function LeitnerDetail(props) {
   }, [countWord]);
 
   useEffect(() => {
-    console.log(typeof level);
     getVocabOfLeitnerLevel(level);
   }, []);
   const handleEndReach = async () => {
@@ -77,7 +81,6 @@ export default function LeitnerDetail(props) {
   const handleAddWord = async (obj) => {
     setListWordAdd((pre) => [...pre, obj.vocab]);
     setcountWord((pre) => pre + 1);
-
   };
   const handleRemoveWord = async (obj) => {
     // console.log('tes remove: ', obj.vocab)
@@ -87,21 +90,20 @@ export default function LeitnerDetail(props) {
     setcountWord((pre) => pre - 1);
   };
   const handleStartToLearn = async (obj) => {
-
     const create = async () => {
       try {
-        const newArray = listWordAdd.map(item => ({
+        const newArray = listWordAdd.map((item) => ({
           vocabId: item.vocabId,
-          defId: item.definition.defId
+          defId: item.definition.defId,
         }));
 
         console.log(newArray);
         setIsLoading(true);
-        const res = await UpVocabLeitner("up",{
+        const res = await UpVocabLeitner("up", {
           level: level,
-          leitnerIds: newArray
+          leitnerIds: newArray,
         });
-        console.log('\nresponse: ', res);
+        console.log("\nresponse: ", res);
         setIsLoading(false);
         showToast("Success", "Create new wordlist successfully", "success");
         await delay(1500);
@@ -110,8 +112,8 @@ export default function LeitnerDetail(props) {
         navigation.goBack();
       } catch (error) {
         setIsLoading(false);
-        console.log('\error: ', error);
-        
+        console.log("error: ", error);
+
         showToast("Error", error, "error");
       }
     };
@@ -217,8 +219,12 @@ export default function LeitnerDetail(props) {
         {/* Button Study */}
         {level !== "0" && (
           <TouchableOpacity
-            style={styles.ButtonStudy}
+            style={{
+              ...styles.ButtonStudy,
+              opacity: !props.route.params.needStudy ? 0.4 : 1,
+            }}
             onPress={() => handleStudy()}
+            disabled={!props.route.params.needStudy}
           >
             <SvgXml width="30" height="30" xml={svgstudy} />
             <Text
@@ -244,44 +250,49 @@ export default function LeitnerDetail(props) {
             showsVerticalScrollIndicator={false}
             data={listVocabOfLeitner}
             keyExtractor={(item) => item.definition.defId}
-            renderItem={(item) =>
+            renderItem={(item) => (
               <ItemVocabOfLeitner
                 Vocab={item}
                 onAddWord={(vocab) => handleAddWord(vocab)}
-                onRemoveWord={(vocab) => handleRemoveWord(vocab)} />}
+                onRemoveWord={(vocab) => handleRemoveWord(vocab)}
+              />
+            )}
             onEndReached={handleEndReach}
             ListFooterComponent={showLoader && <SplashScreen />}
           />
         ) : (
-          <View
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "60%",
-            }}
-          >
-            <Image
-              source={require("~/assets/empty.png")}
-              style={{ width: 200, height: 120 }}
-            />
-            <Text
+          isCheck && (
+            <View
               style={{
-                marginTop: 10,
-                fontFamily: "Quicksand-SemiBold",
-                fontSize: 18,
-                color: colors.textTitle,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "60%",
               }}
             >
-              You don't have any words yet
-            </Text>
-          </View>
+              <Image
+                source={require("~/assets/empty.png")}
+                style={{ width: 200, height: 120 }}
+              />
+              <Text
+                style={{
+                  marginTop: 10,
+                  fontFamily: "Quicksand-SemiBold",
+                  fontSize: 18,
+                  color: colors.textTitle,
+                }}
+              >
+                You don't have any words
+              </Text>
+            </View>
+          )
         )}
 
         {countWord !== 0 && (
-          <TouchableOpacity style={styles.viewButtonReturn}
+          <TouchableOpacity
+            style={styles.viewButtonReturn}
             onPress={() => {
-              console.log('test vocab1:  ', listWordAdd);
+              console.log("test vocab1:  ", listWordAdd);
               handleStartToLearn();
             }}
           >
@@ -352,6 +363,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     paddingLeft: 20,
     paddingRight: 20,
+
     // marginRight: 1
   },
   ButtonAdd: {
@@ -411,16 +423,16 @@ const styles = StyleSheet.create({
     height: "77%",
   },
   viewButtonReturn: {
-    backgroundColor: '#2C94E6',
-    position: 'absolute',
+    backgroundColor: "#2C94E6",
+    position: "absolute",
     borderRadius: 20,
     right: 20,
-    bottom: 20
+    bottom: 20,
   },
   buttonReturn: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     width: "100%",
-    padding: 8
+    padding: 8,
   },
 });

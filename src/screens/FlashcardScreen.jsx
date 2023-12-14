@@ -20,9 +20,11 @@ import ItemCardFlashcard from "~/components/Game/CardFlashcard/ItemCardFlashcard
 import { getGameFromSub, updateStatusGame } from "~/api/Game";
 import ResultGame from "~/components/Game/ResultGame";
 import { AuthContext } from "~/context/AuthContext";
+import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
+import { delay } from "~/helper";
 
 export default function FlashcardScreen(props) {
-  const { setIsFlashcard } = useContext(AuthContext);
+  const { setIsFlashcard, setlistFlashCardError } = useContext(AuthContext);
   const [listAnswer, setListAnswer] = useState([]);
   const [data, setData] = useState([]);
   const [countFail, setCountFail] = useState(0);
@@ -62,12 +64,58 @@ export default function FlashcardScreen(props) {
   };
 
   useEffect(() => {
+    setlistFlashCardError([]);
     getGame(
       props.route.params.wordListId,
       props.route.params.subcategoryId,
       "flashcard"
     );
   }, []);
+
+  const handleAddVocabToLeitner = async (text1, text2, type) => {
+    showToast(text1, text2, type);
+
+    if (type === "success") {
+      await delay(500);
+      navigation.push("FinishGame", { type: "flashcard" });
+    }
+  };
+
+  const toastConfig = {
+    error: (props) => (
+      <ErrorToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
+    success: (props) => (
+      <SuccessToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
+  };
+  const showToast = (text1, text2, type) => {
+    Toast.show({
+      position: "top",
+      type: type,
+      text1: text1,
+      text2: text2,
+      visibilityTime: 1500,
+      autoHide: true,
+      topOffset: 40,
+    });
+  };
 
   const handleRedirect = async () => {
     try {
@@ -163,8 +211,12 @@ export default function FlashcardScreen(props) {
                     result={{
                       correct: listAnswer.length,
                       incorrect: countFail,
+                      type: "Flashcard",
                     }}
                     onContinue={handleContinue}
+                    onShowToast={(text1, text2, type) =>
+                      handleAddVocabToLeitner(text1, text2, type)
+                    }
                   />
                 </View>
               ) : (
@@ -180,6 +232,12 @@ export default function FlashcardScreen(props) {
           ))}
         </ScrollView>
       </View>
+      <Toast
+        config={toastConfig}
+        refs={(ref) => {
+          Toast.setRef(ref);
+        }}
+      />
 
       {/* </View> */}
     </SafeAreaView>

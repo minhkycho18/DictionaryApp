@@ -223,7 +223,6 @@ export default function YourWordlistDetail() {
             Study
           </Text>
         </TouchableOpacity>
-
         {/* List Subcategory */}
         {subCategories.length > 0 ? (
           <View style={styles.dropdown}>
@@ -266,14 +265,12 @@ export default function YourWordlistDetail() {
                   color: colors.textTitle,
                 }}
               >
-                You don't have any categories yet
+                You don't have any categories
               </Text>
             </View>
           )
         )}
-
         {/* Add new Subcategory */}
-
         <TouchableOpacity style={styles.ButtonAdd} onPress={handleModalAdd}>
           <Ionicons
             name="add"
@@ -338,8 +335,9 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "#CFC5EA",
-    width: "80%",
+    width: "75%",
     height: "22%",
+
     // borderBottomRightRadius: 60,
   },
   body: {

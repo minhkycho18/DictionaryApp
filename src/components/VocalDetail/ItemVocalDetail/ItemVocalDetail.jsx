@@ -16,6 +16,7 @@ function ItemVocalDetail({
   onPresentModal,
   stateOfSub,
   toastLeitner,
+  toasError,
 }) {
   const [isWordlist, setIsWordlist] = useState(definition.isWordOfUserWordlist);
   const [isWordOfUserLeitner, setIsWordOfUserLeitner] = useState(
@@ -30,19 +31,18 @@ function ItemVocalDetail({
   const addLeitner = async (vocabId, defId) => {
     try {
       if (isLogin) {
-        const res = await addVocalToLeitner({
-          vocabId: vocabId,
-          defId: defId,
-        });
+        const res = await addVocalToLeitner([
+          { vocabId: vocabId, defId: defId },
+        ]);
         console.log(res);
         toastLeitner("Success", res, "success");
         setIsWordOfUserLeitner(true);
       } else {
-        toastLeitner("Error", "add vocal to leitner", "error");
+        toastLeitner("Error", "add vocab to leitner", "error");
       }
     } catch (error) {
       console.log(error);
-      toastLeitner("Error", error, "error");
+      toasError("Error", error);
     }
   };
   useFocusEffect(
@@ -114,7 +114,7 @@ function ItemVocalDetail({
                       })
                     : toastLeitner(
                         "Error",
-                        "add vocal to your wordlist",
+                        "add vocab to your wordlist",
                         "error"
                       )
                 }

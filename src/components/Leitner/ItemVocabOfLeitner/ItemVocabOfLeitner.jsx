@@ -8,15 +8,11 @@ import { configFont } from "~/constants/theme";
 import { Fontisto } from "@expo/vector-icons";
 import { svgTrash } from "~/constants/theme";
 import { useEffect } from "react";
-import { GetColor } from "~/helper";
+
 import { AntDesign } from "@expo/vector-icons";
+import { GetColor, compareDate } from "~/helper";
 
-
-export default function ItemVocabOfLeitner({
-  Vocab,
-  onAddWord,
-  onRemoveWord
-}) {
+export default function ItemVocabOfLeitner({ Vocab, onAddWord, onRemoveWord }) {
   const [word, setWord] = useState(Vocab.item.word);
   const [isLoading, setIsLoading] = useState(false);
   const [definition, setDefinition] = useState(Vocab.item.definition.wordDesc);
@@ -38,22 +34,21 @@ export default function ItemVocabOfLeitner({
     if (isSelected) {
       setIsSelected(!isSelected);
       onRemoveWord({
-        vocab: Vocab.item
-      })
-
-    }
-    else {
+        vocab: Vocab.item,
+      });
+    } else {
       onAddWord({
-        vocab: Vocab.item
-      })
+        vocab: Vocab.item,
+      });
       setIsSelected(!isSelected);
-
     }
   };
   return (
     <>
-      <TouchableOpacity style={Styles.container}
+      <TouchableOpacity
+        style={Styles.container}
         onPress={handleAddWordToSub}
+        disabled={Vocab.item.level !== 0 ? true : false}
       >
         <View
           style={{
@@ -91,7 +86,6 @@ export default function ItemVocabOfLeitner({
                   <ActivityIndicator size="small" color="#2C94E6" />
                 )}
 
-
                 {Vocab.item.level != 0 ? (
                   <View
                     style={{
@@ -105,7 +99,9 @@ export default function ItemVocabOfLeitner({
                       flexDirection: "row",
                       // alignItems:'center',
                       justifyContent: "center",
-                      backgroundColor: "#F5F5F5",
+                      backgroundColor: compareDate(Vocab.item.studyTime)
+                        ? "#ff7875"
+                        : "#F5F5F5",
                       marginRight: 15,
                     }}
                   >
@@ -113,7 +109,9 @@ export default function ItemVocabOfLeitner({
                       numberOfLines={2}
                       style={[
                         {
-                          color: colors.textColor,
+                          color: compareDate(Vocab.item.studyTime)
+                            ? "#fff"
+                            : colors.textColor,
                           fontFamily: "Quicksand-Medium",
                           fontSize: 14,
                           letterSpacing: 0.2,
@@ -126,11 +124,11 @@ export default function ItemVocabOfLeitner({
                     <SvgXml
                       width="20"
                       height="20"
-                      xml={svgWaitingClock("#ABABAB")}
+                      xml={svgWaitingClock(
+                        compareDate(Vocab.item.studyTime) ? "#fff" : "#ABABAB"
+                      )}
                     />
                   </View>
-
-
                 ) : !isSelected ? (
                   <View
                     style={{
@@ -138,7 +136,6 @@ export default function ItemVocabOfLeitner({
                     }}
                   >
                     <View style={Styles.viewIcon}></View>
-
                   </View>
                 ) : (
                   <View
@@ -148,9 +145,7 @@ export default function ItemVocabOfLeitner({
                   >
                     <AntDesign name="checkcircle" size={20} color="#2C94E6" />
                   </View>
-
                 )}
-
 
                 <TouchableOpacity
                 //  onPress={() => handleDeleteWord()}

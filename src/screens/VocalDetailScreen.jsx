@@ -130,6 +130,7 @@ function VocalDetail() {
                     showToast(t1, t2, t3);
                   }
                 }}
+                toasError={(t1, t2) => handleError(t1, t2)}
               />
             </View>
           );

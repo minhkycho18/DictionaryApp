@@ -177,7 +177,7 @@ export default function YourWordList() {
                 color: colors.textTitle,
               }}
             >
-              You don't have any wordlists yet
+              You don't have any wordlists
             </Text>
           </View>
         )
