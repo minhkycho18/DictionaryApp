@@ -1,5 +1,5 @@
 package com.pbl6.dictionaryappbe.persistence.vocabulary;
 
 public enum VocabularyStatus {
-    DEFAULT, PENDING, REJECTED, PERSONAL
+    DEFAULT, PENDING, REJECTED, PERSONAL, APPROVED
 }

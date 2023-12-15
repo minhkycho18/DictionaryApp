@@ -13,15 +13,11 @@ import java.util.Objects;
 
 @Mapper(componentModel = "spring")
 public interface VocabularyMapper {
-    @Mapping(target = "id", source = "vocabId")
-    @Mapping(target = "definitions", source = "vocabDefs", qualifiedByName = "convertVocabDefsToDefDetail")
-    VocabDetailDto toVocabDetailDto(Vocabulary vocabulary);
-
     @Named("convertVocabDefsToDefDetail")
     static List<DefinitionDetailDto> convertVocabDefsToDefDetail(List<VocabDef> vocabDefs) {
         return vocabDefs.stream()
                 .map(vocabDef -> {
-                    if(!vocabDef.isDeleted()) {
+                    if (!vocabDef.isDeleted()) {
                         return DefinitionDetailDto.builder()
                                 .defId(vocabDef.getDefinition().getDefId())
                                 .wordDesc(vocabDef.getDefinition().getWordDesc())
@@ -38,4 +34,8 @@ public interface VocabularyMapper {
                 .filter(Objects::nonNull)
                 .toList();
     }
+
+    @Mapping(target = "id", source = "vocabId")
+    @Mapping(target = "definitions", source = "vocabDefs", qualifiedByName = "convertVocabDefsToDefDetail")
+    VocabDetailDto toVocabDetailDto(Vocabulary vocabulary);
 }

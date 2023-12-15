@@ -1,9 +1,11 @@
 package com.pbl6.dictionaryappbe.controller;
 
-import com.pbl6.dictionaryappbe.dto.UserDto;
 import com.pbl6.dictionaryappbe.dto.auth.AuthenticationRequestDto;
 import com.pbl6.dictionaryappbe.dto.auth.AuthenticationResponseDto;
+import com.pbl6.dictionaryappbe.dto.auth.PasswordDto;
 import com.pbl6.dictionaryappbe.dto.auth.RegisterRequestDto;
+import com.pbl6.dictionaryappbe.dto.user.UpdateUserDto;
+import com.pbl6.dictionaryappbe.dto.user.UserDto;
 import com.pbl6.dictionaryappbe.mapper.UserMapper;
 import com.pbl6.dictionaryappbe.persistence.role.RoleName;
 import com.pbl6.dictionaryappbe.persistence.user.User;
@@ -103,9 +105,9 @@ public class UserController {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),
             @ApiResponse(responseCode = "401", description = "Authentication failed")})
     @PostMapping("/lock")
-    public String lockAccount(@RequestParam(name = "id") Long id) throws AccessDeniedException {
+    public ResponseEntity<String> lockAccount(@RequestParam(name = "id") Long id) throws AccessDeniedException {
         checkPermissionAndExecute(id, AccountStatus.LOCK);
-        return "Lock successfully";
+        return ResponseEntity.ok("Lock successfully");
     }
 
     @Operation(summary = "Unlock account", security = {@SecurityRequirement(name = "bearer-key")})
@@ -114,10 +116,32 @@ public class UserController {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),
             @ApiResponse(responseCode = "401", description = "Authentication failed")})
     @PostMapping("/unlock")
-    public String unlockAccount(@RequestParam(name = "id") Long id) throws AccessDeniedException {
+    public ResponseEntity<String> unlockAccount(@RequestParam(name = "id") Long id) throws AccessDeniedException {
         checkPermissionAndExecute(id, AccountStatus.UNLOCK);
-        return "Unlock successfully";
+        return ResponseEntity.ok("Unlock successfully");
     }
+
+    @Operation(summary = "Change password", security = {@SecurityRequirement(name = "bearer-key")})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Unlock account Success",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),
+            @ApiResponse(responseCode = "401", description = "Authentication failed")})
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody PasswordDto passwordDto) {
+        userService.changePassword(passwordDto);
+        return ResponseEntity.ok("Changed successfully");
+    }
+
+    @Operation(summary = "Update profile", security = {@SecurityRequirement(name = "bearer-key")})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Changed successfully",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))}),
+            @ApiResponse(responseCode = "401", description = "Authentication failed")})
+    @PatchMapping
+    public UserDto updateProfile(@RequestBody UpdateUserDto updateUserDto) {
+        return userService.updateProfile(updateUserDto);
+    }
+
 
     private void checkPermissionAndExecute(Long id, AccountStatus action) throws AccessDeniedException {
         User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
