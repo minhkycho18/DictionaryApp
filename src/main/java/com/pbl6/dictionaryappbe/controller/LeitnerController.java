@@ -41,8 +41,8 @@ public class LeitnerController {
             @ApiResponse(responseCode = "400", description = "Invalid data")})
     @PostMapping
     public ResponseEntity<String> addVocabLeitner(@Valid @RequestBody List<VocabLeitnerRequestDto> leitnerRequestDto) {
-        leitnerService.addVocabToLeitner(leitnerRequestDto);
-        return new ResponseEntity<>("Add vocabulary to leitner successfully", HttpStatus.CREATED);
+        int numberOfVocab = leitnerService.addVocabToLeitner(leitnerRequestDto);
+        return new ResponseEntity<>("Add " + numberOfVocab + " vocabulary to leitner successfully", HttpStatus.CREATED);
     }
 
     @Operation(summary = "Show user's leitner boxes", security = {@SecurityRequirement(name = "bearer-key")})
