@@ -79,6 +79,14 @@
       color: #0b043d;
     }
   }
+  &__password {
+    font-size: 18px;
+    color: #ff504e;
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
 }
 .ava {
   position: absolute;

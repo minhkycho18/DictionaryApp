@@ -1,5 +1,20 @@
-import { EditFilled, MailOutlined } from "@ant-design/icons";
-import { Avatar, Button, Modal, Space } from "antd";
+import {
+  EditFilled,
+  LockOutlined,
+  MailOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import {
+  Avatar,
+  Button,
+  Form,
+  Input,
+  Modal,
+  Select,
+  Space,
+  Upload,
+  message,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import "./Profile.scss";
 // import { useNavigate } from "react-router-dom";
@@ -7,60 +22,282 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserProfile } from "../../../stores/user/userThunk";
 import { RiGenderlessLine } from "react-icons/ri";
 import { capitalizeFirstLetter } from "../../../helpers/changeTitle";
+import { Option } from "antd/es/mentions";
+const formItemLayout = {
+  labelCol: {
+    xs: {
+      span: 24,
+    },
+    sm: {
+      span: 8,
+    },
+  },
+  wrapperCol: {
+    xs: {
+      span: 24,
+    },
+    sm: {
+      span: 16,
+    },
+  },
+};
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+    },
+    sm: {
+      span: 16,
+      offset: 8,
+    },
+  },
+};
 const Profile = () => {
   // const navigate = useNavigate();
   const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.profile);
   const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [form] = Form.useForm();
+  const [type, setType] = useState("");
+  const [isFormChanged, setIsFormChanged] = useState(false);
+  const [formValues, setFormValues] = useState({
+    email: profile?.email || "",
+    name: profile?.name || "",
+    gender: profile?.gender || undefined,
+    password: null,
+    confirm: null,
+  });
+  const [messageApi, contextHolder] = message.useMessage();
+
+  useEffect(() => {
+    form.setFieldsValue(formValues);
+  }, [formValues, form]);
   useEffect(() => {
     dispatch(getUserProfile());
   }, [dispatch]);
-  const showModal = () => {
+  const handleFormChange = (changedValues, allValues) => {
+    setFormValues(allValues);
+  };
+
+  const showModal = (type) => {
+    setType(type);
     setOpen(true);
   };
-  const handleOk = () => {
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
-  };
+
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setOpen(false);
   };
+  const onFinish = (values) => {
+    if (type === "profile") {
+      console.log("Received values of form: ", values);
+
+      setType("");
+      form.setFieldsValue(formValues);
+      setOpen(false);
+    }
+    if (type === "password") {
+      const { password, confirm } = values;
+
+      if (password === confirm) {
+        messageApi.success("Password updated successfully!");
+      } else {
+        messageApi.error("New password does not match confirmation password!");
+      }
+      setType("");
+      form.setFieldsValue(formValues);
+      setOpen(false);
+    }
+  };
+  // const normFile = (e) => {
+  //   if (Array.isArray(e)) {
+  //     return e;
+  //   }
+  //   return e?.fileList;
+  // };
+  useEffect(() => {
+    const isChanged =
+      JSON.stringify(formValues) !==
+      JSON.stringify({
+        email: profile?.email || "",
+        name: profile?.name || "",
+        gender: profile?.gender || undefined,
+        password: profile?.password,
+      });
+    setIsFormChanged(isChanged);
+  }, [formValues, profile]);
+  const renderProfile = (
+    <Form
+      {...formItemLayout}
+      form={form}
+      name="profile"
+      onFinish={onFinish}
+      onValuesChange={handleFormChange}
+    >
+      <Form.Item name="email" label="E-mail">
+        <Input value={profile?.email} disabled />
+      </Form.Item>
+
+      <Form.Item
+        name="name"
+        label="Name"
+        tooltip="What do you want others to call you?"
+        rules={[
+          {
+            required: true,
+            message: "Please input your nickname!",
+            whitespace: true,
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        name="gender"
+        label="Gender"
+        rules={[
+          {
+            required: true,
+            message: "Please select gender!",
+          },
+        ]}
+      >
+        <Select placeholder="select your gender">
+          <Option value="MALE">Male</Option>
+          <Option value="FEMALE">Female</Option>
+          <Option value="OTHER">Other</Option>
+        </Select>
+      </Form.Item>
+      {/* <Form.Item
+        label="Upload"
+        valuePropName="fileList"
+        getValueFromEvent={normFile}
+      >
+        <Upload action="/upload.do" listType="picture-card">
+          <div>
+            <PlusOutlined />
+            <div
+              style={{
+                marginTop: 8,
+              }}
+            >
+              Upload
+            </div>
+          </div>
+        </Upload>
+      </Form.Item> */}
+      <Form.Item {...tailFormItemLayout}>
+        <Button type="primary" htmlType="submit" disabled={!isFormChanged}>
+          Confirm
+        </Button>
+        <Button type="" onClick={handleCancel}>
+          Cancel
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+  const renderPasswordChange = (
+    <Form {...formItemLayout} form={form} name="profile" onFinish={onFinish}>
+      <Form.Item
+        name="password"
+        label="New Password"
+        rules={[
+          {
+            required: true,
+            message: "Please input your new password!",
+          },
+          {
+            min: 8,
+            message: "At least 8 characters long.",
+          },
+          {
+            pattern: /^\S*$/,
+            message: "Password cannot contain spaces.",
+          },
+        ]}
+        hasFeedback
+      >
+        <Input.Password />
+      </Form.Item>
+      <Form.Item
+        name="confirm"
+        label="Confirm Password"
+        dependencies={["password"]}
+        hasFeedback
+        rules={[
+          {
+            required: true,
+            message: "Please confirm your password!",
+          },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (!value || getFieldValue("password") === value) {
+                return Promise.resolve();
+              }
+              return Promise.reject(
+                new Error("The new password that you entered do not match!")
+              );
+            },
+          }),
+        ]}
+      >
+        <Input.Password />
+      </Form.Item>
+      <Form.Item {...tailFormItemLayout}>
+        <Button type="primary" htmlType="submit">
+          Confirm
+        </Button>
+        <Button type="" onClick={handleCancel}>
+          Cancel
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+  // const =
   return (
     <Space className="profile-wrap">
       <Modal
-        title="Title"
+        title="Edit Profile"
         open={open}
-        onOk={handleOk}
-        confirmLoading={confirmLoading}
+        footer={false}
         onCancel={handleCancel}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        {type === "profile" ? renderProfile : renderPasswordChange}
       </Modal>
+      {contextHolder}
       <Space className="profileCard">
         <Space className="profileCard--top">
           <Space className="ava">
-            <Avatar
-              size={160}
-              style={{
-                backgroundColor: "#fff",
-                color: "#f56a00",
-              }}
-              className="ava--infor"
-            >
-              {profile?.name[0]}
-            </Avatar>
+            {profile.image && (
+              <Avatar
+                size={160}
+                style={{
+                  backgroundColor: "#fff",
+                  color: "#f56a00",
+                }}
+                className="ava--infor"
+                src={profile?.image}
+              />
+            )}
+            {!profile.image && (
+              <Avatar
+                size={160}
+                style={{
+                  backgroundColor: "#fff",
+                  color: "#f56a00",
+                }}
+                className="ava--infor"
+              >
+                {profile?.name[0]}
+              </Avatar>
+            )}
+
             <div className="infor__name name">{profile?.name}</div>
           </Space>
         </Space>
         <div className="profileCard--bottom" direction="vertical">
-          <Space className="button--wrap" onClick={showModal}>
+          <Space className="button--wrap" onClick={() => showModal("profile")}>
             <Button className="button--edit">
               Edit Profile
               <EditFilled />
@@ -77,6 +314,7 @@ const Profile = () => {
               </span>
             </Space>
           </Space>
+
           <Space className="email-group">
             <Space className="email-group__icon">
               <RiGenderlessLine style={{ fontSize: "20px", color: "#000" }} />
@@ -85,6 +323,21 @@ const Profile = () => {
               <span className="email-group__content--title">Gender</span>
               <span className="email-group__content--mail">
                 {capitalizeFirstLetter(profile?.gender.toLocaleLowerCase())}
+              </span>
+            </Space>
+          </Space>
+          <Space className="email-group">
+            <Space className="email-group__icon">
+              <LockOutlined style={{ fontSize: "20px", color: "#000" }} />
+            </Space>
+            <Space
+              className="email-group__content"
+              direction="vertical"
+              onClick={() => showModal("password")}
+            >
+              {/* <span className="email-group__content--title">Email</span> */}
+              <span className="email-group__password email-group__content--mail">
+                Change Password
               </span>
             </Space>
           </Space>
