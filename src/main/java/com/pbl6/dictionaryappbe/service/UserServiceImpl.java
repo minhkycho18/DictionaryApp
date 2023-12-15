@@ -1,13 +1,18 @@
 package com.pbl6.dictionaryappbe.service;
 
+import com.pbl6.dictionaryappbe.dto.auth.PasswordDto;
 import com.pbl6.dictionaryappbe.dto.auth.RegisterRequestDto;
+import com.pbl6.dictionaryappbe.dto.user.UpdateUserDto;
+import com.pbl6.dictionaryappbe.dto.user.UserDto;
 import com.pbl6.dictionaryappbe.exception.DuplicateDataException;
+import com.pbl6.dictionaryappbe.mapper.UserMapper;
 import com.pbl6.dictionaryappbe.persistence.role.Role;
 import com.pbl6.dictionaryappbe.persistence.role.RoleName;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.repository.RoleRepository;
 import com.pbl6.dictionaryappbe.repository.UserRepository;
 import com.pbl6.dictionaryappbe.utils.AccountStatus;
+import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service("userService")
@@ -25,6 +31,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -73,5 +80,30 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             user.setIsLock(false);
         }
         userRepository.save(user);
+    }
+
+    @Override
+    public void changePassword(PasswordDto password) {
+        User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
+        if (passwordEncoder.matches(password.getOldPassword(), user.getPassword())) {
+            String newPassword = passwordEncoder.encode(password.getNewPassword());
+            user.setPassword(newPassword);
+            userRepository.save(user);
+        } else {
+            throw new DuplicateDataException("Your current password is wrong");
+        }
+    }
+
+    @Override
+    public UserDto updateProfile(UpdateUserDto updateUserDto) {
+        User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
+        if (updateUserDto.getName() != null && !updateUserDto.getName().isEmpty()) {
+            user.setName(updateUserDto.getName());
+        }
+        if (updateUserDto.getAvatar() != null && !updateUserDto.getAvatar().isEmpty()) {
+            user.setImage(updateUserDto.getAvatar());
+        }
+        User updatedUser = userRepository.save(user);
+        return userMapper.entityToUserDTO(updatedUser);
     }
 }

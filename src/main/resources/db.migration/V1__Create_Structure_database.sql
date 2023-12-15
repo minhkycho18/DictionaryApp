@@ -100,6 +100,7 @@ CREATE TABLE `users` (
   `password` text NOT NULL,
   `image` text,
   `role_id` int NOT NULL,
+  `created_at` timestamp,
   PRIMARY KEY (`user_id`),
   KEY `role_id` (`role_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`)

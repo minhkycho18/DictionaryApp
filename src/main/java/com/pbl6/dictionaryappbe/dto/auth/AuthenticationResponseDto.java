@@ -1,7 +1,7 @@
 package com.pbl6.dictionaryappbe.dto.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.pbl6.dictionaryappbe.dto.UserDto;
+import com.pbl6.dictionaryappbe.dto.user.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

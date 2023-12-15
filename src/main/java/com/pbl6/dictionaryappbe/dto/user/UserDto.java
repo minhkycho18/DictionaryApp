@@ -1,4 +1,4 @@
-package com.pbl6.dictionaryappbe.dto;
+package com.pbl6.dictionaryappbe.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pbl6.dictionaryappbe.persistence.role.Role;
