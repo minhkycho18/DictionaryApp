@@ -1,9 +1,4 @@
-import {
-  EditFilled,
-  LockOutlined,
-  MailOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { EditFilled, LockOutlined, MailOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Button,
@@ -12,17 +7,16 @@ import {
   Modal,
   Select,
   Space,
-  Upload,
   message,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import "./Profile.scss";
 // import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getUserProfile } from "../../../stores/user/userThunk";
-import { RiGenderlessLine } from "react-icons/ri";
-import { capitalizeFirstLetter } from "../../../helpers/changeTitle";
 import { Option } from "antd/es/mentions";
+import { RiGenderlessLine } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { capitalizeFirstLetter } from "../../../helpers/changeTitle";
+import { getUserProfile } from "../../../stores/user/userThunk";
 const formItemLayout = {
   labelCol: {
     xs: {

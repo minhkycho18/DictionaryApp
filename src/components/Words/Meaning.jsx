@@ -19,28 +19,22 @@ import { addWordToSubcategory } from "../../stores/subcategory/subcategoryThunk"
 import { createNewWL } from "../../stores/word-lists/wordLists-thunk";
 import SubChoice from "../Category/SubChoice/SubChoice";
 import "./Meaning.scss";
-const Meaning = ({ detail }) => {
-  const [isChoice, setIsChoice] = useState(false);
+const Meaning = ({ detail, handleAddLeitner }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { wordLists } = useSelector((state) => state.wordLists);
-  const { loadingAdd } = useSelector((state) => state.search);
   const [wlAdded, setWlAdded] = useState();
-  const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isAddWL, setIsAddWL] = useState(false);
   const [wlTitle, setWlTitle] = useState("");
   const [wlDesc, setWlDesc] = useState("");
   const [wlType, setWlType] = useState("PUBLIC");
-
   useEffect(() => {
-    // if (errorAdd) {
-    //   // messageApi.error("This word has been added");
-    // }
     return () => {
       dispatch(setErrorAdd());
     };
-  }, [dispatch, loadingAdd, messageApi]);
+  }, [dispatch]);
 
   const handleOk = () => {
     setIsModalOpen(false);
@@ -48,9 +42,7 @@ const Meaning = ({ detail }) => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const handleAddLeitner = (e) => {
-    setIsChoice(!isChoice);
-  };
+
   const handleAddWordlist = (e) => {
     const token = getTokenFromStorage();
     if (token) {
@@ -166,7 +158,15 @@ const Meaning = ({ detail }) => {
           className={`choice__item ${
             definition?.isWordOfUserLeitner ? "icon--active" : ""
           }`}
-          onClick={handleAddLeitner}
+          onClick={() =>
+            handleAddLeitner([
+              {
+                vocabId: detail.id,
+                defId: definition.defId,
+                isWordOfUserLeitner: definition?.isWordOfUserLeitner,
+              },
+            ])
+          }
         >
           <InboxOutlined className="choice__icon " />
           <PlusCircleFilled className="choice__icon--sub" />

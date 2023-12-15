@@ -10,6 +10,7 @@ import {
   getSubType,
   updateSub,
 } from "../../api/Subcategory/subcategory.api";
+import { addVocabToLeitner } from "../../api/Leitner/leitner.api";
 
 export const getSubcategory = createAsyncThunk(
   "subcategory/getSubcategory",
@@ -61,6 +62,17 @@ export const addWordToSubcategory = createAsyncThunk(
   async (params, thunkApi) => {
     try {
       const response = await addWordToSub(params);
+      return response;
+    } catch (error) {
+      throw thunkApi.rejectWithValue(error);
+    }
+  }
+);
+export const addWordToLeitner = createAsyncThunk(
+  "subcategory/addWordToLeitner",
+  async (params, thunkApi) => {
+    try {
+      const response = await addVocabToLeitner(params);
       return response;
     } catch (error) {
       throw thunkApi.rejectWithValue(error);

@@ -30,7 +30,7 @@ const Dictionary = () => {
   const debounceInputKey = useRef(
     debounce((nextValue) => {
       setIsSelected(false);
-      dispatch(getSearchResult({keyword: nextValue, offset: 0}));
+      dispatch(getSearchResult({ keyword: nextValue, offset: 0 }));
     }, 500)
   ).current;
 
@@ -81,7 +81,7 @@ const Dictionary = () => {
           <Avatar src={en} className="language__flag"></Avatar>
         </Space>
       </Space>
-      {isSelected ? (
+      {!loading && isSelected ? (
         <Space>
           <Phonetic />
         </Space>

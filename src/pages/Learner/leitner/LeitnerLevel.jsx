@@ -1,4 +1,8 @@
-import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  LoadingOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Checkbox,
@@ -7,6 +11,7 @@ import {
   Pagination,
   Select,
   Space,
+  Spin,
   Tag,
   Tooltip,
 } from "antd";
@@ -25,6 +30,7 @@ import { setCurrentLeitnerLevel } from "../../../stores/leitner/leitnerSlice";
 import "./LeitnerGame.scss";
 import { PiClockCounterClockwiseBold } from "react-icons/pi";
 import DeleteModal from "../../Manager/WordList/CustomModals/DeleteModal";
+import compareDate from "../../../helpers/checkDateTimeLearned";
 const LeitnerLevel = (props) => {
   const loader = useLoaderData();
   const [vocabs, setVocabs] = useState();
@@ -32,6 +38,7 @@ const LeitnerLevel = (props) => {
   const [keyword, setKeywords] = useState("");
   const [currentPos, setCurrentPos] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false);
   const [offset, setOffset] = useState(0);
   const [selectedIds, setSelectedIds] = useState([]);
   const dispatch = useDispatch();
@@ -40,14 +47,17 @@ const LeitnerLevel = (props) => {
 
   //=======================================================================================================================================================
   useEffect(() => {
+    setLoading(true);
     dispatch(setCurrentLeitnerLevel(+loader.data.level));
     const _getAllVocab = async () => {
       const result = await getLeitnerVocabs({
         level: +loader.data.level,
         offset: offset,
+        pos: currentPos === "All" ? null : currentPos,
       });
       if (result) {
         setVocabs(result);
+        setLoading(false);
       }
     };
     const _getAllPos = async () => {
@@ -60,7 +70,7 @@ const LeitnerLevel = (props) => {
     };
     _getAllPos();
     _getAllVocab();
-  }, [dispatch, loader.data.level, offset]);
+  }, [currentPos, dispatch, loader.data.level, offset]);
   //=======================================================================================================================================================
 
   const onChangePosFilter = async (value) => {
@@ -175,6 +185,7 @@ const LeitnerLevel = (props) => {
   const checkAll = vocabs && vocabs.content.length === selectedIds.length;
   const indeterminate =
     selectedIds.length > 0 && selectedIds.length < vocabs.content.length;
+
   //=======================================================================================================================================================
 
   const renderVocabInSub =
@@ -219,14 +230,14 @@ const LeitnerLevel = (props) => {
           <Tag color={colorPos.get(vocab?.pos)} style={{ fontSize: "15px" }}>
             {upperFirst(vocab?.pos)}
           </Tag>
-          <Space
+          {/* <Space
             style={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
             }}
-          >
-            <Space
+          > */}
+          {/* <Space
               style={{
                 borderLeft: "1px solid #ccc",
                 lineHeight: "28px",
@@ -235,15 +246,18 @@ const LeitnerLevel = (props) => {
                 alignItems: "center",
               }}
             >
-              Today
-            </Space>
+              {" "}
+            </Space> */}
+          {+loader.data.level !== 0 && (
             <PiClockCounterClockwiseBold
               style={{
                 fontSize: "20px",
-                color: "#6c757d",
+                color: `${
+                  compareDate(vocab?.studyTime) ? "#52c41a" : "#ff7875"
+                }`,
               }}
             />
-          </Space>
+          )}
         </Space>
       </Space>
     ));
@@ -324,13 +338,14 @@ const LeitnerLevel = (props) => {
               />
             </Space>
             <Space>
-              {selectedIds.length > 0 && +loader.data.level === 0 && (
+              {+loader.data.level === 0 && (
                 <Button
                   type="primary"
                   onClick={() => {
                     upLevelVocab();
                     navigate("/dashboard/leitner/Starting");
                   }}
+                  disabled={selectedIds.length <= 0}
                 >
                   Start to learn
                 </Button>
@@ -357,9 +372,29 @@ const LeitnerLevel = (props) => {
               )}
             </Space>
           </Space>
-
-          {!vocabs?.empty && renderVocabInSub}
-          {vocabs?.empty && renderEmpty}
+          {loading && (
+            <Space
+              style={{
+                width: "100%",
+                height: "100vh",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Spin
+                indicator={
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 64,
+                    }}
+                    spin
+                  />
+                }
+              />
+            </Space>
+          )}
+          {!loading && !vocabs?.empty && renderVocabInSub}
+          {!loading && vocabs?.empty && renderEmpty}
         </Space>
         <DeleteModal
           title={`vocab`}

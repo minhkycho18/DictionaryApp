@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getContributionVocab, getSearchResult } from "./searchThunk";
-import { addWordToSubcategory } from "../subcategory/subcategoryThunk";
+import {
+  addWordToLeitner,
+  addWordToSubcategory,
+} from "../subcategory/subcategoryThunk";
 
 const initialState = {
   keyword: "",
@@ -46,10 +49,19 @@ const searchSlice = createSlice({
     setKeyWord: (state, action) => {
       state.keyword = action.payload;
     },
+    updateLeitnerAdd: (state, action) => {
+      state.vocabDetails = action.payload;
+      state.errorAdd = null;
+    },
     setVocabDetails: (state, action) => {
-      state.vocabDetails = state.result.filter(
+      state.loading = true;
+      const rs = state.result.filter(
         (item, index) => item.word === action.payload
       );
+      if (rs) {
+        state.loading = false;
+        state.vocabDetails = rs;
+      }
     },
     setContributionVocab: (state, action) => {
       state.contributionVocab = state.contributionVocab.filter(
@@ -89,7 +101,7 @@ const searchSlice = createSlice({
         state.loading = false;
         state.error = action.payload.detail;
       })
-      //============================================================================
+      //==============================================================================================================================================================================================================================
       .addCase(addWordToSubcategory.pending, (state, action) => {
         state.loadingAdd = true;
         state.errorAdd = null;
@@ -124,6 +136,30 @@ const searchSlice = createSlice({
       .addCase(addWordToSubcategory.rejected, (state, action) => {
         state.loadingAdd = false;
         state.errorAdd = "Da ton tai";
+      })
+      //========================================================
+      .addCase(addWordToLeitner.pending, (state, action) => {
+        state.loadingAdd = true;
+        state.errorAdd = null;
+      })
+      .addCase(addWordToLeitner.fulfilled, (state, action) => {
+        state.loadingAdd = false;
+        // const update = state.vocabDetails.map((item) => {
+        //   if (item.id === action.payload.vocabId) {
+        //     item.definitions = item.definitions.map((definition) => {
+        //       if (definition.defId === action.payload.defId) {
+        //         definition.isWordOfUserLeitner = true; // Cập nhật giá trị
+        //       }
+        //       return definition;
+        //     });
+        //   }
+        //   return item;
+        // });
+        // state.vocabDetails = update;
+      })
+      .addCase(addWordToLeitner.rejected, (state, action) => {
+        state.loadingAdd = false;
+        state.errorAdd = "Da ton tai";
       });
   },
 });
@@ -134,6 +170,7 @@ export const {
   setVocabDetails,
   setErrorAdd,
   setContributionVocab,
+  updateLeitnerAdd,
 } = searchSlice.actions;
 
 export default searchSlice.reducer;
