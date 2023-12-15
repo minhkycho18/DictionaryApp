@@ -177,7 +177,6 @@ const WordListManagement = () => {
   };
 
   const handleDeleteVocab = async (items) => {
-    console.log(items.currentPage, ">>>>", pagination.current);
     const param = {
       wordListId: selectedWL.id,
       SubId: pagination.subId,

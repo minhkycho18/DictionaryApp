@@ -1,13 +1,11 @@
 import { Avatar, Modal, Space } from "antd";
-import React from "react";
 import uk from "../../assets/images/en-circle.png";
-import { BiSolidVolumeFull } from "react-icons/bi";
+import { BiSolidVolumeFull, BiSolidVolumeMute } from "react-icons/bi";
 import us from "../../assets/images/us-square.png";
 import "./VocabularyDetailModal.scss";
 import { upperFirst } from "lodash/string";
 
 const VocabularyDetailModal = ({ vocabDetail, isOpen, handleShow }) => {
-  console.log(vocabDetail);
   const handleCancel = () => {
     handleShow();
   };
@@ -48,30 +46,38 @@ const VocabularyDetailModal = ({ vocabDetail, isOpen, handleShow }) => {
           </span>
         </Space>
 
-        {vocabDetail.audioUk && (
-          <Space className="phonetic__symbol">
-            <Avatar src={uk} className="language__flag"></Avatar>
-            <span className="phonetic__content">
-              {vocabDetail?.phoneUk}
+        <Space className="phonetic__symbol">
+          <Avatar src={uk} className="language__flag"></Avatar>
+          <span className="phonetic__content">
+            {vocabDetail.phoneUk ? vocabDetail.phoneUk : "/ -- /"}
+            {vocabDetail.audioUk === null ? (
+              <BiSolidVolumeMute
+                className="phonetic__icon"
+                style={{ verticalAlign: "baseline" }}
+              />
+            ) : (
               <BiSolidVolumeFull
                 className="phonetic__icon"
                 onClick={() => new Audio(vocabDetail.audioUk).play()}
               />
-            </span>
-          </Space>
-        )}
-        {vocabDetail.audioUs && (
-          <Space className="phonetic__symbol">
-            <Avatar src={us} className="language__flag"></Avatar>
-            <span className="phonetic__content">
-              {vocabDetail?.phoneUs}
+            )}
+          </span>
+        </Space>
+
+        <Space className="phonetic__symbol">
+          <Avatar src={us} className="language__flag"></Avatar>
+          <span className="phonetic__content">
+            {vocabDetail.phoneUs ? vocabDetail.phoneUs : "/ -- /"}
+            {vocabDetail.audioUs === null ? (
+              <BiSolidVolumeMute className="phonetic__icon" />
+            ) : (
               <BiSolidVolumeFull
                 className="phonetic__icon"
                 onClick={() => new Audio(vocabDetail.audioUs).play()}
               />
-            </span>
-          </Space>
-        )}
+            )}
+          </span>
+        </Space>
       </Space>
 
       <Space className="meaning__content" direction="vertical">

@@ -84,25 +84,15 @@ const Manager = () => {
       >
         <div className={"sidebar__ava"}>
           <Space align={"center"} direction={"vertical"} size={"middle"}>
-            {profile?.image ? (
-              <Avatar
-                shape="square"
-                size={64}
-                style={{
-                  border: "1px solid #ccc",
-                }}
-                src={profile.image}
-              />
-            ) : (
-              <Avatar
-                shape="square"
-                size={64}
-                style={{
-                  border: "1px solid #ccc",
-                }}
-                icon={<UserOutlined />}
-              />
-            )}
+            <Avatar
+              shape="square"
+              size={64}
+              style={{
+                border: "1px solid #ccc",
+              }}
+              src={profile?.image || undefined}
+              icon={!profile?.image && <UserOutlined />}
+            />
             <span className={"sidebar__ava__name"}>{profile?.name}</span>
             <span className={"sidebar__ava__role"}>{profile?.role.name}</span>
           </Space>

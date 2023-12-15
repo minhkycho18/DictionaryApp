@@ -4,7 +4,7 @@ import { upperFirst } from "lodash";
 import { useState, useEffect } from "react";
 import colorStatus from "../../../helpers/ColorStatus";
 import EditDefaultVocabularyModal from "../../Modal/EditDefaultVocabularyModal";
-import { updateDefaultVocab } from "../../../api/Vocabulary/vocabulary.api";
+import { reviewDefaultVocab } from "../../../api/Vocabulary/vocabulary.api";
 
 const ContributionDataTable = ({
   dataSource,
@@ -128,7 +128,7 @@ const ContributionDataTable = ({
       ...currentVocab,
       status: "REJECTED",
     };
-    await updateDefaultVocab(currentVocab.id, data);
+    await reviewDefaultVocab(currentVocab.id, data);
     handleShow();
     handleRejectVocab(currentVocab);
     handleShowSubmitModal();

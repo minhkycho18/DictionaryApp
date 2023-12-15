@@ -16,7 +16,10 @@ import "./EditDefaultVocabularyModal.scss";
 import getAudioUpload from "../../helpers/uploadCloudinary";
 import { upperFirst } from "lodash";
 import { BiSolidVolumeFull, BiSolidVolumeMute } from "react-icons/bi";
-import { updateDefaultVocab } from "../../api/Vocabulary/vocabulary.api";
+import {
+  reviewDefaultVocab,
+  updateDefaultVocab,
+} from "../../api/Vocabulary/vocabulary.api";
 
 const EditDefaultVocabularyModal = (props) => {
   const [form] = Form.useForm();
@@ -51,12 +54,15 @@ const EditDefaultVocabularyModal = (props) => {
       pos: props.vocabDetail.pos.toLowerCase(),
     };
     try {
-      await updateDefaultVocab(props.vocabDetail.id, data);
+      const action = props.contribution ? "contribute" : "edit";
+
       if (props.contribution) {
-        props.notification("success", "contribute");
+        await reviewDefaultVocab(props.vocabDetail.id, data);
       } else {
-        props.notification("success", "edit");
+        await updateDefaultVocab(props.vocabDetail.id, data);
       }
+
+      props.notification("success", action);
       props.handleEditForm();
     } catch (e) {
       if (props.contribution) {

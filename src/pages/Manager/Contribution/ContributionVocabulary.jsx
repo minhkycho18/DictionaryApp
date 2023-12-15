@@ -1,14 +1,20 @@
-import { SearchOutlined } from "@ant-design/icons";
-import { Col, Input, Row, Space } from "antd";
+import {
+  HistoryOutlined,
+  RollbackOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
+import { Button, Col, Input, Row, Space } from "antd";
 import ContributionDataTable from "../../../components/data-table/Contribution/ContributionDataTable";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getContributionVocab } from "../../../stores/search-word/searchThunk";
 import { setContributionVocab } from "../../../stores/search-word/searchSlice";
+import HistoryDataTable from "../../../components/data-table/Contribution/HistoryDataTable";
 
 const ContributionVocabulary = () => {
   const [dataSearch, setDataSearch] = useState([]);
   const [searching, setSearching] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const { contributionVocab, loading } = useSelector((state) => state.search);
   const dispatch = useDispatch();
 
@@ -36,6 +42,10 @@ const ContributionVocabulary = () => {
       setDataSearch(newData);
     }
     setSearching(!!trimmedKeyword);
+  };
+
+  const handleOpenHistory = () => {
+    setIsHistoryOpen(!isHistoryOpen);
   };
 
   const handleTableChange = (record) => {};
@@ -98,15 +108,47 @@ const ContributionVocabulary = () => {
               ></Input>
             </Col>
           </Row>
+          <Row className={"box_data_item"}>
+            <Col span={24} offset={1}>
+              <Button
+                style={{
+                  margin: "0",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  cursor: "pointer",
+                  transition: "color 0.3s ease",
+                  // border: "none",
+                  // boxShadow: "none",
+                }}
+                onClick={handleOpenHistory}
+              >
+                {isHistoryOpen ? (
+                  <>
+                    <RollbackOutlined style={{ marginRight: "8px" }} />
+                    Back to review vocabulary
+                  </>
+                ) : (
+                  <>
+                    <HistoryOutlined style={{ marginRight: "8px" }} />
+                    See contribute history
+                  </>
+                )}
+              </Button>
+            </Col>
+          </Row>
           <Row justify={"center"} className={"box_data_item table_box"}>
             <Col span={22}>
-              <ContributionDataTable
-                loading={loading}
-                dataSource={searching ? dataSearch : contributionVocab}
-                handleAprroveVocab={handleApprove}
-                handleRejectVocab={handleReject}
-                onTableChange={handleTableChange}
-              />
+              {isHistoryOpen ? (
+                <HistoryDataTable />
+              ) : (
+                <ContributionDataTable
+                  loading={loading}
+                  dataSource={searching ? dataSearch : contributionVocab}
+                  handleAprroveVocab={handleApprove}
+                  handleRejectVocab={handleReject}
+                  onTableChange={handleTableChange}
+                />
+              )}
             </Col>
           </Row>
         </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Input } from "antd";
 import { Modal } from "antd";
 import { EditTwoTone } from "@ant-design/icons";
