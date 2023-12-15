@@ -85,7 +85,7 @@ public class WebSecurityConfig {
                                 "/users/authenticate",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**").permitAll()
-                        .requestMatchers("/users/change-password").hasAnyAuthority(forAllRole())
+                        .requestMatchers("/users/password").hasAnyAuthority(forAllRole())
                         .requestMatchers(HttpMethod.PATCH, "/users").hasAnyAuthority(forAllRole())
                         .requestMatchers("/users/me/**").hasAnyAuthority(forAllRole())
                         .requestMatchers("/users/**").hasAnyAuthority(forAdminAndManager())

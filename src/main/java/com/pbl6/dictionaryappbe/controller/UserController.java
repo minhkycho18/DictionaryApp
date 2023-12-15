@@ -126,7 +126,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Unlock account Success",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),
             @ApiResponse(responseCode = "401", description = "Authentication failed")})
-    @PostMapping("/change-password")
+    @PutMapping("/password")
     public ResponseEntity<String> changePassword(@RequestBody PasswordDto passwordDto) {
         userService.changePassword(passwordDto);
         return ResponseEntity.ok("Changed successfully");

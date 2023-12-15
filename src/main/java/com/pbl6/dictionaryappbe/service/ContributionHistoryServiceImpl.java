@@ -9,7 +9,6 @@ import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.persistence.vocabulary.Vocabulary;
 import com.pbl6.dictionaryappbe.persistence.vocabulary.VocabularyStatus;
 import com.pbl6.dictionaryappbe.repository.ContributionHistoryRepository;
-import com.pbl6.dictionaryappbe.repository.VocabDefRepository;
 import com.pbl6.dictionaryappbe.repository.VocabularyRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,7 +24,6 @@ import java.util.Objects;
 public class ContributionHistoryServiceImpl implements ContributionHistoryService {
     private final ContributionHistoryRepository historyRepository;
     private final VocabularyMapper vocabularyMapper;
-    private final VocabDefRepository vocabDefRepository;
     private final VocabularyService vocabularyService;
     private final VocabularyRepository vocabularyRepository;
 
