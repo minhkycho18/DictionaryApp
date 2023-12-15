@@ -39,14 +39,14 @@ public class LeitnerServiceImpl implements LeitnerService {
 
     @Override
     @Transactional
-    public void addVocabToLeitner(List<VocabLeitnerRequestDto> leitnerRequestDto) {
+    public int addVocabToLeitner(List<VocabLeitnerRequestDto> leitnerRequestDto) {
         User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
         List<String> vocabDefIds = leitnerRequestDto.stream()
                 .map(vocabLeitnerRequestDto -> vocabLeitnerRequestDto.getVocabId() + "-" + vocabLeitnerRequestDto.getDefId())
                 .toList();
         List<VocabLeitner> vocabDefs = leitnerRepository.findAllByVocabDefId(vocabDefIds);
-        if(!vocabDefs.isEmpty()) {
-            throw new DuplicateDataException("Request have a vocabulary already exists in Leitner");
+        if(leitnerRequestDto.size() == vocabDefs.size()) {
+            throw new DuplicateDataException("All request vocabularies already exists in Leitner");
         }
         List<VocabLeitner> leitners =  leitnerRequestDto.stream()
                 .map(vocabDef -> VocabLeitner.builder()
@@ -59,6 +59,7 @@ public class LeitnerServiceImpl implements LeitnerService {
                         .build())
                 .toList();
         leitnerRepository.saveAll(leitners);
+        return leitnerRequestDto.size() - vocabDefs.size();
     }
 
     @Override

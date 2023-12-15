@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface LeitnerService {
-    void addVocabToLeitner(List<VocabLeitnerRequestDto> vocabLeitnerRequestDto);
+    int addVocabToLeitner(List<VocabLeitnerRequestDto> vocabLeitnerRequestDto);
 
     Page<VocabularyLeitnerDetailDto> showVocabsByLevel(Integer level, String keyword, String pos, int offset, int limit);
 
