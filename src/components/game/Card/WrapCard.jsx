@@ -8,7 +8,7 @@ const WrapCard = (props) => {
       style={{
         display: `${props.type === "default" ? "none" : "flex"}`,
         opacity: `${props.onSelect ? "1" : "0.6"}`,
-        scale: `${props.onSelect ? "1" : "0.9"}`,
+        scale: `${props.onSelect ? "1" : "0.94"}`,
         pointerEvents: `${props.onSelect ? "" : "none"}`,
       }}
       className="wrap-card"

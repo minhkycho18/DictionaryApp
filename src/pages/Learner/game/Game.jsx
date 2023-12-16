@@ -36,7 +36,7 @@ const Game = (props) => {
   const slide = useRef();
   changeTitle(pathname);
   const [type, setType] = useState(localStorage.getItem("gameType") || REVIEW);
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(1);
   const dispatch = useDispatch();
   const [, setIsModalOpen] = useState(false);
   const [modal, modalCtx] = Modal.useModal();
@@ -120,7 +120,7 @@ const Game = (props) => {
         } catch (error) {
           openNotificationWithIcon("error", "Fail to update game's status!");
         }
-        setCurrent(0);
+        setCurrent(1);
         setCorrectAnswerFlashcard([]);
         setIncorrectAnswer([]);
         setType(lessonType);
@@ -194,7 +194,12 @@ const Game = (props) => {
           description: msg,
         });
         break;
-
+      case "info":
+        api[type]({
+          message: "Info",
+          description: msg,
+        });
+        break;
       default:
         break;
     }
@@ -233,19 +238,24 @@ const Game = (props) => {
             defId: item.defId,
           };
         });
-        const result = await getLeitnerVocabs(0);
-
+        // const result = await getLeitnerVocabs(0);
         const rs = await addVocabToLeitner(data);
         openNotificationWithIcon("success", rs);
       } catch (error) {
-        openNotificationWithIcon("error", "Fail to add!");
+        openNotificationWithIcon("info", error?.detail);
       }
     }
   };
   const renderCard = () => {
+    const listGameItem = [
+      { vocabId: "empty" },
+      ...result,
+      { vocabId: "success" },
+      { vocabId: "empty" },
+    ];
     switch (type) {
       case REVIEW:
-        const a = result && (
+        return (
           <Carousel
             arrows={true}
             showDots={false}
@@ -254,30 +264,38 @@ const Game = (props) => {
             slidesToSlide={1}
             ref={slide}
             afterChange={(nextSlide, { currentSlide, onMove }) => {
-              setCurrent(currentSlide);
+              setCurrent(currentSlide + 1);
             }}
+            transitionDuration={6}
           >
-            <ReviewCard type={"default"} />
-            {result.map((item, index) => (
-              <ReviewCard
-                key={index}
-                onSelect={current === index}
-                vocabInfo={item}
-                handleChangeSlide={handleChangeSlide}
-                handleCorrectFlashCard={handleCorrectFlashCard}
-                handleIncorrectAnswer={handleIncorrectAnswer}
-              />
-            ))}
-            <SuccessCard
-              type={"success-review"}
-              onSelect={current === result.length}
-              handleChangeLesson={handleChangeLesson}
-              handleAddVocabToLeitner={handleAddVocabToLeitner}
-            />
-            <ReviewCard type={"default"} />
+            {listGameItem.map((item, index) => {
+              if (item.vocabId === "empty") {
+                return <ReviewCard key={index} type={"default"} />;
+              } else if (item.vocabId === "success") {
+                return (
+                  <SuccessCard
+                    key={index}
+                    type={"success-review"}
+                    onSelect={current === result.length + 1}
+                    handleChangeLesson={handleChangeLesson}
+                    handleAddVocabToLeitner={handleAddVocabToLeitner}
+                  />
+                );
+              } else
+                return (
+                  <ReviewCard
+                    key={index}
+                    onSelect={current === index}
+                    vocabInfo={item}
+                    handleChangeSlide={handleChangeSlide}
+                    handleCorrectFlashCard={handleCorrectFlashCard}
+                    handleIncorrectAnswer={handleIncorrectAnswer}
+                  />
+                );
+            })}
           </Carousel>
         );
-        return a;
+
       case FLASH_CARD:
         return (
           <Carousel
@@ -288,31 +306,37 @@ const Game = (props) => {
             slidesToSlide={0}
             ref={slide}
             afterChange={(nextSlide, { currentSlide, onMove }) => {
-              setCurrent(currentSlide);
+              setCurrent(currentSlide + 1);
             }}
-            transitionDuration={2}
+            transitionDuration={5}
           >
-            <ReviewCard type={"default"} />
-            {result.map((item, index) => (
-              <FlashCard
-                key={index}
-                onSelect={current === index}
-                handleChangeSlide={handleChangeSlide}
-                vocabInfo={item}
-                handleCorrectFlashCard={handleCorrectFlashCard}
-                handleIncorrectAnswer={handleIncorrectAnswer}
-              />
-            ))}
-            <SuccessCard
-              type={"success-flash_card"}
-              onSelect={current === result.length}
-              correctAnswerFlashcard={correctAnswerFlashcard}
-              resultLength={result.length}
-              handleChangeLesson={handleChangeLesson}
-              incorrectAnswer={incorrectAnswer}
-              handleAddVocabToLeitner={handleAddVocabToLeitner}
-            />
-            <ReviewCard type={"default"} />
+            {listGameItem.map((item, index) => {
+              if (item.vocabId === "empty") {
+                return <ReviewCard key={index} type={"default"} />;
+              } else if (item.vocabId === "success") {
+                return (
+                  <SuccessCard
+                    type={"success-flash_card"}
+                    onSelect={current === result.length + 1}
+                    correctAnswerFlashcard={correctAnswerFlashcard}
+                    resultLength={result.length}
+                    handleChangeLesson={handleChangeLesson}
+                    incorrectAnswer={incorrectAnswer}
+                    handleAddVocabToLeitner={handleAddVocabToLeitner}
+                  />
+                );
+              } else
+                return (
+                  <FlashCard
+                    key={index}
+                    onSelect={current === index}
+                    handleChangeSlide={handleChangeSlide}
+                    vocabInfo={item}
+                    handleCorrectFlashCard={handleCorrectFlashCard}
+                    handleIncorrectAnswer={handleIncorrectAnswer}
+                  />
+                );
+            })}
           </Carousel>
         );
       case SPELLING:
@@ -326,32 +350,39 @@ const Game = (props) => {
             swipeable={false}
             ssr={false}
             afterChange={(nextSlide, { currentSlide, onMove }) => {
-              setCurrent(currentSlide);
+              setCurrent(currentSlide + 1);
             }}
             ref={slide}
+            transitionDuration={10}
           >
-            <ReviewCard type={"default"} />
-            {result.map((item, index) => (
-              <SpellingCard
-                indexKey={index}
-                key={index}
-                onSelect={current === index}
-                handleCorrectFlashCard={handleCorrectFlashCard}
-                handleIncorrectAnswer={handleIncorrectAnswer}
-                handleChangeSlide={handleChangeSlide}
-                vocabInfo={item}
-              />
-            ))}
-            <SuccessCard
-              type={"success-spelling"}
-              onSelect={current === result.length}
-              correctAnswerFlashcard={correctAnswerFlashcard}
-              resultLength={result.length}
-              handleChangeLesson={handleChangeLesson}
-              incorrectAnswer={incorrectAnswer}
-              handleAddVocabToLeitner={handleAddVocabToLeitner}
-            />
-            <ReviewCard type={"default"} />
+            {listGameItem.map((item, index) => {
+              if (item.vocabId === "empty") {
+                return <ReviewCard key={index} type={"default"} />;
+              } else if (item.vocabId === "success") {
+                return (
+                  <SuccessCard
+                    type={"success-spelling"}
+                    onSelect={current === result.length + 1}
+                    correctAnswerFlashcard={correctAnswerFlashcard}
+                    resultLength={result.length}
+                    handleChangeLesson={handleChangeLesson}
+                    incorrectAnswer={incorrectAnswer}
+                    handleAddVocabToLeitner={handleAddVocabToLeitner}
+                  />
+                );
+              } else
+                return (
+                  <SpellingCard
+                    indexKey={index}
+                    key={index}
+                    onSelect={current === index}
+                    handleCorrectFlashCard={handleCorrectFlashCard}
+                    handleIncorrectAnswer={handleIncorrectAnswer}
+                    handleChangeSlide={handleChangeSlide}
+                    vocabInfo={item}
+                  />
+                );
+            })}
           </Carousel>
         );
       case QUIZ:
@@ -365,31 +396,38 @@ const Game = (props) => {
             swipeable={false}
             ssr={false}
             ref={slide}
+            transitionDuration={10}
             afterChange={(nextSlide, { currentSlide, onMove }) => {
-              setCurrent(currentSlide);
+              setCurrent(currentSlide + 1);
             }}
           >
-            <ReviewCard type={"default"} />
-            {result.map((item, index) => (
-              <QuizCard
-                key={index}
-                onSelect={current === index}
-                handleCorrectFlashCard={handleCorrectFlashCard}
-                handleChangeSlide={handleChangeSlide}
-                handleIncorrectAnswer={handleIncorrectAnswer}
-                vocabInfo={item}
-              />
-            ))}
-            <SuccessCard
-              type={"success-quiz"}
-              onSelect={current === result.length}
-              correctAnswerFlashcard={correctAnswerFlashcard}
-              resultLength={result.length}
-              handleChangeLesson={handleChangeLesson}
-              incorrectAnswer={incorrectAnswer}
-              handleAddVocabToLeitner={handleAddVocabToLeitner}
-            />
-            <ReviewCard type={"default"} />
+            {listGameItem.map((item, index) => {
+              if (item.vocabId === "empty") {
+                return <ReviewCard key={index} type={"default"} />;
+              } else if (item.vocabId === "success") {
+                return (
+                  <SuccessCard
+                    type={"success-quiz"}
+                    onSelect={current === result.length + 1}
+                    correctAnswerFlashcard={correctAnswerFlashcard}
+                    resultLength={result.length}
+                    handleChangeLesson={handleChangeLesson}
+                    incorrectAnswer={incorrectAnswer}
+                    handleAddVocabToLeitner={handleAddVocabToLeitner}
+                  />
+                );
+              } else
+                return (
+                  <QuizCard
+                    key={index}
+                    onSelect={current === index}
+                    handleCorrectFlashCard={handleCorrectFlashCard}
+                    handleChangeSlide={handleChangeSlide}
+                    handleIncorrectAnswer={handleIncorrectAnswer}
+                    vocabInfo={item}
+                  />
+                );
+            })}
           </Carousel>
         );
       case OVERVIEW:
@@ -404,26 +442,35 @@ const Game = (props) => {
             slidesToSlide={1}
             ref={slide}
             afterChange={(nextSlide, { currentSlide, onMove }) => {
-              setCurrent(currentSlide);
+              setCurrent(currentSlide + 1);
             }}
+            transitionDuration={6}
           >
-            <ReviewCard type={"default"} />
-            {result.map((item, index) => (
-              <ReviewCard
-                key={index}
-                onSelect={current === index}
-                handleChangeSlide={handleChangeSlide}
-                vocabInfo={item}
-              />
-            ))}
-            <SuccessCard
-              type={"success-review"}
-              onSelect={current === result.length}
-              handleChangeLesson={handleChangeLesson}
-              resultLength={result.length}
-              handleAddVocabToLeitner={handleAddVocabToLeitner}
-            />
-            <ReviewCard type={"default"} />
+            {listGameItem.map((item, index) => {
+              if (item.vocabId === "empty") {
+                return <ReviewCard key={index} type={"default"} />;
+              } else if (item.vocabId === "success") {
+                return (
+                  <SuccessCard
+                    key={index}
+                    type={"success-review"}
+                    onSelect={current === result.length + 1}
+                    handleChangeLesson={handleChangeLesson}
+                    handleAddVocabToLeitner={handleAddVocabToLeitner}
+                  />
+                );
+              } else
+                return (
+                  <ReviewCard
+                    key={index}
+                    onSelect={current === index}
+                    vocabInfo={item}
+                    handleChangeSlide={handleChangeSlide}
+                    handleCorrectFlashCard={handleCorrectFlashCard}
+                    handleIncorrectAnswer={handleIncorrectAnswer}
+                  />
+                );
+            })}
           </Carousel>
         );
     }

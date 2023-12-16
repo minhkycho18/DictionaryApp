@@ -14,7 +14,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  transition: scale 1s linear;
+  transition: scale 1s ease-in;
   transition: opacity 0.5s linear;
   position: relative;
   &__wave {

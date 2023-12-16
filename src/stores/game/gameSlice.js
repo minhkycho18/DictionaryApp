@@ -19,8 +19,6 @@ const gameSlice = createSlice({
   },
   reducers: {
     updateVocab(state, action) {
-      // const initResult = [...state.reviewed];
-      console.log(state.reviewed);
       if (state.reviewed) {
         const index = state.reviewed.findIndex(
           (item) =>
