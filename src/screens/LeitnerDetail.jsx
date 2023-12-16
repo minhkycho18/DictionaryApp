@@ -38,7 +38,7 @@ export default function LeitnerDetail(props) {
 
   const getVocabOfLeitnerLevel = async (level) => {
     const data = await getVocabOfLeitnerLevelOfUser(level);
-    setTotal(data.numberOfElements);
+    setTotal(data.totalElements);
     setListVocabOfLeitner(data.content);
     setIsCheck(true);
   };

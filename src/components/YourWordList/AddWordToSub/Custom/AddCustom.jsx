@@ -15,13 +15,14 @@ import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
 import { createNewWordLists, getWordListByWordlistId } from "~/api/WordList";
 import { MaterialIcons } from "@expo/vector-icons";
 import FieldNoRequired from "./FieldNoRequired/FieldNoRequired";
-import { FontAwesome } from "@expo/vector-icons";
+import DropDownPicker from "react-native-dropdown-picker";
 import { AntDesign } from "@expo/vector-icons";
 import { ListComponentDescContext } from "~/context/ListComponentDesc";
 import { Ionicons } from "@expo/vector-icons";
 import { addWordCustomToSub } from "~/api/Subcategory";
 import { delay } from "~/helper";
 import Modal from "react-native-modal";
+import { getAllPartOfSpeech } from "~/api/Dictionary";
 
 const AddCustom = (props) => {
   const { fieldMain, addFieldMain, Remove } = useContext(
@@ -39,7 +40,14 @@ const AddCustom = (props) => {
   const [fileResponseUK, setFileResponseUK] = useState("");
   const [phoneUs, setPhoneUs] = useState("");
   const [phoneUk, setPhoneUk] = useState("");
-  const [pos, setPos] = useState(null);
+  const [pos, setPos] = useState("");
+  const [open, setOpen] = useState(false);
+  const [items, setItems] = useState([
+    { label: "Adv", value: "adv" },
+    { label: "Adj", value: "adj" },
+    { label: "Noun", value: "noun" },
+    { label: "Verb", value: "Verb" },
+  ]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   ////////
   const [fieldMainComponents, setFieldMainComponents] = useState(fieldMain);
@@ -48,7 +56,7 @@ const AddCustom = (props) => {
   const navigation = useNavigation();
 
   const handlePresentModal = async () => {
-    if (title === "" || desc === "") {
+    if (title === "" || desc === "" || pos === "") {
       showToast("Warning", "Please fill in all field", "error");
       if (title === "") {
         titleRef.current.setNativeProps({
@@ -63,52 +71,6 @@ const AddCustom = (props) => {
     } else {
       setIsModalVisible(true);
     }
-    // } else {
-    //   // params.wordlistId, params.subcategoryId
-    //   try {
-    //     const listDef = fieldMainComponents.map(
-    //       (component) => component.props.data
-    //     );
-    //     const customWord = {
-    //       word: title,
-    //       wordType: "DEFAULT",
-    //       pos: pos,
-    //       phoneUs: phoneUs,
-    //       phoneUk: phoneUk,
-    //       audioUs: fileResponseUS,
-    //       audioUk: fileResponseUK,
-    //       definition: [
-    //         {
-    //           wordDesc: desc,
-    //           example: example,
-    //         },
-    //         ...listDef,
-    //       ],
-    //       subcategoryId: params.subcategoryId,
-    //     };
-    //     const res = await addWordCustomToSub(
-    //       params.wordlistId,
-    //       params.subcategoryId,
-    //       customWord
-    //     );
-    //     console.log(`word custom ::`, res);
-    //     showToast(
-    //       "Success",
-    //       "Create custom vocabulary successfully",
-    //       "success"
-    //     );
-
-    //     const wordlist = await getWordListByWordlistId(params.wordlistId);
-    //     await delay(1000);
-    //     navigation.navigate("YourWordlistDetail", {
-    //       Wordlist: {
-    //         id: wordlist.id,
-    //         title: wordlist.title,
-    //         listDesc: wordlist.listDesc,
-    //       },
-    //     });
-    //   } catch (error) {}
-    // }
   };
   const handleSave = async (contribute) => {
     try {
@@ -154,6 +116,14 @@ const AddCustom = (props) => {
       console.log(error);
     }
   };
+  useEffect(() => {
+    const getAllPos = async () => {
+      const res = await getAllPartOfSpeech();
+      const customRes = res.map((item) => ({ label: item, value: item }));
+      setItems(customRes);
+    };
+    getAllPos();
+  }, []);
   useEffect(() => {
     setFieldMainComponents(fieldMain);
   }, [fieldMain]);
@@ -319,10 +289,61 @@ const AddCustom = (props) => {
             borderRadius: 10,
             justifyContent: "center",
             width: "100%",
-            height: 202,
+            marginVertical: 15,
           }}
         >
           <View style={Styles.inputFirstContent}>
+            <View>
+              <Text
+                style={{
+                  ...Styles.formLabel,
+                  fontFamily: "Quicksand-SemiBold",
+                }}
+              >
+                Part of speech
+              </Text>
+              {/* <View
+                style={{ flexDirection: "row", marginBottom: 10, zIndex: 1000 }}
+              > */}
+              <DropDownPicker
+                open={open}
+                value={pos}
+                items={items}
+                setOpen={setOpen}
+                setValue={(value) => {
+                  setPos(value);
+                }}
+                setItems={setItems}
+                style={{
+                  backgroundColor: "#FEFEFE",
+                  borderRadius: 10,
+                  borderColor: "#e0e0e0",
+                  borderWidth: 1,
+                  zIndex: 1000,
+                  marginBottom: 10,
+                }}
+                textStyle={{
+                  color: "#6b7280",
+                  fontFamily: "Quicksand-Medium",
+                  fontSize: 14,
+                }}
+                placeholder="Select a part of speech "
+                placeholderStyle={{
+                  color: "#6b7280",
+                  fontFamily: "Quicksand-Medium",
+                  fontSize: 14,
+                }}
+                showTickIcon={false}
+                dropDownContainerStyle={{
+                  height: 120,
+                  borderWidth: 1,
+                  borderColor: "#e0e0e0",
+                  zIndex: 1000,
+                }}
+                listMode="SCROLLVIEW"
+              />
+              {/* </View> */}
+            </View>
             <View>
               <Text
                 style={{

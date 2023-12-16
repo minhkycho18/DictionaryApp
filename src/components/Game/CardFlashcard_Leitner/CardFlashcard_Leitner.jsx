@@ -35,10 +35,10 @@ export default function CardFlashcard_Leitner({
             },
           ],
         });
-        onNextSlider({
-          upLevel: true,
-        });
       }
+      onNextSlider({
+        upLevel: true,
+      });
     } else {
       if (level !== "1") {
         await UpVocabLeitner("down", {
@@ -50,10 +50,10 @@ export default function CardFlashcard_Leitner({
             },
           ],
         });
-        onNextSlider({
-          upLevel: false,
-        });
       }
+      onNextSlider({
+        upLevel: false,
+      });
     }
   };
   return (
