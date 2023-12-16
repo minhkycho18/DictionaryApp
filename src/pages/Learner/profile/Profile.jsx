@@ -17,6 +17,7 @@ import { RiGenderlessLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { capitalizeFirstLetter } from "../../../helpers/changeTitle";
 import { getUserProfile } from "../../../stores/user/userThunk";
+import { changePassword, updateProfile } from "../../../api/User/user";
 const formItemLayout = {
   labelCol: {
     xs: {
@@ -61,6 +62,7 @@ const Profile = () => {
     gender: profile?.gender || undefined,
     password: null,
     confirm: null,
+    oldPassword: null,
   });
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -84,23 +86,52 @@ const Profile = () => {
   };
   const onFinish = (values) => {
     if (type === "profile") {
-      console.log("Received values of form: ", values);
-
-      setType("");
+      console.log(values);
+      const getProfileUpdate = async (data) => {
+        try {
+          const rs = await updateProfile(data);
+          if (rs) {
+            messageApi.success(rs);
+            setOpen(false);
+            setIsFormChanged(false);
+            form.setFieldsValue({
+              email: profile?.email || "",
+              name: values.name,
+              gender: profile?.gender || undefined,
+              password: null,
+              confirm: null,
+              oldPassword: null,
+            });
+          }
+        } catch (error) {
+          messageApi.error(error);
+        }
+      };
+      // getProfileUpdate({ name: values.name, image: null });
       form.setFieldsValue(formValues);
       setOpen(false);
+      setType("");
     }
     if (type === "password") {
-      const { password, confirm } = values;
-
+      const { password, confirm, oldPassword } = values;
+      const getPasswordUpdate = async (data) => {
+        try {
+          const rs = await changePassword(data);
+          if (rs) {
+            messageApi.success(rs);
+            setOpen(false);
+            form.setFieldsValue(formValues);
+          }
+        } catch (error) {
+          messageApi.error(error);
+        }
+      };
       if (password === confirm) {
-        messageApi.success("Password updated successfully!");
+        getPasswordUpdate({ newPassword: password, oldPassword });
       } else {
         messageApi.error("New password does not match confirmation password!");
       }
       setType("");
-      form.setFieldsValue(formValues);
-      setOpen(false);
     }
   };
   // const normFile = (e) => {
@@ -114,9 +145,11 @@ const Profile = () => {
       JSON.stringify(formValues) !==
       JSON.stringify({
         email: profile?.email || "",
-        name: profile?.name || "",
+        name: profile?.name,
         gender: profile?.gender || undefined,
-        password: profile?.password,
+        password: null,
+        confirm: null,
+        oldPassword: null,
       });
     setIsFormChanged(isChanged);
   }, [formValues, profile]);
@@ -147,40 +180,14 @@ const Profile = () => {
         <Input />
       </Form.Item>
 
-      <Form.Item
-        name="gender"
-        label="Gender"
-        rules={[
-          {
-            required: true,
-            message: "Please select gender!",
-          },
-        ]}
-      >
-        <Select placeholder="select your gender">
-          <Option value="MALE">Male</Option>
-          <Option value="FEMALE">Female</Option>
-          <Option value="OTHER">Other</Option>
+      <Form.Item name="gender" label="Gender" rules={[]}>
+        <Select placeholder="select your gender" disabled>
+          <Select.Option value="MALE">Male</Select.Option>
+          <Select.Option value="FEMALE">Female</Select.Option>
+          <Select.Option value="OTHER">Other</Select.Option>
         </Select>
       </Form.Item>
-      {/* <Form.Item
-        label="Upload"
-        valuePropName="fileList"
-        getValueFromEvent={normFile}
-      >
-        <Upload action="/upload.do" listType="picture-card">
-          <div>
-            <PlusOutlined />
-            <div
-              style={{
-                marginTop: 8,
-              }}
-            >
-              Upload
-            </div>
-          </div>
-        </Upload>
-      </Form.Item> */}
+
       <Form.Item {...tailFormItemLayout}>
         <Button type="primary" htmlType="submit" disabled={!isFormChanged}>
           Confirm
@@ -194,6 +201,27 @@ const Profile = () => {
   const renderPasswordChange = (
     <Form {...formItemLayout} form={form} name="profile" onFinish={onFinish}>
       <Form.Item
+        name="oldPassword"
+        label="Old Password"
+        rules={[
+          {
+            required: true,
+            message: "Please input your old password!",
+          },
+          {
+            min: 6,
+            message: "At least 6 characters long.",
+          },
+          {
+            pattern: /^\S*$/,
+            message: "Password cannot contain spaces.",
+          },
+        ]}
+        hasFeedback
+      >
+        <Input.Password />
+      </Form.Item>
+      <Form.Item
         name="password"
         label="New Password"
         rules={[
@@ -202,13 +230,25 @@ const Profile = () => {
             message: "Please input your new password!",
           },
           {
-            min: 8,
-            message: "At least 8 characters long.",
+            min: 6,
+            message: "At least 6 characters long.",
           },
           {
             pattern: /^\S*$/,
             message: "Password cannot contain spaces.",
           },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (!value || getFieldValue("oldPassword") !== value) {
+                return Promise.resolve();
+              }
+              return Promise.reject(
+                new Error(
+                  "The new password must be different from the old password!"
+                )
+              );
+            },
+          }),
         ]}
         hasFeedback
       >
@@ -263,7 +303,7 @@ const Profile = () => {
       <Space className="profileCard">
         <Space className="profileCard--top">
           <Space className="ava">
-            {profile.image && (
+            {profile?.image && (
               <Avatar
                 size={160}
                 style={{
@@ -274,7 +314,7 @@ const Profile = () => {
                 src={profile?.image}
               />
             )}
-            {!profile.image && (
+            {!profile?.image && (
               <Avatar
                 size={160}
                 style={{

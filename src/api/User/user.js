@@ -13,3 +13,9 @@ export const lockAccount = (id) => {
 export const unlockAccount = (id) => {
   return http.post(`/users/unlock?id=${id}`);
 };
+export const updateProfile = (data) => {
+  return http.patch("/users", data);
+};
+export const changePassword = (data) => {
+  return http.put("/users/password", data);
+};
