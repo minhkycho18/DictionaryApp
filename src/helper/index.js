@@ -95,3 +95,19 @@ export const getVocalIdAndDefId = (data) => {
     }
   ))
 }
+export const totalLearning = (arr) => {
+  let total = 0;
+  for (let index = 0; index < arr.length; index++) {
+    if (arr[index].level !== "0" || arr[index].level !== "0") {
+      total += arr[index].amountOfWord
+    }
+  }
+  return total
+}
+export const returnHighLevel = arr => {
+  for (let index = arr.length - 1; index > 0; index--) {
+    if (arr[index].needStudy) {
+      return arr[index].level;
+    }
+  }
+}

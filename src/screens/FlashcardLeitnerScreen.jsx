@@ -9,6 +9,7 @@ import {
   Platform,
   ScrollView,
   StatusBar,
+  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -17,6 +18,8 @@ import { colors, configFont } from "~/constants/theme";
 import ListBoxesGame from "~/components/Leitner/ListBoxesGame";
 import CardFlashcard_Leitner from "~/components/Game/CardFlashcard_Leitner/CardFlashcard_Leitner";
 import { getDataForGame } from "~/api/Leitner";
+import Modal from "react-native-modal";
+import { delay } from "~/helper";
 export default function FlashcardLeitnerScreen(props) {
   const [data, setData] = useState([]);
   const [changeLevel, setChangeLevel] = useState({});
@@ -28,6 +31,7 @@ export default function FlashcardLeitnerScreen(props) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const scrollViewRef = useRef(null);
   const navigation = useNavigation();
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const getGame = async () => {
     try {
@@ -40,17 +44,21 @@ export default function FlashcardLeitnerScreen(props) {
 
   const handleNextSlide = async (obj) => {
     if (obj.upLevel) {
-      setChangeLevel({
-        levelUp: (parseInt(level) + 1).toString(),
-        level: level,
-        answer: true,
-      });
+      if (level !== "7") {
+        setChangeLevel({
+          levelUp: (parseInt(level) + 1).toString(),
+          level: level,
+          answer: true,
+        });
+      }
     } else {
-      setChangeLevel({
-        levelUp: (parseInt(level) - 1).toString(),
-        level: level,
-        answer: false,
-      });
+      if (level !== "1") {
+        setChangeLevel({
+          levelUp: (parseInt(level) - 1).toString(),
+          level: level,
+          answer: false,
+        });
+      }
     }
     const nextSlide = currentSlide + 1;
     if (nextSlide < data.length) {
@@ -59,6 +67,9 @@ export default function FlashcardLeitnerScreen(props) {
         animated: true,
       });
       setCurrentSlide(nextSlide);
+    } else {
+      await delay(2000);
+      setIsModalVisible(true);
     }
   };
 
@@ -132,7 +143,59 @@ export default function FlashcardLeitnerScreen(props) {
         </ScrollView>
       </View>
 
-      {/* </View> */}
+      {/* Modal */}
+      <View>
+        <Modal
+          animationType="slide"
+          isVisible={isModalVisible}
+          onRequestClose={() => setIsModalVisible(false)}
+        >
+          <View style={Styles.modal_container}>
+            <View style={Styles.modal_content}>
+              <View
+                style={{
+                  width: "100%",
+                  height: "75%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 15,
+                }}
+              >
+                <Image
+                  source={require("~/assets/successLeitner.png")}
+                  style={Styles.icon}
+                />
+                <Text
+                  style={{ fontFamily: "Quicksand-SemiBold", fontSize: 15 }}
+                >
+                  You have finished all the cards for this level
+                </Text>
+              </View>
+              <View style={Styles.modal_view_button}>
+                <TouchableOpacity
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  onPress={() => navigation.navigate("HomeLeitner")}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "Quicksand-SemiBold",
+                      fontSize: 18,
+                      color: "#C2BAEE",
+                    }}
+                  >
+                    Back to home
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
     </SafeAreaView>
   );
 }
@@ -191,5 +254,31 @@ const Styles = StyleSheet.create({
     alignItems: "center",
     // flex: 1,
     // backgroundColor: "red",
+  },
+  modal_container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modal_content: {
+    backgroundColor: "#D6D3F4",
+    width: "95%",
+    height: 200,
+    borderRadius: 10,
+    position: "relative",
+    flexDirection: "column",
+  },
+  modal_view_button: {
+    borderTopWidth: 2,
+    borderTopColor: "#A99CEE",
+    backgroundColor: "#fff",
+    width: "100%",
+    height: "25%",
+    borderBottomRightRadius: 10,
+    borderBottomLeftRadius: 10,
+  },
+  icon: {
+    width: 50,
+    height: 50,
   },
 });
