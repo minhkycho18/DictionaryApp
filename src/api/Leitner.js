@@ -15,3 +15,6 @@ export const getDataForGame = (level) => {
 export const UpVocabLeitner = (statusLevel, data) => {
     return http.patch(`/leitners/levels/${statusLevel}`, data)
 }
+export const deleteVocabLeitner = (data) => {
+    return http.delete(`/leitners/vocabs`, data)
+}
