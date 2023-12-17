@@ -17,13 +17,25 @@ import LeitnerItem from "~/components/Leitner/LeitnerItem/LeitnerItem";
 import { useNavigation } from "@react-navigation/native";
 import { getInforBoxOfUser } from "~/api/Leitner";
 import { useFocusEffect } from "@react-navigation/native";
+import { returnHighLevel, totalLearning } from "~/helper";
 export default function Leitner() {
   const navigation = useNavigation();
 
   const [boxes, setBoxes] = useState([]);
+  const [needStudy, setNeedStudy] = useState();
+  const [waiting, setWaiting] = useState(0);
+  const [learning, setLearning] = useState(0);
+  const [learned, setLearned] = useState(0);
+  const [load, setLoad] = useState(false);
   const getBoxes = async () => {
     try {
       const res = await getInforBoxOfUser();
+      setLoad(true);
+      const check = res.some((item) => item.needStudy && item.level !== "0");
+      setNeedStudy(check);
+      setWaiting(res[0].amountOfWord);
+      setLearned(res[7].amountOfWord);
+      setLearning(totalLearning(res));
       setBoxes(res);
     } catch (error) {}
   };
@@ -41,8 +53,9 @@ export default function Leitner() {
   }
 
   const handleGO = () => {
-    console.log("\n\ndone nha:\n");
-    navigation.push("FlashcardLeitnerScreen");
+    const level = returnHighLevel(boxes);
+    console.log(`high level :: ${level}`);
+    navigation.push("FlashcardLeitnerScreen", { level: level });
   };
 
   return (
@@ -62,100 +75,136 @@ export default function Leitner() {
           </TouchableOpacity>
           <Text style={Styles.textHeader}>Leitner</Text>
         </View>
-        <View style={Styles.content}>
-          <View style={Styles.circle_large}>
-            <TouchableOpacity
-              style={Styles.circle_medium}
-              onPress={() => handleGO()}
-            >
-              <View style={Styles.circle_small}>
-                <View>
-                  <Text style={{ ...Styles.textHeader, textAlign: "center" }}>
-                    GO!
+        {load && (
+          <View>
+            <View style={Styles.content}>
+              <View style={Styles.circle_large}>
+                <TouchableOpacity
+                  disabled={!needStudy}
+                  onPress={() => handleGO()}
+                  style={Styles.circle_medium}
+                >
+                  <View
+                    style={{
+                      ...Styles.circle_small,
+                      borderColor: needStudy ? "#efb452" : colors.primary,
+                    }}
+                  >
+                    {needStudy ? (
+                      <View>
+                        <Text
+                          style={{ ...Styles.textHeader, textAlign: "center" }}
+                        >
+                          GO!
+                        </Text>
+                        <Text style={{ color: colors.textColor }}>
+                          Click to start
+                        </Text>
+                      </View>
+                    ) : (
+                      <View style={{ alignItems: "center" }}>
+                        <Entypo name="check" size={24} color="#efb452" />
+                        <Text
+                          style={{
+                            textAlign: "center",
+                            fontFamily: "Quicksand-Medium",
+                            fontSize: 12,
+                            color: colors.textColor,
+                          }}
+                        >
+                          Great! you have finished your leitner
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View style={Styles.content_right}>
+                <View style={Styles.content_item}>
+                  <View style={Styles.icon}>
+                    <Image
+                      source={require("~/assets/history.png")}
+                      style={{
+                        width: 20,
+                        height: 20,
+                        tintColor: colors.textTitle,
+                      }}
+                    />
+                  </View>
+                  <View style={{ width: 80 }}>
+                    <Text style={Styles.content_item__text}>Waiting</Text>
+                  </View>
+                  <Text
+                    style={{
+                      ...Styles.content_item__text,
+                      color: colors.textTitle,
+                    }}
+                  >
+                    {waiting}
                   </Text>
-                  <Text style={{ color: colors.textColor }}>
-                    Click to start
+                </View>
+                {/*  */}
+                <View style={Styles.content_item}>
+                  <View style={Styles.icon}>
+                    <Image
+                      source={require("~/assets/book.png")}
+                      style={{
+                        width: 23,
+                        height: 23,
+                        tintColor: colors.textTitle,
+                      }}
+                    />
+                  </View>
+                  <View style={{ width: 80 }}>
+                    <Text style={Styles.content_item__text}>Learning</Text>
+                  </View>
+                  <Text
+                    style={{
+                      ...Styles.content_item__text,
+                      color: colors.textTitle,
+                    }}
+                  >
+                    {learning}
+                  </Text>
+                </View>
+                {/*  */}
+                <View style={Styles.content_item}>
+                  <View style={Styles.icon}>
+                    <MaterialCommunityIcons
+                      name="check"
+                      size={24}
+                      color={colors.textTitle}
+                    />
+                  </View>
+                  <View style={{ width: 80 }}>
+                    <Text style={Styles.content_item__text}>Learned</Text>
+                  </View>
+                  <Text
+                    style={{
+                      ...Styles.content_item__text,
+                      color: colors.textTitle,
+                    }}
+                  >
+                    {learned}
                   </Text>
                 </View>
               </View>
-            </TouchableOpacity>
-          </View>
-          <View style={Styles.content_right}>
-            <View style={Styles.content_item}>
-              <View style={Styles.icon}>
-                <Image
-                  source={require("~/assets/history.png")}
-                  style={{ width: 20, height: 20, tintColor: colors.textTitle }}
-                />
-              </View>
-              <View style={{ width: 80 }}>
-                <Text style={Styles.content_item__text}>Waiting</Text>
-              </View>
-              <Text
-                style={{
-                  ...Styles.content_item__text,
-                  color: colors.textTitle,
-                }}
-              >
-                0
-              </Text>
             </View>
-            {/*  */}
-            <View style={Styles.content_item}>
-              <View style={Styles.icon}>
-                <Image
-                  source={require("~/assets/book.png")}
-                  style={{ width: 23, height: 23, tintColor: colors.textTitle }}
-                />
+            <View style={Styles.boxes}>
+              <View style={{ paddingVertical: 20 }}>
+                <Text style={{ ...Styles.textHeader, color: "#0A1741" }}>
+                  Leitner Boxes
+                </Text>
               </View>
-              <View style={{ width: 80 }}>
-                <Text style={Styles.content_item__text}>Learning</Text>
-              </View>
-              <Text
-                style={{
-                  ...Styles.content_item__text,
-                  color: colors.textTitle,
-                }}
-              >
-                0
-              </Text>
-            </View>
-            {/*  */}
-            <View style={Styles.content_item}>
-              <View style={Styles.icon}>
-                <MaterialCommunityIcons
-                  name="check"
-                  size={24}
-                  color={colors.textTitle}
-                />
-              </View>
-              <View style={{ width: 80 }}>
-                <Text style={Styles.content_item__text}>Learned</Text>
-              </View>
-              <Text
-                style={{
-                  ...Styles.content_item__text,
-                  color: colors.textTitle,
-                }}
-              >
-                0
-              </Text>
+              {boxes.map((item, index) => (
+                <View key={index}>
+                  <LeitnerItem type={item} />
+                  {index !== 7 && <View style={Styles.line}></View>}
+                </View>
+              ))}
             </View>
           </View>
-        </View>
-        <View style={Styles.boxes}>
-          <View style={{ paddingVertical: 20 }}>
-            <Text style={{ ...Styles.textHeader, color: "#0A1741" }}>
-              Leitner Boxes
-            </Text>
-          </View>
-          {boxes.map((item, index) => (
-            <View key={index}>
-              <LeitnerItem type={item} />
-              {index !== 7 && <View style={Styles.line}></View>}
-            </View>
-          ))}
-        </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -235,7 +284,6 @@ const Styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 100,
     borderWidth: 4,
-    borderColor: "#efb452",
     justifyContent: "center",
     alignItems: "center",
   },

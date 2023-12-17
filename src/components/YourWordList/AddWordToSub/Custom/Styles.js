@@ -54,7 +54,7 @@ export const Styles = StyleSheet.create({
     },
     input: {
         width: "100%",
-        padding: 5,
+        padding: 8,
         paddingLeft: 10,
         borderRadius: 6,
         borderWidth: 1,
