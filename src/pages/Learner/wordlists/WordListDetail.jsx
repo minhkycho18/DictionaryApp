@@ -23,7 +23,10 @@ import { BiAddToQueue } from "react-icons/bi";
 import { FiFolderPlus } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { cloneSubcategory } from "../../../api/Subcategory/subcategory.api";
+import {
+  cloneSubcategory,
+  getAllVocabInSub,
+} from "../../../api/Subcategory/subcategory.api";
 import {
   cloneWordLists,
   getDefault,
@@ -40,6 +43,7 @@ import {
   getWordListsPublic,
 } from "../../../stores/word-lists/wordLists-thunk";
 import "./WordListDetail.scss";
+import { addVocabToLeitner } from "../../../api/Leitner/leitner.api";
 const WordListDetail = (props) => {
   const [searchParams] = useSearchParams();
   const [query] = useState(searchParams.get("id"));
@@ -202,12 +206,31 @@ const WordListDetail = (props) => {
       info("In order to learn you must sign in.");
     }
   };
-  const handleAddToLeitner = (subcategoryId) => {
+
+  const handleAddToLeitner = async (subId, wordListId) => {
     const token = getTokenFromStorage();
     if (token) {
-      //  navigate(
-      //    `/vocabulary/${selectedWordList.id}/detail/${subcategoryId}/learn`
-      //  );
+      const sub = await getAllVocabInSub({
+        wordListId: wordListId,
+        SubId: subId,
+        offset: 0,
+        limit: 0,
+      });
+      try {
+        const data = sub.content.map((item) => {
+          return {
+            vocabId: item.vocabId,
+            defId: item.definition.defId,
+          };
+        });
+        const rs = await addVocabToLeitner(data);
+        openNotificationWithIcon("success", rs);
+      } catch (error) {
+        openNotificationWithIcon(
+          "info",
+          "Fail to add leitner. Please try again!"
+        );
+      }
     } else {
       info("In order to add this subcategory you must sign in.");
     }
@@ -215,65 +238,72 @@ const WordListDetail = (props) => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const renderSubcategory = subcategories.map((subcategory, index) => (
-    <Col key={index} className="col-css">
-      <Space className="wldetail__card" direction="vertical">
-        <Space direction="vertical">
-          <Space className="wldetail__card-title">{subcategory?.title}</Space>
-          <Space className="wldetail__card__wrap">
-            <ContainerOutlined className="wldetail__card__icon" />
-            <Space className="wldetail__card__amount">
-              {subcategory?.amountOfWord}
-            </Space>
-            Words
-          </Space>
-        </Space>
-        <Space
-          style={{
-            paddingTop: 64,
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
-          <Space>
-            <Space
-              className="wldetail__card-addLeitner"
-              direction="vertical"
-              onClick={handleAddToLeitner}
-            >
-              <Space className="wldetail__card-iconAdd">
-                <InboxOutlined />
+  const renderSubcategory =
+    subcategories &&
+    subcategories.map((subcategory, index) => (
+      <Col key={index} className="col-css">
+        <Space className="wldetail__card" direction="vertical">
+          <Space direction="vertical">
+            <Space className="wldetail__card-title">{subcategory?.title}</Space>
+            <Space className="wldetail__card__wrap">
+              <ContainerOutlined className="wldetail__card__icon" />
+              <Space className="wldetail__card__amount">
+                {subcategory?.amountOfWord}
               </Space>
-              to leitner
+              Words
             </Space>
-            {selectedWordList.listType !== "PRIVATE" && isPublic && (
+          </Space>
+          <Space
+            style={{
+              paddingTop: 64,
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <Space>
               <Space
                 className="wldetail__card-addLeitner"
                 direction="vertical"
-                onClick={() => {
-                  handleCloneSubcategory(subcategory.subcategoryId);
-                }}
+                onClick={() =>
+                  handleAddToLeitner(
+                    subcategory?.subcategoryId,
+                    subcategory.wordListId
+                  )
+                }
               >
                 <Space className="wldetail__card-iconAdd">
-                  <BiAddToQueue />
+                  <InboxOutlined />
                 </Space>
-                Clone sub
+                to leitner
+              </Space>
+              {selectedWordList.listType !== "PRIVATE" && isPublic && (
+                <Space
+                  className="wldetail__card-addLeitner"
+                  direction="vertical"
+                  onClick={() => {
+                    handleCloneSubcategory(subcategory.subcategoryId);
+                  }}
+                >
+                  <Space className="wldetail__card-iconAdd">
+                    <BiAddToQueue />
+                  </Space>
+                  Clone sub
+                </Space>
+              )}
+            </Space>
+
+            {!isPublic && !isDefault && (
+              <Space
+                className="wldetail__card-iconLearn"
+                onClick={() => handleLearn(subcategory.subcategoryId)}
+              >
+                Learn
               </Space>
             )}
           </Space>
-
-          {!isPublic && !isDefault && (
-            <Space
-              className="wldetail__card-iconLearn"
-              onClick={() => handleLearn(subcategory.subcategoryId)}
-            >
-              Learn
-            </Space>
-          )}
         </Space>
-      </Space>
-    </Col>
-  ));
+      </Col>
+    ));
   const renderItem =
     wordLists &&
     wordLists.map((wl, index) => ({
