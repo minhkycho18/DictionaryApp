@@ -100,8 +100,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (updateUserDto.getName() != null && !updateUserDto.getName().isEmpty()) {
             user.setName(updateUserDto.getName());
         }
-        if (updateUserDto.getAvatar() != null && !updateUserDto.getAvatar().isEmpty()) {
-            user.setImage(updateUserDto.getAvatar());
+        if (updateUserDto.getImage() != null && !updateUserDto.getImage().isEmpty()) {
+            user.setImage(updateUserDto.getImage());
         }
         User updatedUser = userRepository.save(user);
         return userMapper.entityToUserDTO(updatedUser);

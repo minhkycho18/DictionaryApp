@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class UpdateUserDto {
     @Size(max = 30, message = "Name should not be over 30 characters")
     private String name;
-    private String avatar;
+    private String image;
 }
