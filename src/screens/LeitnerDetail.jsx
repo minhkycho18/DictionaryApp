@@ -15,7 +15,7 @@ import { Entypo } from "@expo/vector-icons";
 import { SvgXml } from "react-native-svg";
 import { colors, svgstudy } from "~/constants/theme";
 import ItemVocabOfLeitner from "~/components/Leitner/ItemVocabOfLeitner/ItemVocabOfLeitner";
-import { UpVocabLeitner, getVocabOfLeitnerLevelOfUser } from "~/api/Leitner";
+import { UpVocabLeitner, getSumOfVocabOfLeitnerLevel, getVocabOfLeitnerLevelOfUser } from "~/api/Leitner";
 import SplashScreen from "~/components/SplashScreen";
 import { Ionicons } from "@expo/vector-icons";
 import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
@@ -89,6 +89,15 @@ export default function LeitnerDetail(props) {
     // setcountWord(listWordAdd.length);
     setcountWord((pre) => pre - 1);
   };
+
+  const handleDeleteVocal = (vocalId, defId) => {
+    const listVocabFilter = listVocabOfLeitner.filter(
+      (item) => defId !== item.definition.defId
+    );
+
+    setListVocabOfLeitner(listVocabFilter);
+  };
+
   const handleStartToLearn = async (obj) => {
     const create = async () => {
       try {
@@ -107,9 +116,13 @@ export default function LeitnerDetail(props) {
         setIsLoading(false);
         showToast("Success", "Create new wordlist successfully", "success");
         await delay(1500);
-        // navigation.navigate("YourWordlist", res);
 
-        navigation.goBack();
+        // navigation.goBack();
+
+        navigation.push("LeitnerDetail", {
+          level: 1,
+          needStudy: true,
+        });
       } catch (error) {
         setIsLoading(false);
         console.log("error: ", error);
@@ -255,6 +268,8 @@ export default function LeitnerDetail(props) {
                 Vocab={item}
                 onAddWord={(vocab) => handleAddWord(vocab)}
                 onRemoveWord={(vocab) => handleRemoveWord(vocab)}
+                onDeleteVocal={(vocalId, defId) => handleDeleteVocal(vocalId, defId)}
+
               />
             )}
             onEndReached={handleEndReach}

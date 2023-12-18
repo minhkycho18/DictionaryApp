@@ -11,8 +11,9 @@ import { useEffect } from "react";
 
 import { AntDesign } from "@expo/vector-icons";
 import { GetColor, compareDate } from "~/helper";
+import { deleteVocabLeitner } from "~/api/Leitner";
 
-export default function ItemVocabOfLeitner({ Vocab, onAddWord, onRemoveWord }) {
+export default function ItemVocabOfLeitner({ Vocab, onDeleteVocal, onAddWord, onRemoveWord }) {
   const [word, setWord] = useState(Vocab.item.word);
   const [isLoading, setIsLoading] = useState(false);
   const [definition, setDefinition] = useState(Vocab.item.definition.wordDesc);
@@ -20,7 +21,38 @@ export default function ItemVocabOfLeitner({ Vocab, onAddWord, onRemoveWord }) {
 
   const wrapRef = useRef();
   const handleDeleteWord = async () => {
+    setIsLoading(!isLoading);
     try {
+      if (isSelected) {
+        setIsSelected(!isSelected);
+
+        const res = await deleteVocabLeitner(
+          [
+            {
+              vocabId: Vocab.item.vocabId,
+              defId: Vocab.item.definition.defId,
+            },
+          ]
+        );
+        console.log(res);
+        onRemoveWord({
+          vocab: Vocab.item,
+        });
+      }
+      else
+      {
+        const res = await deleteVocabLeitner(
+          [
+            {
+              vocabId: Vocab.item.vocabId,
+              defId: Vocab.item.definition.defId,
+            },
+          ]
+        );
+        console.log(res);
+      }
+      setIsLoading(false);
+      onDeleteVocal(Vocab.item.vocabId, Vocab.item.definition.defId);
     } catch (error) {
       console.log(`Delete word fail::`, error);
     }
@@ -59,7 +91,11 @@ export default function ItemVocabOfLeitner({ Vocab, onAddWord, onRemoveWord }) {
         >
           <View style={Styles.Text_content}>
             <View style={Styles.Title_Status}>
-              <View>
+              <View
+              style={{
+                width:'59%',
+
+              }}>
                 <Text
                   numberOfLines={1}
                   style={[
@@ -82,9 +118,9 @@ export default function ItemVocabOfLeitner({ Vocab, onAddWord, onRemoveWord }) {
                   alignItems: "center",
                 }}
               >
-                {isLoading && (
+                {/* {isLoading && (
                   <ActivityIndicator size="small" color="#2C94E6" />
-                )}
+                )} */}
 
                 {Vocab.item.level != 0 ? (
                   <View
@@ -146,9 +182,11 @@ export default function ItemVocabOfLeitner({ Vocab, onAddWord, onRemoveWord }) {
                     <AntDesign name="checkcircle" size={20} color="#2C94E6" />
                   </View>
                 )}
-
-                <TouchableOpacity
-                //  onPress={() => handleDeleteWord()}
+                {isLoading ? (
+                  <ActivityIndicator size="small" color="#2C94E6" />
+                ):(
+                  <TouchableOpacity
+                  onPress={() => handleDeleteWord()}
                 >
                   <SvgXml
                     width="18"
@@ -156,6 +194,8 @@ export default function ItemVocabOfLeitner({ Vocab, onAddWord, onRemoveWord }) {
                     xml={svgTrash(colors.textColor)}
                   />
                 </TouchableOpacity>
+                )}
+
               </View>
             </View>
 
