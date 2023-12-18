@@ -1,6 +1,6 @@
 import { Breadcrumb, Button, Image, Layout, Space, theme } from "antd";
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import categoryBack from "../../assets/images/category-back.png";
 import CustomSider from "../../components/sider/CustomSider";
@@ -12,7 +12,6 @@ import "./dashboard.scss";
 import { FaGraduationCap } from "react-icons/fa6";
 const { Header, Content } = Layout;
 const Dashboard = () => {
-  const { currentLevel } = useSelector((state) => state.leitner);
   const { pathname } = useLocation();
   changeTitle(pathname);
   const path = getFullPath(pathname);

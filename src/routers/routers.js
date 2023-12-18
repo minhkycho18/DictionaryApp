@@ -22,6 +22,7 @@ import { getLeiner } from "../api/Leitner/leitner.api";
 import LeitnerLevel from "../pages/Learner/leitner/LeitnerLevel";
 import LeitnerGame from "../pages/Learner/leitner/LeitnerGame";
 import AccountManagement from "../pages/Manager/Account/AccountManagement";
+import Authenticate from "../guards/Auth/Authenticate";
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -146,23 +147,6 @@ const routers = createBrowserRouter([
         element: <Game />,
       },
     ],
-    // {
-    //   path: "game/new",
-    //   element: <NewGame />,
-    // },
-    // {
-    //   path: "game/:id",
-    //   element: <Game />,
-    // },
-    // {
-    //   path: "explore",
-    //   element: <ExploredWordList />,
-    // },
-    // {
-    //   path: "my-words",
-    //   element: <MyWords />,
-    // },
-    // {
   },
   {
     path: "/auth",
@@ -174,7 +158,11 @@ const routers = createBrowserRouter([
   },
   {
     path: "/manager",
-    element: <Manager />,
+    element: (
+      <Authenticate>
+        <Manager />
+      </Authenticate>
+    ),
     children: [
       {
         path: "account",

@@ -8,10 +8,11 @@ import {
 } from "@ant-design/icons";
 import { Avatar, Button, Flex, Menu, Space } from "antd";
 import "./ManagerSider.scss";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../stores/authenticate/authSlice";
 import Sider from "antd/es/layout/Sider";
+import changeTitle from "../../helpers/changeTitle";
 
 const dashboardManagerLink = [
   {
@@ -38,8 +39,8 @@ const dashboardManagerLink = [
 
 const Manager = () => {
   const navigate = useNavigate();
-  // const {pathname} = useLocation();
-  // const path = getFullPath(pathname);
+  const { pathname } = useLocation();
+  changeTitle(pathname);
   const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.profile);
   const [current, setCurrent] = useState("/vocabulary");

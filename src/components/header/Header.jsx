@@ -8,6 +8,7 @@ import "./Header.scss";
 import SignInBtn from "./SignInBtn";
 import { getUserProfile } from "../../stores/user/userThunk";
 import { useDispatch, useSelector } from "react-redux";
+import getTokenFromStorage from "../../helpers/getTokenFromStorage";
 
 const Header = () => {
   const { pathname } = useLocation();
@@ -16,7 +17,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.profile);
   changeTitle(pathname);
-
+  const token = getTokenFromStorage();
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 630) {
@@ -34,11 +35,11 @@ const Header = () => {
     dispatch(getUserProfile());
   }, [dispatch]);
   useEffect(() => {
-    if (profile) {
+    if (token) {
       setIsLogin(true);
     }
     return () => {};
-  }, [profile]);
+  }, [token]);
 
   const links = [
     {

@@ -2,30 +2,33 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getUserProfile } from "../../stores/user/userThunk";
-// import { getUserProfile } from "../../stores/user/userThunk";
-// import { useDispatch } from "react-redux";
 
-const Authenticate = (props) => {
+const AdminAuth = (props) => {
   const [token] = useState(localStorage.getItem("token"));
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (!token) {
-      navigate("/");
+      navigate("/auth/sign-in");
     } else {
+      setLoading(true);
       dispatch(getUserProfile())
         .unwrap()
         .then((rs) => {
           const role = rs?.role?.name;
           if (role === "ADMIN") {
+            setLoading(false);
             navigate("/manager");
+          }
+          if (role !== "ADMIN") {
+            setLoading(false);
+            navigate(-1);
           }
         });
     }
   }, [dispatch, navigate, token]);
-
-  return <>{props.children}</>;
+  return <>{!loading && props.children}</>;
 };
 
-export default Authenticate;
+export default AdminAuth;
