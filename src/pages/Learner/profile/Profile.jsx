@@ -109,6 +109,7 @@ const Profile = () => {
             messageApi.success(rs);
             setOpen(false);
             form.setFieldsValue(formValues);
+            setType("");
           }
         } catch (error) {
           messageApi.error(error);
@@ -119,7 +120,6 @@ const Profile = () => {
       } else {
         messageApi.error("New password does not match confirmation password!");
       }
-      setType("");
     }
   };
 
