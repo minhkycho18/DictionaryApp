@@ -18,7 +18,7 @@ const Authenticate = (props) => {
         .unwrap()
         .then((rs) => {
           const role = rs?.role?.name;
-          if (role === "ADMIN") {
+          if (role !== "LEARNER") {
             navigate("/manager");
           }
         });

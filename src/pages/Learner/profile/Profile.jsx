@@ -12,12 +12,14 @@ import {
 import React, { useEffect, useState } from "react";
 import "./Profile.scss";
 // import { useNavigate } from "react-router-dom";
-import { Option } from "antd/es/mentions";
 import { RiGenderlessLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
+import { changePassword } from "../../../api/User/user";
 import { capitalizeFirstLetter } from "../../../helpers/changeTitle";
-import { getUserProfile } from "../../../stores/user/userThunk";
-import { changePassword, updateProfile } from "../../../api/User/user";
+import {
+  getUserProfile,
+  updateUserProfile,
+} from "../../../stores/user/userThunk";
 const formItemLayout = {
   labelCol: {
     xs: {
@@ -49,7 +51,6 @@ const tailFormItemLayout = {
   },
 };
 const Profile = () => {
-  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.profile);
   const [open, setOpen] = useState(false);
@@ -57,9 +58,7 @@ const Profile = () => {
   const [type, setType] = useState("");
   const [isFormChanged, setIsFormChanged] = useState(false);
   const [formValues, setFormValues] = useState({
-    email: profile?.email || "",
-    name: profile?.name || "",
-    gender: profile?.gender || undefined,
+    ...profile,
     password: null,
     confirm: null,
     oldPassword: null,
@@ -72,44 +71,33 @@ const Profile = () => {
   useEffect(() => {
     dispatch(getUserProfile());
   }, [dispatch]);
-  const handleFormChange = (changedValues, allValues) => {
-    setFormValues(allValues);
-  };
 
   const showModal = (type) => {
     setType(type);
     setOpen(true);
   };
-
+  const handleFormChange = (changedValues, allValues) => {
+    setFormValues(allValues);
+    setIsFormChanged(true); // Khi có sự thay đổi, enable nút Confirm
+  };
   const handleCancel = () => {
     setOpen(false);
   };
   const onFinish = (values) => {
     if (type === "profile") {
-      console.log(values);
-      const getProfileUpdate = async (data) => {
-        try {
-          const rs = await updateProfile(data);
-          if (rs) {
-            messageApi.success(rs);
-            setOpen(false);
-            setIsFormChanged(false);
-            form.setFieldsValue({
-              email: profile?.email || "",
-              name: values.name,
-              gender: profile?.gender || undefined,
-              password: null,
-              confirm: null,
-              oldPassword: null,
-            });
-          }
-        } catch (error) {
-          messageApi.error(error);
-        }
-      };
-      // getProfileUpdate({ name: values.name, image: null });
-      form.setFieldsValue(formValues);
-      setOpen(false);
+      try {
+        dispatch(updateUserProfile({ name: values?.name, image: "" }));
+        messageApi.success("Update successful!");
+        setOpen(false);
+        form.setFieldsValue({
+          ...formValues,
+          name: values?.name,
+          image: "",
+        });
+        setIsFormChanged(false);
+      } catch (error) {
+        messageApi.error(error);
+      }
       setType("");
     }
     if (type === "password") {
@@ -134,25 +122,7 @@ const Profile = () => {
       setType("");
     }
   };
-  // const normFile = (e) => {
-  //   if (Array.isArray(e)) {
-  //     return e;
-  //   }
-  //   return e?.fileList;
-  // };
-  useEffect(() => {
-    const isChanged =
-      JSON.stringify(formValues) !==
-      JSON.stringify({
-        email: profile?.email || "",
-        name: profile?.name,
-        gender: profile?.gender || undefined,
-        password: null,
-        confirm: null,
-        oldPassword: null,
-      });
-    setIsFormChanged(isChanged);
-  }, [formValues, profile]);
+
   const renderProfile = (
     <Form
       {...formItemLayout}
@@ -309,17 +279,7 @@ const Profile = () => {
                 style={{
                   backgroundColor: "#fff",
                   color: "#f56a00",
-                }}
-                className="ava--infor"
-                src={profile?.image}
-              />
-            )}
-            {!profile?.image && (
-              <Avatar
-                size={160}
-                style={{
-                  backgroundColor: "#fff",
-                  color: "#f56a00",
+                  fontSize: 32,
                 }}
                 className="ava--infor"
               >

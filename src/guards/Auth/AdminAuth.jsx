@@ -17,14 +17,9 @@ const AdminAuth = (props) => {
         .unwrap()
         .then((rs) => {
           const role = rs?.role?.name;
-          if (role === "ADMIN") {
-            setLoading(false);
-            navigate("/manager");
-          }
-          if (role !== "ADMIN") {
-            setLoading(false);
+          if (role === "LEARNER") {
             navigate(-1);
-          }
+          } else setLoading(false);
         });
     }
   }, [dispatch, navigate, token]);

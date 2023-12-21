@@ -107,7 +107,12 @@ const WordListDetail = (props) => {
           description: msg,
         });
         break;
-
+      case "info":
+        api[type]({
+          message: "Info",
+          description: msg,
+        });
+        break;
       default:
         break;
     }
@@ -214,8 +219,8 @@ const WordListDetail = (props) => {
         wordListId: wordListId,
         SubId: subId,
         offset: 0,
-        limit: 0,
       });
+
       try {
         const data = sub.content.map((item) => {
           return {
@@ -226,10 +231,7 @@ const WordListDetail = (props) => {
         const rs = await addVocabToLeitner(data);
         openNotificationWithIcon("success", rs);
       } catch (error) {
-        openNotificationWithIcon(
-          "info",
-          "Fail to add leitner. Please try again!"
-        );
+        openNotificationWithIcon("info", error);
       }
     } else {
       info("In order to add this subcategory you must sign in.");
