@@ -113,7 +113,7 @@ export default function Profile() {
             style={Styles.viewProfile}
             onPress={() => {
               if (isLogin) {
-                navigation.navigate("YourWordlist");
+                navigation.navigate("YourWordlist", { title: "My Wordlist" });
               } else {
                 setIsOpenModal(!isOpenModal);
                 setContent("access to your own wordlist");

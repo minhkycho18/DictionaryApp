@@ -21,7 +21,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import { useFocusEffect } from "@react-navigation/native";
-export default function YourWordList() {
+export default function YourWordList(props) {
   const [wordLists, setWordLists] = useState([]);
   const [isCheck, setIsCheck] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
@@ -111,7 +111,7 @@ export default function YourWordList() {
               },
             ]}
           >
-            Your Wordlist
+            {props.route.params.title}
           </Text>
           <Text
             style={[

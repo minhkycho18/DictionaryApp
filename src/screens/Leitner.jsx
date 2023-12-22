@@ -254,7 +254,7 @@ const Styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-around",
     gap: 20,
   },
   content_item__text: {

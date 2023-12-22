@@ -52,14 +52,13 @@ export default function FlashcardLeitnerScreen(props) {
         });
       }
     } else {
-      if (level !== "1") {
-        setChangeLevel({
-          levelUp: (parseInt(level) - 1).toString(),
-          level: level,
-          answer: false,
-        });
-      }
+      setChangeLevel({
+        levelUp: (parseInt(level) - 1).toString(),
+        level: level,
+        answer: false,
+      });
     }
+
     const nextSlide = currentSlide + 1;
     if (nextSlide < data.length) {
       scrollViewRef.current.scrollTo({

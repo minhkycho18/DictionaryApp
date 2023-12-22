@@ -77,7 +77,7 @@ export const compareDate = (date) => {
   var [datePart, timePart] = date.split(" ");
   var [day, month, year] = datePart.split("-");
   var [hour, minute, second] = timePart.split(":");
-  var providedDate = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+  var providedDate = new Date(year, month - 1, day, hour, minute, second);
   // var providedDate = new Date(date)
   var currentDate = new Date();
   if (currentDate.getTime() >= providedDate.getTime()) {
