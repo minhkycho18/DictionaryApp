@@ -165,6 +165,10 @@ const routers = createBrowserRouter([
     ),
     children: [
       {
+        path: "profile",
+        element: <Profile />,
+      },
+      {
         path: "account",
         element: <AccountManagement />,
       },

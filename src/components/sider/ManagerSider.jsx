@@ -62,6 +62,10 @@ const Manager = () => {
     navigate("/");
   };
 
+  const handleClickAvatar = () => {
+    navigate("/manager/profile");
+  };
+
   return (
     <Sider
       width={280}
@@ -90,9 +94,11 @@ const Manager = () => {
               size={64}
               style={{
                 border: "1px solid #ccc",
+                cursor: "pointer",
               }}
               src={profile?.image || undefined}
               icon={!profile?.image && <UserOutlined />}
+              onClick={handleClickAvatar}
             />
             <span className={"sidebar__ava__name"}>{profile?.name}</span>
             <span className={"sidebar__ava__role"}>{profile?.role.name}</span>
