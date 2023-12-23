@@ -28,7 +28,7 @@ const AddAccountModal = ({ handleRegister }) => {
 
   return (
     <>
-      <Button onClick={handleShowModal}>Add new +</Button>
+      <Button onClick={handleShowModal}>Add new account</Button>
       <Modal
         title="Register new account"
         open={isModalOpen}

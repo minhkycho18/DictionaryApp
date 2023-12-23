@@ -87,19 +87,6 @@ const AccountManagement = () => {
         </Row>
         <div className="box_data" style={{ gap: "20px" }}>
           <Row className={"box_data_item search_box"}>
-            {/* <Col offset={1} span={8}>
-              <Space direction={"vertical"}>
-                <span className="pos_filter-title">
-                  Filter by <FilterOutlined />
-                </span>
-                <Select
-                  bordered
-                  placeholder="-- All --"
-                  style={{ width: 200 }}
-                  className="pos_filter-select"
-                />
-              </Space>
-            </Col> */}
             <Col
               offset={16}
               span={8}
@@ -113,19 +100,6 @@ const AccountManagement = () => {
                     style={{ color: "#bbb", padding: "0px 4px" }}
                   />
                 }
-                // suffix={
-                //   searching && (
-                //     <CloseOutlined
-                //       style={{
-                //         fontSize: "12px",
-                //         padding: "2px",
-                //         marginLeft: "2px",
-                //         textAlign: "center",
-                //         cursor: "pointer",
-                //       }}
-                //     ></CloseOutlined>
-                //   )
-                // }
                 onChange={(e) => {
                   handleSearch(e.target.value);
                 }}

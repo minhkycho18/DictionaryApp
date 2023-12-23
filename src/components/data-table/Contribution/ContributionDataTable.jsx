@@ -33,7 +33,6 @@ const ContributionDataTable = ({
       align: "center",
       render: (text) => (
         <Tag color={colorPos.get(text)} key={text} style={{ fontSize: "15px" }}>
-          {!text && "--"}
           {upperFirst(text)}
         </Tag>
       ),

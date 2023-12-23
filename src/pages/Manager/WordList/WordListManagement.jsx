@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Input, Row, Select, Space, message } from "antd";
-import {
-  FilterOutlined,
-  LeftOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
+import { Button, Col, Input, Row, Space } from "antd";
+import { LeftOutlined, SearchOutlined } from "@ant-design/icons";
 import WordListDataTable from "../../../components/data-table/WordList/WordListDataTable";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -143,10 +139,7 @@ const WordListManagement = () => {
         await deleteSub(updatedParam);
         dispatch(getSubcategory({ wordlistId: selectedWL.id }));
       }
-      message.success("Delete successfully!");
-    } catch (error) {
-      message.error("Failed to delete");
-    }
+    } catch (error) {}
   };
 
   const handleAddNewVocab = async (param) => {
@@ -264,21 +257,8 @@ const WordListManagement = () => {
       </Row>
       <div className="box_data" style={{ gap: "20px" }}>
         <Row className={"box_data_item search_box"}>
-          <Col offset={1} span={8}>
-            <Space direction={"vertical"}>
-              <span className="pos_filter-title">
-                Filter by <FilterOutlined />
-              </span>
-              <Select
-                bordered
-                placeholder="-- All --"
-                style={{ width: 200 }}
-                className="pos_filter-select"
-              />
-            </Space>
-          </Col>
           <Col
-            offset={7}
+            offset={16}
             span={8}
             style={{ display: "flex", justifyContent: "center" }}
           >

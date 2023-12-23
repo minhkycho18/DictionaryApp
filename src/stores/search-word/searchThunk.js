@@ -3,7 +3,10 @@ import {
   getSearchResultByKeyword,
   getVocabDetailByKey,
 } from "../../api/Search/search.api";
-import { getAllContributionVocabs } from "../../api/Vocabulary/vocabulary.api";
+import {
+  getAllContributionVocabs,
+  getAllHistory,
+} from "../../api/Vocabulary/vocabulary.api";
 
 export const getSearchResult = createAsyncThunk(
   "search/getSearchResult",
@@ -33,6 +36,18 @@ export const getContributionVocab = createAsyncThunk(
   async (param, thunkAPi) => {
     try {
       const response = await getAllContributionVocabs();
+      return response;
+    } catch (error) {
+      throw thunkAPi.rejectWithValue(error);
+    }
+  }
+);
+
+export const getContributionHistory = createAsyncThunk(
+  "search/getContributionHistory",
+  async (param, thunkAPi) => {
+    try {
+      const response = await getAllHistory();
       return response;
     } catch (error) {
       throw thunkAPi.rejectWithValue(error);

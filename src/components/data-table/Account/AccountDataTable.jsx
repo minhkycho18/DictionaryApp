@@ -1,8 +1,7 @@
 import { Modal, Table, Tag } from "antd";
 import { upperFirst } from "lodash";
 import "./AccountDataTable.scss";
-import colorStatus from "../../../helpers/ColorStatus";
-import { colorRole } from "../../../helpers/accountColor";
+import { colorGender, colorRole } from "../../../helpers/accountColor";
 import { LockOutlined, UnlockOutlined } from "@ant-design/icons";
 import { useState } from "react";
 
@@ -31,7 +30,7 @@ const AccountDataTable = ({ dataSource, handleChangeStatusAccount }) => {
       width: "10%",
       render: (text) => (
         <Tag
-          color={colorStatus.get(text)}
+          color={colorGender.get(text)}
           key={text}
           style={{
             fontSize: "12px",
@@ -129,7 +128,6 @@ const AccountDataTable = ({ dataSource, handleChangeStatusAccount }) => {
         }}
       />
       <Modal
-        // title={`Do you want to ${titleContent} this account ?`}
         open={isModalOpen}
         centered
         onOk={handleSubmit}

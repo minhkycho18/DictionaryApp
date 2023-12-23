@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getContributionVocab, getSearchResult } from "./searchThunk";
+import {
+  getContributionVocab,
+  getSearchResult,
+  getContributionHistory,
+} from "./searchThunk";
 import {
   addWordToLeitner,
   addWordToSubcategory,
@@ -9,6 +13,7 @@ const initialState = {
   keyword: "",
   result: [],
   contributionVocab: [],
+  contributionHistory: [],
   currentPage: 1,
   totalElements: 0,
   selectedMeaning: {},
@@ -98,6 +103,19 @@ const searchSlice = createSlice({
         state.contributionVocab = action.payload;
       })
       .addCase(getContributionVocab.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.detail;
+      })
+      //============================================================================
+      .addCase(getContributionHistory.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getContributionHistory.fulfilled, (state, action) => {
+        state.loading = false;
+        state.contributionHistory = action.payload;
+      })
+      .addCase(getContributionHistory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.detail;
       })

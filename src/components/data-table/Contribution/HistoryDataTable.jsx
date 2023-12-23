@@ -2,10 +2,11 @@ import { Spin, Table, Tag } from "antd";
 import { upperFirst } from "lodash";
 import colorStatus from "../../../helpers/ColorStatus";
 import { useEffect, useState } from "react";
-import { getAllHistory } from "../../../api/Vocabulary/vocabulary.api";
 import VocabularyDetailModal from "../../Modal/VocabularyDetailModal";
+import { useDispatch, useSelector } from "react-redux";
+import { getContributionHistory } from "../../../stores/search-word/searchThunk";
 
-const HistoryDataTable = () => {
+const HistoryDataTable = ({ handleSearch, dataSource }) => {
   const columns = [
     {
       title: "Word",
@@ -76,11 +77,13 @@ const HistoryDataTable = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentVocab, setCurrentVocab] = useState({});
+  const { contributionHistory } = useSelector((state) => state.search);
+  const dispatch = useDispatch();
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await getAllHistory();
-        setData(response);
+        dispatch(getContributionHistory());
+        // setData(contributionHistory);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -90,9 +93,7 @@ const HistoryDataTable = () => {
     getData();
   }, []);
 
-  const handleOpenDetail = (item) => {
-    console.log(item);
-  };
+  const handleOpenDetail = (item) => {};
 
   const handleShow = () => {
     setIsModalOpen(!isModalOpen);
@@ -112,7 +113,7 @@ const HistoryDataTable = () => {
       <Table
         size="small"
         columns={columns}
-        dataSource={data}
+        dataSource={dataSource}
         onRow={setOnRowProps}
       />
 

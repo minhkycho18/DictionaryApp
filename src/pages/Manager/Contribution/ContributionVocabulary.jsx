@@ -7,7 +7,10 @@ import { Button, Col, Input, Row, Space } from "antd";
 import ContributionDataTable from "../../../components/data-table/Contribution/ContributionDataTable";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getContributionVocab } from "../../../stores/search-word/searchThunk";
+import {
+  getContributionHistory,
+  getContributionVocab,
+} from "../../../stores/search-word/searchThunk";
 import { setContributionVocab } from "../../../stores/search-word/searchSlice";
 import HistoryDataTable from "../../../components/data-table/Contribution/HistoryDataTable";
 
@@ -15,11 +18,14 @@ const ContributionVocabulary = () => {
   const [dataSearch, setDataSearch] = useState([]);
   const [searching, setSearching] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-  const { contributionVocab, loading } = useSelector((state) => state.search);
+  const { contributionVocab, loading, contributionHistory } = useSelector(
+    (state) => state.search
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getContributionVocab());
+    dispatch(getContributionHistory());
   }, []);
 
   const handleApprove = (record) => {
@@ -36,10 +42,17 @@ const ContributionVocabulary = () => {
       setDataSearch([]);
     } else {
       const lowerKeyword = trimmedKeyword.toLowerCase();
-      const newData = contributionVocab.filter((item) =>
-        item.word.toLowerCase().startsWith(lowerKeyword)
-      );
-      setDataSearch(newData);
+      if (!isHistoryOpen) {
+        const newData = contributionVocab.filter((item) =>
+          item.word.toLowerCase().startsWith(lowerKeyword)
+        );
+        setDataSearch(newData);
+      } else {
+        const newData = contributionHistory.filter((item) =>
+          item.vocabulary.word.toLowerCase().startsWith(lowerKeyword)
+        );
+        setDataSearch(newData);
+      }
     }
     setSearching(!!trimmedKeyword);
   };
@@ -89,19 +102,6 @@ const ContributionVocabulary = () => {
                     style={{ color: "#bbb", padding: "0px 4px" }}
                   />
                 }
-                // suffix={
-                //   searching && (
-                //     <CloseOutlined
-                //       style={{
-                //         fontSize: "12px",
-                //         padding: "2px",
-                //         marginLeft: "2px",
-                //         textAlign: "center",
-                //         cursor: "pointer",
-                //       }}
-                //     ></CloseOutlined>
-                //   )
-                // }
                 onChange={(e) => {
                   handleSearch(e.target.value);
                 }}
@@ -117,8 +117,6 @@ const ContributionVocabulary = () => {
                   fontWeight: "500",
                   cursor: "pointer",
                   transition: "color 0.3s ease",
-                  // border: "none",
-                  // boxShadow: "none",
                 }}
                 onClick={handleOpenHistory}
               >
@@ -139,7 +137,10 @@ const ContributionVocabulary = () => {
           <Row justify={"center"} className={"box_data_item table_box"}>
             <Col span={22}>
               {isHistoryOpen ? (
-                <HistoryDataTable />
+                <HistoryDataTable
+                  handleSearch={searching}
+                  dataSource={searching ? dataSearch : contributionHistory}
+                />
               ) : (
                 <ContributionDataTable
                   loading={loading}
