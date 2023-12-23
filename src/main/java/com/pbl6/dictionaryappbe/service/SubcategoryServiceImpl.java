@@ -115,7 +115,7 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
         List<SubcategoryDetail> subcategoryDetails = new ArrayList<>();
         Vocabulary newVocab = vocabularyRepository.save(Vocabulary.builder()
                 .word(contributionVocabulary.getWord())
-                .pos(contributionVocabulary.getPos())
+                .pos(contributionVocabulary.getPos().toLowerCase())
                 .phoneUk(contributionVocabulary.getPhoneUk())
                 .phoneUs(contributionVocabulary.getPhoneUs())
                 .audioUs(contributionVocabulary.getAudioUs())
