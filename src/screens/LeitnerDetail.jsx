@@ -15,7 +15,11 @@ import { Entypo } from "@expo/vector-icons";
 import { SvgXml } from "react-native-svg";
 import { colors, svgstudy } from "~/constants/theme";
 import ItemVocabOfLeitner from "~/components/Leitner/ItemVocabOfLeitner/ItemVocabOfLeitner";
-import { UpVocabLeitner, getSumOfVocabOfLeitnerLevel, getVocabOfLeitnerLevelOfUser } from "~/api/Leitner";
+import {
+  UpVocabLeitner,
+  getSumOfVocabOfLeitnerLevel,
+  getVocabOfLeitnerLevelOfUser,
+} from "~/api/Leitner";
 import SplashScreen from "~/components/SplashScreen";
 import { Ionicons } from "@expo/vector-icons";
 import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
@@ -181,7 +185,7 @@ export default function LeitnerDetail(props) {
             size={24}
             color="#182B40"
             onPress={() => {
-              navigation.goBack();
+              navigation.navigate("HomeLeitner");
             }}
           />
         </TouchableOpacity>
@@ -268,8 +272,9 @@ export default function LeitnerDetail(props) {
                 Vocab={item}
                 onAddWord={(vocab) => handleAddWord(vocab)}
                 onRemoveWord={(vocab) => handleRemoveWord(vocab)}
-                onDeleteVocal={(vocalId, defId) => handleDeleteVocal(vocalId, defId)}
-
+                onDeleteVocal={(vocalId, defId) =>
+                  handleDeleteVocal(vocalId, defId)
+                }
               />
             )}
             onEndReached={handleEndReach}

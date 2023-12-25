@@ -23,13 +23,15 @@ export default function BoxesGame({ item, level, changeLevel }) {
     }
   };
   const increaseWordShow = async (currentlevel, Declevel, IncLevel) => {
-    if (currentlevel === Declevel && level !== "1") {
+    if (currentlevel === Declevel) {
       setDown(true);
       await delay(1000);
-      setAmountOfWord(amountOfWord - 1);
+      if (IncLevel !== "0") {
+        setAmountOfWord(amountOfWord - 1);
+      }
       setDown(false);
     }
-    if (currentlevel === IncLevel && level !== "1") {
+    if (currentlevel === IncLevel) {
       setUp(true);
       await delay(1000);
       setAmountOfWord(amountOfWord + 1);

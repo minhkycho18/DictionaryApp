@@ -15,7 +15,7 @@ import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
-
+import { useNavigation } from "@react-navigation/native";
 export default function ProfileDetailScreen(props) {
   const [user, setUser] = useState(props.route.params.user);
   const [isEdit, setEdit] = useState(false);
@@ -23,7 +23,7 @@ export default function ProfileDetailScreen(props) {
   const [email, setEmail] = useState(props.route.params.user.email);
   const [gender, setGender] = useState(props.route.params.user.gender);
   const [loaded] = useFonts(configFont);
-
+  const navigation = useNavigation();
   if (!loaded) {
     return null;
   }
@@ -154,7 +154,10 @@ export default function ProfileDetailScreen(props) {
               </View>
             </View>
           </View>
-          <TouchableOpacity style={Styles.changePass}>
+          <TouchableOpacity
+            style={Styles.changePass}
+            onPress={() => navigation.push("ChangePassScreen")}
+          >
             <Text style={{ ...Styles.textLabel, color: "#9D97F9" }}>
               Change password
             </Text>
