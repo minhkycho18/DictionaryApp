@@ -22,12 +22,12 @@ public interface WordListRepository extends JpaRepository<WordList, Long> {
                 LEFT JOIN users u ON wl.user_id = u.user_id
                 WHERE wl.list_type = :listType
                 AND (:userId IS NULL OR u.user_id != :userId)
-                AND u.role_id IN (:roleId)
+                AND u.role_id = :roleId
             """,
             nativeQuery = true)
     List<WordList> findDefaultWordList(@Param("listType") String listType,
                                        @Param("userId") Long userId,
-                                       @Param("roleId") String roleId);
+                                       @Param("roleId") Long roleId);
 
     @Query(value = """
                 SELECT wl.* FROM word_list wl
