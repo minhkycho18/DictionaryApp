@@ -189,11 +189,11 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
     public SubcategoryResponseDto createSubcategory(Long wordListId, String title) {
         User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
         WordList wordList;
-        if (user.getRole().getName() == RoleName.CONTENT_MANAGER) {
-            wordList = wordListRepository.findById(wordListId).orElseThrow(() -> new EntityNotFoundException("WordList not found"));
-        } else {
+        if (user.getRole().getName() == RoleName.LEARNER) {
             wordList = wordListRepository.findByUserAndWordListId(user, wordListId)
                     .orElseThrow(() -> new AccessDeniedException("You do not have permission to access this WordList"));
+        } else {
+            wordList = wordListRepository.findById(wordListId).orElseThrow(() -> new EntityNotFoundException("WordList not found"));
         }
         if (subcategoryRepository.findByTitleAndWordList(title, wordList) != null) {
             throw new DuplicateDataException("Title's subcategory is existed");

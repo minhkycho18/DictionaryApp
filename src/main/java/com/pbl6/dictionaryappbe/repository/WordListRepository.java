@@ -1,6 +1,5 @@
 package com.pbl6.dictionaryappbe.repository;
 
-import com.pbl6.dictionaryappbe.persistence.role.Role;
 import com.pbl6.dictionaryappbe.persistence.user.User;
 import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,7 +29,12 @@ public interface WordListRepository extends JpaRepository<WordList, Long> {
                                        @Param("userId") Long userId,
                                        @Param("roleId") Long roleId);
 
-    List<WordList> findAllByUserRole(Role role);
+    @Query(value = """
+                SELECT wl.* FROM word_list wl
+                JOIN users u ON wl.user_id = u.user_id
+                WHERE u.role_id IN (:roles)
+            """, nativeQuery = true)
+    List<WordList> findAllByUserRoles(@Param("roles") List<Long> roles);
 
     List<WordList> findByUser(User user);
 
