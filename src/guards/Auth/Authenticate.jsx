@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getUserProfile } from "../../stores/user/userThunk";
@@ -19,7 +19,7 @@ const Authenticate = (props) => {
         .then((rs) => {
           const role = rs?.role?.name;
           if (role !== "LEARNER") {
-            navigate("/manager");
+            navigate("/manager/vocabulary");
           }
         });
     }

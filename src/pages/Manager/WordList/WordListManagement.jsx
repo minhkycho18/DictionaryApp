@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Input, Row, Space } from "antd";
+import { Button, Col, Input, Row, Space, notification } from "antd";
 import { LeftOutlined, SearchOutlined } from "@ant-design/icons";
 import WordListDataTable from "../../../components/data-table/WordList/WordListDataTable";
 import { useDispatch, useSelector } from "react-redux";
@@ -158,13 +158,17 @@ const WordListManagement = () => {
         offset: (pagination.current - 1) * 10,
         limit: 10,
       };
-      await dispatch(getAllVocabInSubcategory(param));
+      dispatch(getAllVocabInSubcategory(param));
+      const response = await getAllVocabInSub(param);
+      setCurrentVocabInSub(response.content);
       setPaginations({ ...pagination, total: pagination.total + 1 });
     } catch (error) {
       if (error.response && error.response.status === 400) {
         console.log("API returned status 400:");
       } else {
-        console.log("An error occurred:");
+        notification.error({
+          message: "This vocabulary is existed",
+        });
       }
     }
   };

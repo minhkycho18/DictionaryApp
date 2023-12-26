@@ -16,11 +16,6 @@ import changeTitle from "../../helpers/changeTitle";
 
 const dashboardManagerLink = [
   {
-    path: "/account",
-    label: "Account",
-    icon: <UserOutlined />,
-  },
-  {
     path: "/vocabulary",
     label: "Vocabulary",
     icon: <AudioOutlined />,
@@ -34,6 +29,11 @@ const dashboardManagerLink = [
     path: "/contribution",
     label: "Contribution",
     icon: <SolutionOutlined />,
+  },
+  {
+    path: "/account",
+    label: "Account",
+    icon: <UserOutlined />,
   },
 ];
 

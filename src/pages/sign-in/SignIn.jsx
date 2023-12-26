@@ -1,6 +1,6 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input, message } from "antd";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { signInUser } from "../../stores/authenticate/authThunk";
@@ -15,7 +15,7 @@ const SignIn = () => {
       if (userInformation?.user?.role?.name === "LEARNER") {
         navigate("/");
       } else {
-        navigate("/manager");
+        navigate("/manager/vocabulary");
       }
     }
 

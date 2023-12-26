@@ -59,7 +59,10 @@ const EditDefaultVocabularyModal = (props) => {
       if (props.contribution) {
         await reviewDefaultVocab(props.vocabDetail.id, data);
       } else {
-        await updateDefaultVocab(props.vocabDetail.id, data);
+        await updateDefaultVocab(props.vocabDetail.id, {
+          ...data,
+          status: "DEFAULT",
+        });
       }
 
       props.notification("success", action);
