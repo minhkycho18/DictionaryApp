@@ -94,7 +94,7 @@ public class LeitnerServiceImpl implements LeitnerService {
                                 .orElseThrow(() -> new RecordNotFoundException("Level leitner not found")));
                     }
                     // case: up level from 0 to 1 --> continue
-                    if (currentLevel > 1) vocabLeitner.setLastLearning(LocalDateTime.now());
+                    if (currentLevel >= 1) vocabLeitner.setLastLearning(LocalDateTime.now());
                 }
                 case DOWN -> {
                     if (currentLevel > 1) {
