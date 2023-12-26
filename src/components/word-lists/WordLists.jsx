@@ -75,6 +75,9 @@ const WordLists = ({ type, wordLists }) => {
     if (type === "public") {
       navigate("/vocabulary/public");
     }
+    if (type === "default") {
+      navigate("/vocabulary/default");
+    }
   };
 
   return (
