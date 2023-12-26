@@ -54,7 +54,6 @@ const CustomWord = (props) => {
       ...values,
       audioUs: audioUs,
       audioUk: audioUk,
-      wordType: "CUSTOM",
     };
     const params = {
       ...props.subInfo,
@@ -66,13 +65,20 @@ const CustomWord = (props) => {
       content: "Would you like to contribute this vocabulary?",
       okText: "Ok",
       cancelText: "No",
-      onOk: props.handleAddCustomVocab(params),
-      onCancel: props.handleAddCustomVocab(params),
-    });
-    // props.handleAddCustomVocab(params);
-    form.resetFields();
-    form.setFieldsValue({
-      definition,
+      onOk: () => {
+        props.handleAddCustomVocab({ ...params, isContribute: true });
+        form.resetFields();
+        form.setFieldsValue({
+          definition,
+        });
+      },
+      onCancel: () => {
+        props.handleAddCustomVocab({ ...params, isContribute: false });
+        form.resetFields();
+        form.setFieldsValue({
+          definition,
+        });
+      },
     });
   };
 

@@ -221,8 +221,9 @@ const Subcategory = (props) => {
         }));
         const newWords = generateResult.map(({ definitions, ...rest }) => rest);
         setVocabsInSub([...vocabsInSub, ...newWords]);
+        message.success("Successful!");
       } catch (error) {
-        // message.error("Cannot add this word to subcategory!");
+        message.error("Cannot add this word to subcategory!");
       }
     };
     addVocab();
