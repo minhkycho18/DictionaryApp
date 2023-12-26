@@ -108,7 +108,12 @@ const Profile = () => {
           if (rs) {
             messageApi.success(rs);
             setOpen(false);
-            form.setFieldsValue(formValues);
+            form.setFieldsValue({
+              ...formValues,
+              password: null,
+              confirm: null,
+              oldPassword: null,
+            });
             setType("");
           }
         } catch (error) {
@@ -150,7 +155,7 @@ const Profile = () => {
         <Input />
       </Form.Item>
 
-      <Form.Item name="gender" label="Gender" rules={[]}>
+      <Form.Item name="gender" label="Gender">
         <Select placeholder="select your gender" disabled>
           <Select.Option value="MALE">Male</Select.Option>
           <Select.Option value="FEMALE">Female</Select.Option>
@@ -320,19 +325,28 @@ const Profile = () => {
               </span>
             </Space>
           </Space>
-          <Space className="email-group">
-            <Space className="email-group__icon">
-              <LockOutlined style={{ fontSize: "20px", color: "#000" }} />
-            </Space>
+          <Space
+            className="email-group"
+            style={{
+              cursor: "pointer",
+            }}
+          >
             <Space
-              className="email-group__content"
-              direction="vertical"
-              onClick={() => showModal("password")}
+              className="button--edit"
+              style={{
+                position: "relative",
+                padding: 8,
+                borderRadius: 8,
+              }}
             >
-              {/* <span className="email-group__content--title">Email</span> */}
-              <span className="email-group__password email-group__content--mail">
-                Change Password
-              </span>
+              <LockOutlined style={{ fontSize: "20px", color: "#000" }} />
+              <Space
+                className="email-group__content"
+                direction="vertical"
+                onClick={() => showModal("password")}
+              >
+                <span>Change Password</span>
+              </Space>
             </Space>
           </Space>
         </div>

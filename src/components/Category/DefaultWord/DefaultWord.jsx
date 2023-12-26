@@ -9,11 +9,11 @@ const DefaultWord = ({ vocabInSub, onAddVocab }) => {
   const { result } = useSelector((state) => state.search);
   const [inputWord, setInputWord] = useState("");
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getSearchResult({ keyword: "", offset: 0 }));
-
-    return () => {};
-  }, [dispatch]);
+  // useEffect(() => {
+  //   return () => {
+  //     setInputWord("");
+  //   };
+  // }, []);
 
   const onChangeInput = (event) => {
     const newValue = event.target.value;

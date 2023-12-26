@@ -74,6 +74,22 @@ const Game = (props) => {
       localStorage.setItem("gameType", REVIEW);
     };
   }, [dispatch, subId, type, wlId]);
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.keyCode === 9) {
+        event.preventDefault();
+      }
+    };
+
+    // Attach event listener to prevent tab key usage
+    document.addEventListener("keydown", handleKeyDown);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   const handleExit = async () => {
     const params = {
       wordListId: wlId,
@@ -242,7 +258,7 @@ const Game = (props) => {
         const rs = await addVocabToLeitner(data);
         openNotificationWithIcon("success", rs);
       } catch (error) {
-        openNotificationWithIcon("info", error?.detail);
+        openNotificationWithIcon("info", error);
       }
     }
   };
@@ -263,6 +279,7 @@ const Game = (props) => {
             responsive={responsive}
             slidesToSlide={1}
             ref={slide}
+            keyBoardControl={false}
             afterChange={(nextSlide, { currentSlide, onMove }) => {
               setCurrent(currentSlide + 1);
             }}
@@ -305,6 +322,7 @@ const Game = (props) => {
             draggable={false}
             slidesToSlide={0}
             ref={slide}
+            keyBoardControl={false}
             afterChange={(nextSlide, { currentSlide, onMove }) => {
               setCurrent(currentSlide + 1);
             }}
@@ -349,6 +367,7 @@ const Game = (props) => {
             slidesToSlide={1}
             swipeable={false}
             ssr={false}
+            keyBoardControl={false}
             afterChange={(nextSlide, { currentSlide, onMove }) => {
               setCurrent(currentSlide + 1);
             }}
@@ -396,6 +415,7 @@ const Game = (props) => {
             swipeable={false}
             ssr={false}
             ref={slide}
+            keyBoardControl={false}
             transitionDuration={10}
             afterChange={(nextSlide, { currentSlide, onMove }) => {
               setCurrent(currentSlide + 1);
@@ -441,6 +461,7 @@ const Game = (props) => {
             responsive={responsive}
             slidesToSlide={1}
             ref={slide}
+            keyBoardControl={false}
             afterChange={(nextSlide, { currentSlide, onMove }) => {
               setCurrent(currentSlide + 1);
             }}

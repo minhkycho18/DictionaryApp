@@ -22,6 +22,7 @@ import {
   getSubcategory,
 } from "../../../stores/subcategory/subcategoryThunk";
 import "./WordListsPage.scss";
+import { deleteASub } from "../../../stores/subcategory/subcategorySlice";
 function WordListsPage() {
   const { id } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
@@ -32,7 +33,6 @@ function WordListsPage() {
   const dispatch = useDispatch();
 
   const [titleInput, setTitleInput] = useState("");
-
   //==========================================================================
 
   useEffect(() => {
@@ -46,8 +46,17 @@ function WordListsPage() {
         wordListId: id,
         SubId: value,
       })
-    );
-    messageApi.success("Deleted success!");
+    )
+      .unwrap()
+      .then((item) => {
+        dispatch(
+          deleteASub({
+            wordListId: id,
+            SubId: value,
+          })
+        );
+        messageApi.success("Deleted success!");
+      });
   };
   //==========================================================================
 
@@ -169,7 +178,7 @@ function WordListsPage() {
             fontWeight: 500,
             color: "#07285a",
           }}
-          defaultActiveKey={subcategories[0].subcategoryId}
+          defaultActiveKey={subcategories[0]?.subcategoryId}
           items={renderSub}
           tabPosition="top"
           onChange={onChange}

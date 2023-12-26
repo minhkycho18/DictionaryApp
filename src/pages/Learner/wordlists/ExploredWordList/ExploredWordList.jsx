@@ -57,7 +57,7 @@ const ExploredWordList = ({ type }) => {
     }, 300)
   ).current;
   const searchResult = wordLists.filter((item) =>
-    item.title.toLowerCase().startsWith(keyword.toLowerCase())
+    item.title.toLowerCase().includes(keyword.toLowerCase())
   );
 
   const handleSelectCategory = (wl) => {

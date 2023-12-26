@@ -81,6 +81,14 @@ const SuccessCard = (props) => {
                 <Space
                   className="success-card__options success-card__options--leitner"
                   onClick={() => {
+                    dispatch(
+                      setCorrectAnswer({
+                        type: "flashcard",
+                        correctCount: props?.correctAnswerFlashcard,
+                        total: props?.resultLength,
+                        incorrect: props?.incorrectAnswer,
+                      })
+                    );
                     handleAddLeitner();
                     changeToNextLesson("spelling");
                   }}
@@ -152,6 +160,14 @@ const SuccessCard = (props) => {
                 <Space
                   className="success-card__options success-card__options--leitner"
                   onClick={() => {
+                    dispatch(
+                      setCorrectAnswer({
+                        type: "spelling",
+                        correctCount: props?.correctAnswerFlashcard,
+                        total: props?.resultLength,
+                        incorrect: props?.incorrectAnswer,
+                      })
+                    );
                     handleAddLeitner();
                     changeToNextLesson("quiz");
                   }}
@@ -224,6 +240,14 @@ const SuccessCard = (props) => {
                 <Space
                   className="success-card__options success-card__options--leitner"
                   onClick={() => {
+                    dispatch(
+                      setCorrectAnswer({
+                        type: "quiz",
+                        correctCount: props?.correctAnswerFlashcard,
+                        total: props?.resultLength,
+                        incorrect: props?.incorrectAnswer,
+                      })
+                    );
                     handleAddLeitner();
                     changeToNextLesson("overview");
                   }}

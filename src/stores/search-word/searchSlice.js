@@ -51,6 +51,9 @@ const searchSlice = createSlice({
     setMeaningWord: (state, action) => {
       state.selectedMeaning = action.payload;
     },
+    setResult: (state, action) => {
+      state.result = action.payload;
+    },
     setKeyWord: (state, action) => {
       state.keyword = action.payload;
     },
@@ -189,6 +192,7 @@ export const {
   setErrorAdd,
   setContributionVocab,
   updateLeitnerAdd,
+  setResult,
 } = searchSlice.actions;
 
 export default searchSlice.reducer;

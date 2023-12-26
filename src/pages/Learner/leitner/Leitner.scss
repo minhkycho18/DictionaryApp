@@ -184,3 +184,13 @@
 .level__num--0 {
   background-color: #6c757d !important;
 }
+.RedDot {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background-color: #ff3a3e;
+  z-index: 100;
+  position: absolute;
+  top: -4px;
+  right: -4px;
+}

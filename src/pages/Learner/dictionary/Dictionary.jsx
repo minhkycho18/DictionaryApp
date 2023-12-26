@@ -1,4 +1,14 @@
-import { Avatar, Col, Divider, Empty, Input, Row, Space, Spin } from "antd";
+import {
+  Avatar,
+  Col,
+  Divider,
+  Empty,
+  Input,
+  Row,
+  Skeleton,
+  Space,
+  Spin,
+} from "antd";
 import { Content } from "antd/es/layout/layout";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,7 +18,7 @@ import Phonetic from "../../../components/Words/Phonetic";
 import Result from "../../../components/card/result";
 import "./Dictionary.scss";
 
-import { SearchOutlined } from "@ant-design/icons";
+import { ArrowDownOutlined, SearchOutlined } from "@ant-design/icons";
 import { debounce } from "lodash";
 import { setVocabDetails } from "../../../stores/search-word/searchSlice";
 import { getSearchResult } from "../../../stores/search-word/searchThunk";
@@ -20,17 +30,58 @@ const Dictionary = () => {
   const [inputWord, setInputWord] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [displayedItems, setDisplayedItems] = useState(10);
+  const contentRef = useRef(null);
+  const [isBottom, setIsBottom] = useState(false);
+  const handleScroll = () => {
+    const content = contentRef.current;
+    if (content) {
+      const isBottom =
+        content.getBoundingClientRect().bottom <= window.innerHeight;
+      setIsBottom(isBottom);
+    }
+  };
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+  useEffect(() => {
+    if (isBottom) {
+      const loadMoreItems = () => {
+        const newDisplayedItems = displayedItems + 10;
+        setDisplayedItems(newDisplayedItems);
+        dispatch(
+          getSearchResult({
+            keyword: inputWord,
+            offset: 0,
+            limit: newDisplayedItems,
+          })
+        );
+      };
+      loadMoreItems();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isBottom]);
   const onChangeInput = (event) => {
     const newValue = event.target.value;
     setInputWord(newValue);
+    setDisplayedItems(10);
     debounceInputKey(newValue);
   };
 
   const debounceInputKey = useRef(
     debounce((nextValue) => {
       setIsSelected(false);
-      dispatch(getSearchResult({ keyword: nextValue, offset: 0 }));
+      setDisplayedItems(10);
+      dispatch(
+        getSearchResult({
+          keyword: nextValue,
+          offset: 0,
+          limit: displayedItems,
+        })
+      );
     }, 500)
   ).current;
 
@@ -53,7 +104,7 @@ const Dictionary = () => {
     </Col>
   ));
   return (
-    <Content className="contentdic">
+    <Content className="contentdic" ref={contentRef}>
       <Space wrap className="search font align-center">
         <Input
           className="search__box font"
@@ -88,13 +139,28 @@ const Dictionary = () => {
       ) : (
         <Space>
           <Row gutter={[32, 16]}>
-            {result.length > 0 ? items : <Spin spinning={loading} />}
+            {result.length > 0 && items}
             {result.length <= 0 && !loading && (
               <Empty
                 description={<span className="notfound">Not Found</span>}
               />
             )}
           </Row>
+        </Space>
+      )}
+      {result.length >= 10 && !loading && (
+        <Space style={{ marginTop: 16 }}>
+          <ArrowDownOutlined
+            style={{
+              fontSize: 24,
+              color: "#07285a",
+            }}
+          />
+        </Space>
+      )}
+      {loading && (
+        <Space style={{ marginTop: 16 }}>
+          <Spin spinning={loading} size="large" />
         </Space>
       )}
     </Content>

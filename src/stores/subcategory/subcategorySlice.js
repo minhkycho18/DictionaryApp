@@ -28,7 +28,12 @@ const subcategorySlice = createSlice({
   initialState,
   reducers: {
     deleteASub: (state, action) => {
-      state.subcategories.filter((sub) => sub !== action.payload);
+      const newSubs = state.subcategories.filter(
+        (sub) =>
+          sub.subcategoryId !== action.payload.SubId[0] &&
+          sub.wordListId !== action.payload.wordListId
+      );
+      state.subcategories = newSubs;
     },
     selectWl: (state, action) => {
       state.selectedWL = action.payload;
@@ -90,14 +95,7 @@ const subcategorySlice = createSlice({
       })
       .addCase(deleteSubcategory.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.subcategories.findIndex(
-          (item) => item.subcategoryId === action.payload
-        );
-
-        if (index === -1) {
-          state.subcategories.splice(index, 1);
-          state.messageDel = action.payload;
-        } else state.messageDel = null;
+        state.messageDel = action.payload;
       })
       .addCase(deleteSubcategory.rejected, (state, action) => {
         state.loading = false;

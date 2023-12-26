@@ -12,8 +12,8 @@ export const getSearchResult = createAsyncThunk(
   "search/getSearchResult",
   async (params, thunkAPi) => {
     try {
-      const { keyword, offset, pos } = params;
-      return await getSearchResultByKeyword(keyword, offset, pos);
+      const { keyword, offset, pos, limit } = params;
+      return await getSearchResultByKeyword(keyword, offset, pos, limit);
     } catch (error) {
       throw thunkAPi.rejectWithValue(error);
     }

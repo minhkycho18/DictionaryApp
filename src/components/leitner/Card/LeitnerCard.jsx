@@ -133,12 +133,21 @@ const LeitnerCard = (props) => {
               className={`leitner-card__options--item leitner-card__unknown`}
               style={{ cursor: "pointer" }}
               onClick={() => {
-                changeLevelVocab("down", [
-                  {
-                    vocabId: props?.vocabInfo?.vocabId,
-                    defId: props?.vocabInfo?.defId,
-                  },
-                ]);
+                if (!props?.vocabInfo?.result) {
+                  changeLevelVocab("up", [
+                    {
+                      vocabId: props?.vocabInfo?.vocabId,
+                      defId: props?.vocabInfo?.defId,
+                    },
+                  ]);
+                } else
+                  changeLevelVocab("down", [
+                    {
+                      vocabId: props?.vocabInfo?.vocabId,
+                      defId: props?.vocabInfo?.defId,
+                    },
+                  ]);
+
                 if (props.isLastItem) {
                   props.handleOpenModal(true);
                 } else onChangeSlide();
@@ -153,12 +162,20 @@ const LeitnerCard = (props) => {
               className={`leitner-card__options--item leitner-card__know`}
               style={{ cursor: "pointer" }}
               onClick={() => {
-                changeLevelVocab("up", [
-                  {
-                    vocabId: props?.vocabInfo?.vocabId,
-                    defId: props?.vocabInfo?.defId,
-                  },
-                ]);
+                if (props?.vocabInfo?.result) {
+                  changeLevelVocab("up", [
+                    {
+                      vocabId: props?.vocabInfo?.vocabId,
+                      defId: props?.vocabInfo?.defId,
+                    },
+                  ]);
+                } else
+                  changeLevelVocab("down", [
+                    {
+                      vocabId: props?.vocabInfo?.vocabId,
+                      defId: props?.vocabInfo?.defId,
+                    },
+                  ]);
                 if (props.isLastItem) {
                   props.handleOpenModal(true);
                 } else onChangeSlide();

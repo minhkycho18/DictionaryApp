@@ -1,15 +1,18 @@
 const shuffleArray = (originalArray) => {
-  let newArray = originalArray.slice();
+  let newArray = [...originalArray];
 
-  newArray.sort(function () {
-    return 0.5 - Math.random();
-  });
-  if (newArray === originalArray) {
-    return shuffleArray(originalArray);
+  // Fisher-Yates shuffle algorithm
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
   }
-  if (newArray.join("") === originalArray.reverse().join("")) {
-    return shuffleArray(originalArray);
+
+  // Check if the shuffled array is the same as the original array
+  if (JSON.stringify(newArray) === JSON.stringify(originalArray)) {
+    return shuffleArray(originalArray); // If they are, reshuffle
   }
+
   return newArray;
 };
+
 export default shuffleArray;

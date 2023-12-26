@@ -23,7 +23,7 @@ import {
 import { debounce, upperFirst } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { FaGraduationCap } from "react-icons/fa6";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   addCustomVocabInSub,
@@ -36,6 +36,7 @@ import DefaultWord from "./DefaultWord/DefaultWord";
 import SubcategoryItem from "./SubItem/SubcategoryItem";
 import "./Subcategory.scss";
 import { getAllPos } from "../../api/Vocabulary/vocabulary.api";
+import { setResult } from "../../stores/search-word/searchSlice";
 
 const Subcategory = (props) => {
   let { id } = useParams();
@@ -51,6 +52,7 @@ const Subcategory = (props) => {
   const [allPos, setAllPos] = useState([]);
   const [, ctxHolder] = message.useMessage();
   //  setCurrentPos(value);
+  const dispatch = useDispatch();
   const [currentPos, setCurrentPos] = useState("All");
   const navigate = useNavigate();
   useEffect(() => {
@@ -99,7 +101,7 @@ const Subcategory = (props) => {
     debounce((nextValue) => {
       setKeyword(nextValue);
       setPage(1);
-    }, 500)
+    }, 300)
   ).current;
 
   //==============================================================================================================
@@ -137,8 +139,9 @@ const Subcategory = (props) => {
   };
 
   //==============================================================================================================
-  const filterVocab = vocabsInSub.filter((vocab) =>
-    vocab.word.toLowerCase().startsWith(keyword.toLowerCase())
+  const filterVocab = vocabsInSub.filter(
+    (vocab) => vocab.word.toLowerCase().includes(keyword.toLowerCase())
+    // item.title.toLowerCase().includes(keyword.toLowerCase())
   );
   const itemsPerPage = 10;
   const startIndex = (page - 1) * itemsPerPage;
@@ -172,7 +175,10 @@ const Subcategory = (props) => {
       imageStyle={{
         height: "120px",
       }}
-      className=""
+      style={{
+        height: "100%",
+        padding: vocabsInSub.length <= 0 ? "9% 0" : 0,
+      }}
       description={
         <span className="empty__sub--content">
           You don't have any vocab yet. Click the button above to add one.
@@ -299,11 +305,20 @@ const Subcategory = (props) => {
         </Space>
         <Button
           className="subcategory__study"
-          onClick={() =>
-            navigate(
-              `/vocabulary/${id}/detail/${props.subcategory.subcategoryId}/learn`
-            )
-          }
+          onClick={() => {
+            if (vocabsInSub.length > 0) {
+              navigate(
+                `/vocabulary/${id}/detail/${props.subcategory.subcategoryId}/learn`
+              );
+            } else
+              modal.info({
+                title: "Study",
+                icon: <ExclamationCircleOutlined />,
+                content: "You should add more vocabulary",
+                okText: "Ok",
+                centered: true,
+              });
+          }}
         >
           <span style={{ marginRight: 8 }}>Study</span>
           <FaGraduationCap size={22} />
@@ -315,7 +330,10 @@ const Subcategory = (props) => {
         <Modal
           centered
           open={isOpen}
-          onCancel={() => setIsOpen(false)}
+          onCancel={() => {
+            dispatch(setResult([]));
+            setIsOpen(false);
+          }}
           footer={null}
         >
           <Space style={{ width: "100%" }} direction="vertical">

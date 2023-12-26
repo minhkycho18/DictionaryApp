@@ -12,7 +12,6 @@ export const getSubByWlsId = (wordListId, keyword) => {
 ///===========================================================================
 export const createSub = (params) => {
   const { wordListId, title } = params;
-  console.log("title", title);
   return http.post(`/wordlists/${wordListId}/subcategories`, title, {
     headers: { "Content-Type": "text/json" },
   });

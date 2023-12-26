@@ -21,12 +21,12 @@ import {
   getAllWL,
 } from "../../../stores/word-lists/wordLists-thunk";
 import "./MyWordLists.scss";
+import { deleteWL } from "../../../stores/word-lists/wordLists-slice";
 const MyWordLists = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
-
   const { loading, wordLists, messageDel } = useSelector(
     (state) => state.wordLists
   );
@@ -41,8 +41,12 @@ const MyWordLists = () => {
     navigate(`/dashboard/wordLists/${wordlist?.title}/${wordlist?.id}`);
   };
   const onDeleteAnItem = (id) => {
-    dispatch(deleteExistWordList(id));
-    messageApi.success(messageDel);
+    dispatch(deleteWL(id));
+    dispatch(deleteExistWordList(id))
+      .unwrap()
+      .then((item) => {
+        messageApi.success(item);
+      });
   };
 
   const handleAddingWordList = () => {
@@ -70,7 +74,14 @@ const MyWordLists = () => {
             .then((values) => {
               setConfirmLoading(true);
               setTimeout(() => {
-                dispatch(createNewWL(values));
+                dispatch(createNewWL(values))
+                  .unwrap()
+                  .then((item) => {
+                    messageApi.success("Add successful!");
+                  })
+                  .catch((item) => {
+                    messageApi.error(item);
+                  });
                 form.resetFields();
                 setOpen(false);
                 setConfirmLoading(false);

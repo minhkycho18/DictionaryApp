@@ -1,5 +1,4 @@
 import {
-  CalendarOutlined,
   CheckCircleOutlined,
   CheckOutlined,
   ContainerOutlined,
@@ -8,13 +7,14 @@ import {
 import { Badge, Col, Row, Space } from "antd";
 import React, { useEffect, useState } from "react";
 import { getLeiner } from "../../../api/Leitner/leitner.api";
-// import LeitnerItem from "../../../components/leitner-item/LeitnerItem";
 import LeitnerItem from "../../../components/leitner/leitner-item/LeitnerItem";
 import "./Leitner.scss";
+import { useNavigate } from "react-router-dom";
 
 const Leitner = () => {
   const [leitner, setLeitner] = useState([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const navigate = useNavigate();
   const MOBILE_WIDTH = 768;
   useEffect(() => {
     const handleResize = () => {
@@ -51,10 +51,28 @@ const Leitner = () => {
     _getLeitner();
     return () => {};
   }, [windowWidth]);
+  const subset = leitner.slice(1, 7);
+
+  const handleStart = () => {
+    const levelStudy = leitner.filter((item) => item.needStudy);
+    navigate(
+      `/dashboard/leitner/${levelStudy[levelStudy.length - 1].levelName}/learn`
+    );
+  };
   const renderLevel = leitner.map((level, index) => (
     <Col xs={24} xl={12} className="level_row" key={index}>
       <Space className="level">
         <Badge dot={level?.needStudy}>
+          <Space
+            className="RedDot"
+            style={{
+              backgroundColor: `${
+                level?.needStudy ? "#ff3a3e" : "transparent"
+              }`,
+            }}
+          >
+            {""}
+          </Space>
           <Space className={` ${"level__num--" + level.level} level__num `}>
             {level?.level === "0" && (
               <HistoryOutlined style={{ fontSize: "20px" }} />
@@ -69,7 +87,6 @@ const Leitner = () => {
       </Space>
     </Col>
   ));
-  const subset = leitner.slice(1, 7);
   const totalAmount = subset.reduce(
     (total, item) => total + item.amountOfWord,
     0
@@ -77,20 +94,11 @@ const Leitner = () => {
   return (
     <Space className="wrap-main">
       <Space className="wrap-head leitner">
-        <Space className="leitner-start">
+        <Space className="leitner-start" onClick={() => handleStart()}>
           <Space className="leitner-start_btn">START</Space>
         </Space>
         <Space>
           <Row gutter={[16, 16]}>
-            <Col span={12}>
-              <Space className="leitner-options">
-                <CalendarOutlined className="leitner-options_btn" />
-                <Space direction="vertical">
-                  <Space className="leitner-options_title">Day</Space>
-                  <Space className="leitner-options_content">27</Space>
-                </Space>
-              </Space>
-            </Col>
             <Col span={12}>
               <Space className="leitner-options">
                 <HistoryOutlined className="leitner-options_btn" />

@@ -22,13 +22,10 @@ const wordListsSlice = createSlice({
     searchWordListResult: [],
   },
   reducers: {
-    // deleteWL: (state, action) => {
-    //   state.messageDel = null;
-    //   const index = state.wordLists.findIndex((wl) => wl.id === action.payload);
-    //   if (index !== -1) {
-    //     state.wordLists.splice(index, 1);
-    //   }
-    // },
+    deleteWL: (state, action) => {
+      const newWL = state.wordLists.filter((wl) => wl.id !== action.payload);
+      state.wordLists = newWL;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -107,14 +104,6 @@ const wordListsSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteExistWordList.fulfilled, (state, action) => {
-        const index = state.wordLists.findIndex(
-          (wl) => wl.id === action.payload
-        );
-        const defaultIndex = state.wordListsDefault.findIndex(
-          (wl) => wl.id === action.payload
-        );
-        state.wordLists.splice(index, 1);
-        state.wordListsDefault.splice(defaultIndex, 1);
         state.loading = false;
         state.messageDel = action.payload;
       })
@@ -150,5 +139,5 @@ const wordListsSlice = createSlice({
       });
   },
 });
-export const { deleteWordList } = wordListsSlice.actions;
+export const { deleteWL } = wordListsSlice.actions;
 export default wordListsSlice.reducer;
