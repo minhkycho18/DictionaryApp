@@ -23,10 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -57,8 +54,9 @@ public class WordListServiceImpl implements WordListService {
     }
 
     @Override
-    public List<WordListResponseDto> getAllSystemWordList(RoleName role, String keyword) {
-        List<WordList> wordLists = wordListRepository.findAllByUserRole(roleRepository.findByName(RoleName.CONTENT_MANAGER));
+    public List<WordListResponseDto> getAllSystemWordList(String keyword) {
+        List<Long> targetRoles = Arrays.asList(roleRepository.findByName(RoleName.ADMIN).getRoleId(), roleRepository.findByName(RoleName.CONTENT_MANAGER).getRoleId());
+        List<WordList> wordLists = wordListRepository.findAllByUserRoles(targetRoles);
         wordLists = wordLists.stream()
                 .filter(wordList -> wordList.getTitle().toLowerCase().contains(keyword.toLowerCase()))
                 .sorted(Comparator.comparing(WordList::getTitle, String.CASE_INSENSITIVE_ORDER))
@@ -71,7 +69,7 @@ public class WordListServiceImpl implements WordListService {
         User user = AuthenticationUtils.getUserFromSecurityContext();
         Long userId = user == null ? null : user.getUserId();
         Long roleId = roleRepository.findByName(RoleName.LEARNER).getRoleId();
-        List<WordList> wordLists = wordListRepository.findDefaultWordList(String.valueOf(ListType.PUBLIC), userId, roleId);
+        List<WordList> wordLists = wordListRepository.findDefaultWordList(String.valueOf(ListType.PUBLIC), userId, roleId.toString());
         return MapperUtils.toTargetList(wordListMapper::toWordListDto, wordLists);
     }
 

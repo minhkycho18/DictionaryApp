@@ -2,7 +2,6 @@ package com.pbl6.dictionaryappbe.controller;
 
 import com.pbl6.dictionaryappbe.dto.wordlist.WordListRequestDto;
 import com.pbl6.dictionaryappbe.dto.wordlist.WordListResponseDto;
-import com.pbl6.dictionaryappbe.persistence.role.RoleName;
 import com.pbl6.dictionaryappbe.persistence.wordlist.ListType;
 import com.pbl6.dictionaryappbe.service.WordListService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -57,7 +56,7 @@ public class WordListController {
         if (keyword == null) {
             keyword = "";
         }
-        return wordListService.getAllSystemWordList(RoleName.CONTENT_MANAGER, keyword);
+        return wordListService.getAllSystemWordList(keyword);
     }
 
     @Operation(summary = "Get all public WordLists except system's WordLists and current user's WordLists")

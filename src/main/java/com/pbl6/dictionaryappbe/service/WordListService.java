@@ -2,7 +2,6 @@ package com.pbl6.dictionaryappbe.service;
 
 import com.pbl6.dictionaryappbe.dto.wordlist.WordListRequestDto;
 import com.pbl6.dictionaryappbe.dto.wordlist.WordListResponseDto;
-import com.pbl6.dictionaryappbe.persistence.role.RoleName;
 import com.pbl6.dictionaryappbe.persistence.wordlist.WordList;
 
 import java.util.List;
@@ -13,7 +12,7 @@ public interface WordListService {
 
     List<WordListResponseDto> getAllByUser();
 
-    List<WordListResponseDto> getAllSystemWordList(RoleName role, String keyword);
+    List<WordListResponseDto> getAllSystemWordList(String keyword);
 
     List<WordListResponseDto> getAllPublicWordList();
 
