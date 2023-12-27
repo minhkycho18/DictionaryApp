@@ -13,6 +13,7 @@ import java.util.List;
 
 @Repository
 public interface VocabularyRepository extends JpaRepository<Vocabulary, Long>, JpaSpecificationExecutor<Vocabulary> {
+    boolean existsByWord(String word);
     @Query(value = """
                             SELECT scd.def_id as defId
                             FROM users u

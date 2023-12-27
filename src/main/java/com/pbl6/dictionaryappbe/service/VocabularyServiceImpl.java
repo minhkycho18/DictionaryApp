@@ -1,8 +1,10 @@
 package com.pbl6.dictionaryappbe.service;
 
 import com.pbl6.dictionaryappbe.dto.definition.DefinitionDetailUserDto;
+import com.pbl6.dictionaryappbe.dto.vocabulary.CreationVocabRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.UpdateDefaultVocabRequest;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabDetailDto;
+import com.pbl6.dictionaryappbe.exception.DuplicateDataException;
 import com.pbl6.dictionaryappbe.exception.RecordNotFoundException;
 import com.pbl6.dictionaryappbe.mapper.VocabularyMapper;
 import com.pbl6.dictionaryappbe.persistence.Definition;
@@ -27,8 +29,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -177,5 +181,40 @@ public class VocabularyServiceImpl implements VocabularyService {
         vocabDefRepository.deleteAll(vocabulary.getVocabDefs());
         definitionRepository.deleteAll(definitions);
         vocabularyRepository.delete(vocabulary);
+    }
+
+    @Override
+    public void createDefaultVocab(CreationVocabRequestDto vocabRequestDto) {
+        User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
+        boolean isExistedWord = vocabularyRepository.existsByWord(vocabRequestDto.getWord());
+        if (isExistedWord)
+            throw new DuplicateDataException("This vocabulary is existed");
+        Vocabulary vocabulary = Vocabulary.builder()
+                .word(vocabRequestDto.getWord())
+                .pos(vocabRequestDto.getPos())
+                .audioUk(vocabRequestDto.getAudioUk())
+                .audioUs(vocabRequestDto.getAudioUs())
+                .phoneUk(vocabRequestDto.getPhoneUk())
+                .phoneUs(vocabRequestDto.getPhoneUs())
+                .status(VocabularyStatus.DEFAULT)
+                .contributedAt(LocalDateTime.now())
+                .contributedBy(user.getEmail())
+                .build();
+        List<Definition> definitions = vocabRequestDto.getDefinitions().stream()
+                .map(definitionRequestDto -> Definition.builder()
+                        .wordDesc(definitionRequestDto.getWordDesc())
+                        .examples(definitionRequestDto.getExample())
+                        .build())
+                .toList();
+        final Vocabulary savedVocab = vocabularyRepository.save(vocabulary);
+        final List<Definition> savedDefinitions = definitionRepository.saveAll(definitions);
+        List<VocabDef> vocabDefs = savedDefinitions.stream()
+                .map(definition -> VocabDef.builder()
+                        .vocabId(savedVocab.getVocabId())
+                        .defId(definition.getDefId())
+                        .isDeleted(false)
+                        .build())
+                .toList();
+        vocabDefRepository.saveAll(vocabDefs);
     }
 }
