@@ -94,7 +94,7 @@ const AccountManagement = () => {
             >
               <Input
                 className="search_vocab"
-                placeholder={`Search User`}
+                placeholder={`Search User by 'Name' or 'Email'`}
                 prefix={
                   <SearchOutlined
                     style={{ color: "#bbb", padding: "0px 4px" }}

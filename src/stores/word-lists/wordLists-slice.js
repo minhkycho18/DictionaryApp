@@ -26,6 +26,12 @@ const wordListsSlice = createSlice({
       const newWL = state.wordLists.filter((wl) => wl.id !== action.payload);
       state.wordLists = newWL;
     },
+    deleteDefaultWL: (state, action) => {
+      const newWL = state.wordListsDefault.filter(
+        (wl) => wl.id !== action.payload
+      );
+      state.wordListsDefault = newWL;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -139,5 +145,5 @@ const wordListsSlice = createSlice({
       });
   },
 });
-export const { deleteWL } = wordListsSlice.actions;
+export const { deleteWL, deleteDefaultWL } = wordListsSlice.actions;
 export default wordListsSlice.reducer;

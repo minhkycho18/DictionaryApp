@@ -21,7 +21,7 @@ import {
   message,
 } from "antd";
 import { debounce, upperFirst } from "lodash";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaGraduationCap } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";

@@ -1,19 +1,14 @@
 import { CheckCircleFilled, SearchOutlined } from "@ant-design/icons";
 import { Empty, Input, Space } from "antd";
 import { debounce } from "lodash";
-import React, { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchResult } from "../../../stores/search-word/searchThunk";
 import "./DefaultWord.scss";
-const DefaultWord = ({ vocabInSub, onAddVocab }) => {
+const DefaultWord = ({ vocabInSub, onAddVocab, initValue }) => {
   const { result } = useSelector((state) => state.search);
   const [inputWord, setInputWord] = useState("");
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   return () => {
-  //     setInputWord("");
-  //   };
-  // }, []);
 
   const onChangeInput = (event) => {
     const newValue = event.target.value;

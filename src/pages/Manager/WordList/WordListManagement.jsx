@@ -7,6 +7,7 @@ import {
   createNewWL,
   updateWl,
   getWordListsDefault,
+  deleteExistWordList,
 } from "../../../stores/word-lists/wordLists-thunk";
 import {
   createSubcategory,
@@ -28,8 +29,8 @@ import {
   deleteSub,
   addWordToSub,
 } from "../../../api/Subcategory/subcategory.api";
-import { deleteWordLists } from "../../../api/WordLists/word-lists.api";
 import VocabularyDetailModal from "../../../components/Modal/VocabularyDetailModal";
+import { deleteDefaultWL } from "../../../stores/word-lists/wordLists-slice";
 
 const WordListManagement = () => {
   const WORDLIST_DATA_TYPE = "wordlist";
@@ -132,8 +133,8 @@ const WordListManagement = () => {
   const handleDelete = async (param) => {
     try {
       if (currentDataType === WORDLIST_DATA_TYPE) {
-        await deleteWordLists(param);
-        dispatch(getWordListsDefault());
+        dispatch(deleteDefaultWL(param));
+        dispatch(deleteExistWordList(param));
       } else {
         const updatedParam = { ...param, wordListId: selectedWL.id };
         await deleteSub(updatedParam);

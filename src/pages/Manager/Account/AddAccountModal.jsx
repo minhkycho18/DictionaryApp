@@ -1,4 +1,13 @@
-import { Button, Col, Form, Input, Modal, Row, Select } from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Modal,
+  Row,
+  Select,
+  notification,
+} from "antd";
 import { useState } from "react";
 
 const AddAccountModal = ({ handleRegister }) => {
@@ -15,10 +24,15 @@ const AddAccountModal = ({ handleRegister }) => {
   };
 
   const handleSubmit = async () => {
-    let values = await form.validateFields();
-    handleRegister(values);
-    handleShowModal();
-    console.log(values);
+    try {
+      const values = await form.validateFields();
+      handleRegister(values);
+      handleShowModal();
+    } catch (error) {
+      notification.error({
+        message: "Please fill in required field",
+      });
+    }
   };
 
   const handleCancel = () => {

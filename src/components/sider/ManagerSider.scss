@@ -86,21 +86,22 @@
         border-radius: 32px;
       }
       &_button:hover {
-        background-color: #3372fe;
+        background-color: #ff7875;
+        transition: 0.4s all linear;
       }
       &_button:hover > * {
         color: white;
       }
       &_icon {
         font-size: 22px;
-        color: #b5bad4;
+        color: #ff7875;
       }
       &_text {
         font-family: $font-manager;
         font-weight: bold !important;
         margin-right: 24px;
         font-size: 17px;
-        color: #b5bad4;
+        color: #ff7875;
       }
     }
   }

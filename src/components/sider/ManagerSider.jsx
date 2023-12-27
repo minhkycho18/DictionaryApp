@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AudioOutlined,
   FolderOutlined,
@@ -14,29 +14,6 @@ import { logOut } from "../../stores/authenticate/authSlice";
 import Sider from "antd/es/layout/Sider";
 import changeTitle from "../../helpers/changeTitle";
 
-const dashboardManagerLink = [
-  {
-    path: "/vocabulary",
-    label: "Vocabulary",
-    icon: <AudioOutlined />,
-  },
-  {
-    path: "/wordlist",
-    label: "WordList",
-    icon: <FolderOutlined />,
-  },
-  {
-    path: "/contribution",
-    label: "Contribution",
-    icon: <SolutionOutlined />,
-  },
-  {
-    path: "/account",
-    label: "Account",
-    icon: <UserOutlined />,
-  },
-];
-
 const Manager = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -44,12 +21,56 @@ const Manager = () => {
   const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.profile);
   const [current, setCurrent] = useState("/vocabulary");
+  const location = useLocation();
 
-  const items = dashboardManagerLink.map((item) => ({
-    key: item.path,
-    icon: item.icon,
-    label: item.label,
-  }));
+  useEffect(() => {
+    const endpoint = location.pathname;
+    setCurrent(`/${endpoint.split("/")[2]}`);
+    console.log(`/${endpoint.split("/")[2]}`);
+  }, [location.pathname]);
+
+  const dashboardManagerLink = [
+    {
+      path: "/vocabulary",
+      label: "Vocabulary",
+      icon: <AudioOutlined />,
+    },
+    {
+      path: "/wordlist",
+      label: "WordList",
+      icon: <FolderOutlined />,
+    },
+    {
+      path: "/contribution",
+      label: "Contribution",
+      icon: <SolutionOutlined />,
+    },
+    {
+      path: "/account",
+      label: "Account",
+      icon: <UserOutlined />,
+    },
+  ];
+  const items = dashboardManagerLink
+    .map((item) => {
+      const storedProfile = localStorage.getItem("profile");
+      const profile = storedProfile ? JSON.parse(storedProfile) : null;
+      if (item.label === "Account") {
+        return profile.role === "ADMIN"
+          ? {
+              key: item.path,
+              icon: item.icon,
+              label: item.label,
+            }
+          : null;
+      }
+      return {
+        key: item.path,
+        icon: item.icon,
+        label: item.label,
+      };
+    })
+    .filter(Boolean);
 
   const onNavItemClick = (e) => {
     setCurrent(e.key);
