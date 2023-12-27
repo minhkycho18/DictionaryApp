@@ -1,6 +1,7 @@
 package com.pbl6.dictionaryappbe.controller;
 
 import com.pbl6.dictionaryappbe.dto.contribution_history.HistoryResponse;
+import com.pbl6.dictionaryappbe.dto.vocabulary.CreationVocabRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.UpdateDefaultVocabRequest;
 import com.pbl6.dictionaryappbe.service.ContributionHistoryService;
 import com.pbl6.dictionaryappbe.service.VocabularyService;
@@ -23,7 +24,6 @@ public class ManagerController {
     private final VocabularyService vocabularyService;
     private final ContributionHistoryService historyService;
 
-
     @Operation(summary = "Update default vocabulary", security = {@SecurityRequirement(name = "bearer-key")})
     @GetMapping("/history")
     public List<HistoryResponse> getAllHistory() {
@@ -36,6 +36,13 @@ public class ManagerController {
                                                   @RequestBody @Valid UpdateDefaultVocabRequest updateDefaultVocabRequest) {
         vocabularyService.updateDefaultVocab(vocabId, updateDefaultVocabRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body("Update vocab successfully");
+    }
+
+    @Operation(summary = "Create default vocabulary", security = {@SecurityRequirement(name = "bearer-key")})
+    @PostMapping("/vocabs")
+    public ResponseEntity<String> createDefaultVocab(@Valid @RequestBody CreationVocabRequestDto vocabRequestDto) {
+        vocabularyService.createDefaultVocab(vocabRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Create vocab successfully");
     }
 
     @Operation(summary = "Review contribution vocabulary", security = {@SecurityRequirement(name = "bearer-key")})
