@@ -26,7 +26,6 @@ const Manager = () => {
   useEffect(() => {
     const endpoint = location.pathname;
     setCurrent(`/${endpoint.split("/")[2]}`);
-    console.log(`/${endpoint.split("/")[2]}`);
   }, [location.pathname]);
 
   const dashboardManagerLink = [
@@ -80,6 +79,7 @@ const Manager = () => {
   const handleSignOut = () => {
     dispatch(logOut());
     localStorage.removeItem("token");
+    localStorage.removeItem("profile");
     navigate("/");
   };
 

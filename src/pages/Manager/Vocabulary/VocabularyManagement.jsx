@@ -1,5 +1,5 @@
 import { Col, Input, Row, Select, Space } from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./VocabularyManagement.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchResult } from "../../../stores/search-word/searchThunk";

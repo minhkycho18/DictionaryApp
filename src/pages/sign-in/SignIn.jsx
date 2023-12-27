@@ -10,11 +10,22 @@ const SignIn = () => {
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
   const { userInformation, error } = useSelector((state) => state.auth);
+  const { profile } = useSelector((state) => state.profile);
   useEffect(() => {
     if (userInformation) {
       if (userInformation?.user?.role?.name === "LEARNER") {
         navigate("/");
       } else {
+        console.log(userInformation);
+        const data = {
+          name: userInformation?.user?.name,
+          email: userInformation?.user?.email,
+          image: userInformation?.user?.image,
+          role: userInformation?.user?.role?.name,
+          gender: userInformation?.user?.gender,
+        };
+        localStorage.setItem("profile", JSON.stringify(data));
+
         navigate("/manager/vocabulary");
       }
     }
