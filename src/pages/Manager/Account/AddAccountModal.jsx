@@ -17,6 +17,7 @@ const AddAccountModal = ({ handleRegister }) => {
 
   const handleShowModal = () => {
     setIsModalOpen(!isModalOpen);
+    form.resetFields();
   };
 
   const onReset = () => {
@@ -28,6 +29,7 @@ const AddAccountModal = ({ handleRegister }) => {
       const values = await form.validateFields();
       handleRegister(values);
       handleShowModal();
+      form.resetFields();
     } catch (error) {
       notification.error({
         message: "Please fill in required field",
@@ -91,6 +93,10 @@ const AddAccountModal = ({ handleRegister }) => {
               {
                 required: true,
                 message: "Please enter your password!",
+              },
+              {
+                min: 6,
+                message: "Password must be at least 6 characters long",
               },
             ]}
           >

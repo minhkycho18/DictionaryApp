@@ -95,7 +95,9 @@ const EditDefaultVocabularyModal = (props) => {
     props.handleRejectVocab();
   };
 
-  const onSubmitModal = () => {};
+  const onSubmitModal = () => {
+    handleShowSubmitModal();
+  };
 
   const handleCancel = () => {
     props.handleShow();

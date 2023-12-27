@@ -96,8 +96,10 @@ const WordListManagement = () => {
         offset: 1,
         limit: record.amountOfWord,
       };
-      const response = await getAllVocabInSub(params);
-      setCurrentVocabInSub(response.content);
+      try {
+        const response = await getAllVocabInSub(params);
+        setCurrentVocabInSub(response.content);
+      } catch (error) {}
       dispatch(getAllVocabInSubcategory(params));
       dispatch(selectSub(record));
       setPaginations({

@@ -10,7 +10,6 @@ const SignIn = () => {
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
   const { userInformation, error } = useSelector((state) => state.auth);
-  const { profile } = useSelector((state) => state.profile);
   useEffect(() => {
     if (userInformation) {
       if (userInformation?.user?.role?.name === "LEARNER") {
