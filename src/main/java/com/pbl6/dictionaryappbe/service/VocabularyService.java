@@ -1,6 +1,7 @@
 package com.pbl6.dictionaryappbe.service;
 
 
+import com.pbl6.dictionaryappbe.dto.vocabulary.CreationVocabRequestDto;
 import com.pbl6.dictionaryappbe.dto.vocabulary.UpdateDefaultVocabRequest;
 import com.pbl6.dictionaryappbe.dto.vocabulary.VocabDetailDto;
 import com.pbl6.dictionaryappbe.persistence.user.User;
@@ -21,4 +22,6 @@ public interface VocabularyService {
     void updateDefaultVocab(Long vocabId, UpdateDefaultVocabRequest updateDefaultVocabRequest);
 
     void deleteDefaultVocab(Long vocabId);
+
+    void createDefaultVocab(CreationVocabRequestDto vocabRequestDto);
 }
