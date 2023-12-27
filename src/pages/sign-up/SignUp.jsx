@@ -127,8 +127,8 @@ const SignUp = () => {
               message: "Please input your Password!",
             },
             {
-              min: 8,
-              message: "At least 8 characters long.",
+              min: 6,
+              message: "At least 6 characters long.",
             },
             {
               pattern: /^\S*$/,
