@@ -186,7 +186,8 @@ public class VocabularyServiceImpl implements VocabularyService {
     @Override
     public void createDefaultVocab(CreationVocabRequestDto vocabRequestDto) {
         User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
-        boolean isExistedWord = vocabularyRepository.existsByWord(vocabRequestDto.getWord());
+        boolean isExistedWord =
+                vocabularyRepository.existsByWordAndPos(vocabRequestDto.getWord(), vocabRequestDto.getPos().toLowerCase());
         if (isExistedWord)
             throw new DuplicateDataException("This vocabulary is existed");
         Vocabulary vocabulary = Vocabulary.builder()
