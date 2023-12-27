@@ -1,18 +1,30 @@
 import { CheckCircleFilled, SearchOutlined } from "@ant-design/icons";
 import { Empty, Input, Space } from "antd";
 import { debounce } from "lodash";
-import { useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchResult } from "../../../stores/search-word/searchThunk";
 import "./DefaultWord.scss";
-const DefaultWord = ({ vocabInSub, onAddVocab, initValue }) => {
+const DefaultWord = ({
+  vocabInSub,
+  onAddVocab,
+  isOpen,
+  inputWordDefault,
+  setInputWordDefault,
+}) => {
   const { result } = useSelector((state) => state.search);
-  const [inputWord, setInputWord] = useState("");
   const dispatch = useDispatch();
+  useEffect(() => {
+    setInputWordDefault(""); // Clear the input when the modal is closed
+    return () => {
+      setInputWordDefault("");
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onChangeInput = (event) => {
     const newValue = event.target.value;
-    setInputWord(newValue);
+    setInputWordDefault(newValue);
     debounceInputKey(newValue);
   };
 
@@ -66,12 +78,12 @@ const DefaultWord = ({ vocabInSub, onAddVocab, initValue }) => {
         prefix={
           <SearchOutlined style={{ color: "#bbb", padding: "0px 4px" }} />
         }
-        value={inputWord}
+        value={inputWordDefault}
         onChange={onChangeInput}
-      ></Input>
+      />
       <Space direction="vertical" className="sub_content">
         {renderSearchResult && renderSearchResult}
-        {!inputWord && <Empty description={false} />}
+        {!inputWordDefault && <Empty description={false} />}
       </Space>
     </Space>
   );

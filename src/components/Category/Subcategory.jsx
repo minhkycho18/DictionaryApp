@@ -52,6 +52,7 @@ const Subcategory = (props) => {
   const [allPos, setAllPos] = useState([]);
   const [, ctxHolder] = message.useMessage();
   //  setCurrentPos(value);
+  const [inputWordDefault, setInputWordDefault] = useState("");
   const dispatch = useDispatch();
   const [currentPos, setCurrentPos] = useState("All");
   const navigate = useNavigate();
@@ -332,6 +333,7 @@ const Subcategory = (props) => {
           open={isOpen}
           onCancel={() => {
             dispatch(setResult([]));
+            setInputWordDefault("");
             setIsOpen(false);
           }}
           footer={null}
@@ -361,6 +363,9 @@ const Subcategory = (props) => {
               <DefaultWord
                 vocabInSub={vocabsInSub}
                 onAddVocab={handleAddAndRemoveVocab}
+                isOpen={isOpen}
+                inputWordDefault={inputWordDefault}
+                setInputWordDefault={setInputWordDefault}
               />
             )}
             {isCustom && (
