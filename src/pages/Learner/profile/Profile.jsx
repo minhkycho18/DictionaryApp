@@ -192,7 +192,6 @@ const Profile = () => {
             message: "Password cannot contain spaces.",
           },
         ]}
-        hasFeedback
       >
         <Input.Password />
       </Form.Item>
