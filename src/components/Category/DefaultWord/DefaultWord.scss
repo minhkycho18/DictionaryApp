@@ -27,6 +27,9 @@
   height: 320px;
   overflow-y: scroll;
   width: 100%;
+  // padding-bottom: 32px;
+  // justify-content: center;
+  align-items: center;
   &::-webkit-scrollbar {
     width: 8px;
   }

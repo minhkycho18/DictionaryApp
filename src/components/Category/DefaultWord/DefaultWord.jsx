@@ -1,7 +1,7 @@
 import { CheckCircleFilled, SearchOutlined } from "@ant-design/icons";
-import { Empty, Input, Space } from "antd";
+import { Empty, Input, Space, Spin } from "antd";
 import { debounce } from "lodash";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchResult } from "../../../stores/search-word/searchThunk";
 import "./DefaultWord.scss";
@@ -12,8 +12,11 @@ const DefaultWord = ({
   inputWordDefault,
   setInputWordDefault,
 }) => {
-  const { result } = useSelector((state) => state.search);
+  const { result, loading } = useSelector((state) => state.search);
   const dispatch = useDispatch();
+  const [displayedItems, setDisplayedItems] = useState(10);
+  const contentRef = useRef(null);
+  const [isBottom, setIsBottom] = useState(false);
   useEffect(() => {
     setInputWordDefault(""); // Clear the input when the modal is closed
     return () => {
@@ -21,16 +24,55 @@ const DefaultWord = ({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  const handleScroll = () => {
+    const content = contentRef.current;
+    if (content) {
+      const isBottom =
+        content.scrollTop + content.clientHeight >= content.scrollHeight - 10;
+      setIsBottom(isBottom);
+    }
+  };
+  useEffect(() => {
+    const content = contentRef.current;
+    content.addEventListener("scroll", handleScroll);
+    return () => {
+      content.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+  useEffect(() => {
+    if (isBottom) {
+      const loadMoreItems = () => {
+        const newDisplayedItems = displayedItems + 10;
+        setDisplayedItems(newDisplayedItems);
+        dispatch(
+          getSearchResult({
+            keyword: inputWordDefault,
+            offset: 0,
+            limit: newDisplayedItems,
+          })
+        );
+      };
+      loadMoreItems();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isBottom]);
   const onChangeInput = (event) => {
     const newValue = event.target.value;
+    setDisplayedItems(10);
     setInputWordDefault(newValue);
     debounceInputKey(newValue);
   };
 
   const debounceInputKey = useRef(
     debounce((nextValue) => {
-      dispatch(getSearchResult({ keyword: nextValue, offset: 0 }));
+      setDisplayedItems(10);
+      dispatch(
+        getSearchResult({
+          keyword: nextValue,
+          offset: 0,
+          limit: displayedItems,
+        })
+      );
     }, 500)
   ).current;
   const checkValid = (vocabId, defId) => {
@@ -81,9 +123,14 @@ const DefaultWord = ({
         value={inputWordDefault}
         onChange={onChangeInput}
       />
-      <Space direction="vertical" className="sub_content">
+      <Space direction="vertical" className="sub_content" ref={contentRef}>
         {renderSearchResult && renderSearchResult}
-        {!inputWordDefault && <Empty description={false} />}
+        {!inputWordDefault && !result && <Empty description={false} />}
+        {loading && (
+          <Space style={{ marginTop: 16 }}>
+            <Spin spinning={loading} size="medium" />
+          </Space>
+        )}
       </Space>
     </Space>
   );
