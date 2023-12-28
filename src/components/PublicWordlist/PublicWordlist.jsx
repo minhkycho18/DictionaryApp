@@ -8,6 +8,7 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  StatusBar,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { colors, spacing, sizes, shadow } from "~/constants/theme";
@@ -18,6 +19,8 @@ import { cloneWordlist } from "~/api/WordList";
 import { checkLogin } from "~/helper/Auth";
 import { useFocusEffect } from "@react-navigation/native";
 import ModalSignIn from "../ModalSignIn";
+import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
 export default function PublicWordlist(props) {
   const [type, setType] = useState(props.route.params.type);
   const [search, setSearch] = useState("");
@@ -137,6 +140,39 @@ export default function PublicWordlist(props) {
           }}
         />
       </View>
+      <LinearGradient
+        colors={["#5671CC", "#9D97F9"]}
+        start={{ x: 0, y: 0.5 }}
+        end={{ x: 1, y: 0.5 }}
+        style={Styles.header}
+      >
+        <TouchableOpacity onPress={() => props.navigation.goBack()}>
+          <Ionicons
+            name="arrow-back-sharp"
+            size={26}
+            color="white"
+            style={{ marginLeft: 10 }}
+          />
+        </TouchableOpacity>
+        <View
+          style={{
+            marginLeft: 4,
+            alignItems: "center",
+            width: "90%",
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: "Quicksand-Bold",
+              color: "#fff",
+              fontSize: 27,
+              textAlign: "center",
+            }}
+          >
+            {type === "public" ? "Public Wordlist" : "Default Wordlist"}
+          </Text>
+        </View>
+      </LinearGradient>
       <View style={Styles.Seach}>
         <View style={Styles.searchView}>
           <View style={Styles.searchIcon} pointerEvents="none">
@@ -203,12 +239,13 @@ export default function PublicWordlist(props) {
 }
 const Styles = StyleSheet.create({
   container: {
+    marginTop: StatusBar.currentHeight,
     flex: 1,
     backgroundColor: "#F4F4F4",
   },
   Seach: {
     width: "100%",
-    height: 64,
+    height: 70,
     borderBottomWidth: 2,
     display: "flex",
     alignItems: "center",
@@ -250,5 +287,13 @@ const Styles = StyleSheet.create({
     top: 10,
     right: 13,
     zIndex: 1,
+  },
+  header: {
+    width: "100%",
+    height: 60,
+    backgroundColor: colors.primary,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

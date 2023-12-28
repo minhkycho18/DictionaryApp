@@ -77,6 +77,15 @@ export default function FlashcardScreen(props) {
 
     if (type === "success") {
       await delay(500);
+      const res = await updateStatusGame(
+        props.route.params.wordListId,
+        props.route.params.subcategoryId,
+        "flashcard",
+        listAnswer
+      );
+      console.log("test 1::", res);
+      console.log(res);
+      setIsFlashcard(true);
       navigation.push("FinishGame", { type: "flashcard" });
     }
   };

@@ -19,17 +19,7 @@ export default function PublicWordlistStack(props) {
                 initialParams={props.route.params}
                 name="publicwordlist"
                 component={PublicWordlist}
-                options={
-                    {
-                        title: props.route.params.type === "public" ? "Public Wordlist" : "Default Wordlist",
-                        headerTitleStyle: {
-                            color: colors.textTitle,
-                            fontSize: 25,
-                            fontFamily: 'Quicksand-Bold',
-                        },
-                        headerTitleAlign: 'center',
-                    }
-                }
+                options={{ headerShown: false }}
             />
             <Stack.Screen
                 name="publicwordlistDetail"

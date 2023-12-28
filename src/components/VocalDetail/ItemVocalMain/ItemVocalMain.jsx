@@ -4,7 +4,7 @@ import { AntDesign } from "@expo/vector-icons";
 import uk from "~/assets/en-circle.png";
 import us from "~/assets/us-square.png";
 import { styles } from "./Style";
-import { UpperText } from "~/helper";
+import { UpperText, checkNull } from "~/helper";
 import { Audio } from "expo-av";
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
@@ -41,7 +41,7 @@ const ItemVocalMain = ({ item, color }) => {
             </Text>
           </View>
         </View>
-        {item.phoneUk !== null && (
+        {checkNull(item.phoneUk) && (
           <View style={styles.languageContainer}>
             <Image source={uk} style={styles.languageFlag} />
             <Text style={styles.phoneticContent}>{item.phoneUk}</Text>
@@ -53,7 +53,7 @@ const ItemVocalMain = ({ item, color }) => {
             </TouchableOpacity>
           </View>
         )}
-        {item.phoneUs !== null && (
+        {checkNull(item.phoneUs) && (
           <View style={styles.languageContainer}>
             <Image
               source={us}

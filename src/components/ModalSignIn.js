@@ -10,6 +10,7 @@ import {
 } from "~/constants/theme";
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { delay } from '~/helper';
 export default function ModalSignIn({ isOpenModal, content }) {
     const [isOpen, setIsOpen] = useState(false)
     const navigation = useNavigation()
@@ -53,7 +54,11 @@ export default function ModalSignIn({ isOpenModal, content }) {
                         in oder to {content} you need to sign in
                     </Text>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate("Authenticate")}
+                        onPress={async () => {
+                            setIsOpen(false);
+                            await delay(500)
+                            navigation.push("Authenticate")
+                        }}
                         style={Styles.button}>
                         <Text style={Styles.textButton}>Sign in</Text></TouchableOpacity>
                 </View>

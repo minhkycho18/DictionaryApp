@@ -5,8 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { styles } from "../styles/Style";
 import { useRef, useState, useEffect } from 'react'
 import { Dimensions, Animated, Keyboard, Platform } from "react-native";
-import Leitner from "~/screens/Leitner";
 import ProfileStack from "./ProfileStack";
+
 export default function BottomTab() {
   const tabOffsetValue = useRef(new Animated.Value(0)).current;
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -71,37 +71,39 @@ export default function BottomTab() {
           tabBarHideOnKeyboard: "true"
 
         })}
+        screenListeners={({ route }) => {
+          if (route.name === "Home") {
+            Animated.spring(tabOffsetValue, {
+              toValue: getWidth() - 105,
+              useNativeDriver: true
+            }).start();
+          }
+          else if (route.name === "DictionaryStack") {
+            Animated.spring(tabOffsetValue, {
+              toValue: getWidth() * 1.23,
+              useNativeDriver: true
+            }).start();
+          }
+          else if (route.name === "ProfileStack") {
+            Animated.spring(tabOffsetValue, {
+              toValue: getWidth() * 2.54,
+              useNativeDriver: true
+            }).start();
+          }
+        }}
       >
         <Tab.Screen name="Home" component={HomeStack} options={styles.tabScreenStyle}
-          listeners={({ navigation, route }) => ({
-            tabPress: e => {
-              Animated.spring(tabOffsetValue, {
-                toValue: getWidth() - 105,
-                useNativeDriver: true
-              }).start();
-            }
-          })} />
+
+        />
         <Tab.Screen name="DictionaryStack" component={DictionaryStack} options={{
           tabBarLabel: 'Dictionary',
           ...styles.tabScreenStyle
         }}
-          listeners={({ navigation, route }) => ({
-            tabPress: e => {
-              Animated.spring(tabOffsetValue, {
-                toValue: getWidth() * 1.23,
-                useNativeDriver: true
-              }).start();
-            }
-          })} />
+
+        />
         <Tab.Screen name="ProfileStack" component={ProfileStack} options={{ ...styles.tabScreenStyle, tabBarLabel: 'Profile' }}
-          listeners={({ navigation, route }) => ({
-            tabPress: e => {
-              Animated.spring(tabOffsetValue, {
-                toValue: getWidth() * 2.54,
-                useNativeDriver: true
-              }).start();
-            }
-          })} />
+
+        />
 
       </Tab.Navigator>
       {!keyboardVisible && (

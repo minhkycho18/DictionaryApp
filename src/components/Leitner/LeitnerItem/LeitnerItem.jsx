@@ -14,10 +14,25 @@ export default function LeitnerItem({ type }) {
     navigation.push("LeitnerDetail", {
       level: Level,
       needStudy: type.needStudy,
+      levelName: type.levelName,
     });
 
     console.log("test: ", "detail leitner");
   };
+
+  const ViewCheck = () => (
+    <View
+      style={{
+        width: 10,
+        height: 10,
+        borderRadius: 20,
+        backgroundColor: "red",
+        position: "absolute",
+        top: -10,
+        right: -2,
+      }}
+    ></View>
+  );
   const getViewIcon = (type) => {
     switch (parseInt(type.level)) {
       case 0:
@@ -44,6 +59,7 @@ export default function LeitnerItem({ type }) {
             >
               {type?.level}
             </Text>
+            {type.needStudy && <ViewCheck />}
           </View>
         );
     }

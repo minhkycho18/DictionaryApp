@@ -21,7 +21,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { SvgXml } from "react-native-svg";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+
+import {
+  CommonActions,
+  useNavigation,
+  useFocusEffect,
+} from "@react-navigation/native";
+
 import { checkLogin } from "~/helper/Auth";
 import { GetInforUser } from "~/api/Auth";
 import { delay } from "~/helper";
@@ -48,7 +54,7 @@ export default function Profile() {
     const getInfor = async () => {
       const res = await GetInforUser();
       setUser(res);
-      console.log('done res: ', res);
+      console.log("done res: ", res);
       setAvatar(res.image);
     };
     if (isLogin) {
@@ -85,19 +91,14 @@ export default function Profile() {
       >
         {isLogin ? (
           <View style={{ gap: 10 }}>
-            {
-              avatar == null ? (
-                <Image
-                  source={require("~/assets/man.png")}
-                  style={Styles.image}
-                />
-              ) : (
-                <Image
-                  source={{ uri: avatar }}
-                  style={Styles.image}
-                />
-              )
-            }
+            {avatar == null ? (
+              <Image
+                source={require("~/assets/man.png")}
+                style={Styles.image}
+              />
+            ) : (
+              <Image source={{ uri: avatar }} style={Styles.image} />
+            )}
             <Text style={Styles.textName}>{user.name}</Text>
             <Text style={Styles.textEmail}>{user.email}</Text>
           </View>
@@ -175,6 +176,13 @@ export default function Profile() {
               await delay(1500);
               setIsLoading(false);
               setIsLogin(false);
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: "Home" }],
+                })
+              );
+              // navigation.navigate("Home");
             }}
           >
             <Image

@@ -10,7 +10,7 @@ import {
   StyleSheet,
   Modal,
 } from "react-native";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import Animated, {
   FadeIn,
@@ -62,7 +62,7 @@ export default function SignUpScreen() {
   const handlePwConfirmSubmit = () => {
     nicknameRef.current.focus();
   };
-
+  const [isDisplay, setIsDisplay] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -192,6 +192,26 @@ export default function SignUpScreen() {
       />
     ),
   };
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      (event) => {
+        setIsDisplay(false);
+      }
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setIsDisplay(true);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   //Warning
   const handleBlurEmail = () => {
@@ -269,7 +289,7 @@ export default function SignUpScreen() {
       // style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
       behavior={Platform.OS === "ios" ? "position" : null}
       enabled
-      keyboardVerticalOffset={-30}
+      keyboardVerticalOffset={-210}
     >
       <TouchableWithoutFeedback onPress={handlePressOutside}>
         <View style={tw`bg-white h-full w-full`}>
@@ -280,17 +300,7 @@ export default function SignUpScreen() {
           />
 
           {/* lights */}
-          <View style={tw`flex-row justify-around w-full absolute`}>
-            <Animated.View
-              style={tw`h-[95] w-[116]`}
-              entering={FadeInUp.delay(200).duration(1000).springify()}
-            >
-              <Image
-                style={tw`h-[95] w-[114]`}
-                source={require("~/assets/icon_login.png")}
-              />
-            </Animated.View>
-          </View>
+
           <Toast
             config={toastConfig}
             refs={(ref) => {
@@ -299,9 +309,21 @@ export default function SignUpScreen() {
           />
 
           {/* title and form */}
-          <View style={tw`h-full w-full flex justify-around pt-60 pb-8`}>
+          <View style={{ justifyContent: "center", flex: 1 }}>
             {/* title */}
-            <View style={[tw`flex items-center pt-9`, { marginTop: 12 }]}>
+
+            {/* form */}
+            <View style={[tw`flex items-center mx-5`]}>
+              {/* Email */}
+              {isDisplay && (
+                <Animated.View entering={FadeInUp.duration(1000).springify()}>
+                  <Image
+                    style={{ width: 260, height: 200, marginRight: 10 }}
+                    source={require("~/assets/icon_login.png")}
+                    // resizeMode="center"
+                  />
+                </Animated.View>
+              )}
               <Animated.Text
                 entering={FadeInUp.duration(1000).springify()}
                 style={[
@@ -311,11 +333,6 @@ export default function SignUpScreen() {
               >
                 Sign Up
               </Animated.Text>
-            </View>
-
-            {/* form */}
-            <View style={[tw`flex items-center mx-5`]}>
-              {/* Email */}
               <Animated.View
                 entering={FadeInDown.duration(1000).springify()}
                 style={[
@@ -382,6 +399,7 @@ export default function SignUpScreen() {
                     onChangeText={(text) => onChangePw(text)}
                     onBlur={handleBlurPw}
                     onFocus={handleFocusPw}
+                    keyboardType="email-address"
                   />
                   {warningPw && (
                     <View
@@ -427,6 +445,7 @@ export default function SignUpScreen() {
                     onChangeText={(text) => onChangePwConfirm(text)}
                     onBlur={handleBlurPwConfirm}
                     onFocus={handleFocusPwConfirm}
+                    keyboardType="email-address"
                   />
                   {warningPwConfirm && (
                     <View

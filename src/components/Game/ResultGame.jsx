@@ -88,7 +88,17 @@ export default function ResultGame({ result, onContinue, onShowToast }) {
 
         <View style={Styles.viewButton}>
           <TouchableOpacity
-            style={Styles.buttonAddLeitner}
+            style={{
+              ...Styles.buttonAddLeitner,
+              opacity:
+                result.type === "Flashcard"
+                  ? listFlashCardError.length > 0
+                    ? 1
+                    : 0.4
+                  : listSpellingError.length > 0
+                  ? 1
+                  : 0.4,
+            }}
             onPress={handleAddVocabToLeitner}
             disabled={
               result.type === "Flashcard"
