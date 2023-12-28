@@ -200,6 +200,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    zIndex: 1000,
   },
   Button: {
     width: 40,
@@ -211,7 +212,7 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 100,
+    zIndex: 1000,
   },
   flatlist: {
     flex: 1,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { Text, View, Image } from "react-native";
 import { colors } from "~/constants/theme";
 import { delay, getNameLevel } from "~/helper";
@@ -23,15 +23,12 @@ export default function BoxesGame({ item, level, changeLevel }) {
     }
   };
   const increaseWordShow = async (currentlevel, Declevel, IncLevel) => {
-    if (currentlevel === Declevel) {
+    if (currentlevel === Declevel && level !== "1") {
       setDown(true);
       await delay(1000);
-      if (IncLevel !== "0") {
-        setAmountOfWord(amountOfWord - 1);
-      }
       setDown(false);
     }
-    if (currentlevel === IncLevel) {
+    if (currentlevel === IncLevel && level !== "1") {
       setUp(true);
       await delay(1000);
       setAmountOfWord(amountOfWord + 1);
@@ -111,7 +108,7 @@ const Styles = StyleSheet.create({
   number: {
     fontFamily: "Quicksand-Bold",
     position: "absolute",
-    top: 23,
+    top: Platform.OS === "ios" ? 28 : 23,
     fontSize: 22,
     alignItems: "center",
     color: colors.textTitle,

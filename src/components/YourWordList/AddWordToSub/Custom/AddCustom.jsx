@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Platform,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
@@ -31,6 +32,7 @@ const AddCustom = (props) => {
   const titleRef = useRef();
   const descRef = useRef();
   const exampleRef = useRef();
+  const [isSelect, setIsSelect] = useState(true);
 
   // field of cusword
   const [title, setTitle] = useState("");
@@ -68,23 +70,32 @@ const AddCustom = (props) => {
           style: Styles.warning,
         });
       }
+      if (pos === "") {
+        setIsSelect(false);
+      }
     } else {
       setIsModalVisible(true);
     }
   };
   const handleSave = async (contribute) => {
     try {
-      const listDef = fieldMainComponents.map(
-        (component) => component.props.data
-      );
+      const listDef = fieldMainComponents
+        .map((component) => {
+          if (component.props.data.wordDesc !== "") {
+            return component.props.data;
+          }
+        })
+        .filter((data) => data !== undefined);
+
+      console.log(`check `, listDef);
       const customWord = {
         word: title,
         wordType: "DEFAULT",
         pos: pos,
         phoneUs: phoneUs,
         phoneUk: phoneUk,
-        audioUs: fileResponseUS,
-        audioUk: fileResponseUK,
+        audioUs: fileResponseUS === "" ? null : fileResponseUS,
+        audioUk: fileResponseUK === "" ? null : fileResponseUK,
         definition: [
           {
             wordDesc: desc,
@@ -293,7 +304,7 @@ const AddCustom = (props) => {
           }}
         >
           <View style={Styles.inputFirstContent}>
-            <View>
+            <View style={{ zIndex: Platform.OS === "ios" ? 1000 : undefined }}>
               <Text
                 style={{
                   ...Styles.formLabel,
@@ -312,12 +323,13 @@ const AddCustom = (props) => {
                 setOpen={setOpen}
                 setValue={(value) => {
                   setPos(value);
+                  setIsSelect(true);
                 }}
                 setItems={setItems}
                 style={{
                   backgroundColor: "#FEFEFE",
                   borderRadius: 10,
-                  borderColor: "#e0e0e0",
+                  borderColor: isSelect ? "#e0e0e0" : "red",
                   borderWidth: 1,
                   zIndex: 1000,
                   marginBottom: 10,
@@ -339,12 +351,13 @@ const AddCustom = (props) => {
                   borderWidth: 1,
                   borderColor: "#e0e0e0",
                   zIndex: 1000,
+                  // backgroundColor: "red",
                 }}
                 listMode="SCROLLVIEW"
               />
               {/* </View> */}
             </View>
-            <View>
+            <View style={Styles.viewCard}>
               <Text
                 style={{
                   ...Styles.formLabel,
@@ -371,7 +384,7 @@ const AddCustom = (props) => {
                 }}
               />
             </View>
-            <View>
+            <View style={Styles.viewCard}>
               <Text
                 style={{
                   ...Styles.formLabel,

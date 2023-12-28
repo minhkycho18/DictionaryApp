@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { colors } from "~/constants/theme";
 export const Styles = StyleSheet.create({
     container: {
@@ -22,6 +22,9 @@ export const Styles = StyleSheet.create({
         height: 50,
         padding: 10,
         color: colors.textColor
+    },
+    viewCard: {
+        marginTop: 6
     },
     inputContent: {
         marginTop: 20,
@@ -54,7 +57,7 @@ export const Styles = StyleSheet.create({
     },
     input: {
         width: "100%",
-        padding: 5,
+        padding: Platform.OS === 'ios' ? 10 : 5,
         paddingLeft: 10,
         borderRadius: 6,
         borderWidth: 1,

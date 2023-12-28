@@ -35,7 +35,11 @@ function ItemVocalDetail({
           { vocabId: vocabId, defId: defId },
         ]);
         console.log(res);
-        toastLeitner("Success", res, "success");
+        toastLeitner(
+          "Success",
+          "Add vocabulary to leitner successfully",
+          "success"
+        );
         setIsWordOfUserLeitner(true);
       } else {
         toastLeitner("Error", "add vocab to leitner", "error");
@@ -72,6 +76,7 @@ function ItemVocalDetail({
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
+              flexWrap: "wrap",
             }}
           >
             <View>

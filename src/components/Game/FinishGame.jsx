@@ -308,7 +308,7 @@ const Styles = StyleSheet.create({
   },
   lineSuccess: {
     width: 4,
-    height: 38,
+    height: 40,
     backgroundColor: "#1CBD9E",
     position: "absolute",
     bottom: -39,
@@ -317,7 +317,7 @@ const Styles = StyleSheet.create({
   },
   linePending: {
     width: 4,
-    height: 40,
+    height: 38,
     backgroundColor: "#E6E6E6",
     position: "absolute",
     bottom: -38,

@@ -67,7 +67,7 @@ export default function FlashcardLeitnerScreen(props) {
       });
       setCurrentSlide(nextSlide);
     } else {
-      await delay(2000);
+      await delay(1000);
       setIsModalVisible(true);
     }
   };

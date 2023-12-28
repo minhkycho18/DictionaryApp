@@ -96,14 +96,10 @@ export const Styles = StyleSheet.create({
     type: {
         marginTop: 12,
         alignItems: 'center',
-        borderRadius: 20,
-        // backgroundColor: "#B4B6E6",
     },
     textType: {
         paddingHorizontal: 15,
         paddingBottom: 2,
-        borderRadius: 20,
-        // backgroundColor: "#B4B6E6",
         color: '#fff',
 
     },

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useContext } from "react";
 import { Styles } from "./Styles";
-import { View, Text, TextInput } from "react-native";
+import { View, Text, TextInput, Platform } from "react-native";
 import { useFonts } from "expo-font";
 import { configFont } from "~/constants/theme";
 import { TouchableOpacity } from "react-native";
@@ -64,7 +64,7 @@ export default function FeildDesc_Ex({ data, index }) {
             }}
           />
         </View>
-        <View>
+        <View style={{ marginTop: 6 }}>
           <Text
             style={{
               ...Styles.formLabel,

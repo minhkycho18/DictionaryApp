@@ -9,6 +9,7 @@ import { SvgXml } from "react-native-svg";
 import { Audio } from "expo-av";
 import { GetColor, checkNull } from "~/helper";
 import { UpVocabLeitner } from "~/api/Leitner";
+import _ from "lodash";
 export default function CardFlashcard_Leitner({
   onNextSlider,
   vocal,
@@ -23,7 +24,7 @@ export default function CardFlashcard_Leitner({
     });
     await sound.playAsync();
   };
-  const hanleClickAnswer = async (answer) => {
+  const hanleClickAnswer = _.debounce(async (answer) => {
     if (answer === vocal.result) {
       if (level !== "7") {
         await UpVocabLeitner("up", {
@@ -55,7 +56,7 @@ export default function CardFlashcard_Leitner({
         upLevel: false,
       });
     }
-  };
+  }, 500);
   return (
     <>
       <FlipCard

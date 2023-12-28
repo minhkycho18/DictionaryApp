@@ -92,14 +92,14 @@ export default function ItemVocabOfLeitner({
             <View style={Styles.Title_Status}>
               <View
                 style={{
-                  width: "59%",
+                  width: "80%",
                   flexDirection: "row",
                   alignItems: "center",
                   gap: 10,
                 }}
               >
                 <Text
-                  numberOfLines={1}
+                  numberOfLines={2}
                   style={[
                     {
                       color: "#182B40",
@@ -111,19 +111,6 @@ export default function ItemVocabOfLeitner({
                 >
                   {word}
                 </Text>
-                <View style={{ marginTop: 5 }}>
-                  {Vocab.item.level != 0 && (
-                    <SvgXml
-                      width="20"
-                      height="20"
-                      xml={svgWaitingClock(
-                        compareDate(Vocab.item.studyTime)
-                          ? "#ff7875"
-                          : "#ABABAB"
-                      )}
-                    />
-                  )}
-                </View>
               </View>
               <View
                 style={{
@@ -138,11 +125,19 @@ export default function ItemVocabOfLeitner({
                 )} */}
 
                 {Vocab.item.level != 0 ? (
-                  <View
-                    style={{
-                      marginRight: 15,
-                    }}
-                  ></View>
+                  <View style={{ marginRight: 10 }}>
+                    {Vocab.item.level != 0 && (
+                      <SvgXml
+                        width="25"
+                        height="25"
+                        xml={svgWaitingClock(
+                          compareDate(Vocab.item.studyTime)
+                            ? "#52c41a"
+                            : "#ABABAB"
+                        )}
+                      />
+                    )}
+                  </View>
                 ) : !isSelected ? (
                   <View
                     style={{

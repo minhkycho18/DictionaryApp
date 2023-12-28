@@ -32,7 +32,7 @@ export default function LeitnerDetail(props) {
   const navigation = useNavigation();
   const [listVocabOfLeitner, setListVocabOfLeitner] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
-  const [offset, setOffset] = useState(6);
+  const [offset, setOffset] = useState(15);
   const [isCheck, setIsCheck] = useState(false);
 
   const [listWordAdd, setListWordAdd] = useState([]);
@@ -67,7 +67,7 @@ export default function LeitnerDetail(props) {
     getVocabOfLeitnerLevel(level);
   }, []);
   const handleEndReach = async () => {
-    if (listVocabOfLeitner.length > 5) {
+    if (listVocabOfLeitner.length > 14) {
       try {
         setShowLoader(true);
         const data = await getVocabOfLeitnerLevelOfUser(level, offset);
@@ -75,7 +75,7 @@ export default function LeitnerDetail(props) {
           setListVocabOfLeitner([...listVocabOfLeitner, ...data.content]);
         }
 
-        setOffset(offset + 6);
+        setOffset(offset + 15);
         setShowLoader(false);
       } catch (error) {
         console.log(`error ::`, error);
@@ -116,9 +116,9 @@ export default function LeitnerDetail(props) {
           level: level,
           leitnerIds: newArray,
         });
-        console.log("\nresponse: ", res);
+
         setIsLoading(false);
-        showToast("Success", "Create new wordlist successfully", "success");
+        showToast("Success", res, "success");
         await delay(1500);
 
         // navigation.goBack();
@@ -211,7 +211,7 @@ export default function LeitnerDetail(props) {
                 },
               ]}
             >
-              Leitner box Pending
+              {props.route.params.levelName}
             </Text>
             {/* Description */}
 

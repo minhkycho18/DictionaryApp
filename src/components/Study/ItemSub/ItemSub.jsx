@@ -21,8 +21,14 @@ export default function ItemSub({ Sub }) {
     return null;
   }
   return (
-    <TouchableOpacity style={Styles.container} onPress={handlePress}>
-      <View style={Styles.wrapper}>
+    <TouchableOpacity
+      style={Styles.container}
+      onPress={handlePress}
+      disabled={Sub.amountOfWord === 0}
+    >
+      <View
+        style={{ ...Styles.wrapper, opacity: Sub.amountOfWord === 0 ? 0.6 : 1 }}
+      >
         <View style={Styles.viewText}>
           <Text
             style={[

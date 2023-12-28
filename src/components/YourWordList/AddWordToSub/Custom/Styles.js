@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { colors } from "~/constants/theme";
 export const Styles = StyleSheet.create({
     container: {
@@ -7,6 +7,9 @@ export const Styles = StyleSheet.create({
         position: 'relative',
         backgroundColor: "#fff"
 
+    },
+    viewCard: {
+        marginTop: 6
     },
     header: {
         width: "100%",
@@ -54,7 +57,7 @@ export const Styles = StyleSheet.create({
     },
     input: {
         width: "100%",
-        padding: 8,
+        padding: Platform.OS === 'ios' ? 12 : 8,
         paddingLeft: 10,
         borderRadius: 6,
         borderWidth: 1,
@@ -109,12 +112,12 @@ export const Styles = StyleSheet.create({
     },
     inputTitle: {
         width: "100%",
-        padding: 5,
+        padding: Platform.OS === 'ios' ? 10 : 5,
         paddingLeft: 10,
         fontWeight: "500",
-        fontSize: 14,
+        fontSize: 16,
         color: "#6b7280",
-        marginTop: 15,
+        marginTop: 19,
         borderBottomWidth: 3,
         borderBottomColor: "#e0e0e0"
     },
@@ -150,8 +153,8 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: "#4F62F7",
         position: "absolute",
-        bottom: 15,
-        right: 15,
+        bottom: Platform.OS === 'ios' ? 30 : 20,
+        right: 20,
         flexDirection: 'row',
         borderRadius: 20,
         paddingHorizontal: 10,

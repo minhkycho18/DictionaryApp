@@ -107,7 +107,7 @@ export default function ItemPublicWordlist({ wordlist, onClone, type }) {
               flexDirection: "row",
               justifyContent: "flex-end",
               gap: 5,
-              marginTop: 8,
+              marginTop: 15,
             }}
           >
             <Text
@@ -122,8 +122,9 @@ export default function ItemPublicWordlist({ wordlist, onClone, type }) {
             </Text>
             <Text
               style={{
-                fontFamily: "Quicksand-SemiBold",
+                fontFamily: "Quicksand-Bold",
                 fontSize: 14,
+
                 //   S
                 color: "#6c757d",
               }}

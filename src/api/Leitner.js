@@ -7,7 +7,7 @@ export const addVocalToLeitner = (data) => {
     return http.post(`/leitners`, data)
 }
 export const getVocabOfLeitnerLevelOfUser = (level, offset = 0) => {
-    return http.get(`/leitners/${level}?offset=${offset}&limit=6`);
+    return http.get(`/leitners/${level}?offset=${offset}&limit=15`);
 };
 export const getDataForGame = (level) => {
     return http.get(`/leitners/levels/${level}/game`)

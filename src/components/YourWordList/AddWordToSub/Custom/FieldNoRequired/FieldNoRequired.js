@@ -7,7 +7,8 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    ActivityIndicator
+    ActivityIndicator,
+    Platform
 
 } from "react-native";
 import { useFonts } from "expo-font";
@@ -129,7 +130,7 @@ export default function FieldNoRequired({ onSetFileResponseUS, onSetFileResponse
 
                 </View>
             </View>
-            <View style={Styles.viewPhone}>
+            <View style={{ ...Styles.viewPhone, marginTop: 6 }}>
                 <View style={{ width: "36%" }}>
                     <Text
                         style={{ ...Styles.formLabel, fontFamily: "Quicksand-SemiBold" }}
