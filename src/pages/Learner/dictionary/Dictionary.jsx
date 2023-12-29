@@ -38,7 +38,7 @@ const Dictionary = () => {
     };
   }, []);
   useEffect(() => {
-    if (isBottom) {
+    if (isBottom && !isSelected) {
       const loadMoreItems = () => {
         const newDisplayedItems = displayedItems + 10;
         setDisplayedItems(newDisplayedItems);
