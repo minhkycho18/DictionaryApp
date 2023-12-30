@@ -52,7 +52,7 @@ export default function MyWordList({ onOpenModal }) {
       // navigation.push("Authenticate");
       onOpenModal();
     } else {
-      navigation.push("YourWordlist");
+      navigation.push("YourWordlist", { title: "Your Wordlist" });
     }
   };
   const toastConfig = {

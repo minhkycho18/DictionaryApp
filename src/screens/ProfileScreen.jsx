@@ -34,6 +34,7 @@ export default function Profile() {
   const [user, setUser] = useState({});
   const [content, setContent] = useState("");
   const navigation = useNavigation();
+  const [avatar, setAvatar] = useState(user.image);
 
   useEffect(() => {
     const checkToken = async () => {
@@ -47,6 +48,8 @@ export default function Profile() {
     const getInfor = async () => {
       const res = await GetInforUser();
       setUser(res);
+      console.log('done res: ', res);
+      setAvatar(res.image);
     };
     if (isLogin) {
       getInfor();
@@ -82,7 +85,19 @@ export default function Profile() {
       >
         {isLogin ? (
           <View style={{ gap: 10 }}>
-            <Image source={require("~/assets/man.png")} style={Styles.image} />
+            {
+              avatar == null ? (
+                <Image
+                  source={require("~/assets/man.png")}
+                  style={Styles.image}
+                />
+              ) : (
+                <Image
+                  source={{ uri: avatar }}
+                  style={Styles.image}
+                />
+              )
+            }
             <Text style={Styles.textName}>{user.name}</Text>
             <Text style={Styles.textEmail}>{user.email}</Text>
           </View>
@@ -125,7 +140,7 @@ export default function Profile() {
             style={Styles.viewProfile}
             onPress={() => {
               if (isLogin) {
-                navigation.navigate("YourWordlist");
+                navigation.navigate("YourWordlist", { title: "My Wordlist" });
               } else {
                 setIsOpenModal(!isOpenModal);
                 setContent("access to your own wordlist");

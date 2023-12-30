@@ -5,6 +5,7 @@ import YourWordList from '~/screens/YourWordList';
 import YourWordlistDetail from '~/screens/YourWordListDetail';
 import Leitner from '~/screens/Leitner';
 import LeitnerDetail from '~/screens/LeitnerDetail';
+import ChangePassScreen from '~/components/Profile/ChangePassScreen';
 export default function ProfileStack() {
     const Stack = createNativeStackNavigator();
 
@@ -32,7 +33,7 @@ export default function ProfileStack() {
                 component={LeitnerDetail}
                 options={{ headerShown: false }}
             /> */}
-            
+
             <Stack.Screen
                 name="YourWordlist"
                 component={YourWordList}
@@ -41,6 +42,11 @@ export default function ProfileStack() {
             <Stack.Screen
                 name="YourWordlistDetail"
                 component={YourWordlistDetail}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="ChangePassScreen"
+                component={ChangePassScreen}
                 options={{ headerShown: false }}
             />
 

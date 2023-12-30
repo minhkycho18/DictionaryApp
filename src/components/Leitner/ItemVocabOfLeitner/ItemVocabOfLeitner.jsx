@@ -13,7 +13,12 @@ import { AntDesign } from "@expo/vector-icons";
 import { GetColor, compareDate } from "~/helper";
 import { deleteVocabLeitner } from "~/api/Leitner";
 
-export default function ItemVocabOfLeitner({ Vocab, onDeleteVocal, onAddWord, onRemoveWord }) {
+export default function ItemVocabOfLeitner({
+  Vocab,
+  onDeleteVocal,
+  onAddWord,
+  onRemoveWord,
+}) {
   const [word, setWord] = useState(Vocab.item.word);
   const [isLoading, setIsLoading] = useState(false);
   const [definition, setDefinition] = useState(Vocab.item.definition.wordDesc);
@@ -26,29 +31,23 @@ export default function ItemVocabOfLeitner({ Vocab, onDeleteVocal, onAddWord, on
       if (isSelected) {
         setIsSelected(!isSelected);
 
-        const res = await deleteVocabLeitner(
-          [
-            {
-              vocabId: Vocab.item.vocabId,
-              defId: Vocab.item.definition.defId,
-            },
-          ]
-        );
+        const res = await deleteVocabLeitner([
+          {
+            vocabId: Vocab.item.vocabId,
+            defId: Vocab.item.definition.defId,
+          },
+        ]);
         console.log(res);
         onRemoveWord({
           vocab: Vocab.item,
         });
-      }
-      else
-      {
-        const res = await deleteVocabLeitner(
-          [
-            {
-              vocabId: Vocab.item.vocabId,
-              defId: Vocab.item.definition.defId,
-            },
-          ]
-        );
+      } else {
+        const res = await deleteVocabLeitner([
+          {
+            vocabId: Vocab.item.vocabId,
+            defId: Vocab.item.definition.defId,
+          },
+        ]);
         console.log(res);
       }
       setIsLoading(false);
@@ -92,10 +91,13 @@ export default function ItemVocabOfLeitner({ Vocab, onDeleteVocal, onAddWord, on
           <View style={Styles.Text_content}>
             <View style={Styles.Title_Status}>
               <View
-              style={{
-                width:'59%',
-
-              }}>
+                style={{
+                  width: "59%",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 10,
+                }}
+              >
                 <Text
                   numberOfLines={1}
                   style={[
@@ -109,6 +111,19 @@ export default function ItemVocabOfLeitner({ Vocab, onDeleteVocal, onAddWord, on
                 >
                   {word}
                 </Text>
+                <View style={{ marginTop: 5 }}>
+                  {Vocab.item.level != 0 && (
+                    <SvgXml
+                      width="20"
+                      height="20"
+                      xml={svgWaitingClock(
+                        compareDate(Vocab.item.studyTime)
+                          ? "#ff7875"
+                          : "#ABABAB"
+                      )}
+                    />
+                  )}
+                </View>
               </View>
               <View
                 style={{
@@ -125,46 +140,9 @@ export default function ItemVocabOfLeitner({ Vocab, onDeleteVocal, onAddWord, on
                 {Vocab.item.level != 0 ? (
                   <View
                     style={{
-                      paddingTop: 1,
-                      paddingBottom: 1,
-                      paddingRight: 10,
-                      paddingLeft: 10,
-                      // paddingTop:5,
-                      borderRadius: 7,
-                      display: "flex",
-                      flexDirection: "row",
-                      // alignItems:'center',
-                      justifyContent: "center",
-                      backgroundColor: compareDate(Vocab.item.studyTime)
-                        ? "#ff7875"
-                        : "#F5F5F5",
                       marginRight: 15,
                     }}
-                  >
-                    <Text
-                      numberOfLines={2}
-                      style={[
-                        {
-                          color: compareDate(Vocab.item.studyTime)
-                            ? "#fff"
-                            : colors.textColor,
-                          fontFamily: "Quicksand-Medium",
-                          fontSize: 14,
-                          letterSpacing: 0.2,
-                          marginRight: 2,
-                        },
-                      ]}
-                    >
-                      Today
-                    </Text>
-                    <SvgXml
-                      width="20"
-                      height="20"
-                      xml={svgWaitingClock(
-                        compareDate(Vocab.item.studyTime) ? "#fff" : "#ABABAB"
-                      )}
-                    />
-                  </View>
+                  ></View>
                 ) : !isSelected ? (
                   <View
                     style={{
@@ -184,18 +162,15 @@ export default function ItemVocabOfLeitner({ Vocab, onDeleteVocal, onAddWord, on
                 )}
                 {isLoading ? (
                   <ActivityIndicator size="small" color="#2C94E6" />
-                ):(
-                  <TouchableOpacity
-                  onPress={() => handleDeleteWord()}
-                >
-                  <SvgXml
-                    width="18"
-                    height="18"
-                    xml={svgTrash(colors.textColor)}
-                  />
-                </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity onPress={() => handleDeleteWord()}>
+                    <SvgXml
+                      width="18"
+                      height="18"
+                      xml={svgTrash(colors.textColor)}
+                    />
+                  </TouchableOpacity>
                 )}
-
               </View>
             </View>
 

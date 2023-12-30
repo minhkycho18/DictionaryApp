@@ -303,7 +303,10 @@ export default function ProfileDetailScreen(props) {
             </TouchableOpacity>
           )}
 
-          <TouchableOpacity style={Styles.changePass}>
+          <TouchableOpacity
+            style={Styles.changePass}
+            onPress={() => navigation.push("ChangePassScreen")}
+          >
             <Text style={{ ...Styles.textLabel, color: "#9D97F9" }}>
               Change password
             </Text>
