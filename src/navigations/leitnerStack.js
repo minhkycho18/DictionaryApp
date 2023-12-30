@@ -5,7 +5,7 @@ import FlashcardLeitnerScreen from '~/screens/FlashcardLeitnerScreen';
 import Leitner from '~/screens/Leitner';
 import LeitnerDetail from '~/screens/LeitnerDetail';
 
-export default function LeitnerStack() {
+export default function  LeitnerStack() {
     const Stack = createNativeStackNavigator();
 
 

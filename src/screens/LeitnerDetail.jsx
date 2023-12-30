@@ -118,7 +118,7 @@ export default function LeitnerDetail(props) {
         });
         console.log("\nresponse: ", res);
         setIsLoading(false);
-        showToast("Success", "Create new wordlist successfully", "success");
+        showToast("Success", `${countWord} words is already to learn`, "success");
         await delay(1500);
 
         // navigation.goBack();

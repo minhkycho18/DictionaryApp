@@ -8,7 +8,7 @@ import {
   svgleitner,
 } from "~/constants/theme";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -21,7 +21,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { SvgXml } from "react-native-svg";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { checkLogin } from "~/helper/Auth";
 import { GetInforUser } from "~/api/Auth";
 import { delay } from "~/helper";
@@ -34,6 +34,7 @@ export default function Profile() {
   const [user, setUser] = useState({});
   const [content, setContent] = useState("");
   const navigation = useNavigation();
+  const [avatar, setAvatar] = useState(user.image);
 
   useEffect(() => {
     const checkToken = async () => {
@@ -47,11 +48,24 @@ export default function Profile() {
     const getInfor = async () => {
       const res = await GetInforUser();
       setUser(res);
+      console.log('done res: ', res);
+      setAvatar(res.image);
     };
     if (isLogin) {
       getInfor();
     }
   }, [isLogin]);
+  useFocusEffect(
+    useCallback(() => {
+      const getInfor = async () => {
+        const res = await GetInforUser();
+        setUser(res);
+      };
+      if (isLogin) {
+        getInfor();
+      }
+    }, [])
+  );
 
   const [loaded] = useFonts(configFont);
   if (!loaded) {
@@ -60,6 +74,7 @@ export default function Profile() {
   const handleLeitner = async () => {
     navigation.push("Leitner");
   };
+
   return (
     <SafeAreaView style={Styles.container}>
       <LinearGradient
@@ -70,7 +85,19 @@ export default function Profile() {
       >
         {isLogin ? (
           <View style={{ gap: 10 }}>
-            <Image source={require("~/assets/man.png")} style={Styles.image} />
+            {
+              avatar == null ? (
+                <Image
+                  source={require("~/assets/man.png")}
+                  style={Styles.image}
+                />
+              ) : (
+                <Image
+                  source={{ uri: avatar }}
+                  style={Styles.image}
+                />
+              )
+            }
             <Text style={Styles.textName}>{user.name}</Text>
             <Text style={Styles.textEmail}>{user.email}</Text>
           </View>

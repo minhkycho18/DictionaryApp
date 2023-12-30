@@ -37,6 +37,10 @@ export default function FieldNoRequired({ onSetFileResponseUS, onSetFileResponse
             const result = await DocumentPicker.getDocumentAsync({
                 type: 'audio/*', // Specify the allowed MIME types for audio files
             });
+            console.log('tes: ', result);
+            console.log('tes 1: ', result.assets[0]);
+            console.log('tes 2: ', result.assets[0].uri);
+
 
             // get thoi gian 
             const soundObject = new Audio.Sound();
@@ -46,7 +50,7 @@ export default function FieldNoRequired({ onSetFileResponseUS, onSetFileResponse
 
 
 
-            if (durationMillis / 1000 < 5 && result.assets[0].size < 50000) {
+            if (durationMillis / 1000 < 5 && result.assets[0].size < 100000) {
                 type ? setIsLoadingUs(!isLoadingUs) : setIsLoadingUk(!isLoadingUk)
                 const res = await getAudioUpload({
                     uri: result.assets[0].uri,

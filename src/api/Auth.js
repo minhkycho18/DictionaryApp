@@ -19,3 +19,7 @@ export const GetInforUser = () => {
 export const ChangePass = (data) => {
   return http.put('/users/password', data);
 }
+
+export const UpdateProfile = (data) => {
+  return http.patch(`/users`, data);
+}
