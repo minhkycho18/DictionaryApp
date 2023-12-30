@@ -399,7 +399,6 @@ export default function SignUpScreen() {
                     onChangeText={(text) => onChangePw(text)}
                     onBlur={handleBlurPw}
                     onFocus={handleFocusPw}
-                    keyboardType="email-address"
                   />
                   {warningPw && (
                     <View
@@ -445,7 +444,6 @@ export default function SignUpScreen() {
                     onChangeText={(text) => onChangePwConfirm(text)}
                     onBlur={handleBlurPwConfirm}
                     onFocus={handleFocusPwConfirm}
-                    keyboardType="email-address"
                   />
                   {warningPwConfirm && (
                     <View

@@ -305,7 +305,7 @@ export default function LoginScreen() {
                       onChangeText={(text) => onChangePw(text)}
                       onBlur={handleBlurPw}
                       onFocus={handleFocusPw}
-                      keyboardType="email-address"
+                      // keyboardType="email-address"
                     />
                     {warningPw && (
                       <View

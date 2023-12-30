@@ -26,6 +26,7 @@ export default function BoxesGame({ item, level, changeLevel }) {
     if (currentlevel === Declevel && level !== "1") {
       setDown(true);
       await delay(1000);
+      setAmountOfWord(amountOfWord - 1);
       setDown(false);
     }
     if (currentlevel === IncLevel && level !== "1") {
