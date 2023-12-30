@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   StatusBar,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native";
@@ -15,6 +16,13 @@ import { useFonts } from "expo-font";
 import { colors, configFont } from "~/constants/theme";
 import { FontAwesome } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
+import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
+import { getImageUpload } from "~/helper/cloudinary";
+import { UpdateProfile } from "~/api/Auth";
+import AppLoader from "~/components/AppLoader";
+import { delay } from "~/helper";
+import { useNavigation } from "@react-navigation/native";
+
 
 export default function ProfileDetailScreen(props) {
   const [user, setUser] = useState(props.route.params.user);
@@ -23,6 +31,11 @@ export default function ProfileDetailScreen(props) {
   const [email, setEmail] = useState(props.route.params.user.email);
   const [gender, setGender] = useState(props.route.params.user.gender);
   const [loaded] = useFonts(configFont);
+  const [isLoadingAvatar, setIsLoadingAvatar] = useState(false);
+  const [fileResponseAvatar, setFileResponseAvatar] = useState("");
+  const [avatar, setAvatar] = useState(user.image);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigation = useNavigation();
 
   if (!loaded) {
     return null;
@@ -32,9 +45,93 @@ export default function ProfileDetailScreen(props) {
       const result = await DocumentPicker.getDocumentAsync({
         type: "image/*", // Specify the allowed MIME types for audio files
       });
+
+      if (result.assets[0].size < 5242880) {
+        setIsLoadingAvatar(!isLoadingAvatar);
+        const res = await getImageUpload({
+          uri: result.assets[0].uri,
+          type: result.assets[0].mimeType,
+          name: result.assets[0].name
+        })
+        setFileResponseAvatar(res);
+        setAvatar(res);
+        setIsLoadingAvatar(false);
+
+        console.log('done res: ', res);
+
+
+      }
+      console.log('tes: ', result);
+      setEdit(!isEdit);
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const handleConfirm = () => {
+
+    const update = async () => {
+      try {
+        setIsLoading(true);
+        const res = await UpdateProfile({
+          name: name,
+          image: avatar,
+        });
+        console.log('tes: ', res);
+        setIsLoading(false);
+        setEdit(false);
+        showToast("Success", "Update successful!", "success");
+        await delay(1500);
+
+        // navigation.goBack();
+      } catch (error) {
+        setIsLoading(false);
+        console.log('tes: ', error);
+
+        showToast("Error", error, "error");
+      }
+    };
+    update();
+
+
+
+
+  }
+
+  const toastConfig = {
+    error: (props) => (
+      <ErrorToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
+    success: (props) => (
+      <SuccessToast
+        {...props}
+        text1Style={{
+          fontSize: 14,
+        }}
+        text2Style={{
+          fontSize: 12,
+        }}
+      />
+    ),
+  };
+  const showToast = (text1, text2, type) => {
+    Toast.show({
+      position: "top",
+      type: type,
+      text1: text1,
+      text2: text2,
+      visibilityTime: 1300,
+      autoHide: true,
+      topOffset: 60,
+    });
   };
   return (
     <SafeAreaView style={Styles.container}>
@@ -50,7 +147,7 @@ export default function ProfileDetailScreen(props) {
             size={25}
             color="#fff"
             style={{ padding: 3, marginTop: 5 }}
-            onPress={() => props.navigation.goBack()}
+            onPress={() => navigation.goBack()}
           />
           <Text style={Styles.textHeader}>Profile</Text>
         </View>
@@ -62,14 +159,41 @@ export default function ProfileDetailScreen(props) {
               // transform: [{ translateX: -50 }],
             }}
           >
-            <Image
+            {/* <Image
               source={require("~/assets/man.png")}
               style={Styles.viewImage}
-            />
+            /> */}
+            {!isLoadingAvatar ?
+              (
+                avatar == null ? (
+                  <Image
+                    source={require("~/assets/man.png")}
+                    style={Styles.viewImage}
+                  />
+                ) : (
+                  <Image
+                    source={{ uri: avatar }}
+                    style={Styles.viewImage}
+                  />
+                )
+
+              ) : (
+                <View
+                  style={[Styles.viewImage,
+                  {
+                    display: 'flex',
+                    justifyContent: 'center'
+                  }]}
+
+                >
+                  <ActivityIndicator size="small" color="#2C94E6" />
+                </View>
+              )}
+
             <TouchableOpacity
               style={Styles.viewCamera}
               onPress={() => pickDocument()}
-              disabled={!isEdit}
+
             >
               <Image
                 source={require("~/assets/camera.png")}
@@ -78,18 +202,28 @@ export default function ProfileDetailScreen(props) {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity
+          <View
             style={Styles.viewEdit}
-            onPress={() => setEdit(!isEdit)}
           >
-            <FontAwesome name="pencil" size={24} color={colors.textColor} />
-          </TouchableOpacity>
+            <TouchableOpacity
+              // style={{backgroundColor:'yellow'}}
+              onPress={() => setEdit(!isEdit)}
+
+            >
+              <FontAwesome name="pencil" size={24} color={colors.textColor} />
+            </TouchableOpacity>
+          </View>
 
           <View style={Styles.ViewItem}>
             <View>
               <Text style={Styles.textLabel}>Name</Text>
               {!isEdit ? (
-                <Text style={Styles.textPlacehoder}>{name}</Text>
+                <Text style={[
+                  Styles.textPlacehoder,
+                  {
+                    color: colors.textColor,
+                  }
+                ]}>{name}</Text>
               ) : (
                 <TextInput
                   style={Styles.textPlacehoder}
@@ -103,15 +237,19 @@ export default function ProfileDetailScreen(props) {
           <View style={Styles.ViewItem}>
             <View>
               <Text style={Styles.textLabel}>Email</Text>
-              {!isEdit ? (
-                <Text style={Styles.textPlacehoder}>{email}</Text>
-              ) : (
+              {/* {!isEdit ? ( */}
+              <Text style={[Styles.textPlacehoder,
+              {
+                color: colors.textColor,
+              }
+              ]}>{email}</Text>
+              {/* ) : (
                 <TextInput
                   style={Styles.textPlacehoder}
                   value={email}
                   onChangeText={setEmail}
                 />
-              )}
+              )} */}
             </View>
           </View>
           <View style={{ ...Styles.ViewItem, borderBottomWidth: 0 }}>
@@ -120,7 +258,7 @@ export default function ProfileDetailScreen(props) {
               <View style={Styles.viewGender}>
                 <TouchableOpacity
                   style={{ flexDirection: "row", gap: 10, marginRight: 25 }}
-                  disabled={!isEdit}
+                  disabled={true}
                   onPress={() => {
                     setGender("MALE");
                   }}
@@ -137,7 +275,7 @@ export default function ProfileDetailScreen(props) {
 
                 <TouchableOpacity
                   style={{ flexDirection: "row", gap: 10 }}
-                  disabled={!isEdit}
+                  disabled={true}
                   onPress={() => {
                     setGender("FEMALE");
                   }}
@@ -154,12 +292,31 @@ export default function ProfileDetailScreen(props) {
               </View>
             </View>
           </View>
+          {isEdit && (
+            <TouchableOpacity
+              style={Styles.confirm}
+              onPress={handleConfirm}
+            >
+              <Text style={{ ...Styles.textLabel, color: "#4096FF" }}>
+                Confirm
+              </Text>
+            </TouchableOpacity>
+          )}
+
           <TouchableOpacity style={Styles.changePass}>
             <Text style={{ ...Styles.textLabel, color: "#9D97F9" }}>
               Change password
             </Text>
           </TouchableOpacity>
         </View>
+        <Toast
+          config={toastConfig}
+          refs={(ref) => {
+            Toast.setRef(ref);
+          }}
+        />
+        {isLoading ? <AppLoader /> : ""}
+
       </LinearGradient>
     </SafeAreaView>
   );
@@ -271,6 +428,28 @@ const Styles = StyleSheet.create({
     borderColor: "#9D97F9",
     position: "absolute",
     bottom: 25,
+    left: "50%",
+    transform: [{ translateX: -50 }],
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 3,
+  },
+  confirm: {
+    backgroundColor: "#fff",
+    width: 150,
+    borderWidth: 1,
+    alignItems: "center",
+    paddingVertical: 8,
+    borderRadius: 10,
+    borderColor: "#4096FF",
+    position: "absolute",
+    bottom: "21%",
     left: "50%",
     transform: [{ translateX: -50 }],
     shadowColor: "#000",

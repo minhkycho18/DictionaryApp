@@ -8,7 +8,7 @@ import {
   svgleitner,
 } from "~/constants/theme";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -21,7 +21,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { SvgXml } from "react-native-svg";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { checkLogin } from "~/helper/Auth";
 import { GetInforUser } from "~/api/Auth";
 import { delay } from "~/helper";
@@ -52,6 +52,17 @@ export default function Profile() {
       getInfor();
     }
   }, [isLogin]);
+  useFocusEffect(
+    useCallback(() => {
+      const getInfor = async () => {
+        const res = await GetInforUser();
+        setUser(res);
+      };
+      if (isLogin) {
+        getInfor();
+      }
+    }, [])
+  );
 
   const [loaded] = useFonts(configFont);
   if (!loaded) {
@@ -60,6 +71,7 @@ export default function Profile() {
   const handleLeitner = async () => {
     navigation.push("Leitner");
   };
+
   return (
     <SafeAreaView style={Styles.container}>
       <LinearGradient

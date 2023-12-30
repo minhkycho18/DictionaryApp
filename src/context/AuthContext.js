@@ -18,9 +18,13 @@ export const AuthProvider = ({ children }) => {
     const [isSpelling, setIsSpelling] = useState(false)
     const [isQuiz, setIsQuiz] = useState(false)
     const login = async ({ email, password }) => {
+        console.log(`here: ${1}`)
+
         setIsLoading(true);
         try {
             const res = await getTokenLogin({ email, password });
+            console.log(`Login access: ${res.access_token}`)
+            
             if (res.access_token) {
                 setUserToken(res.access_token);
                 await AsyncStorage.setItem('userToken', JSON.stringify(res.access_token))

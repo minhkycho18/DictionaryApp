@@ -5,7 +5,8 @@ import { getTokenFromAsyncStorage } from "./Auth";
 class Http {
   constructor() {
     this.instance = axios.create({
-      baseURL: "http://dictionary-app-server.online:8080",
+      baseURL: "https://dictionary-app-server.online",
+      // baseURL: "http://192.168.0.6:8080",
       name: "Dictionary App",
       timeout: 10000,
       headers: {

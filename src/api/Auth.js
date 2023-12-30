@@ -15,3 +15,7 @@ export const Register = (data) => {
 export const GetInforUser = () => {
   return http.get(`/users/me`);
 }
+
+export const UpdateProfile = (data) => {
+  return http.patch(`/users`, data);
+}
