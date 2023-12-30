@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../stores/authenticate/authSlice";
 import Sider from "antd/es/layout/Sider";
 import changeTitle from "../../helpers/changeTitle";
+import deleteToken from "../../helpers/deleteToken";
 
 const Manager = () => {
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ const Manager = () => {
       const storedProfile = localStorage.getItem("profile");
       const profile = storedProfile ? JSON.parse(storedProfile) : null;
       if (item.label === "Account") {
-        return profile.role === "ADMIN"
+        return profile?.role === "ADMIN"
           ? {
               key: item.path,
               icon: item.icon,
@@ -78,7 +79,8 @@ const Manager = () => {
 
   const handleSignOut = () => {
     dispatch(logOut());
-    localStorage.removeItem("token");
+    // localStorage.removeItem("token");
+    deleteToken();
     localStorage.removeItem("profile");
     navigate("/");
   };

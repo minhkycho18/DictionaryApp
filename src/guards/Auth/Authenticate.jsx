@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import getTokenFromStorage from "../../helpers/getTokenFromStorage";
 import { getUserProfile } from "../../stores/user/userThunk";
-// import { getUserProfile } from "../../stores/user/userThunk";
-// import { useDispatch } from "react-redux";
 
 const Authenticate = (props) => {
-  const [token] = useState(localStorage.getItem("token"));
+  const token = getTokenFromStorage();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

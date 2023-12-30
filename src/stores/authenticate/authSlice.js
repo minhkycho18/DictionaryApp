@@ -1,6 +1,7 @@
 // authSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 import { signInUser, signUpUser } from "./authThunk";
+import setAccessToken from "../../helpers/setAccessToken";
 
 // Create the auth slice
 const authSlice = createSlice({
@@ -39,7 +40,8 @@ const authSlice = createSlice({
         state.loading = false;
         // console.log(action.payload);
         state.userInformation = action.payload;
-        localStorage.setItem("token", action.payload.access_token);
+        // localStorage.setItem("token", action.payload.access_token);
+        setAccessToken(action.payload.access_token);
       })
       .addCase(signInUser.rejected, (state, action) => {
         state.loading = false;

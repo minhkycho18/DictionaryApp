@@ -15,7 +15,6 @@ const SignIn = () => {
       if (userInformation?.user?.role?.name === "LEARNER") {
         navigate("/");
       } else {
-        console.log(userInformation);
         const data = {
           name: userInformation?.user?.name,
           email: userInformation?.user?.email,

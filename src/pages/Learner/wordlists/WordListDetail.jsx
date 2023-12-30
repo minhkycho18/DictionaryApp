@@ -63,6 +63,7 @@ const WordListDetail = (props) => {
   const [subAddedID, setSubAddedID] = useState();
   const [isPublic, setIsPublic] = useState(false);
   const [isDefault, setIsDefault] = useState(false);
+  const token = getTokenFromStorage();
 
   useEffect(() => {
     dispatch(getWordListsPublic());
@@ -178,7 +179,6 @@ const WordListDetail = (props) => {
     });
   };
   const handleCloneSubcategory = (e) => {
-    const token = getTokenFromStorage();
     if (token) {
       setSubAddedID(e);
       setIsModalOpen(true);
@@ -187,7 +187,6 @@ const WordListDetail = (props) => {
     }
   };
   const handleCloneWL = (e) => {
-    const token = getTokenFromStorage();
     if (token) {
       modal.confirm({
         title: "Clone Wordlist",
@@ -202,7 +201,6 @@ const WordListDetail = (props) => {
     }
   };
   const handleLearn = (subcategoryId) => {
-    const token = getTokenFromStorage();
     if (token) {
       navigate(
         `/vocabulary/${selectedWordList.id}/detail/${subcategoryId}/learn`
@@ -213,7 +211,6 @@ const WordListDetail = (props) => {
   };
 
   const handleAddToLeitner = async (subId, wordListId) => {
-    const token = getTokenFromStorage();
     if (token) {
       const sub = await getAllVocabInSub({
         wordListId: wordListId,

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Authenticate from "../../guards/Auth/Authenticate";
 import dashboardLink from "../../routers/dashboard";
 import { logOut } from "../../stores/authenticate/authSlice";
+import deleteToken from "../../helpers/deleteToken";
 
 const Avt = (props) => {
   const navigate = useNavigate();
@@ -21,7 +22,8 @@ const Avt = (props) => {
           onClick={() => {
             if (link.label === "Sign Out") {
               dispatch(logOut());
-              localStorage.removeItem("token");
+              // localStorage.removeItem("token");
+              deleteToken();
               navigate("/auth/sign-in");
             } else navigate(`/dashboard${link.path}`);
           }}

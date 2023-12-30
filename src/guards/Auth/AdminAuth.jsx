@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getUserProfile } from "../../stores/user/userThunk";
+import getTokenFromStorage from "../../helpers/getTokenFromStorage";
 
 const AdminAuth = (props) => {
-  const [token] = useState(localStorage.getItem("token"));
+  // const [token] = useState(localStorage.getItem("token"));
+  const token = getTokenFromStorage();
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);

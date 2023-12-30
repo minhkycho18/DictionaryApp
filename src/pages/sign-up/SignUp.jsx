@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { signUpUser } from "../../stores/authenticate/authThunk";
+import setAccessToken from "../../helpers/setAccessToken";
 
 const { Option } = Select;
 const formItemLayout = {
@@ -44,7 +45,7 @@ const SignUp = () => {
   const { userInformation, error } = useSelector((state) => state.auth);
   useEffect(() => {
     if (userInformation) {
-      localStorage.setItem("token", userInformation.access_token);
+      setAccessToken(userInformation.access_token);
       navigate("/");
     }
 

@@ -8,6 +8,7 @@ import getFullPath from "../../helpers/getPath";
 import dashboardLink from "../../routers/dashboard";
 import { logOut } from "../../stores/authenticate/authSlice";
 import "./CustomSider.scss";
+import deleteToken from "../../helpers/deleteToken";
 
 const CustomSider = (props) => {
   const navigate = useNavigate();
@@ -16,11 +17,11 @@ const CustomSider = (props) => {
   const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.profile);
 
-  
-
   const handleSignOut = () => {
     dispatch(logOut());
-    localStorage.removeItem("token");
+    // localStorage.removeItem("token");
+    deleteToken();
+
     navigate("/");
   };
 
