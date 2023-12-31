@@ -61,7 +61,7 @@ const SubcategoryItem = ({ vocab, setList, isChecked }) => {
             <Space className="vocabulary__phonetic">
               {vocab?.phoneUs || vocab?.phoneUk}
             </Space>
-            {vocab?.status && (
+            {vocab?.status && vocab?.status !== "DEFAULT" && (
               <Tag
                 icon={renderStatus(vocab?.status).icon}
                 color={renderStatus(vocab?.status).color}
