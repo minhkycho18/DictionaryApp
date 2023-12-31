@@ -101,7 +101,8 @@ public class SubcategoryServiceImpl implements SubcategoryService, SubcategoryGa
         List<SubcategoryDetailResponseDto> vocabularyDtos = MapperUtils.toTargetList(subcategoryDetailMapper::toSubcategoryDetailResponseDto, SubcategoryDetailUtils.filterDeletedVocabulary(vocabularyPage.getContent()));
         vocabularyDtos = vocabularyDtos.stream()
                 .filter(vocab -> vocab.getWord().toLowerCase().startsWith(keyword.toLowerCase()))
-                .sorted(Comparator.comparing(SubcategoryDetailResponseDto::getWord))
+                .sorted(Comparator.comparing(SubcategoryDetailResponseDto::getStatus)
+                        .thenComparing(SubcategoryDetailResponseDto::getWord))
                 .toList()
         ;
         return new PageImpl<>(vocabularyDtos, pageable, vocabularyPage.getTotalElements());
