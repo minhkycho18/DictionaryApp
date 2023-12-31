@@ -210,14 +210,14 @@ const WordListDetail = (props) => {
     }
   };
 
-  const handleAddToLeitner = async (subId, wordListId) => {
+  const handleAddToLeitner = async (subId, wordListId, total) => {
     if (token) {
       const sub = await getAllVocabInSub({
         wordListId: wordListId,
         SubId: subId,
         offset: 0,
+        limit: total,
       });
-
       try {
         const data = sub.content.map((item) => {
           return {
@@ -225,6 +225,7 @@ const WordListDetail = (props) => {
             defId: item.definition.defId,
           };
         });
+        console.log(data);
         const rs = await addVocabToLeitner(data);
         openNotificationWithIcon("success", rs);
       } catch (error) {
@@ -266,7 +267,8 @@ const WordListDetail = (props) => {
                 onClick={() =>
                   handleAddToLeitner(
                     subcategory?.subcategoryId,
-                    subcategory.wordListId
+                    subcategory.wordListId,
+                    subcategory.amountOfWord
                   )
                 }
               >

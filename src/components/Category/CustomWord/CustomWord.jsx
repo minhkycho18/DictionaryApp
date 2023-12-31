@@ -248,12 +248,6 @@ const CustomWord = (props) => {
                     {...restField}
                     name={[name, "example"]}
                     label="Example"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please input your example!",
-                      },
-                    ]}
                   >
                     <Input type="text" placeholder="Write here..." />
                   </Form.Item>

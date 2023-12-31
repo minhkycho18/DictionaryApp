@@ -222,6 +222,7 @@ const Subcategory = (props) => {
     const addVocab = async () => {
       try {
         const result = await addCustomVocabInSub(value);
+        console.log(result);
         const generateResult = result.definitions.map((definition) => ({
           ...result,
           definition: definition,
