@@ -35,6 +35,7 @@ public interface SubcategoryDetailMapper {
                 .isQuiz(newSubcategoryDetail.getIsQuiz())
                 .definitions(definitions)
                 .lastLearning(newSubcategoryDetail.getLastLearning())
+                .status(vocabulary.getStatus())
                 .build();
     }
 
