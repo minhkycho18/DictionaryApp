@@ -10,7 +10,7 @@ import {
   Alert,
   StyleSheet,
 } from "react-native";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import Animated, {
   FadeIn,
@@ -52,7 +52,7 @@ export default function LoginScreen() {
   const [warningPw, setWarningPw] = useState(false);
   const [isFocusMail, setIsFocusMail] = useState(false);
   const [isFocusPw, setIsFocusPw] = useState(false);
-
+  const [isDisplay, setIsDisplay] = useState(true);
   const handlePressItem = async () => {
     console.log("Test : ", "Click Sign in");
     const data = {
@@ -170,6 +170,26 @@ export default function LoginScreen() {
     }
     setPassword(text);
   };
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      (event) => {
+        setIsDisplay(false);
+      }
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setIsDisplay(true);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   return (
     <>
@@ -177,7 +197,7 @@ export default function LoginScreen() {
         // style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         behavior={Platform.OS === "ios" ? "position" : null}
         enabled
-        keyboardVerticalOffset={-10}
+        keyboardVerticalOffset={-200}
       >
         <TouchableWithoutFeedback onPress={handlePressOutside}>
           <View style={tw`bg-white h-full w-full`}>
@@ -195,35 +215,31 @@ export default function LoginScreen() {
             />
 
             {/* lights */}
-            <View style={tw`flex-row justify-around w-full absolute`}>
-              <Animated.View
-                style={tw`h-[124] w-[115]`}
-                entering={FadeInUp.delay(200).duration(1000).springify()}
-              >
-                <Image
-                  style={tw`h-[124] w-[115]`}
-                  source={require("~/assets/icon_login.png")}
-                />
-              </Animated.View>
-            </View>
 
             {/* title and form */}
-            <View style={tw`h-full w-full flex justify-around pt-80 pb-12`}>
-              {/* title */}
-              <View style={[tw`flex items-center pt-9`, { marginTop: 12 }]}>
+            <View style={{ justifyContent: "center", flex: 1 }}>
+              <View style={[tw`flex mx-5`, { alignItems: "center" }]}>
+                {isDisplay && (
+                  <Animated.View
+                    entering={FadeInUp.delay(200).duration(1000).springify()}
+                  >
+                    <Image
+                      style={{ width: 260, height: 200, marginRight: 10 }}
+                      source={require("~/assets/icon_login.png")}
+                      // resizeMode="center"
+                    />
+                  </Animated.View>
+                )}
+
                 <Animated.Text
-                  entering={FadeInUp.duration(1000).springify()}
+                  entering={FadeInDown.duration(1000).springify()}
                   style={[
                     tw`text-white font-bold tracking-wider text-5xl mb-4`,
-                    { color: "#4F88A6" },
+                    { color: "#4F88A6", marginTop: 10 },
                   ]}
                 >
                   Login
                 </Animated.Text>
-              </View>
-
-              {/* form */}
-              <View style={[tw`flex items-center mx-5`]}>
                 <Animated.View
                   entering={FadeInDown.duration(1000).springify()}
                   style={[
@@ -289,6 +305,7 @@ export default function LoginScreen() {
                       onChangeText={(text) => onChangePw(text)}
                       onBlur={handleBlurPw}
                       onFocus={handleFocusPw}
+                      // keyboardType="email-address"
                     />
                     {warningPw && (
                       <View

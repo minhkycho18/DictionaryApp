@@ -8,6 +8,7 @@ import {
   StatusBar,
   TextInput,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native";
@@ -23,7 +24,6 @@ import AppLoader from "~/components/AppLoader";
 import { delay } from "~/helper";
 import { useNavigation } from "@react-navigation/native";
 
-
 export default function ProfileDetailScreen(props) {
   const [user, setUser] = useState(props.route.params.user);
   const [isEdit, setEdit] = useState(false);
@@ -37,6 +37,7 @@ export default function ProfileDetailScreen(props) {
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
+  const nameRef = useRef();
   if (!loaded) {
     return null;
   }
@@ -51,17 +52,15 @@ export default function ProfileDetailScreen(props) {
         const res = await getImageUpload({
           uri: result.assets[0].uri,
           type: result.assets[0].mimeType,
-          name: result.assets[0].name
-        })
+          name: result.assets[0].name,
+        });
         setFileResponseAvatar(res);
         setAvatar(res);
         setIsLoadingAvatar(false);
 
-        console.log('done res: ', res);
-
-
+        console.log("done res: ", res);
       }
-      console.log('tes: ', result);
+      console.log("tes: ", result);
       setEdit(!isEdit);
     } catch (err) {
       console.error(err);
@@ -69,7 +68,6 @@ export default function ProfileDetailScreen(props) {
   };
 
   const handleConfirm = () => {
-
     const update = async () => {
       try {
         setIsLoading(true);
@@ -77,26 +75,28 @@ export default function ProfileDetailScreen(props) {
           name: name,
           image: avatar,
         });
-        console.log('tes: ', res);
+        console.log("tes: ", res);
         setIsLoading(false);
         setEdit(false);
+        nameRef.current.setNativeProps({
+          style: {
+            borderBottomColor: "#ccc",
+            borderBottomWidth: 1,
+          },
+        });
         showToast("Success", "Update successful!", "success");
         await delay(1500);
 
         // navigation.goBack();
       } catch (error) {
         setIsLoading(false);
-        console.log('tes: ', error);
+        console.log("tes: ", error);
 
         showToast("Error", error, "error");
       }
     };
     update();
-
-
-
-
-  }
+  };
 
   const toastConfig = {
     error: (props) => (
@@ -147,7 +147,7 @@ export default function ProfileDetailScreen(props) {
             size={25}
             color="#fff"
             style={{ padding: 3, marginTop: 5 }}
-            onPress={() => navigation.goBack()}
+            onPress={() => navigation.push("Profile")}
           />
           <Text style={Styles.textHeader}>Profile</Text>
         </View>
@@ -163,37 +163,32 @@ export default function ProfileDetailScreen(props) {
               source={require("~/assets/man.png")}
               style={Styles.viewImage}
             /> */}
-            {!isLoadingAvatar ?
-              (
-                avatar == null ? (
-                  <Image
-                    source={require("~/assets/man.png")}
-                    style={Styles.viewImage}
-                  />
-                ) : (
-                  <Image
-                    source={{ uri: avatar }}
-                    style={Styles.viewImage}
-                  />
-                )
-
+            {!isLoadingAvatar ? (
+              avatar == null ? (
+                <Image
+                  source={require("~/assets/man.png")}
+                  style={Styles.viewImage}
+                />
               ) : (
-                <View
-                  style={[Styles.viewImage,
+                <Image source={{ uri: avatar }} style={Styles.viewImage} />
+              )
+            ) : (
+              <View
+                style={[
+                  Styles.viewImage,
                   {
-                    display: 'flex',
-                    justifyContent: 'center'
-                  }]}
-
-                >
-                  <ActivityIndicator size="small" color="#2C94E6" />
-                </View>
-              )}
+                    display: "flex",
+                    justifyContent: "center",
+                  },
+                ]}
+              >
+                <ActivityIndicator size="small" color="#2C94E6" />
+              </View>
+            )}
 
             <TouchableOpacity
               style={Styles.viewCamera}
               onPress={() => pickDocument()}
-
             >
               <Image
                 source={require("~/assets/camera.png")}
@@ -202,33 +197,50 @@ export default function ProfileDetailScreen(props) {
             </TouchableOpacity>
           </View>
 
-          <View
-            style={Styles.viewEdit}
-          >
+          <View style={Styles.viewEdit}>
             <TouchableOpacity
               // style={{backgroundColor:'yellow'}}
-              onPress={() => setEdit(!isEdit)}
-
+              onPress={() => {
+                setEdit(!isEdit);
+                if (!isEdit) {
+                  nameRef.current.setNativeProps({
+                    style: {
+                      borderBottomColor: "#6a64f1",
+                      borderBottomWidth: 2,
+                    },
+                  });
+                } else {
+                  nameRef.current.setNativeProps({
+                    style: {
+                      borderBottomColor: "#ccc",
+                      borderBottomWidth: 1,
+                    },
+                  });
+                }
+              }}
             >
               <FontAwesome name="pencil" size={24} color={colors.textColor} />
             </TouchableOpacity>
           </View>
 
-          <View style={Styles.ViewItem}>
+          <View ref={nameRef} style={Styles.ViewItem}>
             <View>
               <Text style={Styles.textLabel}>Name</Text>
               {!isEdit ? (
-                <Text style={[
-                  Styles.textPlacehoder,
-                  {
-                    color: colors.textColor,
-                  }
-                ]}>{name}</Text>
+                <Text
+                  style={[
+                    Styles.textPlacehoder,
+                    {
+                      color: colors.textColor,
+                    },
+                  ]}
+                >
+                  {name}
+                </Text>
               ) : (
                 <TextInput
                   style={Styles.textPlacehoder}
                   value={name}
-                  focusable
                   onChangeText={setName}
                 />
               )}
@@ -238,11 +250,16 @@ export default function ProfileDetailScreen(props) {
             <View>
               <Text style={Styles.textLabel}>Email</Text>
               {/* {!isEdit ? ( */}
-              <Text style={[Styles.textPlacehoder,
-              {
-                color: colors.textColor,
-              }
-              ]}>{email}</Text>
+              <Text
+                style={[
+                  Styles.textPlacehoder,
+                  {
+                    color: colors.textColor,
+                  },
+                ]}
+              >
+                {email}
+              </Text>
               {/* ) : (
                 <TextInput
                   style={Styles.textPlacehoder}
@@ -293,10 +310,7 @@ export default function ProfileDetailScreen(props) {
             </View>
           </View>
           {isEdit && (
-            <TouchableOpacity
-              style={Styles.confirm}
-              onPress={handleConfirm}
-            >
+            <TouchableOpacity style={Styles.confirm} onPress={handleConfirm}>
               <Text style={{ ...Styles.textLabel, color: "#4096FF" }}>
                 Confirm
               </Text>
@@ -319,7 +333,6 @@ export default function ProfileDetailScreen(props) {
           }}
         />
         {isLoading ? <AppLoader /> : ""}
-
       </LinearGradient>
     </SafeAreaView>
   );
@@ -343,7 +356,7 @@ const Styles = StyleSheet.create({
   },
   content: {
     width: "100%",
-    height: 400,
+    height: Platform.OS === "ios" ? 400 : 430,
     backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: {

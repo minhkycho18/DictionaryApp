@@ -21,7 +21,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { SvgXml } from "react-native-svg";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+
+import {
+  CommonActions,
+  useNavigation,
+  useFocusEffect,
+} from "@react-navigation/native";
+
 import { checkLogin } from "~/helper/Auth";
 import { GetInforUser } from "~/api/Auth";
 import { delay } from "~/helper";
@@ -34,12 +40,14 @@ export default function Profile() {
   const [user, setUser] = useState({});
   const [content, setContent] = useState("");
   const navigation = useNavigation();
-  const [avatar, setAvatar] = useState(user.image);
+  const [avatar, setAvatar] = useState();
+  const [checkAvt, setCheckAvt] = useState(false);
 
   useEffect(() => {
     const checkToken = async () => {
       const check = await checkLogin();
       setIsLogin(check);
+      setCheckAvt(true);
     };
 
     checkToken();
@@ -48,24 +56,12 @@ export default function Profile() {
     const getInfor = async () => {
       const res = await GetInforUser();
       setUser(res);
-      console.log('done res: ', res);
       setAvatar(res.image);
     };
     if (isLogin) {
       getInfor();
     }
   }, [isLogin]);
-  useFocusEffect(
-    useCallback(() => {
-      const getInfor = async () => {
-        const res = await GetInforUser();
-        setUser(res);
-      };
-      if (isLogin) {
-        getInfor();
-      }
-    }, [])
-  );
 
   const [loaded] = useFonts(configFont);
   if (!loaded) {
@@ -83,38 +79,36 @@ export default function Profile() {
         start={{ x: 0, y: 0.5 }}
         end={{ x: 1, y: 0.5 }}
       >
-        {isLogin ? (
-          <View style={{ gap: 10 }}>
-            {
-              avatar == null ? (
+        {checkAvt &&
+          (isLogin ? (
+            <View style={{ gap: 10 }}>
+              {avatar === null ? (
                 <Image
                   source={require("~/assets/man.png")}
                   style={Styles.image}
                 />
               ) : (
-                <Image
-                  source={{ uri: avatar }}
-                  style={Styles.image}
-                />
-              )
-            }
-            <Text style={Styles.textName}>{user.name}</Text>
-            <Text style={Styles.textEmail}>{user.email}</Text>
-          </View>
-        ) : (
-          <View style={Styles.viewImageLogo}>
-            <Image
-              source={require("~/assets/logo.png")}
-              style={Styles.imageLogo}
-            />
-            <View style={{ flexDirection: "column" }}>
-              <Text style={{ ...Styles.textName, fontSize: 32 }}>English</Text>
-              <Text style={{ ...Styles.textName, fontSize: 32 }}>
-                Vocabulary
-              </Text>
+                <Image source={{ uri: avatar }} style={Styles.image} />
+              )}
+              <Text style={Styles.textName}>{user.name}</Text>
+              <Text style={Styles.textEmail}>{user.email}</Text>
             </View>
-          </View>
-        )}
+          ) : (
+            <View style={Styles.viewImageLogo}>
+              <Image
+                source={require("~/assets/logo.png")}
+                style={Styles.imageLogo}
+              />
+              <View style={{ flexDirection: "column" }}>
+                <Text style={{ ...Styles.textName, fontSize: 32 }}>
+                  English
+                </Text>
+                <Text style={{ ...Styles.textName, fontSize: 32 }}>
+                  Vocabulary
+                </Text>
+              </View>
+            </View>
+          ))}
       </LinearGradient>
       <View style={{ flex: 1 }}>
         <TouchableOpacity
@@ -125,7 +119,7 @@ export default function Profile() {
           }}
           onPress={() => {
             if (isLogin) {
-              navigation.navigate("ProfileDetail", { user: user });
+              navigation.push("ProfileDetail", { user: user });
             } else {
               setIsOpenModal(true);
               setContent("see your profile");
@@ -175,6 +169,13 @@ export default function Profile() {
               await delay(1500);
               setIsLoading(false);
               setIsLogin(false);
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{ name: "Home" }],
+                })
+              );
+              // navigation.navigate("Home");
             }}
           >
             <Image

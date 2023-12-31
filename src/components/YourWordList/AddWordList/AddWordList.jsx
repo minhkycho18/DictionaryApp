@@ -16,10 +16,11 @@ import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
 import { createNewWordLists } from "~/api/WordList";
 import RadioGroup from "react-native-radio-buttons-group";
 import { useFonts } from "expo-font";
-import { configFont } from "~/constants/theme";
+import { colors, configFont } from "~/constants/theme";
 import { delay, getIdValueInArr } from "~/helper";
 import AppLoader from "~/components/AppLoader";
 import { LinearGradient } from "expo-linear-gradient";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 const data = [
   {
     id: "1",
@@ -195,12 +196,6 @@ const AddWordList = () => {
             Add Your Word List
           </Text>
         </View>
-        <TouchableOpacity
-          style={{ position: "absolute", right: 15 }}
-          onPress={handleCreate}
-        >
-          <AntDesign name="check" size={26} color="white" style={tw`ml-4`} />
-        </TouchableOpacity>
       </LinearGradient>
       <View style={{ marginTop: 40, margin: 20 }}>
         <View style={Styles.inputContent}>
@@ -263,6 +258,38 @@ const AddWordList = () => {
               selectedId={type}
               containerStyle={Styles.radioGroup}
             />
+          </View>
+
+          <View
+            style={{
+              alignItems: "center",
+              marginTop: 30,
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                display: "flex",
+                borderRadius: 20,
+                alignItems: "center",
+                borderWidth: 2,
+                paddingHorizontal: 30,
+                paddingVertical: 5,
+                borderColor: "#9D97F9",
+              }}
+              onPress={handleCreate}
+            >
+              <Text
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontFamily: "Quicksand-Bold",
+                  fontSize: 15,
+                  color: "#9D97F9",
+                }}
+              >
+                Create
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

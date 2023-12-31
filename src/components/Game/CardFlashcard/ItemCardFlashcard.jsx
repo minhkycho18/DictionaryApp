@@ -9,6 +9,7 @@ import { SvgXml } from "react-native-svg";
 import { Audio } from "expo-av";
 import { GetColor, checkNull } from "~/helper";
 import { AuthContext } from "~/context/AuthContext";
+import _ from "lodash";
 export default function ItemCardFlashcard({
   onNextSlider,
   vocal,
@@ -23,7 +24,7 @@ export default function ItemCardFlashcard({
     });
     await sound.playAsync();
   };
-  const hanleClickAnswer = (answer) => {
+  const hanleClickAnswer = _.debounce((answer) => {
     console.log(`Answer :: ${answer}   Result :: ${vocal.result}`);
     if (answer === vocal.result) {
       onNextSlider({
@@ -47,7 +48,7 @@ export default function ItemCardFlashcard({
         answer: false,
       });
     }
-  };
+  }, 500);
   return (
     <>
       <FlipCard
@@ -98,12 +99,17 @@ export default function ItemCardFlashcard({
               {vocal?.word}
             </Text>
             <View style={Styles.viewPos}>
-              <View style={Styles.type}>
+              <View
+                style={{
+                  ...Styles.type,
+                  backgroundColor: GetColor(vocal?.pos),
+                  borderRadius: 20,
+                }}
+              >
                 <Text
                   style={{
                     ...Styles.textType,
                     fontFamily: "Quicksand-Bold",
-                    backgroundColor: GetColor(vocal?.pos),
                   }}
                 >
                   {vocal?.pos}

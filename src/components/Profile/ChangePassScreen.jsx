@@ -18,6 +18,7 @@ import { Feather } from "@expo/vector-icons";
 import Toast, { ErrorToast, SuccessToast } from "react-native-toast-message";
 import { ChangePass } from "~/api/Auth";
 import { delay } from "~/helper";
+
 export default function ChangePassScreen(props) {
   const [oldPass, setOldPass] = useState("");
   const [newPass, setNewPass] = useState("");
@@ -27,6 +28,7 @@ export default function ChangePassScreen(props) {
   const [isConfirm, setIsConfirm] = useState(false);
   const [checkConfirm, setCheckConfirm] = useState(false);
   const [checkOld, setCheckOld] = useState(false);
+  const [checkNew, setCheckNew] = useState(false);
   const [loaded] = useFonts(configFont);
 
   if (!loaded) {
@@ -36,13 +38,7 @@ export default function ChangePassScreen(props) {
     if (oldPass === "" || newPass === "" || confirmPass === "") {
       showToast("Error", "Please fill in all fields", "error");
     } else {
-      if (confirmPass !== newPass) {
-        showToast(
-          "Error",
-          "Please make sure your confirm password match",
-          "error"
-        );
-      } else {
+      if (!checkNew && !checkOld && !checkOld) {
         try {
           const res = await ChangePass({
             oldPassword: oldPass,
@@ -50,9 +46,11 @@ export default function ChangePassScreen(props) {
           });
           showToast("Success", "Reset password success", "success");
           await delay(1000);
-          props.navigation.navigate("Authenticate");
+          props.navigation.goBack();
         } catch (error) {
-          showToast("Error", error, "error");
+          // showToast("Error", error, "error");
+          setCheckOld(true);
+          console.log(error);
         }
       }
     }
@@ -92,6 +90,23 @@ export default function ChangePassScreen(props) {
       topOffset: 20,
     });
   };
+  const handleNewPass = (text) => {
+    if (text.length < 6) {
+      setCheckNew(true);
+    } else setCheckNew(false);
+    if (confirmPass !== "") {
+      if (text !== confirmPass) {
+        setCheckConfirm(true);
+      } else setCheckConfirm(false);
+    }
+    setNewPass(text);
+  };
+  const handleConfirmPass = (text) => {
+    if (text !== newPass) {
+      setCheckConfirm(true);
+    } else setCheckConfirm(false);
+    setConfirmPass(text);
+  };
 
   return (
     <SafeAreaView style={Styles.container}>
@@ -120,7 +135,10 @@ export default function ChangePassScreen(props) {
                 <TextInput
                   style={Styles.textPlacehoder}
                   value={oldPass}
-                  onChangeText={setOldPass}
+                  onChangeText={(text) => {
+                    setCheckOld(false);
+                    setOldPass(text);
+                  }}
                   secureTextEntry={!isOld}
                 />
                 {isOld ? (
@@ -139,6 +157,18 @@ export default function ChangePassScreen(props) {
                   />
                 )}
               </View>
+              {checkOld && (
+                <Text
+                  style={{
+                    fontFamily: "Quicksand-SemiBold",
+                    marginLeft: 10,
+                    marginTop: 5,
+                    color: "red",
+                  }}
+                >
+                  Your current password is wrong
+                </Text>
+              )}
             </View>
           </View>
           <View style={Styles.ViewItem}>
@@ -150,7 +180,7 @@ export default function ChangePassScreen(props) {
                 <TextInput
                   style={Styles.textPlacehoder}
                   value={newPass}
-                  onChangeText={setNewPass}
+                  onChangeText={(text) => handleNewPass(text)}
                   secureTextEntry={!isNew}
                 />
                 {isNew ? (
@@ -169,6 +199,18 @@ export default function ChangePassScreen(props) {
                   />
                 )}
               </View>
+              {checkNew && (
+                <Text
+                  style={{
+                    fontFamily: "Quicksand-SemiBold",
+                    textAlign: "center",
+                    marginTop: 5,
+                    color: "red",
+                  }}
+                >
+                  Password must be at least 6 characters
+                </Text>
+              )}
             </View>
           </View>
           <View style={Styles.ViewItem}>
@@ -180,7 +222,7 @@ export default function ChangePassScreen(props) {
                 <TextInput
                   style={Styles.textPlacehoder}
                   value={confirmPass}
-                  onChangeText={setConfirmPass}
+                  onChangeText={(text) => handleConfirmPass(text)}
                   secureTextEntry={!isConfirm}
                 />
                 {isConfirm ? (
@@ -199,6 +241,18 @@ export default function ChangePassScreen(props) {
                   />
                 )}
               </View>
+              {checkConfirm && (
+                <Text
+                  style={{
+                    fontFamily: "Quicksand-SemiBold",
+                    textAlign: "center",
+                    marginTop: 5,
+                    color: "red",
+                  }}
+                >
+                  Please make sure your password match
+                </Text>
+              )}
             </View>
           </View>
 
@@ -241,7 +295,7 @@ const Styles = StyleSheet.create({
   },
   content: {
     width: "100%",
-    height: 430,
+    height: 460,
     backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: {
@@ -275,7 +329,7 @@ const Styles = StyleSheet.create({
     // borderWidth: 1,
     // borderBottomColor: "#ccc",
     paddingHorizontal: 10,
-    marginTop: 25,
+    marginTop: 20,
     // paddingBottom: 8,
   },
   textLabel: {

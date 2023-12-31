@@ -103,6 +103,14 @@ export default function SpellingScreen(props) {
 
     if (type === "success") {
       await delay(500);
+      const res = await updateStatusGame(
+        props.route.params.wordListId,
+        props.route.params.subcategoryId,
+        "spelling",
+        listAnswer
+      );
+      console.log(res);
+      setIsSpelling(true);
       navigation.push("FinishGame", { type: "spelling" });
     }
   };
