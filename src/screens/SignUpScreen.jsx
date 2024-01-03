@@ -16,6 +16,7 @@ import Animated, {
   FadeIn,
   FadeInDown,
   FadeInUp,
+  FadeOutUp,
 } from "react-native-reanimated";
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
@@ -131,36 +132,46 @@ export default function SignUpScreen() {
           );
           setWarningMail(true);
         } else {
-          if (password !== passwordConfirm) {
+          if (password.length < 6) {
             showToast(
               "error",
               "Error",
-              "Password doesn't match, please check again!"
+              "At least 6 characters long!"
             );
-            console.log("Password        : ", password);
-            console.log("Password Confirm: ", passwordConfirm);
-            Error_Password();
+            setWarningPw(true);
           } else {
-            try {
-              console.log("Test : ", "Pass all! Call APIIII!");
-              //call api
-              const i = await register(data_input);
-              if (i === "400") {
-                showToast("error", "Error", "Email already exists!");
-              } else {
-                showToast("error", "Success", "Register success!");
-                navigation.push("BottomTab");
-                // console.log('before');
+            if (password !== passwordConfirm) {
+              showToast(
+                "error",
+                "Error",
+                "Password doesn't match, please check again!"
+              );
+              console.log("Password        : ", password);
+              console.log("Password Confirm: ", passwordConfirm);
+              Error_Password();
+            } else {
+              try {
+                console.log("Test : ", "Pass all! Call APIIII!");
+                //call api
+                const i = await register(data_input);
+                if (i === "400") {
+                  showToast("error", "Error", "Email already exists!");
+                } else {
+                  showToast("error", "Success", "Register success!");
+                  navigation.push("BottomTab");
+                  // console.log('before');
 
-                // delay(3000);
+                  // delay(3000);
 
-                // console.log('after');
+                  // console.log('after');
+                }
+                // showToast("success", "Success", "Register success!");
+              } catch (error) {
+                console.log("Error : ", error);
               }
-              // showToast("success", "Success", "Register success!");
-            } catch (error) {
-              console.log("Error : ", error);
             }
           }
+
         }
         break;
     }
@@ -173,9 +184,9 @@ export default function SignUpScreen() {
       type: type,
       text1: text1,
       text2: text2,
-      visibilityTime: 2000,
+      visibilityTime: 1300,
       autoHide: true,
-      topOffset: 55,
+      topOffset: 60,
     });
   };
 
@@ -289,7 +300,7 @@ export default function SignUpScreen() {
       // style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
       behavior={Platform.OS === "ios" ? "position" : null}
       enabled
-      keyboardVerticalOffset={-210}
+      keyboardVerticalOffset={-100}
     >
       <TouchableWithoutFeedback onPress={handlePressOutside}>
         <View style={tw`bg-white h-full w-full`}>
@@ -301,29 +312,40 @@ export default function SignUpScreen() {
 
           {/* lights */}
 
-          <Toast
-            config={toastConfig}
-            refs={(ref) => {
-              Toast.setRef(ref);
-            }}
-          />
+          
 
           {/* title and form */}
-          <View style={{ justifyContent: "center", flex: 1 }}>
+          <View style={{ justifyContent: "center", flex: 1, marginBottom: 10 }}>
             {/* title */}
 
             {/* form */}
             <View style={[tw`flex items-center mx-5`]}>
               {/* Email */}
-              {isDisplay && (
-                <Animated.View entering={FadeInUp.duration(1000).springify()}>
-                  <Image
-                    style={{ width: 260, height: 200, marginRight: 10 }}
-                    source={require("~/assets/icon_login.png")}
+              <View
+                style={{ width: 260, height: 200, marginRight: 10,  marginBottom:20 }}
+              >
+                {isDisplay && (
+                  <Animated.View entering={FadeInUp.delay(200).duration(1000).springify()}>
+                    <Image
+                      style={{ width: 260, height: 200, marginRight: 10, marginBottom:0 }}
+                      source={require("~/assets/icon_login.png")}
                     // resizeMode="center"
-                  />
-                </Animated.View>
-              )}
+                    />
+                  </Animated.View>
+                )}
+                {!isDisplay && (
+                    <Animated.View
+                      style={[{ width: 260, height: 200, marginRight: 10, },tw`flex-row justify-around w-full absolute`]}
+                      entering={FadeOutUp.delay(200).duration(1000).springify()}
+                    >
+                      <Image
+                        style={{ width: 260, height: 200, marginRight: 10 }}
+                        source={require("~/assets/icon_login.png")}
+                      // resizeMode="center"
+                      />
+                    </Animated.View>
+                  )}
+              </View>
               <Animated.Text
                 entering={FadeInUp.duration(1000).springify()}
                 style={[
@@ -568,6 +590,12 @@ export default function SignUpScreen() {
           </View>
         </View>
       </TouchableWithoutFeedback>
+      <Toast
+            config={toastConfig}
+            refs={(ref) => {
+              Toast.setRef(ref);
+            }}
+          />
     </KeyboardAvoidingView>
   );
 }
@@ -579,7 +607,7 @@ const styles = StyleSheet.create({
   },
   selectedTextStyle: {
     fontSize: 14,
-    color: "gray",
+    color: "#000",
   },
   inputSearchStyle: {
     fontSize: 14,

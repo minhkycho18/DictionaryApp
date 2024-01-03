@@ -16,6 +16,7 @@ import Animated, {
   FadeIn,
   FadeInDown,
   FadeInUp,
+  FadeOutUp,
   convertToRGBA,
 } from "react-native-reanimated";
 import tw from "twrnc";
@@ -197,7 +198,7 @@ export default function LoginScreen() {
         // style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         behavior={Platform.OS === "ios" ? "position" : null}
         enabled
-        keyboardVerticalOffset={-200}
+        keyboardVerticalOffset={-70}
       >
         <TouchableWithoutFeedback onPress={handlePressOutside}>
           <View style={tw`bg-white h-full w-full`}>
@@ -207,29 +208,42 @@ export default function LoginScreen() {
               source={require("~/assets/background_login.png")}
             />
 
-            <Toast
-              config={toastConfig}
-              refs={(ref) => {
-                Toast.setRef(ref);
-              }}
-            />
+
 
             {/* lights */}
 
             {/* title and form */}
             <View style={{ justifyContent: "center", flex: 1 }}>
-              <View style={[tw`flex mx-5`, { alignItems: "center" }]}>
-                {isDisplay && (
-                  <Animated.View
-                    entering={FadeInUp.delay(200).duration(1000).springify()}
-                  >
-                    <Image
-                      style={{ width: 260, height: 200, marginRight: 10 }}
-                      source={require("~/assets/icon_login.png")}
+              <View style={[tw`flex mx-5`, { alignItems: "center", marginBottom: 0, }]}>
+                <View
+                  style={{ width: 260, height: 200, marginRight: 10, marginBottom: 50 }}
+                >
+                  {isDisplay && (
+                    <Animated.View
+                      style={{ width: 260, height: 200, marginRight: 10, }}
+                      entering={FadeInUp.delay(200).duration(1000).springify()}
+                    >
+                      <Image
+                        style={{ width: 260, height: 200, marginRight: 10 }}
+                        source={require("~/assets/icon_login.png")}
                       // resizeMode="center"
-                    />
-                  </Animated.View>
-                )}
+                      />
+                    </Animated.View>
+                  )}
+                  {!isDisplay && (
+                    <Animated.View
+                      style={{ width: 260, height: 200, marginRight: 10, }}
+                      entering={FadeOutUp.delay(200).duration(1000).springify()}
+                    >
+                      <Image
+                        style={{ width: 260, height: 200, marginRight: 10 }}
+                        source={require("~/assets/icon_login.png")}
+                      // resizeMode="center"
+                      />
+                    </Animated.View>
+                  )}
+                </View>
+
 
                 <Animated.Text
                   entering={FadeInDown.duration(1000).springify()}
@@ -246,7 +260,7 @@ export default function LoginScreen() {
                     tw`bg-black/10 p-5 rounded-2xl w-full mb-4`,
                     warningMail && { borderColor: "#FF0000", borderWidth: 1 },
                   ]}
-                  // onPress={emailRef.current.focus()}
+                // onPress={emailRef.current.focus()}
                 >
                   <View
                     style={{
@@ -305,7 +319,7 @@ export default function LoginScreen() {
                       onChangeText={(text) => onChangePw(text)}
                       onBlur={handleBlurPw}
                       onFocus={handleFocusPw}
-                      // keyboardType="email-address"
+                    // keyboardType="email-address"
                     />
                     {warningPw && (
                       <View
@@ -352,6 +366,12 @@ export default function LoginScreen() {
             </View>
           </View>
         </TouchableWithoutFeedback>
+        <Toast
+              config={toastConfig}
+              refs={(ref) => {
+                Toast.setRef(ref);
+              }}
+            />
         {isLoading ? <AppLoader /> : ""}
       </KeyboardAvoidingView>
     </>
