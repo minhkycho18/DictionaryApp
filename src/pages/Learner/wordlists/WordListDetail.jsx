@@ -4,6 +4,7 @@ import {
   EditOutlined,
   ExclamationCircleOutlined,
   InboxOutlined,
+  LoadingOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
 import {
@@ -11,22 +12,30 @@ import {
   Button,
   Col,
   Collapse,
+  Empty,
   Input,
   Modal,
+  Pagination,
   Row,
   Select,
   Space,
+  Spin,
+  Tag,
   notification,
 } from "antd";
+import { upperFirst } from "lodash";
 import { useEffect, useState } from "react";
 import { BiAddToQueue } from "react-icons/bi";
 import { FiFolderPlus } from "react-icons/fi";
+import { IoArrowBackOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { addVocabToLeitner } from "../../../api/Leitner/leitner.api";
 import {
   cloneSubcategory,
   getAllVocabInSub,
 } from "../../../api/Subcategory/subcategory.api";
+import { getAllPos } from "../../../api/Vocabulary/vocabulary.api";
 import {
   cloneWordLists,
   getDefault,
@@ -34,6 +43,7 @@ import {
 } from "../../../api/WordLists/word-lists.api";
 import logo from "../../../assets/images/category-back.png";
 import SubChoice from "../../../components/Category/SubChoice/SubChoice";
+import colorPos from "../../../helpers/ColorPos";
 import getTokenFromStorage from "../../../helpers/getTokenFromStorage";
 import { getSubcategory } from "../../../stores/subcategory/subcategoryThunk";
 import {
@@ -43,7 +53,6 @@ import {
   getWordListsPublic,
 } from "../../../stores/word-lists/wordLists-thunk";
 import "./WordListDetail.scss";
-import { addVocabToLeitner } from "../../../api/Leitner/leitner.api";
 const WordListDetail = (props) => {
   const [searchParams] = useSearchParams();
   const [query] = useState(searchParams.get("id"));
@@ -64,14 +73,26 @@ const WordListDetail = (props) => {
   const [isPublic, setIsPublic] = useState(false);
   const [isDefault, setIsDefault] = useState(false);
   const token = getTokenFromStorage();
+  const [vocabInSub, setVocabInSub] = useState({});
+  const [allPos, setAllPos] = useState([]);
+  const [currentSub, setCurrentSub] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [offset, setOffset] = useState(0);
 
   useEffect(() => {
     dispatch(getWordListsPublic());
     dispatch(getWLById(query));
-
     dispatch(getAllWL());
     dispatch(getSubcategory({ wordlistId: query }));
-
+    const _getAllPos = async () => {
+      try {
+        const result = await getAllPos();
+        setAllPos(["All", ...result]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    _getAllPos();
     return () => {};
   }, [dispatch, query]);
   useEffect(() => {
@@ -94,6 +115,96 @@ const WordListDetail = (props) => {
     return () => {};
   }, [selectedWordList]);
 
+  //============================================================//============================================================
+  const handleDetail = (value) => {
+    setCurrentSub(value);
+    const params = {
+      wordListId: +query,
+      SubId: value,
+      offset: 0,
+      limit: 10,
+    };
+    const getAllVocab = async () => {
+      try {
+        const result = await getAllVocabInSub(params);
+        if (result) {
+          setVocabInSub(result);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getAllVocab();
+  };
+  const handleBack = () => {
+    setVocabInSub({});
+  };
+  const renderVocabInSub =
+    vocabInSub?.content?.length > 0 &&
+    vocabInSub?.content?.map((vocab, index) => (
+      <Space
+        className="subcategory-item"
+        style={{ alignSelf: "center", width: "100%" }}
+        key={index}
+      >
+        <Space className="subcategory__header" direction="vertical">
+          <Space className="vocabulary">
+            <Space className="vocabulary__title">{vocab?.word}</Space>
+            <Space className="vocabulary__phonetic">
+              {vocab?.phoneUs || vocab?.phoneUk}
+            </Space>
+          </Space>
+          <Space className="subcategory__content">
+            {vocab?.definition?.wordDesc}
+          </Space>
+        </Space>
+        <Space>
+          <Tag color={colorPos.get(vocab?.pos)} style={{ fontSize: "15px" }}>
+            {upperFirst(vocab?.pos)}
+          </Tag>
+        </Space>
+      </Space>
+    ));
+
+  const onPageChange = (value) => {
+    setCurrentPage(value);
+    setOffset((value - 1) * 10);
+    const params = {
+      wordListId: +query,
+      SubId: currentSub,
+      offset: (value - 1) * 10,
+      limit: 10,
+    };
+    const getAllVocab = async () => {
+      try {
+        const result = await getAllVocabInSub(params);
+        if (result) {
+          setVocabInSub(result);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getAllVocab();
+  };
+  const renderEmpty = (
+    <Empty
+      style={{
+        padding: 64,
+      }}
+      image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+      imageStyle={{
+        height: "120px",
+      }}
+      className=""
+      description={
+        <span className="empty__sub--content">
+          It don't have any vocabulary yet.
+        </span>
+      }
+    ></Empty>
+  );
+  //============================================================//============================================================
   const openNotificationWithIcon = (type, msg) => {
     switch (type) {
       case "success":
@@ -159,7 +270,6 @@ const WordListDetail = (props) => {
     } catch (error) {
       openNotificationWithIcon("error", "Clone fail! Please try again.");
     }
-    // console.log(result);
   };
 
   const info = (msg) => {
@@ -225,7 +335,6 @@ const WordListDetail = (props) => {
             defId: item.definition.defId,
           };
         });
-        console.log(data);
         const rs = await addVocabToLeitner(data);
         openNotificationWithIcon("success", rs);
       } catch (error) {
@@ -301,6 +410,22 @@ const WordListDetail = (props) => {
                 Learn
               </Space>
             )}
+            {isPublic && (
+              <Space
+                className="wldetail__card-iconLearn"
+                onClick={() => handleDetail(subcategory.subcategoryId)}
+              >
+                Detail
+              </Space>
+            )}
+            {isDefault && (
+              <Space
+                className="wldetail__card-iconLearn"
+                onClick={() => handleDetail(subcategory.subcategoryId)}
+              >
+                Detail
+              </Space>
+            )}
           </Space>
         </Space>
       </Col>
@@ -357,9 +482,83 @@ const WordListDetail = (props) => {
               </Space>
             )}
           </Space>
-          <Row className="row-css" gutter={[32, 32]}>
-            {renderSubcategory}
-          </Row>
+          {vocabInSub?.content ? (
+            <Space
+              direction="vertical"
+              style={{
+                width: "80vw",
+                padding: "0px 128px",
+              }}
+            >
+              <Space
+                style={{
+                  marginTop: 8,
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                <Space
+                  onClick={handleBack}
+                  style={{
+                    cursor: "pointer",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: 18,
+                  }}
+                >
+                  <IoArrowBackOutline style={{ fontSize: 24 }} />
+                  <Space>Back</Space>
+                </Space>
+                {!vocabInSub?.empty && (
+                  <Pagination
+                    defaultCurrent={1}
+                    total={vocabInSub?.totalElements}
+                    onChange={onPageChange}
+                    size="small"
+                    current={currentPage}
+                  />
+                )}
+              </Space>
+              {loading && (
+                <Space
+                  style={{
+                    width: "100%",
+                    height: "100vh",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Spin
+                    indicator={
+                      <LoadingOutlined
+                        style={{
+                          fontSize: 64,
+                        }}
+                        spin
+                      />
+                    }
+                  />
+                </Space>
+              )}
+
+              {!loading && !vocabInSub?.empty && (
+                <Space
+                  direction="vertical"
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  {renderVocabInSub}
+                </Space>
+              )}
+              {!loading && vocabInSub?.empty && renderEmpty}
+            </Space>
+          ) : (
+            <Row className="row-css" gutter={[32, 32]}>
+              {renderSubcategory}
+            </Row>
+          )}
+
           <Modal
             title="Clone a Subcategory"
             open={isModalOpen}

@@ -230,24 +230,7 @@ const LeitnerLevel = (props) => {
           <Tag color={colorPos.get(vocab?.pos)} style={{ fontSize: "15px" }}>
             {upperFirst(vocab?.pos)}
           </Tag>
-          {/* <Space
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          > */}
-          {/* <Space
-              style={{
-                borderLeft: "1px solid #ccc",
-                lineHeight: "28px",
-                padding: "0px 8px",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              {" "}
-            </Space> */}
+
           {+loader.data.level !== 0 && (
             <PiClockCounterClockwiseBold
               style={{
