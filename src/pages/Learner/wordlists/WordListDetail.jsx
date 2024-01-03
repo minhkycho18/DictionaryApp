@@ -78,6 +78,7 @@ const WordListDetail = (props) => {
   const [currentSub, setCurrentSub] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [offset, setOffset] = useState(0);
+  const [titleSub, setTitleSub] = useState("Back");
 
   useEffect(() => {
     dispatch(getWordListsPublic());
@@ -116,8 +117,9 @@ const WordListDetail = (props) => {
   }, [selectedWordList]);
 
   //============================================================//============================================================
-  const handleDetail = (value) => {
+  const handleDetail = (value, title = "Back") => {
     setCurrentSub(value);
+    setTitleSub(title);
     const params = {
       wordListId: +query,
       SubId: value,
@@ -138,6 +140,7 @@ const WordListDetail = (props) => {
   };
   const handleBack = () => {
     setVocabInSub({});
+    setTitleSub("Back");
   };
   const renderVocabInSub =
     vocabInSub?.content?.length > 0 &&
@@ -413,7 +416,9 @@ const WordListDetail = (props) => {
             {isPublic && (
               <Space
                 className="wldetail__card-iconLearn"
-                onClick={() => handleDetail(subcategory.subcategoryId)}
+                onClick={() => {
+                  handleDetail(subcategory.subcategoryId, subcategory?.title);
+                }}
               >
                 Detail
               </Space>
@@ -421,7 +426,9 @@ const WordListDetail = (props) => {
             {isDefault && (
               <Space
                 className="wldetail__card-iconLearn"
-                onClick={() => handleDetail(subcategory.subcategoryId)}
+                onClick={() => {
+                  handleDetail(subcategory.subcategoryId, subcategory?.title);
+                }}
               >
                 Detail
               </Space>
@@ -507,7 +514,7 @@ const WordListDetail = (props) => {
                   }}
                 >
                   <IoArrowBackOutline style={{ fontSize: 24 }} />
-                  <Space>Back</Space>
+                  <Space>{titleSub}</Space>
                 </Space>
                 {!vocabInSub?.empty && (
                   <Pagination
