@@ -26,7 +26,6 @@ const gameSlice = createSlice({
             item.defId === action.payload.defId
         );
         if (index === -1) {
-          console.log(action.payload);
           state.reviewed.push(action.payload);
         }
       } else state.reviewed.push(action.payload);

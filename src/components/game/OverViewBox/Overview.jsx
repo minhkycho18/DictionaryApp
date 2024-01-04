@@ -19,15 +19,12 @@ const Overview = (props) => {
   const handleOpenIncorrect = (type) => {
     setType(type);
     if (type === "flashcard") {
-      // console.log(correctFlashcard?.incorrect);
       setIncorrectAnswer(correctFlashcard?.incorrect);
     }
     if (type === "quiz") {
-      // console.log(correctQuiz?.incorrect);
       setIncorrectAnswer(correctQuiz?.incorrect);
     }
     if (type === "spelling") {
-      console.log(correctSpelling?.incorrect);
       setIncorrectAnswer(correctSpelling?.incorrect);
     }
   };

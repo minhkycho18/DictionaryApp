@@ -253,7 +253,6 @@ const LeitnerLevel = (props) => {
     const data = { statusLevel: "up", params: params };
     try {
       const rs = await changeLevelVocab(data);
-      console.log(rs);
       if (rs) {
         const updatedVocabs = vocabs.content.filter((vocab) => {
           return !selectedIds.some(
