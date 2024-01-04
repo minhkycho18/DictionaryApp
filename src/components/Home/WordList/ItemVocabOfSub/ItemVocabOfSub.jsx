@@ -8,10 +8,13 @@ import { configFont } from "~/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { deleteWordInSub } from "~/api/Subcategory";
 import { GetColor, UpperText } from "~/helper";
+import ItemStatusOfVocab from "../ItemStatusOfVocab/ItemStatusOfVocab";
 export default function ItemVocabOfSub({ Vocab, onDeleteVocal, subcategory }) {
   const [word, setWord] = useState(Vocab.item.word);
   const [pos, setPos] = useState(Vocab.item.pos);
   const colorPos = GetColor(Vocab.item.pos);
+  const [status, setStatus] = useState(Vocab.item.status);
+
 
   const [isLoading, setIsLoading] = useState(false);
   const [definition, setDefinition] = useState(Vocab.item.definition.wordDesc);
@@ -56,7 +59,7 @@ export default function ItemVocabOfSub({ Vocab, onDeleteVocal, subcategory }) {
         >
           <View style={Styles.Text_content}>
             <View style={Styles.Title_Status}>
-              <View style={{ width: "90%" }}>
+              <View style={{ width: "90%", height:50, flexDirection: 'row',display:'flex',alignItems:'center'}}>
                 <Text
                   numberOfLines={1}
                   style={[
@@ -65,6 +68,7 @@ export default function ItemVocabOfSub({ Vocab, onDeleteVocal, subcategory }) {
                       fontFamily: "Quicksand-SemiBold",
                       fontSize: 18,
                       letterSpacing: 0.2,
+                      marginRight: 10
                       // backgroundColor:'yellow',
                     },
                   ]}
@@ -72,6 +76,16 @@ export default function ItemVocabOfSub({ Vocab, onDeleteVocal, subcategory }) {
                   {word}
                   {/* Word {item.id} */}
                 </Text>
+
+                {status !== 'DEFAULT' && (
+
+                  <ItemStatusOfVocab 
+                    Status={status}
+                  />
+
+                )}
+
+
               </View>
               <View
                 style={{
@@ -98,11 +112,11 @@ export default function ItemVocabOfSub({ Vocab, onDeleteVocal, subcategory }) {
             <View style={{
               marginBottom: 5,
             }}>
-            <Text style={{ ...Styles.phoneticType, color: colorPos }}>
-              {/* [{UpperText([item.pos])}] */}
-              [{UpperText(pos)}]
-            </Text>
-          </View>
+              <Text style={{ ...Styles.phoneticType, color: colorPos }}>
+                {/* [{UpperText([item.pos])}] */}
+                [{UpperText(pos)}]
+              </Text>
+            </View>
 
             <View>
               <Text

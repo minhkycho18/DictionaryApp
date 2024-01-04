@@ -61,7 +61,7 @@ export default function ProfileDetailScreen(props) {
         console.log("done res: ", res);
       }
       console.log("tes: ", result);
-      setEdit(!isEdit);
+      if(!isEdit) setEdit(!isEdit);
     } catch (err) {
       console.error(err);
     }
