@@ -389,20 +389,21 @@ const WordListDetail = (props) => {
                 </Space>
                 to leitner
               </Space>
-              {selectedWordList.listType !== "PRIVATE" && isPublic && (
-                <Space
-                  className="wldetail__card-addLeitner"
-                  direction="vertical"
-                  onClick={() => {
-                    handleCloneSubcategory(subcategory.subcategoryId);
-                  }}
-                >
-                  <Space className="wldetail__card-iconAdd">
-                    <BiAddToQueue />
+              {selectedWordList.listType !== "PRIVATE" &&
+                (isPublic || isDefault) && (
+                  <Space
+                    className="wldetail__card-addLeitner"
+                    direction="vertical"
+                    onClick={() => {
+                      handleCloneSubcategory(subcategory.subcategoryId);
+                    }}
+                  >
+                    <Space className="wldetail__card-iconAdd">
+                      <BiAddToQueue />
+                    </Space>
+                    Clone sub
                   </Space>
-                  Clone sub
-                </Space>
-              )}
+                )}
             </Space>
 
             {!isPublic && !isDefault && (
