@@ -29,7 +29,7 @@ const authSlice = createSlice({
       })
       .addCase(signUpUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.detail;
+        state.error = action.payload.detail || action.payload;
       })
       //======================================================
       .addCase(signInUser.pending, (state) => {
