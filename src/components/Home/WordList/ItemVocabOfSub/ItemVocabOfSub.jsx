@@ -34,7 +34,6 @@ export default function ItemVocabOfSub({ Vocab, onDeleteVocal, subcategory }) {
         ]
       );
       setIsLoading(false);
-      console.log(res);
       onDeleteVocal(Vocab.item.vocabId, Vocab.item.definition.defId);
     } catch (error) {
       console.log(`Delete word fail::`, error);

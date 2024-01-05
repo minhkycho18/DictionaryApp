@@ -3,6 +3,9 @@ import { StyleSheet } from "react-native";
 export const Styles = StyleSheet.create({
 
     container: {
+        display:'flex',
+        // alignItems:'center',
+        flexDirection: 'row',
         borderWidth: 2,
         borderRadius: 5,
         width: 90,
