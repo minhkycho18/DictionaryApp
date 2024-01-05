@@ -38,8 +38,10 @@ export const Styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-between',
         width: '100%',
-        height: "80%",
+        height: "100%",
+        marginTop :10,
         justifyContent: 'flex-start',
+        // backgroundColor :'red'
         // backgroundColor: 'green',
         // marginTop: 15,
         // marginBottom: 15,
@@ -51,11 +53,12 @@ export const Styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 2,
+        // marginBottom: 2,
         // borderStyle: 'solid',
         // borderBottomWidth: 1,
         // borderTopWidth: 1,
         alignItems: "center",
+        
     },
     // viewItem: {
     //     width: "35%",

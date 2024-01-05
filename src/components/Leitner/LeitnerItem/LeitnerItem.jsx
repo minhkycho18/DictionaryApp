@@ -16,8 +16,9 @@ export default function LeitnerItem({ type }) {
       needStudy: type.needStudy,
       levelName: type.levelName,
     });
+    
 
-    console.log("test: ", "detail leitner");
+    console.log("test: ", type.levelName);
   };
 
   const ViewCheck = () => (
