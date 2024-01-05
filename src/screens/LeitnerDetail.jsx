@@ -131,6 +131,8 @@ export default function LeitnerDetail(props) {
         navigation.push("LeitnerDetail", {
           level: 1,
           needStudy: true,
+          levelName: 'Starting',
+
         });
       } catch (error) {
         setIsLoading(false);

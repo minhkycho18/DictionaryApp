@@ -58,7 +58,7 @@ export default function ItemVocabOfSub({ Vocab, onDeleteVocal, subcategory }) {
         >
           <View style={Styles.Text_content}>
             <View style={Styles.Title_Status}>
-              <View style={{ width: "90%", height:50, flexDirection: 'row',display:'flex',alignItems:'center'}}>
+              <View style={{ width: "90%", height:40, flexDirection: 'row',display:'flex',alignItems:'center'}}>
                 <Text
                   numberOfLines={1}
                   style={[
@@ -110,6 +110,9 @@ export default function ItemVocabOfSub({ Vocab, onDeleteVocal, subcategory }) {
             {/* preposition */}
             <View style={{
               marginBottom: 5,
+              // backgroundColor :"red",
+              marginTop :-5,
+
             }}>
               <Text style={{ ...Styles.phoneticType, color: colorPos }}>
                 {/* [{UpperText([item.pos])}] */}

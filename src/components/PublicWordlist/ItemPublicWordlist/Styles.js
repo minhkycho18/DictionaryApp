@@ -16,7 +16,7 @@ export const Styles = StyleSheet.create({
     wrappered: {
         padding: 15,
         borderRadius: 20,
-        height: 135,
+        height: 138,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

@@ -56,7 +56,7 @@ export default function CardFlashcard_Leitner({
         upLevel: false,
       });
     }
-  }, 500);
+  }, 100);
   return (
     <>
       <FlipCard

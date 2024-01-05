@@ -134,7 +134,7 @@ export default function FinishGame(props) {
             }}
           >
             <View style={Styles.viewCircle}>{getProgess(review)}</View>
-            <TouchableOpacity style={[getStatusStyle(review)]}>
+            <TouchableOpacity style={[getStatusStyle(review)]} onPress={() => navigation.push("ReviewScreen")}>
               <Text style={[getTextStyle(review)]}>Review</Text>
             </TouchableOpacity>
             <View style={[getLineStyle(true)]}></View>

@@ -14,17 +14,17 @@ export default function ItemStatusOfVocab({ Status }) {
     var background = "#FEFEFE";
     var textColor = "#FEFEFE";
 
-    if (Status === 'PENDING') {
+    if (status === 'PENDING') {
         border = '#FFE58F';
         background = '#FFFBE6';
         textColor = '#FAAD14';
     }
-    else if (Status === 'REJECTED') {
+    else if (status === 'REJECTED') {
         border = '#FFCCC7';
         background = '#FFF2F0';
         textColor = '#FF4D4F';
     }
-    else if (Status === 'PERSONAL') {
+    else if (status === 'PERSONAL') {
         border = '#91CAFF';
         background = '#E6F4FF';
         textColor = '#1677FF';
@@ -44,19 +44,19 @@ export default function ItemStatusOfVocab({ Status }) {
                         style={{ marginRight: 3, marginTop: 1 }}
                     >
                         {status === 'PERSONAL' ? (
-                            <Ionicons name="person-outline" size={14} color={textColor} />)
+                            <Ionicons name="person-outline" size={13} color={textColor} />)
                         : status === 'REJECTED'? (
                             <SvgXml
                             style={{ right: "5%" }}
-                            width="14"
-                            height="14"
+                            width="12"
+                            height="12"
                             xml={status_rejected("#FF4D4F")}
                           />)
                     : status === 'PENDING'&& (
                         <SvgXml
                         style={{ right: "10%" }}
-                        width="14"
-                        height="14"
+                        width="12"
+                        height="12"
                         xml={status_pending("#FAAD14")}
                       />)
                     }

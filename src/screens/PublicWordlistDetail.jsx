@@ -198,7 +198,7 @@ export default function PublicWordlistDetail() {
               flex: 1,
               justifyContent: "flex-end",
               width: "100%",
-              height: 320,
+              height :380
             }}
           >
             <View
@@ -266,7 +266,6 @@ export default function PublicWordlistDetail() {
               <View style={{ top: "-13%", width: "90%" }}>
                 {/* Description */}
                 <Text
-                  numberOfLines={2}
                   style={[
                     {
                       color: colors.gray,

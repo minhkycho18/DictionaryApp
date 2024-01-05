@@ -91,7 +91,7 @@ export default function ItemPublicWordlist({ wordlist, onClone, type }) {
             Sub-list: {subs.length}
           </Text>
           <Text
-            numberOfLines={3}
+            numberOfLines={2}
             style={{
               fontFamily: "Quicksand-Medium",
               fontSize: 14,
@@ -102,12 +102,16 @@ export default function ItemPublicWordlist({ wordlist, onClone, type }) {
             {wordlist.item?.listDesc}
           </Text>
 
-          <View
+          
+        </View>
+        <View
             style={{
               flexDirection: "row",
               justifyContent: "flex-end",
               gap: 5,
-              marginTop: 15,
+              position :'absolute',
+              bottom :8,
+              right :12
             }}
           >
             <Text
@@ -132,7 +136,6 @@ export default function ItemPublicWordlist({ wordlist, onClone, type }) {
               {wordlist.item.createdBy}
             </Text>
           </View>
-        </View>
       </View>
     </TouchableOpacity>
   );

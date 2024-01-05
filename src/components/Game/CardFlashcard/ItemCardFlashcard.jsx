@@ -48,7 +48,7 @@ export default function ItemCardFlashcard({
         answer: false,
       });
     }
-  }, 500);
+  }, 100);
   return (
     <>
       <FlipCard
