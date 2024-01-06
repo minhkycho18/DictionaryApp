@@ -44,7 +44,6 @@ const LeitnerLevel = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
   //=======================================================================================================================================================
   useEffect(() => {
     setLoading(true);
@@ -160,6 +159,23 @@ const LeitnerLevel = (props) => {
         });
         setSelectedIds([]);
         setIsDeleteModalOpen(false);
+        // setCurrentPage(value);
+        const _getAllVocab = async () => {
+          const result = await getLeitnerVocabs({
+            level: +loader.data.level,
+            offset: offset,
+            pos: currentPos === "All" ? null : currentPos,
+          });
+          if (result) {
+            setVocabs(result);
+            setLoading(false);
+            if (vocabs?.totalPages === currentPage && currentPage !== 1) {
+              setCurrentPage(currentPage - 1);
+              setOffset((currentPage - 2) * 10);
+            }
+          }
+        };
+        _getAllVocab();
       }
     } catch (error) {}
   };
