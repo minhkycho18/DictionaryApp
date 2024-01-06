@@ -31,6 +31,13 @@ public interface VocabDefRepository extends JpaRepository<VocabDef, VocabDefId> 
             """, nativeQuery = true)
     List<VocabDef> findRandomLimit(int limit);
 
+    @Query(value = """
+                    SELECT *
+                    FROM vocab_def vd
+                    WHERE CONCAT(vd.vocab_id, '-', vd.def_id) IN (:vocabDefs) AND is_deleted = :isDelete
+            """, nativeQuery = true)
+    List<VocabDef> findVocabDefsByIds(@Param("vocabDefs") List<String> vocabDefs, @Param("isDelete") boolean isDelete);
+
     @Modifying
     @Query(value = """
                     UPDATE vocab_def vd
