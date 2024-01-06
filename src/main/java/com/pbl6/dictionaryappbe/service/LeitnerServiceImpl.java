@@ -10,10 +10,14 @@ import com.pbl6.dictionaryappbe.persistence.leitner.LeitnerId;
 import com.pbl6.dictionaryappbe.persistence.leitner.VocabLeitner;
 import com.pbl6.dictionaryappbe.persistence.level_leitner.LevelLeitner;
 import com.pbl6.dictionaryappbe.persistence.user.User;
+import com.pbl6.dictionaryappbe.persistence.vocabdef.VocabDef;
+import com.pbl6.dictionaryappbe.persistence.vocabulary.VocabularyStatus;
 import com.pbl6.dictionaryappbe.repository.LevelLeitnerRepository;
+import com.pbl6.dictionaryappbe.repository.VocabDefRepository;
 import com.pbl6.dictionaryappbe.repository.leitner.LeitnerRepository;
 import com.pbl6.dictionaryappbe.utils.AuthenticationUtils;
 import com.pbl6.dictionaryappbe.utils.MapperUtils;
+import com.pbl6.dictionaryappbe.utils.StreamUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +40,7 @@ public class LeitnerServiceImpl implements LeitnerService {
     private final LeitnerMapper leitnerMapper;
 
     private final Random rand = new Random();
+    private final VocabDefRepository vocabDefRepository;
 
     @Override
     @Transactional
@@ -45,10 +50,15 @@ public class LeitnerServiceImpl implements LeitnerService {
                 .map(vocabLeitnerRequestDto -> vocabLeitnerRequestDto.getVocabId() + "-" + vocabLeitnerRequestDto.getDefId())
                 .toList();
         List<VocabLeitner> vocabDefs = leitnerRepository.findAllByVocabDefId(vocabDefIds, user.getUserId());
-        if(leitnerRequestDto.size() == vocabDefs.size()) {
+        List<VocabDef> leitnerRequestVocabDefs = vocabDefRepository.findVocabDefsByIds(vocabDefIds, false)
+                .stream()
+                .filter(vocabDef -> vocabDef.getVocabulary().getStatus() == VocabularyStatus.DEFAULT
+                        && !StreamUtils.findVocabDefExisted(vocabDef, vocabDefs))
+                .toList();
+        if(leitnerRequestVocabDefs.isEmpty()) {
             throw new DuplicateDataException("All request vocabularies already exists in Leitner");
         }
-        List<VocabLeitner> leitners =  leitnerRequestDto.stream()
+        List<VocabLeitner> leitners =  leitnerRequestVocabDefs.stream()
                 .map(vocabDef -> VocabLeitner.builder()
                         .vocabId(vocabDef.getVocabId())
                         .defId(vocabDef.getDefId())
@@ -59,7 +69,7 @@ public class LeitnerServiceImpl implements LeitnerService {
                         .build())
                 .toList();
         leitnerRepository.saveAll(leitners);
-        return leitnerRequestDto.size() - vocabDefs.size();
+        return leitnerRequestVocabDefs.size();
     }
 
     @Override
