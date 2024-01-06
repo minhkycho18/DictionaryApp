@@ -44,7 +44,7 @@ public class LeitnerServiceImpl implements LeitnerService {
         List<String> vocabDefIds = leitnerRequestDto.stream()
                 .map(vocabLeitnerRequestDto -> vocabLeitnerRequestDto.getVocabId() + "-" + vocabLeitnerRequestDto.getDefId())
                 .toList();
-        List<VocabLeitner> vocabDefs = leitnerRepository.findAllByVocabDefId(vocabDefIds);
+        List<VocabLeitner> vocabDefs = leitnerRepository.findAllByVocabDefId(vocabDefIds, user.getUserId());
         if(leitnerRequestDto.size() == vocabDefs.size()) {
             throw new DuplicateDataException("All request vocabularies already exists in Leitner");
         }
@@ -143,10 +143,11 @@ public class LeitnerServiceImpl implements LeitnerService {
     @Override
     @Transactional
     public void removeVocabLeitner(List<VocabLeitnerRequestDto> vocabLeitnerRequestDto) {
+        User user = Objects.requireNonNull(AuthenticationUtils.getUserFromSecurityContext());
         List<String> vocabDefIds = vocabLeitnerRequestDto.stream()
                 .map(vocabLeitner -> vocabLeitner.getVocabId() + "-" + vocabLeitner.getDefId())
                 .toList();
-        List<VocabLeitner> vocabLeitners = leitnerRepository.findAllByVocabDefId(vocabDefIds);
+        List<VocabLeitner> vocabLeitners = leitnerRepository.findAllByVocabDefId(vocabDefIds, user.getUserId());
         if(vocabLeitnerRequestDto.size() != vocabLeitners.size())
             throw new InvalidRequestDataException("Vocab Leitner not found");
         leitnerRepository.deleteAll(vocabLeitners);

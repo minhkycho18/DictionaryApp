@@ -15,9 +15,9 @@ public interface LeitnerRepository extends JpaRepository<VocabLeitner, LeitnerId
     @Query(value = """
         SELECT *
         FROM vocab_leitner
-        WHERE CONCAT(vocab_id, '-', def_id) IN :vocabDefs
+        WHERE CONCAT(vocab_id, '-', def_id) IN :vocabDefs AND user_id = :userId
     """, nativeQuery = true)
-    List<VocabLeitner> findAllByVocabDefId(@Param("vocabDefs") List<String> vocabDefIds);
+    List<VocabLeitner> findAllByVocabDefId(@Param("vocabDefs") List<String> vocabDefIds, @Param("userId") Long userId);
 
     @Query(name = "find_leitner_game", nativeQuery = true)
     List<LeitnerVocabCardGame> findVocabLeitnerGameByLevel(
