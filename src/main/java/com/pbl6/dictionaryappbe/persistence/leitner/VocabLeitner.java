@@ -47,7 +47,7 @@ import java.time.LocalDateTime;
                     JOIN vocabularies v
                          ON v.vocab_id = vl.vocab_id
                     WHERE vl.level = :level AND vl.user_id = :userId
-                        AND (DATE_ADD(last_learning, INTERVAL ll.time HOUR) > CURRENT_TIMESTAMP()
+                        AND (DATE_ADD(last_learning, INTERVAL ll.time HOUR) < CURRENT_TIMESTAMP()
                                  OR last_learning IS NULL)
                     GROUP BY vl.vocab_id, vl.def_id
                 )
